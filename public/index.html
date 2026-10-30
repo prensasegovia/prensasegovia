@@ -253,7 +253,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
     <h2 id="sheetTitle">Filtros</h2>
     <div class="row">
       <span class="t">Periodo</span>
-      <div class="seg" id="segRango"><button data-v="2" type="button">Hoy y ayer</button><button data-v="7" type="button">7 días</button><button data-v="30" type="button">30 días</button></div>
+      <div class="seg" id="segRango"><button data-v="3" type="button">3 días</button><button data-v="7" type="button">7 días</button><button data-v="21" type="button">21 días</button></div>
     </div>
     <div class="row">
       <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Quita las noticias que son solo de la capital. También desde el botón “Sin capital” de la barra de temas.</span></span><input type="checkbox" id="fCap"></label>
@@ -280,16 +280,13 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 <script>
 /* ---------- Configuración ---------- */
 const CATS = [
-  {k:"policial", n:"Policial", d:"M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"},
-  {k:"social", n:"Movimientos sociales", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
+  {k:"policial", n:"Policial y sucesos", d:"M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"},
+  {k:"social", n:"Movilizaciones", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
   {k:"politica", n:"Política", d:"M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M3 10l9-6 9 6z"},
   {k:"emergencias", n:"Tráfico y emergencias", d:"M12 3l9 16H3zM12 10v4M12 17h.01"},
-  {k:"economia", n:"Economía", d:"M4 19h16M7 15l4-4 3 3 5-6"},
-  {k:"sociedad", n:"Sociedad", d:"M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0M17 11a2.5 2.5 0 1 0 0-5M21 20a5 5 0 0 0-4-5"},
-  {k:"cultura", n:"Cultura y fiestas", d:"M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"},
-  {k:"deportes", n:"Deportes", d:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7l4 3-1.5 5h-5L8 10z"}
+  {k:"eventos", n:"Fiestas y eventos", d:"M4 21V4M4 4h12l-2 4 2 4H4"}
 ];
-const TRABAJO = ["policial","social","politica","emergencias"];
+const TRABAJO = CATS.map(c=>c.k);
 const CAT = Object.fromEntries(CATS.map(c=>[c.k,c]));
 const ICON = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 const EXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>`;
@@ -302,6 +299,8 @@ const MEDIOS = [
     ["El Espinar Información","https://www.elespinar.org","El Espinar, San Rafael, La Estación y Los Ángeles"]]},
   {g:"Digitales de la provincia", l:[
     ["SegoviaUdaz","https://segoviaudaz.es","Pueblos, sucesos y convocatorias"],
+    ["Segovia Directo","https://segoviadirecto.com",""],
+    ["Segovia 24/7","https://segovia247.es",""],
     ["Tribuna de Segovia","https://www.tribunasegovia.com",""],
     ["Segovia al día","https://segoviaaldia.es",""],
     ["Diario de Castilla y León – Segovia","https://www.diariodecastillayleon.es/segovia/",""]]},
@@ -354,18 +353,18 @@ function cuando(dia, hora){
 /* ---------- Estado ---------- */
 const st = {
   view:"noticias",
-  cats: new Set(store.get("cats", TRABAJO)),
-  rango: store.get("rango","2"),
+  cats: new Set((store.get("cats3", TRABAJO)).filter(k=>CATS.some(c=>c.k===k))),
+  rango: store.get("rango3","3"),
   sinCapital: store.get("sinCapital2", false),
   soloAlta: store.get("soloAlta", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   q:"", muni:"", townQ:"",
   dias: [], fuentes: [], actualizado:"", loaded:false, error:false,
-  seen: new Set(store.get("seen2", null) ? store.get("seen", []) : []),
+  seen: new Set(store.get("seen3", null) ? store.get("seen", []) : []),
   pending:null
 };
-const saveF = () => { store.set("cats",[...st.cats]); store.set("rango",st.rango); store.set("sinCapital2",st.sinCapital); store.set("soloAlta",st.soloAlta); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
+const saveF = () => { store.set("cats3",[...st.cats]); store.set("rango3",st.rango); store.set("sinCapital2",st.sinCapital); store.set("soloAlta",st.soloAlta); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
 
 /* ---------- Datos ---------- */
 function allNews(){
@@ -424,7 +423,7 @@ function card(n, opts={}){
   const src = medios.slice(0,3).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("") + (medios.length>3?`<span class="more">+${medios.length-3}</span>`:"");
   const lugar = n.municipio && n.municipio!=="General" ? `<span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio)}</span>` : "";
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""}" data-k="${esc(n._key)}" ${first?`data-href="${esc(first)}"`:""}>
-    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cats}<span class="time">${esc(cuando(n._dia, n.hora))}</span></div>
+    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cats}<span class="time">${esc(cuando(n._dia, n.hora).split(" · ")[0])}</span></div>
     <h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
     <div class="bottom"><div class="srcs">${src}</div><button class="share" type="button" data-share aria-label="Compartir noticia"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button></div>
@@ -435,14 +434,12 @@ function chipsBar(pool){
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
   const isTrabajo = st.cats.size===TRABAJO.length && TRABAJO.every(c=>st.cats.has(c));
   const isTodo = st.cats.size===CATS.length;
-  const nf = (st.soloAlta?1:0)+(st.soloKw?1:0)+(st.rango!=="2"?1:0);
+  const nf = (st.soloAlta?1:0)+(st.soloKw?1:0)+(st.rango!=="3"?1:0);
   let h = `<button class="chip filters" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${nf?`<span class="badge">${nf}</span>`:""}</button>`;
   if (st.muni) h += `<button class="chip" data-act="clearMuni" aria-pressed="true" type="button">${esc(st.muni)} ✕</button>`;
   h += `<button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>`;
-  h += `<button class="chip" data-preset="trabajo" aria-pressed="${isTrabajo}" type="button">De interés</button>`;
-  h += `<button class="chip" data-preset="todo" aria-pressed="${isTodo}" type="button">Todo</button>`;
   for (const c of CATS){ const n = counts[c.k]||0;
-    h += `<button class="chip ${n?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cats.has(c.k)&&!isTodo}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${n}</span></button>`; }
+    h += `<button class="chip ${n?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cats.has(c.k)}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${n}</span></button>`; }
   return `<div class="chips" id="chips">${h}</div>`;
 }
 
@@ -453,7 +450,7 @@ function heroBlock(news, nuevas){
   const pueblos = new Set(pool.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
   const ag = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7));
   const sum = nuevas ? `<b>${nuevas} ${nuevas===1?"noticia nueva":"noticias nuevas"}</b> desde tu última visita.`
-    : pool.length ? `Estás al día. ${pool.length} ${pool.length===1?"noticia":"noticias"} entre hoy y ayer.` : "Sin noticias con los filtros actuales.";
+    : pool.length ? `Estás al día. ${pool.length} ${pool.length===1?"noticia":"noticias"} en los últimos ${st.rango} días.` : "Sin noticias con los filtros actuales.";
   return `<section class="hero">
     <div class="day">${esc(fmtLong(t))}</div>
     <div class="sum">${sum}</div>
@@ -530,7 +527,7 @@ function viewPueblos(news){
   for (const n of pool){ const k=n.municipio; (m[k] ||= {n:0,a:0}); m[k].n++; if(n.relevancia==="alta") m[k].a++; }
   let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
   if (st.townQ) list = list.filter(([k])=>norm(k).includes(norm(st.townQ)));
-  let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">${esc(st.rango==="2"?"Hoy y ayer":"Últimos "+st.rango+" días")}</span></div>
+  let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">${esc("Últimos "+st.rango+" días")}</span></div>
     <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">`;
   if (!list.length) h += `<div class="empty"><b>Sin noticias</b>No hay noticias de ese pueblo en el periodo elegido. Prueba a ampliarlo en Filtros.</div>`;
   h += list.map(([k,v])=>`<button class="town" data-muni="${esc(k)}" type="button"><span class="name">${esc(k)}</span>${v.a?`<span class="al">${v.a} ${v.a===1?"importante":"importantes"}</span>`:""}<span class="cnt">${v.n}</span><span class="chev">›</span></button>`).join("");
@@ -538,7 +535,7 @@ function viewPueblos(news){
 }
 
 function viewMedios(){
-  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada hora. Además de estos medios, busca en Google Noticias, que recoge radios, agencias y periódicos regionales.</p>`;
+  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada hora. Además, hace 20 búsquedas en Google Noticias por temas (sucesos, Guardia Civil, protestas, huelgas, plataformas vecinales, plantas de biogás, plenos, fiestas…) y por los pueblos más grandes. Solo se guarda lo que es de Segovia o sus pueblos y de interés: sucesos, movilizaciones, política, emergencias y eventos multitudinarios.</p>`;
   if (st.fuentes.length){
     h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"Sin RSS propio: llega por Google Noticias"}</span></div></div>`).join("") + `</div>`;
   }
@@ -617,8 +614,7 @@ $("#app").addEventListener("click", e=>{
   else if (b.dataset.preset==="todo"){ st.cats = new Set(CATS.map(c=>c.k)); saveF(); render(true); }
   else if (b.dataset.cat){
     const k=b.dataset.cat;
-    if (st.cats.size===CATS.length) st.cats = new Set([k]);
-    else if (st.cats.has(k) && st.cats.size>1) st.cats.delete(k); else st.cats.add(k);
+    if (st.cats.has(k) && st.cats.size>1) st.cats.delete(k); else st.cats.add(k);
     saveF(); render(true);
   }
   else if (b.dataset.muni){ st.muni = b.dataset.muni; st.cats = new Set(CATS.map(c=>c.k)); setView("noticias"); }
@@ -676,7 +672,7 @@ function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(
 $("#kwAdd").addEventListener("click", addKw);
 $("#kwIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addKw(); } });
 $("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); syncSheet(); });
-$("#fReset").addEventListener("click", ()=>{ st.cats=new Set(TRABAJO); st.rango="2"; st.sinCapital=false; st.soloAlta=false; st.soloKw=false; st.muni=""; saveF(); syncSheet(); });
+$("#fReset").addEventListener("click", ()=>{ st.cats=new Set(TRABAJO); st.rango="3"; st.sinCapital=false; st.soloAlta=false; st.soloKw=false; st.muni=""; saveF(); syncSheet(); });
 
 $("#btnReload").addEventListener("click", ()=>load(true));
 $("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
@@ -688,9 +684,9 @@ function applyData(j){
   st.actualizado = j.actualizado || "";
   st.loaded = true; st.error = false;
   render();
-  if (!store.get("seen2", null)){ // primera vez con la versión nueva: solo cuenta como nuevo lo de hoy
-    store.set("seen2", true);
-    marcarVisto(allNews().filter(n=>n._dia < today()).map(n=>n._key));
+  if (!store.get("seen3", null)){ // primera vez con esta versión: cuenta como nuevo lo de los últimos 2 días
+    store.set("seen3", true); st.seen = new Set();
+    marcarVisto(allNews().filter(n=>n._dia < addDays(today(),-2)).map(n=>n._key));
     render();
   }
 }

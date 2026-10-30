@@ -24,25 +24,35 @@ const FEEDS = [
   { nombre: "Segovia al día", urls: ["https://segoviaaldia.es/rss/", "https://segoviaaldia.es/feed/", "https://segoviaaldia.es/rss"] },
   { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/?format=feed&type=rss", "https://www.elnordestedesegovia.es/index.php?format=feed&type=rss"] },
   { nombre: "El Espinar Información", urls: ["https://www.elespinar.org/feeds/posts/default?alt=rss"] },
+  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/feed/", "https://www.segoviadirecto.com/feed/"] },
+  { nombre: "Segovia 24/7", urls: ["https://segovia247.es/feed/", "https://www.segovia247.es/feed/"] },
   { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia/", "https://www.diariodecastillayleon.es/segovia/rss/"], soloSiMenciona: true },
 ];
 
 // Búsquedas en Google Noticias (cubren también radios, agencias y medios sin RSS propio)
 const BUSQUEDAS = [
-  'Segovia',
+  // Temas (toda la provincia)
   '"Guardia Civil" Segovia',
-  'Segovia detenido OR detenidos OR investigado',
-  'Segovia accidente OR incendio OR rescate OR herido',
-  'Segovia concentración OR manifestación OR protesta OR huelga',
-  'Segovia pleno OR alcalde OR ayuntamiento',
-  'Cuéllar Segovia',
-  '"El Espinar" OR "San Rafael" Segovia',
-  '"La Granja" OR "San Ildefonso" OR Valsaín Segovia',
-  '(Cantalejo OR Riaza OR Sepúlveda OR Ayllón OR Boceguillas) Segovia',
-  '(Villacastín OR "Nava de la Asunción" OR "Carbonero el Mayor" OR "Navas de Oro") Segovia',
-  '("Palazuelos de Eresma" OR "La Lastrilla" OR "San Cristóbal de Segovia" OR Torrecaballeros) Segovia',
-  '(Turégano OR Fuentepelayo OR Aguilafuente OR Cantimpalos OR Pedraza) Segovia',
-  '("Santa María la Real de Nieva" OR Coca OR Bernardos OR Navalmanzano) Segovia',
+  'Segovia detenido OR detenidos OR investigado OR investigados',
+  'Segovia robo OR estafa OR agresión OR reyerta OR okupas',
+  'Segovia accidente OR atropello OR incendio OR rescate OR fallecido',
+  'Segovia concentración OR manifestación OR protesta OR movilización',
+  'Segovia huelga OR paros OR sindicatos OR CCOO OR UGT',
+  'Segovia "plataforma" vecinos OR vecinal OR "recogida de firmas"',
+  'Segovia tractorada OR agricultores OR ganaderos protesta',
+  'Segovia macrogranja OR biogás OR biometano OR fotovoltaica OR "planta solar" OR eólico',
+  'Segovia pleno OR alcalde OR moción OR concejales',
+  'Segovia fiestas OR encierros OR "concentración motera" OR festival',
+  // Pueblos grandes y cabeceras de comarca
+  '(Cuéllar OR "Navas de Oro" OR Samboal OR Chañe OR Fuentepelayo) Segovia',
+  '("El Espinar" OR "San Rafael" OR "Navas de San Antonio" OR "Otero de Herreros") Segovia',
+  '("La Granja" OR "San Ildefonso" OR Valsaín OR Torrecaballeros OR Trescasas) Segovia',
+  '("Palazuelos de Eresma" OR "La Lastrilla" OR "San Cristóbal de Segovia" OR Hontanares) Segovia',
+  '(Cantalejo OR Turégano OR Cantimpalos OR Carbonero OR Escalona) Segovia',
+  '(Riaza OR Ayllón OR Sepúlveda OR Boceguillas OR Prádena OR Navafría) Segovia',
+  '("Nava de la Asunción" OR Coca OR "Santa María la Real de Nieva" OR Bernardos OR Navalmanzano) Segovia',
+  '(Villacastín OR "Valverde del Majano" OR Abades OR Martín Muñoz OR Lastras) Segovia',
+  '(Fuentidueña OR Sacramenia OR Aguilafuente OR Mozoncillo OR Zarzuela) Segovia',
 ];
 // Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
 const MEDIOS_OK_RE = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
@@ -139,25 +149,30 @@ function municipioDe(texto) {
 const PATRONES = {
   policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|seprona|antidroga|narcotrafico/,
   social: /concentracion|manifestacion|protesta|huelga|paros parciales|plataforma|colectivo|movilizacion|reivindica|pancarta|sindicat|ccoo|ugt|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen)|recogida de firmas|marea blanca|en contra de|se oponen|rechazo vecinal|cacerolada|encierro de protesta/,
-  politica: /pleno|alcalde|alcaldesa|concejal|ayuntamiento|diputacion|junta de castilla|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]|ministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|ciudadanos|elecciones|mocion|presupuesto municipal|ordenanza|partido popular|partido socialista/,
+  politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
   emergencias: /accidente|colision|choque|salida de via|atropell|herid|fallec|muere|murio|incendio|fuego|bomberos|rescat|112|desaparecid|inundacion|nevada|temporal|aviso (amarillo|naranja|rojo)|corte de (la )?carretera|trafico|\bdgt\b|\ba-1\b|\ba-6\b|\bap-6\b|\bap-61\b|n-110|n-603|cl-6\d\d|sg-\d|evacuad|derrumbe|explosion/,
   economia: /empresa|empleo|paro registrado|inversion|millones de euros|industria|agricultor|ganader|poligono|comercio|negocio|turismo|hosteleria|subvencion|ayudas|precio/,
   sociedad: /sanidad|centro de salud|consultorio|hospital|colegio|instituto|educacion|vivienda|mayores|residencia|despoblacion|servicios sociales|universidad|medico/,
   cultura: /fiesta|fiestas|concierto|festival|teatro|exposicion|feria|romeria|procesion|halloween|certamen|museo|cine|libro|patrimonio|musica|danza|tradicion/,
   deportes: /futbol|gimnastica segoviana|baloncesto|balonmano|atletismo|carrera popular|maraton|ciclismo|liga|campeonato|club deportivo|tenis|padel|deportista|jornada \d/,
 };
+// Deportes y cultura no interesan salvo que haya un suceso
+const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
+const EVENTO = /fiestas? (patronales|de |en honor|del )|encierros?|toros|capea|concentracion motera|festival|concierto|romeria|carrera popular|marcha (popular|reivindicativa)|cabalgata|verbena|penas|botellon|halloween|feria (de |del )|partido de alto riesgo|multitudinari/;
 const ALTA = /detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
 
 function clasifica(titulo, texto, municipio) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
-  let categorias = Object.keys(PATRONES).filter(k => PATRONES[k].test(tt));
-  if (!categorias.length) categorias = Object.keys(PATRONES).filter(k => PATRONES[k].test(t)).slice(0, 2);
-  if (!categorias.length) categorias = ["sociedad"];
+  const UTILES = ["policial", "social", "politica", "emergencias"];
+  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja" };
+  let categorias = UTILES.filter(k => PATRONES[k].test(tt));
+  if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
+  if (EVENTO.test(tt) || (!categorias.length && EVENTO.test(t))) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
   if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias"].includes(c))) relevancia = "alta";
-  else if (categorias.some(c => ["policial", "social", "emergencias", "politica"].includes(c))) relevancia = "media";
+  else if (categorias.length) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
   return { categorias, relevancia };
 }
@@ -271,7 +286,7 @@ async function main() {
         brutos.push({ ...it, titulo, texto, medio, directo: false }); gTotal++;
       }
     } catch (e) { gFallos++; }
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise(r => setTimeout(r, 900));
   }
   estado.push({ fuente: "Google Noticias", ok: gFallos < BUSQUEDAS.length, noticias: gTotal, error: gFallos ? `${gFallos} búsquedas fallidas` : undefined });
 
@@ -306,6 +321,12 @@ async function main() {
       _dia: fechaMadrid(g.fecha),
     };
   });
+
+  // Fuera lo que no es de interés (deportes, cultura, economía...) y lo que no menciona Segovia ni ningún pueblo
+  const interesa = n => n.categorias.length > 0 && n.municipio !== "General";
+  const antes = nuevas.length;
+  for (let i = nuevas.length - 1; i >= 0; i--) if (!interesa(nuevas[i])) nuevas.splice(i, 1);
+  console.log(`Descartadas por no ser de interés: ${antes - nuevas.length}`);
 
   // 5) Fusionar con el histórico
   let previo = { dias: [] };
@@ -342,6 +363,9 @@ async function main() {
       if (!n.medios.length) return false;
       const nuevo = municipioDe(n.titulo + " " + (n.resumen || ""));
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
+      const c = clasifica(n.titulo, n.resumen || "", n.municipio);
+      n.categorias = c.categorias; n.relevancia = c.relevancia;
+      if (!interesa(n)) return false;
       if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
       return true;
     });
