@@ -216,8 +216,8 @@ function municipioDe(texto) {
 }
 
 const PATRONES = {
-  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|roband|robaron|retienen|retenido|pillad[oa] (robando|in fraganti)|sorprendid[oa] (robando|cuando)|ladron|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de)|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|recoge(n)? firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|indigna a|indignados|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
+  policial: /guardia civil|policia|\bpresos?\b|reclus|funcionario de prisiones|lesiona a|detenid|detencion|arrest|investigad|robo|robar|roband|robaron|retienen|retenido|pillad[oa] (robando|in fraganti)|sorprendid[oa] (robando|cuando)|ladron|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de (ladrones|delincuentes|atracadores|narcotraficantes))|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|\bparar\b|llamad[oa]s a (la huelga|parar|movilizarse|concentrarse)|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|recoge(n)? firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|indigna a|indignados|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
   // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
   proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|convenio|colectivo/,
   medioambiente: /embalse|pantano|\bpresas? (de|del)\b|\bazud|rio (eresma|cega|duraton|riaza|voltoya|moros|piron|adaja|zapardiel|pirón)|caudal|vertido|contamina|purines|nitratos|acuifero|sequia|restricciones de agua|cortes? de(l)? (suministro de )?agua|agua potable|abastecimiento de agua|depuradora|\bedar\b|macrogranja|granja (porcina|de cerdos|avicola|intensiva)|explotacion porcina|biogas|biometano|planta (solar|fotovoltaica|de biogas|de biometano|de residuos|de reciclaje|de hidrogeno)|parque (solar|eolico|fotovoltaico)|fotovoltaic|huerto solar|aerogenerador|eolico|linea de (muy )?alta tension|subestacion|cantera|mineria|\bmina\b|extraccion de|gravera|vertedero|residuos|incendios? forestal|quema de rastrojos|\btala\b|talas|deforestac|plantacion (de|forestal)|repoblacion|monte publico|\bpinos\b|resina|\blobos?\b|ataques? de lobo|especies? invasora|plaga|espacio natural|red natura|\bzepa\b|parque (nacional|natural)|guadarrama|hoces del (duraton|riaza)|impacto ambiental|evaluacion ambiental|declaracion de impacto|medio ?ambient|ecologist|cambio climatico|calidad del agua|fauna|biodiversidad/,
@@ -256,6 +256,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
+  const porTexto = !categorias.length;
   if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && PATRONES[k].test(t)).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
@@ -274,7 +275,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
-  return { categorias, relevancia };
+  return { categorias, relevancia, porTexto };
 }
 
 /* Fecha de convocatoria: "el próximo sábado", "el 14 de noviembre", "a las 19:00" */
@@ -352,6 +353,8 @@ function relleno(n) {
   if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias", "medioambiente"])) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
+  // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
+  if (n.municipio === "Segovia" && n.porTexto && !n.analisis?.cats?.length) return true;
   // Medio ambiente en la capital: solo si hay conflicto
   if (n.municipio === "Segovia" && solo(["medioambiente", "politica", "eventos"]) && c.includes("medioambiente") && !CONFLICTO.test(tt)) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
@@ -441,7 +444,7 @@ const FUERTE = {
 };
 const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
 function analizaCuerpo(titulo, cuerpo, publicada) {
-  if (!cuerpo || cuerpo.length < 200) return { vacio: true };
+  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 2 };
   const t = norm(cuerpo.slice(0, 5000));
   const cats = [], pistas = [];
   for (const [k, re] of Object.entries(FUERTE)) {
@@ -465,8 +468,9 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   }
   const muni = municipioDe(cuerpo.slice(0, 1500));
   // Dónde ocurre, según el texto (para titulares que no nombran ningún sitio)
-  const lugar = municipioDe(cuerpo.slice(0, 4000));
-  return { cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
+  let lugar = municipioDe(cuerpo.slice(0, 4000));
+  if (lugar === "Provincia" && !/segovia/.test(norm(cuerpo.slice(0, 4000)))) lugar = "";
+  return { v: 2, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
 function limpiaAnalisis(a) {
@@ -477,6 +481,7 @@ function limpiaAnalisis(a) {
   if (a.evento) o.evento = a.evento;
   if (a.pueblo) o.pueblo = a.pueblo;
   if (a.lugar) o.lugar = a.lugar;
+  if (a.v) o.v = a.v;
   return Object.keys(o).length ? o : null;
 }
 function conCuerpo(c, a, municipio) {
@@ -485,7 +490,7 @@ function conCuerpo(c, a, municipio) {
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
   if (a.extracto && ALTA.test(norm(a.extracto))) relevancia = "alta";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
-  return { categorias, relevancia };
+  return { categorias, relevancia, porTexto: false };
 }
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);
@@ -629,7 +634,8 @@ async function main() {
   let previoTmp = { dias: [] };
   try { previoTmp = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const conocidas = new Set((previoTmp.dias || []).flatMap(d => d.noticias.flatMap(n => n.medios.map(m => m.url))));
-  const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || cache[m.url]));
+  const analizada = u => cache[u] && cache[u].v === 2; // las de versiones anteriores se vuelven a leer
+  const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || analizada(m.url)));
   let leidas = 0;
   const cola = pendientes.slice(0, 80);
   await Promise.all(Array.from({ length: 8 }, async () => {
@@ -644,7 +650,7 @@ async function main() {
     }
   }));
   // Lo ya analizado en pasadas anteriores también cuenta
-  for (const g of grupos) { const m = g.medios.find(m => cache[m.url]); if (m) g.analisis = cache[m.url]; }
+  for (const g of grupos) { const m = g.medios.find(m => analizada(m.url)); if (m) g.analisis = cache[m.url]; }
   console.log(`Cuerpos leídos: ${leidas} de ${pendientes.length} noticias nuevas`);
 
   // 4) Clasificar
@@ -653,14 +659,14 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
-    else if (municipio === "General" && a?.lugar) municipio = a.lugar;
+    else if (municipio === "General" && a?.lugar && (a.lugar !== "Provincia" || a.v === 2)) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
-    const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
+    const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
       ...evento,
       id: hash(norm(g.titulo)),
-      titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
+      titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(porTexto ? { porTexto: true } : {}), ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
       ...(a ? { analisis: a } : {}),
       ...(g.img ? { img: g.img } : {}),
       medios: g.medios,
@@ -726,13 +732,14 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
-      else if (nuevo === "General" && n.analisis?.lugar) nuevo = n.analisis.lugar;
-      if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
+      else if (nuevo === "General" && n.analisis?.lugar && (n.analisis.lugar !== "Provincia" || n.analisis.v === 2)) nuevo = n.analisis.lugar;
+      n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       // Webs municipales de otro pueblo que se agruparon por error
       if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
+      if (c.porTexto) n.porTexto = true; else delete n.porTexto;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
       if (!interesa(n)) return false;
