@@ -48,7 +48,6 @@ const FEEDS = [
   { nombre: "Ayuntamiento de Riaza", urls: ["https://www.riaza.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Riaza" },
   { nombre: "Ayuntamiento de Sepúlveda", urls: ["https://www.sepulveda.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Sepúlveda" },
   { nombre: "Ayuntamiento de La Lastrilla", urls: ["https://www.lalastrilla.es/home/-/asset_publisher/Sd1Q/rss"], pueblo: "La Lastrilla" },
-  { nombre: "Diputación de Segovia", urls: ["https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/rss", "https://www.abades.es/home/-/asset_publisher/g0dC/rss"], pueblo: "Provincia" },
   { nombre: "Agronews Castilla y León", urls: ["https://www.agronewscastillayleon.com/feed/"], soloSiMenciona: true },
   ...Object.entries(AYUNTAMIENTOS_WEB).map(([pueblo, urls]) => ({ nombre: "Ayuntamiento de " + pueblo, urls, pueblo, todas: urls.length > 1, ayto: true })),
 ];
