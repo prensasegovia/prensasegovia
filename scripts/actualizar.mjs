@@ -115,6 +115,8 @@ const BUSQUEDAS = [
   'Segovia fiestas OR encierros OR "concentración motera" OR festival',
   'Segovia visita ministro OR ministra OR presidente OR consejero OR delegado',
   'Segovia mitin OR "29N" OR campaña OR candidatos',
+  'Labajos Onésimo OR "Onésimo Redondo" OR Falange OR homenaje',
+  'Segovia Falange OR franquista OR "memoria histórica" OR fosa OR exhumación',
   'Segovia pintadas OR vandalismo OR ultras OR "extrema derecha" OR "extrema izquierda" OR antifascista OR neonazi',
   'Segovia banda OR bandas OR pandilla OR "delito de odio" OR racismo',
   'Segovia polémica OR tensión OR crispación OR abucheos OR "malestar vecinal"',
@@ -233,15 +235,17 @@ const MUNIS = [
 const MUNI_RE = MUNIS.map(([nombre, municipio]) => {
   const n = reEsc(nombre);
   const pre = AMBIGUOS.has(nombre) ? "(?:\\b(?:en|de|a|desde|hacia|vecinos de|localidad de|municipio de|pueblo de)\\s)" : "(?:^|[^\\p{L}])";
-  return { municipio, re: new RegExp(pre + "(" + n + ")(?![\\p{L}])", "u") };
+  // Pueblos que también son apellidos: valen además al principio del titular seguidos de un verbo, o con "(Segovia)"
+  const inicio = AMBIGUOS.has(nombre) ? new RegExp("^\\s(" + n + ")(?=\\s+[a-záéíóúñ]|\\s*\\(segovia\\))", "u") : null;
+  return { municipio, re: new RegExp(pre + "(" + n + ")(?![\\p{L}])", "u"), inicio };
 });
 
 const PERMITIDOS_ANTES = new Set(["Ayuntamiento","Villa","Comunidad","Tierra","Real","Sitio","Plaza","Colegio","Instituto","Club","Diputación","Alcalde","Alcaldesa","Centro","Hoces","Castillo","Feria","Fiestas","Polígono","Calle","Carretera","Puerto","Estación","Mancomunidad","Partido","Juzgado","Cuartel","Puesto","Municipio","Pueblo","Localidad","Noticias","Vecinos","Segovia","Provincia","Hoy","Ayer"]);
 function municipioDe(texto) {
   let t = " " + texto + " ";
   const hallados = [];
-  for (const { municipio, re } of MUNI_RE) {
-    const m = t.match(re);
+  for (const { municipio, re, inicio } of MUNI_RE) {
+    const m = t.match(re) || (inicio && t.match(inicio)) || (inicio && t.replace(/\(Segovia\)/g, "(segovia)").match(inicio));
     if (m) {
       const antes = t.slice(Math.max(0, m.index + m[0].indexOf(m[1]) - 30), m.index + m[0].indexOf(m[1]));
       const prev = antes.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)[\s-]+$/u);
@@ -284,8 +288,8 @@ const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infanti
 // IMPORTANTE (rojo): solo lo grave de verdad, y decidido por el titular
 const ALTA = /detenid|detien|detencion|arrestad|agresion|agredid|apunal|acuchill|reyerta|pelea multitudinaria|tiroteo|disparo|violencia de genero|violencia machista|asesin|homicid|mata a|muerte violenta|cadaver|robo con violencia|atraco|okupa|ocupacion ilegal|banda (latina|juvenil|organizada|criminal)|trinitarios|organizacion criminal|delito de odio|operacion (de la guardia civil|antidroga|policial)|desarticula|incautad|narcotrafic|manifestacion|concentracion (de|contra|en|frente|ante|convocada)|se concentrar|se manifestar|convoca(n|do|da)? (una |la )?(concentracion|manifestacion|huelga|protesta|movilizacion|tractorada|marcha)|huelga (indefinida|general)|tractorada|corte de (la )?(carretera|via|autovia)|cortan la|encierro (de|en) protesta|se encierran|desalojo|desahucio|disturbios|altercados|enfrentamiento|cargas policiales|pintadas|\bultras\b|ultraderech|neonazi|esvastica|fallec|muere|murio|muertos?\b|mortal|herido grave|heridos graves|incendio|desaparecid|rescat|evacuad|explosion|derrumbe|visita (del|de la) (ministr|president|rey|reina|vicepresident)|felipe vi|\bel rey\b|mitin|vertido|peces muertos|muerte de peces/;
 // Actos de recuerdo con carga política (franquismo, memoria histórica, terrorismo, partidos): sí son importantes
-const ACTO_RECUERDO = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
-const POLITIZADO = /franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
+const ACTO_RECUERDO = /homenaje|exaltacion|marcha|monolito|cruz|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
+const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
 const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
