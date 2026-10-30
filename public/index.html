@@ -114,7 +114,9 @@ a{color:inherit}
 .pill.nuevo{background:var(--new);color:#fff}
 .cat{color:var(--muted);display:inline-flex;align-items:center;gap:4px}
 .cat svg{width:14px;height:14px}
-.time{margin-left:auto;color:var(--muted);white-space:nowrap}
+.foot-card{margin:-2px 0 9px}
+.time{color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:5px;font-weight:500}
+.time svg{width:14px;height:14px}
 .card h4{margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
 .card p{margin:0 0 9px;color:var(--muted);font-size:14.5px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .srcs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -314,12 +316,20 @@ const store = {
   set(k,v){ try{ localStorage.setItem("psg:"+k, JSON.stringify(v)); }catch(e){} }
 };
 function ago(dia, hora){
-  if (!hora) return dia===today() ? "" : "";
-  const t = new Date(`${dia}T${hora}:00`); const m = (Date.now()-t.getTime())/6e4;
-  if (m < 0) return hora;
-  if (m < 60) return `Hace ${Math.max(1,Math.round(m))} min`;
-  if (m < 60*12) return `Hace ${Math.floor(m/60)} h`;
-  return dia===today() ? hora : "";
+  if (!hora) return "";
+  const m = (Date.now()-new Date(`${dia}T${hora}:00`).getTime())/6e4;
+  if (m < 0) return "";
+  if (m < 60) return `hace ${Math.max(1,Math.round(m))} min`;
+  if (m < 60*24) return `hace ${Math.floor(m/60)} h`;
+  return "";
+}
+// "Hoy, 10:42 · hace 2 h", "Ayer, 18:05", "Lun 26 oct, 09:10" (sin hora si no se conoce)
+function cuando(dia, hora){
+  const t = today(); const x = D(dia);
+  const fecha = dia===t ? "Hoy" : dia===addDays(t,-1) ? "Ayer"
+    : cap(x.toLocaleDateString("es-ES",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,""));
+  const a = ago(dia, hora);
+  return `${fecha}${hora?", "+hora:""}${a?" · "+a:""}`;
 }
 
 /* ---------- Estado ---------- */
@@ -387,15 +397,16 @@ function card(n, opts={}){
   const vistos = new Set();
   const medios = (n.medios||[]).filter(m=>{ const k=norm(String(m.nombre).replace(/[.\s]+$/,"").replace(/^el\s+/i,"")); const u=String(m.url||""); if(vistos.has(k)||vistos.has(u)) return false; vistos.add(k); vistos.add(u); return true; });
   const src = medios.slice(0,4).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("");
-  const t = ago(n._dia, n.hora);
+  const t = cuando(n._dia, n.hora);
   return `<article class="card ${lvl}" ${first?`data-href="${esc(first)}"`:""}>
     <div class="top">
       ${isNew(n)?'<span class="pill nuevo">Nuevo</span>':""}
       <span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio||"Provincia")}</span>
-      ${ev}${cats}${t?`<span class="time">${esc(t)}</span>`:""}
+      ${ev}${cats}
     </div>
     <h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
+    <div class="foot-card"><span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t)}</span></div>
     <div class="srcs">${src}</div>
   </article>`;
 }
@@ -451,7 +462,7 @@ function viewNoticias(news){
         return `<a class="urg ${urg.length===1?"alone":""}" ${u?`href="${esc(u)}" target="_blank" rel="noopener"`:""}>
           <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio||"Provincia")}</span>
           <h3>${esc(n.titulo)}</h3>
-          <span class="when">${n.fecha_evento?esc(fmtDayName(n.fecha_evento))+(n.hora_evento?", "+esc(n.hora_evento):""):esc(ago(n._dia,n.hora)||fmtDayName(n._dia))}</span></a>`; }).join("") + `</div>`;
+          <span class="when">${n.fecha_evento?esc(fmtDayName(n.fecha_evento))+(n.hora_evento?", "+esc(n.hora_evento):""):esc(cuando(n._dia,n.hora))}</span></a>`; }).join("") + `</div>`;
   }
   h += chipsBar(pool);
   h += `<div class="feed">`;

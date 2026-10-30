@@ -282,6 +282,7 @@ async function main() {
     const tk = tokens(n.titulo);
     const ya = existentes.find(e => e.n.id === n.id || parecido(e.tk, tk) >= 0.6);
     if (ya) { // añade enlaces de otros medios a la que ya estaba
+      if (!ya.n.hora && n.hora) ya.n.hora = n.hora;
       for (const m of n.medios) if (!ya.n.medios.some(x => norm(x.nombre) === norm(m.nombre)) && ya.n.medios.length < 5) ya.n.medios.push(m);
       continue;
     }
