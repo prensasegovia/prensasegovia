@@ -1,1 +1,333 @@
-{}
+{
+ "Tribuna de Segovia": {
+  "home": 200,
+  "final": "https://www.tribunasegovia.com/",
+  "declarados": [],
+  "validos": [
+   {
+    "u": "https://www.tribunasegovia.com/rss.xml",
+    "items": 200
+   }
+  ],
+  "titulo": "Noticias Segovia - Tribuna",
+  "rssEnlaces": []
+ },
+ "El Día de Segovia": {
+  "home": 200,
+  "final": "https://www.eldiasegovia.es/",
+  "declarados": [],
+  "validos": [
+   {
+    "u": "https://www.eldiasegovia.es/sitemap-news.xml",
+    "items": 155,
+    "ultimo": "2026-10-30T12:11:44Z"
+   },
+   {
+    "u": "https://www.eldiasegovia.es/sitemap_news.xml",
+    "items": 155,
+    "ultimo": "2026-10-30T12:11:44Z"
+   }
+  ],
+  "titulo": "\r\n\tEl Día de Segovia. Noticias de Segovia y provincia | eldiasegovia.es \r\n",
+  "rssEnlaces": [
+   "https://www.eldiasegovia.es/listadorss"
+  ]
+ },
+ "Segovia al día": {
+  "home": 200,
+  "final": "https://segoviaaldia.es/",
+  "declarados": [],
+  "validos": [],
+  "titulo": " Segovia al día | Noticias de Segovia y provincia",
+  "rssEnlaces": [
+   "https://segoviaaldia.es/coverrss"
+  ]
+ },
+ "El Nordeste de Segovia": {
+  "home": 200,
+  "final": "https://www.elnordestedesegovia.es/",
+  "declarados": [],
+  "validos": [],
+  "titulo": "El Nordeste de Segovia - Tu periódico desde 1996",
+  "rssEnlaces": [
+   "https://www.elnordestedesegovia.es/media/mod_rsform_feedback/css/style.css?e36157"
+  ]
+ },
+ "Segovia Directo": {
+  "home": 200,
+  "final": "https://segoviadirecto.com/",
+  "declarados": [],
+  "validos": [],
+  "titulo": " Noticias de Segovia hoy",
+  "rssEnlaces": [
+   "https://segoviadirecto.com/coverrss"
+  ]
+ },
+ "Segovia 24/7": {
+  "home": 200,
+  "final": "http://segovia247.es/",
+  "declarados": [],
+  "validos": [],
+  "titulo": " El periódico digital 3.0. #nonstop de Segovia.  La web más rebelde y divertida de Segovia.",
+  "rssEnlaces": [
+   "http://segovia247.es/coverrss"
+  ]
+ },
+ "Diario de Castilla y León": {
+  "home": 200,
+  "final": "https://www.diariodecastillayleon.es/segovia/",
+  "declarados": [
+   "https://www.diariodecastillayleon.es/rss/segovia.xml"
+  ],
+  "validos": [
+   {
+    "u": "https://www.diariodecastillayleon.es/rss/segovia.xml",
+    "items": 21,
+    "ultimo": "Wed, 28 Oct 2026 17:17:52 +0100"
+   }
+  ],
+  "titulo": "Noticias de Segovia | Diario de Castilla y León",
+  "rssEnlaces": [
+   "https://www.diariodecastillayleon.es/rss/segovia.xml",
+   "https://www.diariodecastillayleon.es/rss.html"
+  ]
+ },
+ "COPE Segovia": {
+  "home": 200,
+  "final": "https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias",
+  "declarados": [
+   "https://www.cope.es/rss/home.xml",
+   "https://www.cope.es/rss/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/news/rss.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/videos/rss.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/audios/rss.xml"
+  ],
+  "validos": [
+   {
+    "u": "https://www.cope.es/rss/home.xml",
+    "items": 244,
+    "ultimo": "2026-10-30T14:22:39+01:00"
+   }
+  ],
+  "titulo": "Segovia | Emisoras | COPE",
+  "rssEnlaces": [
+   "https://www.cope.es/rss/home.xml",
+   "https://www.cope.es/rss/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/news/rss.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/videos/rss.xml",
+   "https://www.cope.es/api/es/emisoras&#x2F;castilla-y-leon&#x2F;segovia-provincia&#x2F;segovia/audios/rss.xml",
+   "https://www.cope.es/rss-cope.html"
+  ]
+ },
+ "Cadena SER Segovia": {
+  "home": 404,
+  "final": "https://cadenaser.com/castilla-y-leon/",
+  "declarados": [],
+  "validos": [],
+  "titulo": "Cadena SER: Noticias y Radio Online",
+  "rssEnlaces": []
+ },
+ "Onda Cero Segovia": {
+  "home": 200,
+  "final": "https://www.ondacero.es/emisoras/castilla-y-leon/segovia/",
+  "declarados": [
+   "https://www.ondacero.es/rss/8521.xml"
+  ],
+  "validos": [
+   {
+    "u": "https://www.ondacero.es/rss/8521.xml",
+    "items": 19,
+    "ultimo": "Thu, 29 Oct 2026 17:05:29 +0100"
+   }
+  ],
+  "titulo": "Últimas Noticias de Segovia | Onda Cero Segovia | Onda Cero Radio",
+  "rssEnlaces": [
+   "https://www.ondacero.es/rss/8521.xml"
+  ]
+ },
+ "Europa Press CyL": {
+  "home": 200,
+  "final": "https://www.europapress.es/castilla-y-leon/",
+  "declarados": [
+   "https://www.europapress.es/rss/rss.aspx?ch=283"
+  ],
+  "validos": [
+   {
+    "u": "https://www.europapress.es/rss/rss.aspx?ch=283",
+    "items": 11,
+    "ultimo": "Fri, 30 Oct 2026 08:33:53 GMT"
+   }
+  ],
+  "titulo": "\r\n\tNoticias de Castilla y León hoy - EUROPA PRESS\r\n",
+  "rssEnlaces": [
+   "https://www.europapress.es/rss/rss.aspx?ch=283"
+  ]
+ },
+ "ICAL": {
+  "home": 200,
+  "final": "https://www.agenciaical.es/",
+  "declarados": [],
+  "validos": [],
+  "titulo": "\r\n\tAgencia Ical\r\n",
+  "rssEnlaces": []
+ },
+ "RTVCyL": {
+  "home": 0,
+  "err": "fetch failed",
+  "declarados": [],
+  "validos": []
+ },
+ "Acueducto2": {
+  "home": 200,
+  "final": "https://www.acueducto2.com/",
+  "declarados": [
+   "https://www.acueducto2.com/feed",
+   "https://www.acueducto2.com/comments/feed"
+  ],
+  "validos": [
+   {
+    "u": "https://www.acueducto2.com/feed",
+    "items": 10,
+    "ultimo": "Fri, 16 Oct 2026 19:10:22 +0000"
+   },
+   {
+    "u": "https://www.acueducto2.com/comments/feed",
+    "items": 10,
+    "ultimo": "Sat, 05 Sep 2026 07:45:05 +0000"
+   },
+   {
+    "u": "https://www.acueducto2.com/feed/",
+    "items": 10,
+    "ultimo": "Fri, 16 Oct 2026 19:10:22 +0000"
+   },
+   {
+    "u": "https://www.acueducto2.com/rss/",
+    "items": 10,
+    "ultimo": "Fri, 16 Oct 2026 19:10:22 +0000"
+   }
+  ],
+  "titulo": "Acueducto2 &#8211; Noticias de Segovia",
+  "rssEnlaces": [
+   "https://www.acueducto2.com/feed",
+   "https://www.acueducto2.com/comments/feed"
+  ]
+ },
+ "El Adelantado": {
+  "home": 200,
+  "final": "https://eladelantado.com/",
+  "declarados": [
+   "https://eladelantado.com/feed/"
+  ],
+  "validos": [
+   {
+    "u": "https://eladelantado.com/feed/",
+    "items": 22,
+    "ultimo": "Fri, 30 Oct 2026 13:25:15 +0000"
+   },
+   {
+    "u": "https://eladelantado.com/rss/",
+    "items": 22,
+    "ultimo": "Fri, 30 Oct 2026 13:25:15 +0000"
+   },
+   {
+    "u": "https://eladelantado.com/rss",
+    "items": 22,
+    "ultimo": "Fri, 30 Oct 2026 13:25:15 +0000"
+   },
+   {
+    "u": "https://eladelantado.com/feed",
+    "items": 22,
+    "ultimo": "Fri, 30 Oct 2026 13:25:15 +0000"
+   }
+  ],
+  "titulo": "El Adelantado: Últimas noticias de Segovia y provincia",
+  "rssEnlaces": [
+   "https://eladelantado.com/feed/"
+  ]
+ },
+ "Subdelegación Segovia": {
+  "home": 200,
+  "final": "https://www.mpr.gob.es/Paginas/PageNotFoundError.aspx?requestUrl=/prencom/notas/Paginas/subdelegaciones/segovia.aspx",
+  "declarados": [
+   "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=1",
+   "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=20"
+  ],
+  "validos": [
+   {
+    "u": "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=1",
+    "items": 5
+   },
+   {
+    "u": "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=20",
+    "items": 11
+   }
+  ],
+  "titulo": "\rP&aacute;gina no encontrada404 [/prencom/notas/Paginas/subdelegaciones/segovia.aspx]\r",
+  "rssEnlaces": [
+   "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=1",
+   "https://www.mpr.gob.es/Paginas/rss.aspx?tipo=20"
+  ]
+ },
+ "Diputación Segovia": {
+  "home": 200,
+  "final": "https://www.dipsegovia.es/",
+  "declarados": [],
+  "validos": [],
+  "titulo": "Inicio - Diputación de Segovia - dipsegovia.es",
+  "rssEnlaces": []
+ },
+ "Junta CyL comunicacion": {
+  "home": 200,
+  "final": "https://comunicacion.jcyl.es/web/es/comunicacion-junta-castilla-leon.html",
+  "declarados": [],
+  "validos": [],
+  "titulo": "Comunicación de la Junta de Castilla y León | Comunicación | Junta de Castilla y León",
+  "rssEnlaces": []
+ },
+ "Ayto Cuéllar": {
+  "home": 200,
+  "final": "https://www.aytocuellar.es/",
+  "declarados": [
+   "https://www.aytocuellar.es/feed/",
+   "https://www.aytocuellar.es/comments/feed/"
+  ],
+  "validos": [
+   {
+    "u": "https://www.aytocuellar.es/feed/",
+    "items": 9,
+    "ultimo": "Fri, 30 Oct 2026 13:04:41 +0000"
+   },
+   {
+    "u": "https://www.aytocuellar.es/comments/feed/",
+    "items": 0
+   },
+   {
+    "u": "https://www.aytocuellar.es/rss/",
+    "items": 9,
+    "ultimo": "Fri, 30 Oct 2026 13:04:41 +0000"
+   },
+   {
+    "u": "https://www.aytocuellar.es/rss",
+    "items": 9,
+    "ultimo": "Fri, 30 Oct 2026 13:04:41 +0000"
+   }
+  ],
+  "titulo": "Ayuntamiento de Cuéllar &#8211; Plaza Mayor, 1   Cuéllar &#8211; 40200 (Segovia)  Telf. 921 140 014.",
+  "rssEnlaces": [
+   "https://www.aytocuellar.es/feed/",
+   "https://www.aytocuellar.es/comments/feed/"
+  ]
+ },
+ "Ayto El Espinar": {
+  "home": 0,
+  "err": "fetch failed",
+  "declarados": [],
+  "validos": []
+ },
+ "Ayto Real Sitio": {
+  "home": 0,
+  "err": "fetch failed",
+  "declarados": [],
+  "validos": []
+ }
+}
