@@ -14,6 +14,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="app-180.png">
 <title>Prensa Segovia</title>
+<script>try{var t=JSON.parse(localStorage.getItem("psg:tema"));if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
@@ -27,10 +28,11 @@
   --safe-t: env(safe-area-inset-top, 0px);
   --bar: calc(58px + var(--safe-t));
 }
-@media (prefers-color-scheme: dark){
-  :root{ --stone:#0E1412; --surface:#171F1C; --ink:#E7ECE9; --muted:#9AA6A1; --line:#28322E;
+:root[data-theme="dark"]{color-scheme:dark; --stone:#0E1412; --surface:#171F1C; --ink:#E7ECE9; --muted:#9AA6A1; --line:#28322E;
     --pine-soft:#1B2D27; --alta-soft:#3B1F1C; --alta-ink:#FF9488; --media-soft:#33280F; --pine-2:#86CAB5; --media:#E6AE45; --star:#F2C14E; }
-}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){color-scheme:dark; --stone:#0E1412; --surface:#171F1C; --ink:#E7ECE9; --muted:#9AA6A1; --line:#28322E;
+    --pine-soft:#1B2D27; --alta-soft:#3B1F1C; --alta-ink:#FF9488; --media-soft:#33280F; --pine-2:#86CAB5; --media:#E6AE45; --star:#F2C14E; } }
+:root[data-theme="light"]{color-scheme:light}
 /* En la app instalada, iOS difumina el borde superior: se baja un poco la cabecera */
 @media (display-mode: standalone){ :root{ --safe-t: calc(env(safe-area-inset-top, 0px) + 6px); } }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -136,6 +138,8 @@ svg{flex:none}
 .abtn svg{width:18px;height:18px}
 .abtn.fav[aria-pressed="true"]{color:var(--star)}
 .abtn.fav[aria-pressed="true"] svg{fill:currentColor}
+.pista{font-size:14px;line-height:1.4;margin:-3px 0 9px;padding:7px 10px;border-radius:10px;background:var(--pine-soft);color:var(--ink)}
+.pista b{color:var(--pine-2);font-weight:700}
 mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 
 /* Nuevo / al día */
@@ -261,11 +265,16 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   <div class="scrim" id="scrim"></div>
   <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="grab"></div>
-    <h2 id="sheetTitle">Filtros</h2>
+    <h2 id="sheetTitle">Filtros y ajustes</h2>
     <div class="row">
       <span class="t">Periodo</span>
       <div class="seg" id="segRango"><button data-v="3" type="button">3 días</button><button data-v="7" type="button">7 días</button><button data-v="21" type="button">21 días</button></div>
       <span class="h">Al volver a abrir la app vuelve a 3 días.</span>
+    </div>
+    <div class="row">
+      <span class="t">Aspecto</span>
+      <div class="seg" id="segTema"><button data-v="auto" type="button">Automático</button><button data-v="light" type="button">Claro</button><button data-v="dark" type="button">Oscuro</button></div>
+      <span class="h">Automático sigue el modo claro u oscuro del móvil.</span>
     </div>
     <div class="row">
       <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Se recuerda. También con el botón “Sin capital” de la barra de temas.</span></span><input type="checkbox" id="fCap"></label>
@@ -377,6 +386,7 @@ const st = {
   sinCapital: store.get("sinCapital2", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
+  tema: store.get("tema","auto"),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
   q:"", townQ:"",
   dias:[], fuentes:[], actualizado:"", loaded:false, error:false,
@@ -408,7 +418,7 @@ function allNews(){
   }
   return (cacheNews = [...map.values()]);
 }
-const kwHits = n => { if(!st.kws.length) return 0; const t = norm([n.titulo,n.resumen,n.municipio].join(" ")); return st.kws.filter(k=>t.includes(norm(k))).length; };
+const kwHits = n => { if(!st.kws.length) return 0; const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto].join(" ")); return st.kws.filter(k=>t.includes(norm(k))).length; };
 const enRango = n => n._dia >= addDays(today(), -(parseInt(st.rango,10)-1));
 // Filtros generales (los que se ven en la barra)
 function pasa(n){
@@ -436,6 +446,14 @@ function mediosDe(n){
   const vistos = new Set();
   return (n.medios||[]).filter(m=>{ const k=norm(String(m.nombre).replace(/[.\s]+$/,"").replace(/^el\s+/i,"")); const u=String(m.url||""); if(!safeUrl(u)||vistos.has(k)||vistos.has(u)) return false; vistos.add(k); vistos.add(u); return true; });
 }
+// Frase del cuerpo que explica por qué interesa (si no lo dice ya el titular o la entradilla)
+function extractoDe(n){
+  const a = n.analisis; if (!a) return "";
+  const f = (n.fecha_evento && a.evento && a.evento.fecha_evento===n.fecha_evento) ? a.evento.frase : a.extracto;
+  if (!f) return "";
+  const nf = norm(f).slice(0,60);
+  return norm(n.resumen||"").includes(nf) || norm(n.titulo).includes(nf) ? "" : f;
+}
 function card(n, opts={}){
   const lvl = n.relevancia==="alta"?"alta":n.relevancia==="media"?"media":"baja";
   const cat = n._cats[0] ? `<span class="cat">${ICON(CAT[n._cats[0]].d)}${esc(CAT[n._cats[0]].n)}</span>` : "";
@@ -452,6 +470,7 @@ function card(n, opts={}){
     ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
     <h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
+    ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     <div class="bottom"><div class="srcs">${src}</div><div class="acts">
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>
       <button class="abtn" type="button" data-share aria-label="Compartir">${I.share}</button>
@@ -519,7 +538,7 @@ function porDias(list, extra=""){
 }
 function viewBusqueda(news){
   const words = norm(st.q).split(/\s+/).filter(Boolean);
-  const res = news.filter(n=>{ const t = norm([n.titulo,n.resumen,n.municipio,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); }).sort(porHora);
+  const res = news.filter(n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); }).sort(porHora);
   return `<div class="sect"><h2>Resultados</h2><span class="aux">${plural(res.length,"noticia","noticias")} en 21 días, sin filtros</span></div><div class="feed">` +
     (res.length ? res.map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados</b>Prueba con otra palabra o el nombre de un pueblo.</div>`) + `</div>`;
 }
@@ -738,7 +757,16 @@ $("#q").addEventListener("keydown", e=>{ if (e.key==="Enter") e.target.blur(); i
 $("#qClear").addEventListener("click", ()=>toggleSearch(false));
 
 /* Hoja de filtros */
+function aplicaTema(){
+  const r = document.documentElement;
+  if (st.tema==="light"||st.tema==="dark") r.dataset.theme = st.tema; else delete r.dataset.theme;
+  const oscuro = st.tema==="dark" || (st.tema==="auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.querySelector('meta[name="theme-color"]').content = oscuro ? "#123029" : "#1E4A3F";
+}
+aplicaTema();
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", aplicaTema);
 function syncSheet(){
+  document.querySelectorAll("#segTema button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.tema));
   document.querySelectorAll("#segRango button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.rango));
   $("#fCap").checked = st.sinCapital; $("#fKw").checked = st.soloKw;
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
@@ -749,6 +777,7 @@ $("#scrim").addEventListener("click", closeSheet);
 $("#fClose").addEventListener("click", closeSheet);
 $("#fMedios").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); abrirSub({t:"medios"}); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap").classList.contains("open")) closeSheet(); });
+$("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
 $("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); });
 $("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); });
 $("#fKw").addEventListener("change", e=>{ st.soloKw=e.target.checked; saveF(); });

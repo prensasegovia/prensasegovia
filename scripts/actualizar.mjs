@@ -7,6 +7,7 @@ import { MUNICIPIOS, AMBIGUOS, ALIAS, BARRIOS_CAPITAL } from "./municipios.mjs";
 
 const SALIDA = new URL("../public/datos.json", import.meta.url);
 const DIAS_HISTORICO = 21;
+const CACHE = new URL("../datos/analizadas.json", import.meta.url);
 const HORAS_VENTANA = 72;          // se aceptan noticias publicadas en las últimas 72 h
 const TZ = "Europe/Madrid";
 
@@ -136,6 +137,7 @@ function items(xml) {
       fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()),
       sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
       texto: limpia(txt(it.description) || txt(it.summary) || txt(it["content:encoded"]) || txt(it.content)),
+      cuerpo: limpia(txt(it["content:encoded"]) || txt(it.content) || ""),
       fuente: limpia(txt(it.source)),
     };
   }).filter(x => x.titulo && /^https?:\/\//.test(x.url));
@@ -328,6 +330,76 @@ function parecido(a, b) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Lectura del cuerpo de la noticia                                    */
+/* ------------------------------------------------------------------ */
+async function leeArticulo(url) {
+  try {
+    const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html" }, signal: AbortSignal.timeout(10000), redirect: "follow" });
+    if (!r.ok) return "";
+    let html = (await r.text()).slice(0, 600000);
+    const art = html.match(/<article[\s\S]*?<\/article>/i); if (art && art[0].length > 1500) html = art[0];
+    const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => limpia(m[1])).filter(p => p.length > 60 && !/cookies|suscri|newsletter|todos los derechos|publicidad|comparte|whatsapp|telegram/i.test(p));
+    return ps.join(" ").slice(0, 8000);
+  } catch { return ""; }
+}
+// Indicios fuertes en el cuerpo (hacen falta al menos 2 menciones para contar)
+const FUERTE = {
+  policial: /detenid|detencion|guardia civil (ha )?(investiga|detiene|detuvo|esclarece|desarticula|busca)|agresion|apunal|reyerta|okupa|banda (latina|juvenil|organizada|criminal)|delito de odio|robo con (fuerza|violencia)|violencia de genero|atestado/g,
+  social: /concentracion|manifestacion|huelga|tractorada|protesta|movilizacion|recogida de firmas|plataforma (vecinal|ciudadana|contra|en defensa|de afectados)|cacerolada|pintadas|neonazi|\bultras?\b|extrema (derecha|izquierda)|antifascista|inmigra|migrantes|centro de acogida|desalojo|abuche|escrache|crispacion|enfrentamiento|alegaciones|se oponen|rechazo vecinal/g,
+  autoridades: /visita (del|de la) (ministr|president|consejer|delegad|subdelegad|secretari)|visitara|mitin|acto electoral|campana electoral|acto de campana/g,
+};
+const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
+function analizaCuerpo(titulo, cuerpo, publicada) {
+  if (!cuerpo || cuerpo.length < 200) return { vacio: true };
+  const t = norm(cuerpo.slice(0, 5000));
+  const cats = [], pistas = [];
+  for (const [k, re] of Object.entries(FUERTE)) {
+    const m = [...t.matchAll(re)];
+    if (m.length >= 2 || (k === "autoridades" && m.length)) { cats.push(k); pistas.push(m[0].index); }
+  }
+  // Frase que explica por qué interesa
+  const frases = cuerpo.slice(0, 5000).split(/(?<=[.!?])\s+/);
+  let extracto = "";
+  if (cats.length) {
+    const re = new RegExp(cats.map(k => FUERTE[k].source).join("|"));
+    extracto = frases.find(f => re.test(norm(f)) && !norm(titulo).includes(norm(f).slice(0, 40))) || "";
+  }
+  // Convocatoria con fecha en el cuerpo
+  let evento = null;
+  for (const f of frases) {
+    const nf = norm(f);
+    if (!CONVOCA_CUERPO.test(nf)) continue;
+    const e = eventoDe(f, "", publicada, ["social"]);
+    if (e.fecha_evento && e.convocatoria) { evento = { fecha_evento: e.fecha_evento, ...(e.hora_evento ? { hora_evento: e.hora_evento } : {}), frase: recorta(f, 240) }; break; }
+  }
+  const muni = municipioDe(cuerpo.slice(0, 1500));
+  return { cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "" };
+}
+// Lo que se guarda con la noticia (sin campos vacíos)
+function limpiaAnalisis(a) {
+  if (!a || a.vacio) return null;
+  const o = {};
+  if (a.cats?.length) o.cats = a.cats;
+  if (a.extracto) o.extracto = a.extracto;
+  if (a.evento) o.evento = a.evento;
+  if (a.pueblo) o.pueblo = a.pueblo;
+  return Object.keys(o).length ? o : null;
+}
+function conCuerpo(c, a, municipio) {
+  if (!a?.cats?.length) return c;
+  const categorias = [...new Set([...c.categorias, ...a.cats])].slice(0, 3);
+  let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
+  if (a.extracto && ALTA.test(norm(a.extracto))) relevancia = "alta";
+  if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
+  return { categorias, relevancia };
+}
+function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
+  const e = eventoDe(titulo, resumen, publicada, categorias);
+  if (e.fecha_evento || !a?.evento) return e;
+  return { fecha_evento: a.evento.fecha_evento, ...(a.evento.hora_evento ? { hora_evento: a.evento.hora_evento } : {}), convocatoria: true };
+}
+
+/* ------------------------------------------------------------------ */
 /* Principal                                                           */
 /* ------------------------------------------------------------------ */
 async function main() {
@@ -385,20 +457,47 @@ async function main() {
     if (g) {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
       if (!g.texto && b.texto) g.texto = b.texto;
+      if ((b.cuerpo || "").length > (g.cuerpo || "").length) g.cuerpo = b.cuerpo;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
+
+  // 3b) Leer el cuerpo de las noticias nuevas: lo interesante no siempre está en el titular
+  let cache = {};
+  try { cache = JSON.parse(await readFile(CACHE, "utf8")); } catch {}
+  let previoTmp = { dias: [] };
+  try { previoTmp = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
+  const conocidas = new Set((previoTmp.dias || []).flatMap(d => d.noticias.flatMap(n => n.medios.map(m => m.url))));
+  const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || cache[m.url]));
+  let leidas = 0;
+  const cola = pendientes.slice(0, 80);
+  await Promise.all(Array.from({ length: 8 }, async () => {
+    while (cola.length) {
+      const g = cola.shift();
+      let cuerpo = g.cuerpo && g.cuerpo.length > 400 ? g.cuerpo : "";
+      const url = g.medios.map(m => m.url).find(u => !/news\.google\./.test(u));
+      if (!cuerpo && url) { cuerpo = await leeArticulo(url); if (cuerpo) leidas++; }
+      const a = analizaCuerpo(g.titulo, cuerpo, g.fecha);
+      for (const m of g.medios) cache[m.url] = { ...a, t: Date.now() };
+    }
+  }));
+  // Lo ya analizado en pasadas anteriores también cuenta
+  for (const g of grupos) { const m = g.medios.find(m => cache[m.url]); if (m) g.analisis = cache[m.url]; }
+  console.log(`Cuerpos leídos: ${leidas} de ${pendientes.length} noticias nuevas`);
 
   // 4) Clasificar
   const nuevas = grupos.map(g => {
     const resumen = g.texto ? recorta(g.texto) : "";
-    const municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
-    const { categorias, relevancia } = clasifica(g.titulo, resumen, municipio, soloAyto(g.medios));
-    const evento = eventoDe(g.titulo, resumen, g.fecha, categorias);
+    const a = limpiaAnalisis(g.analisis);
+    let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
+    if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
+    const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios)), a, municipio);
+    const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
       ...evento,
       id: hash(norm(g.titulo)),
       titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
+      ...(a ? { analisis: a } : {}),
       medios: g.medios,
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
@@ -445,12 +544,15 @@ async function main() {
       juntaMedios(n.medios, []);
       n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
       if (!n.medios.length || n.medios.every(m => OPINION.test(m.url))) return false;
-      const nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
+      if (!n.analisis) { const m = n.medios.find(m => cache[m.url]); if (m) n.analisis = limpiaAnalisis(cache[m.url]); }
+      if (!n.analisis) delete n.analisis;
+      let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
+      if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
-      const c = clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios));
+      const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios)), n.analisis, n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
-      if (n.publicado) Object.assign(n, eventoDe(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias));
+      Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
       if (!interesa(n)) return false;
       if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
       return true;
@@ -495,7 +597,12 @@ async function main() {
   if (!porDia.has(hoy)) porDia.set(hoy, { fecha: hoy, noticias: [] });
   porDia.get(hoy).generado = horaMadrid(ahora);
   const corte = fechaMadrid(new Date(ahora.getTime() - DIAS_HISTORICO * 864e5));
-  const dias = [...porDia.values()].filter(d => d.fecha >= corte).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  // Las noticias viejas se borran, salvo las que anuncian algo que todavía no ha pasado (siguen en la agenda)
+  for (const d of porDia.values()) if (d.fecha < corte) d.noticias = d.noticias.filter(n => n.fecha_evento && n.fecha_evento >= hoy);
+  const dias = [...porDia.values()].filter(d => d.fecha >= corte || d.noticias.length).sort((a, b) => b.fecha.localeCompare(a.fecha));
+  // Caché de cuerpos analizados: 5 días
+  for (const [u, v] of Object.entries(cache)) if (Date.now() - (v.t || 0) > 5 * 864e5) delete cache[u];
+  await writeFile(CACHE, JSON.stringify(cache));
 
   const salida = {
     actualizado: `${hoy} ${horaMadrid(ahora)}`,
