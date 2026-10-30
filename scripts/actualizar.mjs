@@ -120,8 +120,11 @@ async function descarga(url) {
     headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "application/rss+xml, application/xml, text/xml, */*", "Accept-Language": "es-ES,es;q=0.9" },
     signal: AbortSignal.timeout(20000), redirect: "follow",
   });
-  if (!r.ok) throw new Error("HTTP " + r.status);
-  const txt = await r.text();
+  let res = r;
+  // Algunos servidores rechazan las cabeceras de lector de RSS: se reintenta como un navegador normal
+  if (res.status === 403) res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" }, signal: AbortSignal.timeout(20000), redirect: "follow" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const txt = await res.text();
   if (!/<(rss|feed|rdf:RDF|urlset)[\s>]/i.test(txt.slice(0, 3000))) throw new Error("no es un feed");
   return txt;
 }
