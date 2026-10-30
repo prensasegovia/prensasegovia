@@ -311,7 +311,7 @@ const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|for
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
-  if (soloOrganizacion(n.medios || []) && !c.some(k => ["social", "autoridades", "policial"].includes(k)) && !n.fecha_evento && !CONCRETO(n.municipio)) return true;
+  if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)) return true;
   const solo = ks => c.length && c.every(k => ks.includes(k));
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
@@ -533,7 +533,7 @@ async function main() {
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
     municipio = fueraDeProvincia(g.titulo, municipio);
-    const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios)), a, municipio);
+    const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
       ...evento,
@@ -593,7 +593,7 @@ async function main() {
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
-      const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios)), n.analisis, n.municipio);
+      const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
