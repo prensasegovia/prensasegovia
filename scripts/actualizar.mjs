@@ -400,6 +400,8 @@ function relleno(n) {
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
   if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias", "medioambiente"])) return true;
+  // Periodismo de servicio (consejos, guías, precios): no son noticias para la unidad salvo sucesos o movilizaciones
+  if (/^(ventajas|consejos|claves|trucos|como (ahorrar|calentar|elegir|hacer|preparar)|cuanto cuesta|el precio de|guia (para|de)|todo lo que|lo que (debes|tienes que)|asi (es|son|se|puedes)|estos son los mejores|que hacer|planes para|recomendaciones)/.test(tt) && !c.some(k => ["policial", "social"].includes(k))) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
