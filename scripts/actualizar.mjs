@@ -14,19 +14,31 @@ const TZ = "Europe/Madrid";
 /* Fuentes                                                             */
 /* ------------------------------------------------------------------ */
 // Feeds directos de medios. Para cada uno se prueban varias direcciones y se usa la primera que funcione.
+// todas: lee todas las URLs (no solo la primera que funcione). pueblo: municipio por defecto si la noticia no lo dice.
 const FEEDS = [
   { nombre: "SegoviaUdaz", urls: ["https://segoviaudaz.es/feed/"] },
   { nombre: "esCuéllar", urls: ["https://escuellar.es/feed/"] },
   { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/", "https://www.eladelantado.com/rss/"] },
-  { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss/", "https://www.tribunasegovia.com/feed/", "https://www.tribunasegovia.com/rss"] },
-  { nombre: "El Día de Segovia", urls: ["https://www.eldiasegovia.es/rss/", "https://www.eldiasegovia.es/rss/portada.xml", "https://www.eldiasegovia.es/feed/"] },
+  { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss.xml"] },
+  { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/rss/DSGProvincia.xml", "http://www.eldiasegovia.es/RSS/DSGlocal.xml", "http://www.eldiasegovia.es/RSS/DSGPortada.xml"], todas: true },
   { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia", "https://www.elnortedecastilla.es/rss/2.0/portada"], soloSiMenciona: true },
-  { nombre: "Segovia al día", urls: ["https://segoviaaldia.es/rss/", "https://segoviaaldia.es/feed/", "https://segoviaaldia.es/rss"] },
-  { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/?format=feed&type=rss", "https://www.elnordestedesegovia.es/index.php?format=feed&type=rss"] },
-  { nombre: "El Espinar Información", urls: ["https://www.elespinar.org/feeds/posts/default?alt=rss"] },
-  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/feed/", "https://www.segoviadirecto.com/feed/"] },
-  { nombre: "Segovia 24/7", urls: ["https://segovia247.es/feed/", "https://www.segovia247.es/feed/"] },
-  { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia/", "https://www.diariodecastillayleon.es/segovia/rss/"], soloSiMenciona: true },
+  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"] },
+  { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"] },
+  { nombre: "Segovia al día", urls: ["https://segoviaaldia.es/coverrss"] },
+  { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/noticias?format=feed&type=rss", "https://www.elnordestedesegovia.es/?view=featured&id=1&format=feed&type=rss"] },
+  { nombre: "El Espinar Información", urls: ["https://www.elespinar.org/feeds/posts/default?alt=rss"], pueblo: "El Espinar" },
+  { nombre: "La Granja-Valsaín", urls: ["https://www.lagranja-valsain.com/feed/"], pueblo: "Real Sitio de San Ildefonso" },
+  { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia.xml"] },
+  { nombre: "COPE Segovia", urls: ["https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml", "https://www.cope.es/api/es/emisoras/castilla-y-leon/segovia-provincia/segovia/news/rss.xml"], soloSiMenciona: true },
+  { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"] },
+  { nombre: "Europa Press", urls: ["https://www.europapress.es/rss/rss.aspx?ch=283"], soloSiMenciona: true },
+  { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"] },
+  // Ayuntamientos con noticias propias (actos, plenos, fiestas, avisos)
+  { nombre: "Ayuntamiento de Cuéllar", urls: ["https://www.aytocuellar.es/feed/"], pueblo: "Cuéllar" },
+  { nombre: "Ayuntamiento de Cantalejo", urls: ["https://www.cantalejo.es/home/-/asset_publisher/QGA6lS8CBHs5/rss"], pueblo: "Cantalejo" },
+  { nombre: "Ayuntamiento de Riaza", urls: ["https://www.riaza.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Riaza" },
+  { nombre: "Ayuntamiento de Sepúlveda", urls: ["https://www.sepulveda.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Sepúlveda" },
+  { nombre: "Ayuntamiento de La Lastrilla", urls: ["https://www.lalastrilla.es/home/-/asset_publisher/Sd1Q/rss"], pueblo: "La Lastrilla" },
 ];
 
 // Búsquedas en Google Noticias (cubren también radios, agencias y medios sin RSS propio)
@@ -96,12 +108,20 @@ async function descarga(url) {
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const txt = await r.text();
-  if (!/<(rss|feed|rdf:RDF)[\s>]/i.test(txt.slice(0, 2000))) throw new Error("no es un feed");
+  if (!/<(rss|feed|rdf:RDF|urlset)[\s>]/i.test(txt.slice(0, 3000))) throw new Error("no es un feed");
   return txt;
 }
 
 function items(xml) {
   const d = parser.parse(xml);
+  // Sitemap de noticias de Google (El Día de Segovia no tiene RSS)
+  if (d?.urlset) {
+    const urls = d.urlset.url; const txt = v => typeof v === "object" && v !== null ? (v["#text"] ?? "") : (v ?? "");
+    return (Array.isArray(urls) ? urls : [urls]).map(u => ({
+      titulo: limpia(txt(u?.["news:news"]?.["news:title"])), url: String(txt(u?.loc)).trim(),
+      fecha: new Date(txt(u?.["news:news"]?.["news:publication_date"]) || txt(u?.lastmod) || Date.now()), texto: "", fuente: "",
+    })).filter(x => x.titulo && /^https?:\/\//.test(x.url));
+  }
   const lista = d?.rss?.channel?.item ?? d?.feed?.entry ?? d?.["rdf:RDF"]?.item ?? [];
   return (Array.isArray(lista) ? lista : [lista]).map(it => {
     const txt = v => typeof v === "object" && v !== null ? (v["#text"] ?? "") : (v ?? "");
@@ -243,6 +263,8 @@ const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carc
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
   fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid" };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
+// Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
+const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) ? pueblo : m;
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
@@ -269,7 +291,7 @@ const CANON = { segoviaudaz: "SegoviaUdaz", escuellar: "esCuéllar", tribunadese
   eladelantado: "El Adelantado", eladelantadodesegovia: "El Adelantado", elnortedecastilla: "El Norte de Castilla", segoviadirectocom: "Segovia Directo",
   segoviadirecto: "Segovia Directo", cope: "COPE Segovia", copesegovia: "COPE Segovia", cadenaser: "Cadena SER", ondacero: "Onda Cero Segovia",
   diariodecastillayleon: "Diario de Castilla y León", diariodecastillayleonsegovia: "Diario de Castilla y León", europapress: "Europa Press",
-  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE" };
+  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE", lagranjavalsain: "La Granja-Valsaín", segoviaaldia: "Segovia al día", diariodecastillayleonsegovia2: "Diario de Castilla y León", ondacerosegovia: "Onda Cero Segovia", acueducto2: "Acueducto2", acueducto2com: "Acueducto2" };
 const canonMedio = n => CANON[norm(n).replace(/[^a-z0-9]/g, "")] || String(n).replace(/[.\s]+$/, "");
 function juntaMedios(destino, origen) {
   for (const m of origen) {
@@ -302,20 +324,19 @@ async function main() {
 
   // 1) Feeds de medios
   for (const f of FEEDS) {
-    let ok = false, error = "";
+    let ok = false, error = "", n = 0;
     for (const url of f.urls) {
       try {
         const its = items(await descarga(url));
-        let n = 0;
         for (const it of its) {
           if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           if (OPINION.test(it.url)) continue;
-        brutos.push({ ...it, medio: f.nombre, directo: true }); n++;
+          brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
         }
-        estado.push({ fuente: f.nombre, ok: true, noticias: n }); ok = true; break;
+        ok = true; if (!f.todas) break;
       } catch (e) { error = e.message; }
     }
-    if (!ok) estado.push({ fuente: f.nombre, ok: false, error });
+    estado.push(ok ? { fuente: f.nombre, ok: true, noticias: n } : { fuente: f.nombre, ok: false, error });
   }
 
   // 2) Google Noticias
@@ -344,25 +365,25 @@ async function main() {
   for (const b of recientes) {
     const tk = tokens(b.titulo);
     if (tk.size < 2) continue;
-    const yo = { tk, titulo: b.titulo, municipio: municipioDe(b.titulo + " " + b.texto), dia: fechaMadrid(b.fecha) };
+    const yo = { tk, titulo: b.titulo, municipio: conPueblo(municipioDe(b.titulo + " " + b.texto), b.pueblo), dia: fechaMadrid(b.fecha) };
     const g = grupos.find(g => mismaNoticia(g, yo));
     if (g) {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
       if (!g.texto && b.texto) g.texto = b.texto;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ ...yo, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
 
   // 4) Clasificar
   const nuevas = grupos.map(g => {
     const resumen = g.texto ? recorta(g.texto) : "";
-    const municipio = municipioDe(g.titulo + " " + resumen);
+    const municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     const { categorias, relevancia } = clasifica(g.titulo, resumen, municipio);
     const evento = eventoDe(g.titulo, resumen, g.fecha, categorias);
     return {
       ...evento,
       id: hash(norm(g.titulo)),
-      titulo: g.titulo, resumen, categorias, municipio, relevancia,
+      titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
       medios: g.medios,
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
@@ -409,7 +430,7 @@ async function main() {
       juntaMedios(n.medios, []);
       n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
       if (!n.medios.length || n.medios.every(m => OPINION.test(m.url))) return false;
-      const nuevo = municipioDe(n.titulo + " " + (n.resumen || ""));
+      const nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       const c = clasifica(n.titulo, n.resumen || "", n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;

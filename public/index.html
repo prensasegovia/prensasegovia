@@ -317,18 +317,26 @@ const MEDIOS = [
   {g:"Comarcales y locales", l:[
     ["esCuéllar","https://escuellar.es","Cuéllar y Tierra de Pinares"],
     ["El Nordeste de Segovia","https://www.elnordestedesegovia.es","Riaza, Ayllón, Sepúlveda, Boceguillas y el nordeste"],
-    ["El Espinar Información","https://www.elespinar.org","El Espinar, San Rafael, La Estación y Los Ángeles"]]},
+    ["El Espinar Información","https://www.elespinar.org","El Espinar, San Rafael, La Estación y Los Ángeles"],
+    ["La Granja-Valsaín","https://www.lagranja-valsain.com","Real Sitio de San Ildefonso"]]},
   {g:"Digitales de la provincia", l:[
     ["SegoviaUdaz","https://segoviaudaz.es","Pueblos, sucesos y convocatorias"],
     ["Segovia Directo","https://segoviadirecto.com",""],
     ["Segovia 24/7","https://segovia247.es",""],
     ["Tribuna de Segovia","https://www.tribunasegovia.com",""],
     ["Segovia al día","https://segoviaaldia.es",""],
-    ["Diario de Castilla y León – Segovia","https://www.diariodecastillayleon.es/segovia/",""]]},
+    ["Diario de Castilla y León – Segovia","https://www.diariodecastillayleon.es/segovia/",""],
+    ["Acueducto2","https://www.acueducto2.com",""]]},
   {g:"Prensa provincial", l:[
     ["El Adelantado de Segovia","https://www.eladelantado.com",""],
     ["El Norte de Castilla – Segovia","https://www.elnortedecastilla.es/segovia/","Parte del contenido es de pago"],
     ["El Día de Segovia","https://www.eldiasegovia.es",""]]},
+  {g:"Ayuntamientos con noticias propias", l:[
+    ["Ayuntamiento de Cuéllar","https://www.aytocuellar.es",""],
+    ["Ayuntamiento de Cantalejo","https://www.cantalejo.es",""],
+    ["Ayuntamiento de Riaza","https://www.riaza.es",""],
+    ["Ayuntamiento de Sepúlveda","https://www.sepulveda.es",""],
+    ["Ayuntamiento de La Lastrilla","https://www.lalastrilla.es",""]]},
   {g:"Radio, televisión y agencias", l:[
     ["COPE Segovia","https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias",""],
     ["Cadena SER – Radio Segovia y Radio Cuéllar","https://cadenaser.com/",""],
@@ -578,7 +586,7 @@ function viewImportantes(news){
 function viewMedios(){
   let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>Se revisan cada hora. Además, se busca en Google Noticias por temas de interés y por los 209 municipios (todos cada 3 horas).</p></section>`;
   if (st.fuentes.length){
-    h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"Sin RSS propio: llega por Google Noticias"}</span></div></div>`).join("") + `</div>`;
+    h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"No responde ahora: sus noticias llegan por Google Noticias"}</span></div></div>`).join("") + `</div>`;
   }
   for (const g of MEDIOS) h += `<div class="mgroup"><h3>${esc(g.g)}</h3>` + g.l.map(([n,u,d])=>`<a class="medio" href="${esc(u)}" target="_blank" rel="noopener"><div><b>${esc(n)}</b>${d?`<span>${esc(d)}</span>`:""}</div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("") + `</div>`;
   return h;
