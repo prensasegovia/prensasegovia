@@ -281,7 +281,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 /* ---------- Configuración ---------- */
 const CATS = [
   {k:"policial", n:"Policial y sucesos", d:"M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"},
-  {k:"social", n:"Movilizaciones", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
+  {k:"social", n:"Movilizaciones y conflictos", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
+  {k:"autoridades", n:"Visitas y actos oficiales", d:"M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"},
   {k:"politica", n:"Política", d:"M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M3 10l9-6 9 6z"},
   {k:"emergencias", n:"Tráfico y emergencias", d:"M12 3l9 16H3zM12 10v4M12 17h.01"},
   {k:"eventos", n:"Fiestas y eventos", d:"M4 21V4M4 4h12l-2 4 2 4H4"}
@@ -507,16 +508,22 @@ function viewNoticias(news){
 
 function viewAgenda(news){
   const t = today();
-  const ev = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t)
+  const base = news.filter(n=>baseFilter(n,true) && catFilter(n));
+  const ev = base.filter(n=>n.fecha_evento && n.fecha_evento>=t)
                  .sort((a,b)=>(a.fecha_evento+(a.hora_evento||"")).localeCompare(b.fecha_evento+(b.hora_evento||"")));
-  let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Convocatorias y eventos</span></div>`;
-  h += chipsBar(news.filter(n=>baseFilter(n,true) && n.fecha_evento && n.fecha_evento>=t));
-  if (!ev.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Cuando la prensa anuncie concentraciones, plenos o eventos con fecha, aparecerán aquí.</div>`;
-  const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
+  const sinFecha = base.filter(n=>n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)).sort(porHora);
+  let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Convocatorias, huelgas, visitas y eventos</span></div>`;
+  h += chipsBar(news.filter(n=>baseFilter(n,true) && (n.fecha_evento>=t || n.convocatoria)));
+  if (!ev.length && !sinFecha.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Cuando la prensa anuncie concentraciones, huelgas, manifestaciones, visitas o fiestas en cualquier pueblo, aparecerán aquí.</div>`;
   h += `<div class="feed">`;
+  const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
   for (const d of Object.keys(by).sort()){
     const x = D(d);
     h += `<div class="ag-day"><div class="ag-date ${d===t?"today":""}"><div class="d">${x.getDate()}</div><div class="m">${esc(x.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</div><div class="m">${esc(d===t?"hoy":x.toLocaleDateString("es-ES",{weekday:"short"}).replace(".",""))}</div></div><div>${by[d].map(n=>card(n,{noEv:true})).join("")}</div></div>`;
+  }
+  if (sinFecha.length){
+    h += `<div class="dayhead"><h3>Anunciadas, sin fecha clara</h3><span>${sinFecha.length}</span></div><p class="note" style="padding:0 4px 8px">Protestas y convocatorias de los últimos 5 días en las que la noticia no da una fecha concreta. Ábrelas para comprobarla.</p>`;
+    h += sinFecha.map(n=>card(n)).join("");
   }
   return h + `</div>`;
 }
@@ -535,7 +542,7 @@ function viewPueblos(news){
 }
 
 function viewMedios(){
-  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada hora. Además, hace 20 búsquedas en Google Noticias por temas (sucesos, Guardia Civil, protestas, huelgas, plataformas vecinales, plantas de biogás, plenos, fiestas…) y por los pueblos más grandes. Solo se guarda lo que es de Segovia o sus pueblos y de interés: sucesos, movilizaciones, política, emergencias y eventos multitudinarios.</p>`;
+  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada hora. Además, busca en Google Noticias por temas (sucesos, Guardia Civil, protestas, huelgas, plataformas vecinales, conflictos laborales, radicalismo, visitas oficiales, plantas de biogás, plenos, fiestas…) y por los 209 municipios de la provincia, que se repasan todos cada 3 horas. Solo se guarda lo que es de Segovia o sus pueblos y de interés: sucesos, movilizaciones y conflictos, política, visitas y actos oficiales, emergencias y eventos multitudinarios.</p>`;
   if (st.fuentes.length){
     h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"Sin RSS propio: llega por Google Noticias"}</span></div></div>`).join("") + `</div>`;
   }
@@ -567,7 +574,7 @@ function render(keepScroll){
   }
   app.innerHTML = st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="medios" ? viewMedios() : viewNoticias(news);
   const t = today();
-  const nAg = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,2)).length;
+  const nAg = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,3)).length;
   const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
   if (keepScroll) window.scrollTo(0,y);
   if (chipObs) chipObs.disconnect();

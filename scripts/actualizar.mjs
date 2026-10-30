@@ -57,6 +57,11 @@ const BUSQUEDAS = [
 // Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
 const MEDIOS_OK_RE = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
 const MEDIOS_OK = { test: m => MEDIOS_OK_RE.test(m) && !NO_ESPANA.test(m) };
+const GRUPOS_PUEBLOS = (() => {
+  const nombres = MUNICIPIOS.map(m => m.includes(" ") || AMBIGUOS.has(m) ? `"${m}"` : m);
+  const g = []; for (let i = 0; i < nombres.length; i += 12) g.push(`(${nombres.slice(i, i + 12).join(" OR ")}) Segovia`);
+  return g;
+})();
 const gnews = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:3d")}&hl=es&gl=ES&ceid=ES:es`;
 
 /* ------------------------------------------------------------------ */
@@ -148,7 +153,8 @@ function municipioDe(texto) {
 
 const PATRONES = {
   policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|seprona|antidroga|narcotrafico/,
-  social: /concentracion|manifestacion|protesta|huelga|paros parciales|plataforma|colectivo|movilizacion|reivindica|pancarta|sindicat|ccoo|ugt|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen)|recogida de firmas|marea blanca|en contra de|se oponen|rechazo vecinal|cacerolada|encierro de protesta/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|colectivo|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|en contra de|se oponen|rechazo|cacerolada|encierro|tractorada|agricultores|ganaderos|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|macrogranja|biogas|biometano|fotovoltaic|planta solar|parque solar|eolic|mineria|cantera|vertedero|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|convenio|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|inmigrant|migrantes|centro de acogida|refugiados|temporeros|okupa|ocupacion ilegal|desalojo|desahucio/,
+  autoridades: /visita (del|de la|de los) (ministr|president|rey|reina|delegad|consejer|vicepresident|secretari)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ministerio del interior|director general de la guardia civil/,
   politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
   emergencias: /accidente|colision|choque|salida de via|atropell|herid|fallec|muere|murio|incendio|fuego|bomberos|rescat|112|desaparecid|inundacion|nevada|temporal|aviso (amarillo|naranja|rojo)|corte de (la )?carretera|trafico|\bdgt\b|\ba-1\b|\ba-6\b|\bap-6\b|\bap-61\b|n-110|n-603|cl-6\d\d|sg-\d|evacuad|derrumbe|explosion/,
   economia: /empresa|empleo|paro registrado|inversion|millones de euros|industria|agricultor|ganader|poligono|comercio|negocio|turismo|hosteleria|subvencion|ayudas|precio/,
@@ -159,19 +165,19 @@ const PATRONES = {
 // Deportes y cultura no interesan salvo que haya un suceso
 const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 const EVENTO = /fiestas? (patronales|de |en honor|del )|encierros?|toros|capea|concentracion motera|festival|concierto|romeria|carrera popular|marcha (popular|reivindicativa)|cabalgata|verbena|penas|botellon|halloween|feria (de |del )|partido de alto riesgo|multitudinari/;
-const ALTA = /detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
+const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
 
 function clasifica(titulo, texto, municipio) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
-  const UTILES = ["policial", "social", "politica", "emergencias"];
+  const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
   if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja" };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
   if (EVENTO.test(tt) || (!categorias.length && EVENTO.test(t))) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
-  if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias"].includes(c))) relevancia = "alta";
+  if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades"].includes(c))) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
   return { categorias, relevancia };
@@ -180,25 +186,32 @@ function clasifica(titulo, texto, municipio) {
 /* Fecha de convocatoria: "el próximo sábado", "el 14 de noviembre", "a las 19:00" */
 const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const DIAS = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+const CONVOCA = /convoca|manifesta|concentrara|protestara|movilizara|convocatoria|concentrac|manifestac|huelga|paros|pleno|marcha|protesta|movilizac|tractorada|caravana|encierro|mitin|visita|visitara|acto |asamblea|recogida de firmas|cacerolada|celebrara|tendra lugar|se celebra|fiestas|encierros|concentracion motera|festival|romeria/;
+const LETRA_MES = { E: 0, F: 1, S: 8, O: 9, N: 10, D: 11 }; // 11N, 4D... (solo letras sin ambigüedad)
 function eventoDe(titulo, texto, publicada) {
   const t = norm(titulo + " " + texto);
-  if (!/convoca|concentracion|manifestacion|huelga|pleno|marcha|protesta|celebrara|tendra lugar|se celebra|movilizacion|paros/.test(t)) return {};
+  const tOrig = titulo + " " + texto;
+  if (!CONVOCA.test(t)) return {};
   const base = new Date(fechaMadrid(publicada) + "T12:00:00");
-  let f = null;
-  const m = t.match(/\b(\d{1,2}) de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/);
-  if (m) {
-    f = new Date(base); f.setMonth(MESES.indexOf(m[2]), +m[1]);
-    if (f < base) f.setFullYear(f.getFullYear() + 1);
-    if ((f - base) / 864e5 > 90) f = null;
-  } else {
-    const d = t.match(/\b(este|el proximo|proximo|el) (lunes|martes|miercoles|jueves|viernes|sabado|domingo)\b/);
-    if (d) { f = new Date(base); const delta = (DIAS.indexOf(d[2]) - f.getDay() + 7) % 7 || 7; f.setDate(f.getDate() + delta); }
-    else if (/\b(hoy|esta tarde|esta manana)\b/.test(t)) f = new Date(base);
-    else if (/\bmanana\b/.test(t) && !/esta manana/.test(t)) { f = new Date(base); f.setDate(f.getDate() + 1); }
-  }
-  if (!f) return {};
-  const h = t.match(/a las (\d{1,2})(?:[:.](\d{2}))?\s*(?:h|horas)?/);
+  const conAnio = f => { if (f < base) f.setFullYear(f.getFullYear() + 1); return (f - base) / 864e5 > 120 ? null : f; };
+  let f = null, m;
+  if ((m = t.match(/\b(?:del?|el|los dias|dias)?\s*(\d{1,2})(?:\s*(?:y|al|-|a)\s*\d{1,2})?\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/))) {
+    f = new Date(base); f.setMonth(MESES.indexOf(m[2]), +m[1]); f = conAnio(f);
+  } else if ((m = tOrig.match(/\b(\d{1,2})([EFSOND])\b/))) {
+    f = new Date(base); f.setMonth(LETRA_MES[m[2]], +m[1]); f = conAnio(f);
+  } else if ((m = t.match(/\b(?:este|el proximo|proximo|el)\s+(lunes|martes|miercoles|jueves|viernes|sabado|domingo)(?:,?\s*(?:dia\s*)?(\d{1,2}))?\b/))) {
+    f = new Date(base);
+    if (m[2]) { f.setDate(+m[2]); if (f < base) f.setMonth(f.getMonth() + 1); }
+    else { const delta = (DIAS.indexOf(m[1]) - f.getDay() + 7) % 7; f.setDate(f.getDate() + delta); }
+  } else if ((m = t.match(/\b(?:el|este|proximo)\s+dia\s+(\d{1,2})\b/))) {
+    f = new Date(base); f.setDate(+m[1]); if (f < base) f.setMonth(f.getMonth() + 1);
+  } else if (/\b(hoy|esta tarde|esta manana|esta noche|este mediodia)\b/.test(t)) f = new Date(base);
+  else if (/\bmanana\b/.test(t) && !/esta manana/.test(t)) { f = new Date(base); f.setDate(f.getDate() + 1); }
+  const convocatoria = /convoca|manifesta|concentrara|protestara|movilizara|concentrac|manifestac|huelga|paros|protesta|movilizac|tractorada|caravana|encierro|cacerolada|recogida de firmas|mitin|visita/.test(t);
+  if (!f) return convocatoria ? { convocatoria: true } : {};
+  const h = t.match(/a las (\d{1,2})(?:[:.,](\d{2}))?\s*(?:h|horas)?/) || t.match(/\b(\d{1,2})[:.](\d{2})\s*(?:h|horas)\b/);
   const out = { fecha_evento: f.toISOString().slice(0, 10) };
+  if (convocatoria) out.convocatoria = true;
   if (h && +h[1] < 24) out.hora_evento = String(h[1]).padStart(2, "0") + ":" + (h[2] ?? "00");
   return out;
 }
@@ -275,7 +288,9 @@ async function main() {
 
   // 2) Google Noticias
   let gTotal = 0, gFallos = 0;
-  for (const q of BUSQUEDAS) {
+  const turno = new Date().getUTCHours() % 3;
+  const busquedas = [...BUSQUEDAS, ...GRUPOS_PUEBLOS.filter((_, i) => i % 3 === turno)];
+  for (const q of busquedas) {
     try {
       for (const it of items(await descarga(gnews(q)))) {
         let titulo = it.titulo, medio = (it.fuente || "Google Noticias").replace(/[.\s]+$/, "");
@@ -288,7 +303,7 @@ async function main() {
     } catch (e) { gFallos++; }
     await new Promise(r => setTimeout(r, 900));
   }
-  estado.push({ fuente: "Google Noticias", ok: gFallos < BUSQUEDAS.length, noticias: gTotal, error: gFallos ? `${gFallos} búsquedas fallidas` : undefined });
+  estado.push({ fuente: "Google Noticias", ok: gFallos < busquedas.length, noticias: gTotal, error: gFallos ? `${gFallos} búsquedas fallidas` : undefined });
 
   // 3) Filtrar por fecha y agrupar duplicados (las de medios directos primero: traen mejor enlace y entradilla)
   const recientes = brutos.filter(b => !isNaN(b.fecha) && b.fecha >= limite && b.fecha <= new Date(ahora.getTime() + 36e5))
@@ -365,6 +380,7 @@ async function main() {
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       const c = clasifica(n.titulo, n.resumen || "", n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
+      if (!n.fecha_evento && n.publicado) Object.assign(n, eventoDe(n.titulo, n.resumen || "", new Date(n.publicado)));
       if (!interesa(n)) return false;
       if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
       return true;
