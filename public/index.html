@@ -73,6 +73,13 @@ svg{flex:none}
 .stat .n{font-weight:800;font-size:24px;line-height:1;font-variation-settings:"wdth" 70}
 .stat .l{font-size:12.5px;color:var(--pine-ink);margin-top:3px;line-height:1.2;display:flex;align-items:center;gap:3px}
 .stat.alta .n{color:#FFB4AB}
+.partebtn{margin-top:10px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:11px 13px;background:#fff;color:var(--pine);font-weight:700;font-size:15.5px;cursor:pointer;text-align:left}
+.partebtn svg{width:20px;height:20px}
+.partebtn span{margin-left:auto;font-weight:500;font-size:12.5px;color:#5B6763}
+.parte{white-space:pre-wrap;font:14.5px/1.5 "Archivo",system-ui,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;word-break:break-word;color:var(--ink)}
+.parte-acts{display:flex;gap:10px;position:sticky;bottom:calc(76px + var(--safe-b));padding:8px 0}
+.parte-acts .btn{flex:1;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.parte-acts .btn.ghost{background:var(--surface)}
 .subhero{background:var(--pine);color:#fff;padding:2px 16px 16px;border-radius:0 0 24px 24px}
 .subhero h1{margin:4px 0 2px;font-size:clamp(28px,8vw,38px);font-variation-settings:"wdth" 66;font-weight:800;line-height:1.05}
 .subhero p{margin:0;color:var(--pine-ink);font-size:14.5px}
@@ -387,6 +394,7 @@ const st = {
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   tema: store.get("tema","auto"),
+  parteDesde: "24h", parteLinks: store.get("parteLinks", false),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
   q:"", townQ:"",
   dias:[], fuentes:[], actualizado:"", loaded:false, error:false,
@@ -507,7 +515,8 @@ function viewNoticias(news){
       <button class="stat alta" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
       <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Convocatorias ${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l">Pueblos ${I.chev}</div></button>
-    </div></section>`;
+    </div>
+    <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevas.filter(n=>n.relevancia==="alta").slice(0,8);
   if (urg.length){
     h += `<div class="sect"><h2>Importante y nuevo</h2><span class="aux">${urg.length}</span></div><div class="rail">` +
@@ -603,6 +612,41 @@ function viewImportantes(news){
   let h = `<section class="subhero"><h1>Importantes</h1><p>${plural(list.length,"noticia","noticias")} en los últimos ${st.rango} días.</p></section><div class="feed">${avisoFiltros()}`;
   return h + (list.length ? porDias(list) : `<div class="empty"><b>Nada importante</b>No hay noticias marcadas como importantes en este periodo.</div>`) + `</div>`;
 }
+/* Parte del día: texto para pegar en WhatsApp o en un informe */
+function textoParte(news){
+  const ahora = Date.now(), t = today();
+  const desde = st.parteDesde==="hoy" ? new Date(t+"T00:00:00").getTime() : ahora - 24*36e5;
+  const base = news.filter(pasa);
+  const rec = base.filter(n=>(n._ts||0) >= desde).sort(porHora);
+  const imp = rec.filter(n=>n.relevancia==="alta");
+  const ag = base.filter(n=>n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7)).sort((a,b)=>(a.fecha_evento+(a.hora_evento||"99")).localeCompare(b.fecha_evento+(b.hora_evento||"99")));
+  const resto = rec.filter(n=>n.relevancia!=="alta" && !ag.includes(n));
+  const lugar = n => n.municipio && n.municipio!=="General" ? n.municipio : "Provincia";
+  const fuente = n => { const m = mediosDe(n)[0]; return m ? ` (${m.nombre})` + (st.parteLinks ? `\n  ${m.url}` : "") : ""; };
+  const linea = n => `• ${lugar(n)} — ${n.titulo}${fuente(n)}`;
+  const hora = new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+  let x = `*PARTE DE PRENSA · ${fmtLong(t)} · ${hora}*\n`;
+  const f = filtrosActivos().filter(v=>!/días$/.test(v)); if (f.length) x += `_Filtro: ${f.join(", ")}_\n`;
+  x += `_${st.parteDesde==="hoy"?"Noticias de hoy":"Últimas 24 horas"}_\n`;
+  x += `\n*IMPORTANTE*\n` + (imp.length ? imp.map(linea).join("\n") : "• Nada destacado") + "\n";
+  x += `\n*CONVOCATORIAS Y EVENTOS (próximos 7 días)*\n` + (ag.length ? ag.map(n=>`• ${cuando(n.fecha_evento,n.hora_evento)} · ${lugar(n)} — ${n.titulo}${fuente(n)}`).join("\n") : "• Sin convocatorias con fecha") + "\n";
+  if (resto.length){
+    x += `\n*RESTO DE NOTICIAS*\n`;
+    for (const c of CATS){ const l = resto.filter(n=>n._cats[0]===c.k); if (l.length) x += `_${c.n}_\n` + l.map(linea).join("\n") + "\n"; }
+  }
+  return { x, n: imp.length + ag.length + resto.length };
+}
+function viewParte(news){
+  const { x, n } = textoParte(news);
+  return `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto, con los filtros que tengas puestos.</p></section>
+  <div class="feed" style="padding-top:12px">
+    <div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div>
+    <label class="sw" style="margin:12px 4px 0"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
+    <div class="parte" id="parteTxt">${esc(x)}</div>
+    <div class="parte-acts"><button class="btn ghost" data-act="parteCopiar" type="button">Copiar</button><button class="btn" data-act="parteEnviar" type="button">Enviar…</button></div>
+    <p class="note" style="padding:0 4px">${plural(n,"noticia","noticias")} en el parte. Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p>
+  </div>`;
+}
 function viewMedios(){
   let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>Se revisan cada hora. Además, se busca en Google Noticias por temas de interés y por los 209 municipios (todos cada 3 horas).</p></section>`;
   if (st.fuentes.length){
@@ -616,7 +660,7 @@ function viewMedios(){
 function appbar(){
   const bar = $("#appbar");
   if (st.sub){
-    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : "Medios";
+    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="parte" ? "Parte del día" : "Medios";
     bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div>`;
     $("#btnBack").onclick = () => cerrarSub();
     return;
@@ -647,7 +691,7 @@ function render(keepScroll){
     app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
-  if (st.sub) app.innerHTML = st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : viewMedios();
+  if (st.sub) app.innerHTML = st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios();
   else app.innerHTML = st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : viewNoticias(news);
   const t = today();
   const nAg = news.filter(n=>pasa(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,3)).length;
@@ -725,7 +769,9 @@ async function compartir(c){
 let avisoT;
 function aviso(txt){ const el=$("#aviso"); el.textContent=txt; el.classList.add("show"); clearTimeout(avisoT); avisoT=setTimeout(()=>el.classList.remove("show"),1600); }
 
+$("#app").addEventListener("change", e=>{ if (e.target.id==="parteLinks"){ st.parteLinks=e.target.checked; store.set("parteLinks",st.parteLinks); render(true); } });
 $("#app").addEventListener("click", e=>{
+  const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }
   const a = e.target.closest("a");
   if (a){ const c = a.closest("[data-k]"); if (c) marcarVisto([c.dataset.k]); return; }
   const card = e.target.closest(".card");
@@ -745,6 +791,9 @@ $("#app").addEventListener("click", e=>{
   else if (act==="limpiar"){ st.sinCapital=false; st.soloKw=false; st.cat=null; st.rango="3"; saveF(); aplicaFiltro(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
+  else if (act==="parte") abrirSub({t:"parte"});
+  else if (act==="parteCopiar"){ const x = $("#parteTxt").textContent; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
+  else if (act==="parteEnviar"){ const x = $("#parteTxt").textContent; if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");

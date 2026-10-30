@@ -295,6 +295,22 @@ const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
 const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
 const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
+// Relleno que no aporta a la unidad aunque toque un tema de interés
+const POL_CONFLICTO = /\bpp\b|psoe|\bvox\b|podemos|\bsumar\b|izquierda unida|\biu\b|segovia en marcha|por segovia|ciudadanos|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
+const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las )?mesas|mesas electorales|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
+const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|operacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
+const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
+function relleno(n) {
+  const tt = norm(n.titulo), c = n.categorias;
+  const solo = ks => c.length && c.every(k => ks.includes(k));
+  // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
+  if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
+  // 3) Estadísticas y trámites electorales (sí quedan candidaturas, mítines y visitas)
+  if (ESTADISTICA_ELECTORAL.test(tt) && !/candidat|mitin|visita|campana|lista/.test(tt) && solo(["politica", "social", "autoridades"])) return true;
+  // 2) Avisos preventivos de tráfico y emergencias (sí quedan los sucesos reales)
+  if (c.includes("emergencias") && solo(["emergencias", "politica", "autoridades"]) && PREVENTIVO_EMERG.test(tt) && !INCIDENTE.test(tt)) return true;
+  return false;
+}
 const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) ? pueblo : m;
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
@@ -522,7 +538,7 @@ async function main() {
   });
 
   // Fuera lo que no es de interés (deportes, cultura, economía...) y lo que no menciona Segovia ni ningún pueblo
-  const interesa = n => n.categorias.length > 0 && n.municipio !== "General";
+  const interesa = n => n.categorias.length > 0 && n.municipio !== "General" && !relleno(n);
   const antes = nuevas.length;
   for (let i = nuevas.length - 1; i >= 0; i--) if (!interesa(nuevas[i])) nuevas.splice(i, 1);
   console.log(`Descartadas por no ser de interés: ${antes - nuevas.length}`);
