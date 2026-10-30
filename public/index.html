@@ -68,13 +68,14 @@ svg{flex:none}
 .hero .day{font-weight:800;font-size:clamp(26px,7.4vw,40px);line-height:1;font-variation-settings:"wdth" 64;margin:6px 0 6px}
 .hero .sum{font-size:15px;color:var(--pine-ink);line-height:1.35}
 .hero .sum b{color:#fff;font-weight:700}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
 .stat{background:rgba(255,255,255,.1);border-radius:14px;padding:9px 11px;border:0;color:#fff;text-align:left;cursor:pointer;min-height:62px;display:flex;flex-direction:column;justify-content:space-between}
 .stat .n{font-weight:800;font-size:24px;line-height:1;font-variation-settings:"wdth" 70}
-.stat .l{font-size:12.5px;color:var(--pine-ink);margin-top:3px;line-height:1.2;display:flex;align-items:center;gap:3px}
+.stat .l{font-size:clamp(11px,3.4vw,12.5px);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--pine-ink);margin-top:3px;line-height:1.2;display:flex;align-items:center;gap:3px}
 .stat.alta .n{color:#FFB4AB}
 .partebtn{margin-top:10px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:11px 13px;background:#fff;color:var(--pine);font-weight:700;font-size:15.5px;cursor:pointer;text-align:left}
 .partebtn svg{width:20px;height:20px}
+@media (max-width:360px){.partebtn span{display:none}}
 .partebtn span{margin-left:auto;font-weight:500;font-size:12.5px;color:#5B6763}
 .parte{white-space:pre-wrap;font:14.5px/1.5 "Archivo",system-ui,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;word-break:break-word;color:var(--ink)}
 .parte-acts{display:flex;gap:10px;position:sticky;bottom:calc(76px + var(--safe-b));padding:8px 0}
@@ -132,7 +133,8 @@ svg{flex:none}
 .cat{color:var(--muted);display:inline-flex;align-items:center;gap:4px}
 .cat svg{width:14px;height:14px}
 .time{color:var(--muted);margin-left:auto;white-space:nowrap;font-weight:500}
-.card h4{margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
+.card{min-width:0}
+.card h4{overflow-wrap:anywhere;margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
 .card p{margin:0 0 9px;color:var(--muted);font-size:14.5px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .bottom{display:flex;align-items:flex-end;gap:8px}
 .srcs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-width:0;flex:1}
@@ -165,7 +167,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .filtrado .linkbtn{margin-left:auto;white-space:nowrap}
 
 /* ---------- Agenda ---------- */
-.ag-day{display:grid;grid-template-columns:58px 1fr;gap:10px;margin:12px 0}
+.ag-day{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;margin:12px 0}
 .ag-date{background:var(--pine);color:#fff;border-radius:14px;text-align:center;padding:8px 0 7px;align-self:start;position:sticky;top:calc(var(--bar) + 70px)}
 .ag-date .d{font-size:24px;font-weight:800;line-height:1;font-variation-settings:"wdth" 65}
 .ag-date .m{font-size:12px;opacity:.88}
