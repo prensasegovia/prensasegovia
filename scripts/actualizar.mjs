@@ -192,7 +192,10 @@ const PATRONES = {
 };
 // Deportes y cultura no interesan salvo que haya un suceso
 const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
-const EVENTO = /fiestas? (patronales|de |en honor|del )|encierros?|toros|capea|concentracion motera|festival|concierto|romeria|carrera popular|marcha (popular|reivindicativa)|cabalgata|verbena|penas|botellon|halloween|feria (de |del )|partido de alto riesgo|multitudinari/;
+// Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
+const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
+// Ocio y planes sin interés para la unidad
+const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
 const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
 
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
@@ -207,7 +210,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
-  if (EVENTO.test(tt) || (!categorias.length && EVENTO.test(t))) categorias.push("eventos");
+  if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
   if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades"].includes(c))) relevancia = "alta";
