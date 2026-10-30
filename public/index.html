@@ -640,7 +640,7 @@ function syncLabel(){
 let chipObs;
 function render(keepScroll){
   appbar();
-  const app = $("#app"); const y = window.scrollY;
+  const app = $("#app"); const y = window.scrollY; const chipsX = $("#chips")?.scrollLeft || 0;
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
   const news = allNews();
   if (!news.length && !st.sub && st.view!=="guardadas"){
@@ -656,7 +656,12 @@ function render(keepScroll){
   if (keepScroll) window.scrollTo(0,y);
   if (chipObs) chipObs.disconnect();
   const ch = $("#chips");
-  if (ch){ const sent = document.createElement("div"); ch.before(sent);
+  if (ch){
+    // La barra de temas conserva su posición y el tema elegido siempre queda a la vista
+    ch.scrollLeft = chipsX;
+    const sel = ch.querySelector('[data-cat][aria-pressed="true"]:not([data-cat=""])');
+    if (sel && (sel.offsetLeft < ch.scrollLeft || sel.offsetLeft + sel.offsetWidth > ch.scrollLeft + ch.clientWidth)) ch.scrollLeft = sel.offsetLeft - 16;
+    const sent = document.createElement("div"); ch.before(sent);
     chipObs = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 200), {rootMargin:`-${$("#appbar").offsetHeight+2}px 0px 0px 0px`}); chipObs.observe(sent); }
   observarVistos();
   const tq = $("#townQ");
