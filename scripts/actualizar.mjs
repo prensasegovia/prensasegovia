@@ -293,8 +293,8 @@ const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antoni
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
 const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
-const SERVICIO = /operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
-const SERVICIO_MAL = /falta de|sin medico|sin pediatra|deficit|colapso|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
+const SERVICIO = /fibra|cobertura|internet|telefonia|\bmovil\b|operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
+const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
@@ -594,6 +594,12 @@ async function periodicos(ahora) {
       } catch {}
     }
     estado.push({ medio: p.nombre, ok, nuevas: n });
+  }
+  // Lugar de cada noticia con las reglas actuales (las de sección local sin sitio en el titular son de la capital)
+  for (const n of porUrl.values()) {
+    let m = municipioDe(n.titulo + " " + (n.resumen || ""));
+    if (m === "General" && !FUERA.test(norm(n.titulo)) && !/\/(castilla-leon|espana|mundo|internacional|nacional)\//.test(n.url)) m = "Segovia";
+    n.municipio = m;
   }
   // Noticias sin foto: se toma la imagen principal del artículo (unas pocas por pasada)
   const sinFoto = [...porUrl.values()].filter(n => !n.img && !n.sinFoto).sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 15);

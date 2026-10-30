@@ -3,7 +3,7 @@ name: Actualizar noticias
 on:
   schedule:
     # Cada hora (minuto 17 para evitar la congestión de las horas en punto)
-    - cron: "17 * * * *"
+    - cron: "7,27,47 * * * *"
   workflow_dispatch: {}
   push:
     branches: [main]

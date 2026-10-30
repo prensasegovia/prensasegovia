@@ -167,6 +167,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .allread .ok{width:34px;height:34px;border-radius:50%;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center;flex:none}
 .allread b{display:block}
 .allread span{font-size:13.5px;color:var(--muted)}
+.viejo-w{background:var(--pine);padding:8px 12px 4px}
+.viejo{margin:0;padding:10px 14px;border-radius:14px;background:var(--alta-soft);color:var(--alta-ink);font-size:14px;line-height:1.4}
+.viejo b{display:block}
 .filtrado{display:flex;align-items:center;gap:10px;background:var(--media-soft);color:var(--ink);border-radius:14px;padding:8px 12px 8px 14px;margin:10px 0 2px;font-size:14px}
 .filtrado .linkbtn{margin-left:auto;white-space:nowrap}
 
@@ -516,7 +519,7 @@ function viewNoticias(news){
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
       <button class="stat alta" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
-      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Agenda 7 días ${I.chev}</div></button>
+      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Agenda ${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l">Pueblos ${I.chev}</div></button>
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
@@ -713,6 +716,17 @@ function appbar(){
   $("#btnReload").onclick = () => load(true);
   syncLabel();
 }
+// Si la actualización automática lleva tiempo sin funcionar, se avisa claramente
+function horasDesdeActualizacion(){
+  const m = (st.actualizado||"").match(/(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
+  return m ? (Date.now()-new Date(`${m[1]}T${m[2]}:${m[3]}:00`).getTime())/36e5 : 0;
+}
+function avisoViejo(){
+  const h = horasDesdeActualizacion();
+  if (h < 2.5) return "";
+  const t = h < 48 ? `${Math.floor(h)} horas` : `${Math.floor(h/24)} días`;
+  return `<div class="viejo-w"><div class="viejo"><b>Sin actualizar desde hace ${t}</b> (última revisión: ${esc(fmtCorto(st.actualizado.slice(0,10)))}, ${esc(st.actualizado.slice(11,16))}). Puede faltar lo más reciente.</div></div>`;
+}
 function syncLabel(){
   const tx = $("#syncTxt"); if (!tx) return;
   if (!st.actualizado){ tx.textContent = st.loaded ? (st.error?"Sin conexión":"Sin datos") : "Cargando…"; return; }
@@ -732,8 +746,8 @@ function render(keepScroll){
     app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
-  if (st.sub) app.innerHTML = st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios();
-  else app.innerHTML = st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news);
+  if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
+  else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
   const t = today();
   const nAg = news.filter(n=>pasa(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,3)).length;
   const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
