@@ -472,6 +472,45 @@ function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Periódicos: todas las noticias de los tres principales (sin deporte ni opinión) */
+/* ------------------------------------------------------------------ */
+const PERIODICOS = [
+  { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/"] },
+  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia"] },
+  { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/RSS/DSGlocal.xml", "http://www.eldiasegovia.es/rss/DSGProvincia.xml"] },
+];
+const SALIDA_PERIODICOS = new URL("../public/periodicos.json", import.meta.url);
+const NO_PERIODICO = /\/(deportes?|opinion|opiniones|tribuna|blogs?|cartas?-al-director|esquelas|obituarios|horoscopo)\//;
+async function periodicos(ahora) {
+  let previo = { noticias: [] };
+  try { previo = JSON.parse(await readFile(SALIDA_PERIODICOS, "utf8")); } catch {}
+  const porUrl = new Map((previo.noticias || []).map(n => [n.url, n]));
+  const estado = [];
+  for (const p of PERIODICOS) {
+    let n = 0, ok = false;
+    for (const url of p.urls) {
+      try {
+        for (const it of items(await descarga(url))) {
+          if (NO_PERIODICO.test(it.url) || DEPORTE.test(norm(it.titulo)) || BASURA.test(norm(it.titulo))) continue;
+          if (porUrl.has(it.url)) continue;
+          const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
+          porUrl.set(it.url, { medio: p.nombre, titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
+          n++;
+        }
+        ok = true;
+      } catch {}
+    }
+    estado.push({ medio: p.nombre, ok, nuevas: n });
+  }
+  // Se guardan los últimos 4 días
+  const limite = ahora.getTime() - 4 * 864e5;
+  const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
+    .sort((a, b) => b.publicado.localeCompare(a.publicado));
+  await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, noticias }));
+  console.log("Periódicos:", estado.map(e => `${e.medio} ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${noticias.length} en total`);
+}
+
+/* ------------------------------------------------------------------ */
 /* Principal                                                           */
 /* ------------------------------------------------------------------ */
 async function main() {
@@ -726,6 +765,7 @@ async function main() {
     dias,
   };
   await writeFile(SALIDA, JSON.stringify(salida, null, 0));
+  try { await periodicos(ahora); } catch (e) { console.log("Periódicos: error", e.message); }
   console.log(`Noticias leídas: ${brutos.length}. Agrupadas: ${grupos.length}. Nuevas añadidas: ${añadidas}.`);
   for (const e of estado) console.log(` - ${e.fuente}: ${e.ok ? "ok (" + e.noticias + ")" : "FALLO " + e.error}`);
 }
