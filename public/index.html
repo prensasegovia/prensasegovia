@@ -353,12 +353,11 @@ const MEDIOS = [
     ["PP de Castilla y León","https://www.ppcyl.es",""],
     ["STECyL","https://stecyl.net","Sindicato de enseñanza"],
     ["UGT Castilla y León","https://ugtcyl.es/web/",""]]},
-  {g:"Ayuntamientos con noticias propias", l:[
-    ["Ayuntamiento de Cuéllar","https://www.aytocuellar.es",""],
-    ["Ayuntamiento de Cantalejo","https://www.cantalejo.es",""],
-    ["Ayuntamiento de Riaza","https://www.riaza.es",""],
-    ["Ayuntamiento de Sepúlveda","https://www.sepulveda.es",""],
-    ["Ayuntamiento de La Lastrilla","https://www.lalastrilla.es",""]]},
+  {g:"Instituciones", l:[
+    ["Diputación de Segovia","https://www.dipsegovia.es/noticias",""],
+    ["Webs de 48 ayuntamientos","https://www.dipsegovia.es","Bandos, plenos, fiestas y avisos de cada pueblo"]]},
+  {g:"Medio agrario", l:[
+    ["Agronews Castilla y León","https://www.agronewscastillayleon.com","Solo lo que menciona Segovia"]]},
   {g:"Radio, televisión y agencias", l:[
     ["COPE Segovia","https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias",""],
     ["Cadena SER – Radio Segovia y Radio Cuéllar","https://cadenaser.com/",""],
@@ -656,7 +655,11 @@ function viewParte(news){
 function viewMedios(){
   let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>Se revisan cada hora. Además, se busca en Google Noticias por temas de interés y por los 209 municipios (todos cada 3 horas).</p></section>`;
   if (st.fuentes.length){
-    h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"No responde ahora: sus noticias llegan por Google Noticias"}</span></div></div>`).join("") + `</div>`;
+    const aytos = st.fuentes.filter(f=>/^Ayuntamiento de /.test(f.fuente)), resto = st.fuentes.filter(f=>!/^Ayuntamiento de /.test(f.fuente));
+    const aOk = aytos.filter(f=>f.ok).length, aN = aytos.reduce((t,f)=>t+(f.noticias||0),0);
+    h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>`;
+    if (aytos.length) h += `<div class="medio"><span class="dot ${aOk?"":"ko"}"></span><div><b>Webs de ${aytos.length} ayuntamientos</b><span>${aOk} responden · ${aN} avisos y noticias leídos · ${esc(aytos.map(f=>f.fuente.replace("Ayuntamiento de ","")).join(", "))}</span></div></div>`;
+    h += resto.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"No responde ahora: sus noticias llegan por Google Noticias"}</span></div></div>`).join("") + `</div>`;
   }
   for (const g of MEDIOS) h += `<div class="mgroup"><h3>${esc(g.g)}</h3>` + g.l.map(([n,u,d])=>`<a class="medio" href="${esc(u)}" target="_blank" rel="noopener"><div><b>${esc(n)}</b>${d?`<span>${esc(d)}</span>`:""}</div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("") + `</div>`;
   return h;

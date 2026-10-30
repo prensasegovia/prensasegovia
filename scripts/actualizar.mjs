@@ -15,6 +15,8 @@ const TZ = "Europe/Madrid";
 /* Fuentes                                                             */
 /* ------------------------------------------------------------------ */
 // Feeds directos de medios. Para cada uno se prueban varias direcciones y se usa la primera que funcione.
+// Webs municipales con noticias activas en 2026 (encontradas revisando las 208 webs de ayuntamientos)
+const AYUNTAMIENTOS_WEB = {"Aguilafuente": ["https://www.aguilafuente.es/home/-/asset_publisher/Sd1Q/rss"],"Arcones": ["https://www.arcones.es/home/-/asset_publisher/Sd1Q/rss"],"Ayllón": ["https://www.ayllon.es/home/-/asset_publisher/hr5A/rss"],"Bernardos": ["https://www.bernardos.es/feed/"],"Bernuy de Porreros": ["https://www.bernuydeporreros.es/home/-/asset_publisher/83tT/rss"],"Cantimpalos": ["https://www.cantimpalos.es/home/-/asset_publisher/KM33GUf3aML4/rss"],"Cedillo de la Torre": ["https://www.cedillodelatorre.es/home/-/asset_publisher/Sd1Q/rss"],"Chañe": ["https://www.chane.es/home/-/asset_publisher/Sd1Q/rss"],"Coca": ["https://www.coca.es/home/-/asset_publisher/Sd1Q/rss"],"Collado Hermoso": ["https://www.colladohermoso.es/home/-/asset_publisher/Sd1Q/rss"],"Duruelo": ["https://www.duruelo.es/home/-/asset_publisher/Sd1Q/rss"],"Escalona del Prado": ["https://www.escalonadelprado.es/home/-/asset_publisher/hr5A/rss"],"Espirdo": ["https://www.espirdo.es/home/-/asset_publisher/9AyG/rss"],"Fresno de Cantespino": ["https://www.fresnodecantespino.es/home/-/asset_publisher/r4Bp/rss"],"Fuente el Olmo de Fuentidueña": ["https://www.fuenteelolmodefuentiduena.es/home/-/asset_publisher/Sd1Q/rss"],"Fuentepelayo": ["https://www.fuentepelayo.es/home/-/asset_publisher/Sd1Q/rss"],"Fuenterrebollo": ["https://www.fuenterrebollo.es/home/-/asset_publisher/B92r/rss"],"Hontanares de Eresma": ["https://www.hontanaresdeeresma.es/home/-/asset_publisher/BwI6/rss"],"La Losa": ["https://www.lalosa.es/feed/"],"Labajos": ["https://www.labajos.es/home/-/asset_publisher/Sd1Q/rss"],"Lastras de Cuéllar": ["https://www.lastrasdecuellar.es/home/-/asset_publisher/ER3t/rss"],"Martín Muñoz de las Posadas": ["https://www.martinmunozdelasposadas.es/home/-/asset_publisher/u3LR/rss"],"Marugán": ["https://www.marugan.es/home/-/asset_publisher/1YZv/rss"],"Mozoncillo": ["https://www.mozoncillo.es/home/-/asset_publisher/hr5A/rss"],"Muñopedro": ["https://www.munopedro.es/home/-/asset_publisher/Sd1Q/rss"],"Nava de la Asunción": ["https://navadelaasuncion.org/feed/"],"Navafría": ["https://www.navafria.es/home/-/asset_publisher/Sd1Q/rss"],"Navalmanzano": ["https://www.navalmanzano.es/home/-/asset_publisher/X3h6/rss"],"Navas de Riofrío": ["https://www.navasderiofrio.es/home/-/asset_publisher/Sd1Q/rss"],"Navas de San Antonio": ["https://www.navasdesanantonio.es/home/-/asset_publisher/qv0K/rss"],"Ortigosa del Monte": ["https://www.ortigosadelmonte.es/home/-/asset_publisher/Sd1Q/rss"],"Otero de Herreros": ["https://oterodeherreros.es/feed/"],"Palazuelos de Eresma": ["https://palazuelosdeeresma.es/feed/"],"Pinarnegrillo": ["https://www.pinarnegrillo.es/home/-/asset_publisher/Sd1Q/rss"],"Prádena": ["https://www.pradena.es/home/-/asset_publisher/yCd5/rss"],"Sacramenia": ["https://www.sacramenia.es/home/-/asset_publisher/Sd1Q/rss"],"San Cristóbal de Cuéllar": ["https://www.sancristobaldecuellar.es/home/-/asset_publisher/Sd1Q/rss"],"San Cristóbal de Segovia": ["https://www.sancristobaldesegovia.es/home/-/asset_publisher/Sd1Q/rss","https://www.sancristobaldesegovia.es/home/-/asset_publisher/44OBUNgUJAZC/rss","https://www.sancristobaldesegovia.es/home/-/asset_publisher/A9Rer5EVgk4q/rss"],"Sauquillo de Cabezas": ["https://www.sauquillodecabezas.es/home/-/asset_publisher/Sd1Q/rss"],"Trescasas": ["https://www.aytotrescasas.es/feed/"],"Turégano": ["https://www.turegano.es/home/-/asset_publisher/Sd1Q/rss"],"Valseca": ["https://www.valseca.es/home/-/asset_publisher/kP7j/rss"],"Zarzuela del Monte": ["https://www.zarzueladelmonte.es/home/-/asset_publisher/Sd1Q/rss"]};
 // todas: lee todas las URLs (no solo la primera que funcione). pueblo: municipio por defecto si la noticia no lo dice.
 const FEEDS = [
   { nombre: "SegoviaUdaz", urls: ["https://segoviaudaz.es/feed/"] },
@@ -46,6 +48,9 @@ const FEEDS = [
   { nombre: "Ayuntamiento de Riaza", urls: ["https://www.riaza.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Riaza" },
   { nombre: "Ayuntamiento de Sepúlveda", urls: ["https://www.sepulveda.es/home/-/asset_publisher/hr5A/rss"], pueblo: "Sepúlveda" },
   { nombre: "Ayuntamiento de La Lastrilla", urls: ["https://www.lalastrilla.es/home/-/asset_publisher/Sd1Q/rss"], pueblo: "La Lastrilla" },
+  { nombre: "Diputación de Segovia", urls: ["https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/rss", "https://www.abades.es/home/-/asset_publisher/g0dC/rss"], pueblo: "Provincia" },
+  { nombre: "Agronews Castilla y León", urls: ["https://www.agronewscastillayleon.com/feed/"], soloSiMenciona: true },
+  ...Object.entries(AYUNTAMIENTOS_WEB).map(([pueblo, urls]) => ({ nombre: "Ayuntamiento de " + pueblo, urls, pueblo, todas: urls.length > 1, ayto: true })),
 ];
 
 // Búsquedas en Google Noticias (cubren también radios, agencias y medios sin RSS propio)
@@ -316,6 +321,8 @@ function relleno(n) {
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
   if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)) return true;
   const solo = ks => c.length && c.every(k => ks.includes(k));
+  // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
+  if (soloAyto(n.medios || []) && solo(["politica"]) && !/extraordinari|urgente|mocion de censura|dimision|toma de posesion/.test(tt)) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
   // 3) Estadísticas y trámites electorales (sí quedan candidaturas, mítines y visitas)
@@ -453,22 +460,28 @@ async function main() {
   const brutos = [];
 
   // 1) Feeds de medios
-  for (const f of FEEDS) {
-    let ok = false, error = "", n = 0;
-    for (const url of f.urls) {
-      try {
-        const its = items(await descarga(url));
-        // Feeds sin fecha (Tribuna): solo las más recientes, que se fechan con la hora en que aparecen
-        for (const it of its.filter((x, i) => !x.sinFecha || i < 12)) {
-          if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
-          if (OPINION.test(it.url)) continue;
-          brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
-        }
-        ok = true; if (!f.todas) break;
-      } catch (e) { error = e.message; }
+  // Se leen 8 fuentes a la vez para que la actualización no se alargue
+  const colaF = FEEDS.map((f, i) => [f, i]); const estadoF = [];
+  await Promise.all(Array.from({ length: 8 }, async () => {
+    while (colaF.length) {
+      const [f, i] = colaF.shift();
+      let ok = false, error = "", n = 0;
+      for (const url of f.urls) {
+        try {
+          const its = items(await descarga(url));
+          // Feeds sin fecha (Tribuna): solo las más recientes, que se fechan con la hora en que aparecen
+          for (const it of its.filter((x, k) => !x.sinFecha || k < 12)) {
+            if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
+            if (OPINION.test(it.url)) continue;
+            brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
+          }
+          ok = true; if (!f.todas) break;
+        } catch (e) { error = e.message; }
+      }
+      estadoF[i] = ok ? { fuente: f.nombre, ok: true, noticias: n } : { fuente: f.nombre, ok: false, error };
     }
-    estado.push(ok ? { fuente: f.nombre, ok: true, noticias: n } : { fuente: f.nombre, ok: false, error });
-  }
+  }));
+  estado.push(...estadoF);
 
   // 2) Google Noticias
   let gTotal = 0, gFallos = 0;
