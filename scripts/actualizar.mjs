@@ -195,8 +195,8 @@ function municipioDe(texto) {
 }
 
 const PATRONES = {
-  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de)|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
+  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|roband|robaron|retienen|retenido|pillad[oa] (robando|in fraganti)|sorprendid[oa] (robando|cuando)|ladron|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de)|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|recoge(n)? firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
   // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
   proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|convenio|colectivo/,
   autoridades: /visita (del|de la|de los|de) (ministr|president|rey|reina|delegad|subdelegad|consejer|vicepresident|secretari|director general|procurador|senador|diputad|candidat|lider|alcalde)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|delegad[oa] de la junta|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|acto de campana|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ione belarra|irene montero|garcia-gallardo|pollan|carriedo|suarez-quinones|oscar puente|ministerio del interior|director general de la guardia civil|secretari[oa] de estado|comitiva|autoridades/,
@@ -227,7 +227,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
   const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
-  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia|protesta|firmas|concentracion|manifestacion|huelga|polemica|boicot|ultras\b/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
@@ -304,7 +304,7 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten" };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
 const ORGANIZACIONES = new Set(FEEDS.filter(f => f.tipo === "organizacion").map(f => f.nombre));
@@ -436,7 +436,9 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
     if (e.fecha_evento && e.convocatoria) { evento = { fecha_evento: e.fecha_evento, ...(e.hora_evento ? { hora_evento: e.hora_evento } : {}), frase: recorta(f, 240) }; break; }
   }
   const muni = municipioDe(cuerpo.slice(0, 1500));
-  return { cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "" };
+  // Dónde ocurre, según el texto (para titulares que no nombran ningún sitio)
+  const lugar = municipioDe(cuerpo.slice(0, 4000));
+  return { cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
 function limpiaAnalisis(a) {
@@ -446,6 +448,7 @@ function limpiaAnalisis(a) {
   if (a.extracto) o.extracto = a.extracto;
   if (a.evento) o.evento = a.evento;
   if (a.pueblo) o.pueblo = a.pueblo;
+  if (a.lugar) o.lugar = a.lugar;
   return Object.keys(o).length ? o : null;
 }
 function conCuerpo(c, a, municipio) {
@@ -577,6 +580,7 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
+    else if (municipio === "General" && a?.lugar) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
     const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
@@ -647,6 +651,7 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
+      else if (nuevo === "General" && n.analisis?.lugar) nuevo = n.analisis.lugar;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       // Webs municipales de otro pueblo que se agruparon por error
