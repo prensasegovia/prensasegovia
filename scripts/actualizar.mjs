@@ -122,7 +122,7 @@ function items(xml) {
       fecha: new Date(txt(u?.["news:news"]?.["news:publication_date"]) || txt(u?.lastmod) || Date.now()), texto: "", fuente: "",
     })).filter(x => x.titulo && /^https?:\/\//.test(x.url));
   }
-  const lista = d?.rss?.channel?.item ?? d?.feed?.entry ?? d?.["rdf:RDF"]?.item ?? [];
+  const lista = d?.rss?.channel?.item ?? d?.rss?.item ?? d?.feed?.entry ?? d?.["rdf:RDF"]?.item ?? [];
   return (Array.isArray(lista) ? lista : [lista]).map(it => {
     const txt = v => typeof v === "object" && v !== null ? (v["#text"] ?? "") : (v ?? "");
     let link = it.link;
@@ -132,6 +132,7 @@ function items(xml) {
       titulo: limpia(txt(it.title)),
       url: String(link ?? "").trim(),
       fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()),
+      sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
       texto: limpia(txt(it.description) || txt(it.summary) || txt(it["content:encoded"]) || txt(it.content)),
       fuente: limpia(txt(it.source)),
     };
@@ -328,7 +329,8 @@ async function main() {
     for (const url of f.urls) {
       try {
         const its = items(await descarga(url));
-        for (const it of its) {
+        // Feeds sin fecha (Tribuna): solo las más recientes, que se fechan con la hora en que aparecen
+        for (const it of its.filter((x, i) => !x.sinFecha || i < 12)) {
           if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           if (OPINION.test(it.url)) continue;
           brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
