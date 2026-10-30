@@ -196,7 +196,7 @@ function municipioDe(texto) {
 
 const PATRONES = {
   policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de)|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
   // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
   proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|convenio|colectivo/,
   autoridades: /visita (del|de la|de los|de) (ministr|president|rey|reina|delegad|subdelegad|consejer|vicepresident|secretari|director general|procurador|senador|diputad|candidat|lider|alcalde)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|delegad[oa] de la junta|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|acto de campana|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ione belarra|irene montero|garcia-gallardo|pollan|carriedo|suarez-quinones|oscar puente|ministerio del interior|director general de la guardia civil|secretari[oa] de estado|comitiva|autoridades/,
@@ -213,7 +213,7 @@ const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|b
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
-const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera|banda|trinitarios|pandilla|organizacion criminal|delito de odio|racis|xenofob|neonazi|nazi|esvastica|falange|anarquis|antisistema|escrache|abuche|enfrentamiento|crispacion|inmigra|migrante|patera|centro de acogida|menores no acompanados/;
+const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera|banda|trinitarios|pandilla|organizacion criminal|delito de odio|racis|xenofob|neonazi|nazi|esvastica|falange|anarquis|antisistema|escrache|abuche|enfrentamiento|crispacion|inmigra|migrante|patera|centro de acogida|menores no acompanados/;
 
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
@@ -327,6 +327,7 @@ function relleno(n) {
   const solo = ks => c.length && c.every(k => ks.includes(k));
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
+  if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias"])) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
@@ -343,6 +344,8 @@ const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
 // Un titular que trae un cambio (se suspende, hay un detenido, fallece...) no se junta con el anterior: es otra noticia
 const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
+// Si comparten el enlace de un artículo, son la misma noticia sin duda
+const comparteUrl = (a, b) => (a.medios || []).some(m => (b.medios || []).some(x => x.url === m.url));
 function mismaNoticia(a, b) {
   // Noticias de pueblos distintos nunca son la misma (p. ej. "Pleno extraordinario" en dos ayuntamientos)
   if (CONCRETO(a.municipio) && CONCRETO(b.municipio) && a.municipio !== b.municipio) return false;
@@ -405,7 +408,7 @@ async function leeArticulo(url) {
 // Indicios fuertes en el cuerpo (hacen falta al menos 2 menciones para contar)
 const FUERTE = {
   policial: /ha(n)? (sido )?detenid|detenid[oa]s? (a|al|por|como|en|tras)|detencion de|guardia civil (ha )?(investiga|detiene|detuvo|esclarece|desarticula|busca)|agresion|apunal|reyerta|okupa|banda (latina|juvenil|organizada|criminal)|delito de odio|robo con (fuerza|violencia)|violencia de genero|atestado/g,
-  social: /concentracion|manifestacion|huelga|tractorada|protesta|movilizacion|recogida de firmas|plataforma (vecinal|ciudadana|contra|en defensa|de afectados)|cacerolada|pintadas|neonazi|\bultras?\b|extrema (derecha|izquierda)|antifascista|inmigra|migrantes|centro de acogida|desalojo|abuche|escrache|crispacion|enfrentamiento|alegaciones|se oponen|rechazo vecinal/g,
+  social: /concentracion|manifestacion|huelga|tractorada|protesta|movilizacion|recogida de firmas|plataforma (vecinal|ciudadana|contra|en defensa|de afectados)|cacerolada|pintadas|neonazi|\bultras\b|ultraderech|ultraizquierd|extrema (derecha|izquierda)|antifascista|inmigra|migrantes|centro de acogida|desalojo|abuche|escrache|crispacion|enfrentamiento|alegaciones|se oponen|rechazo vecinal/g,
   autoridades: /visita (del|de la) (ministr|president|consejer|delegad|subdelegad|secretari)|visitara|mitin|acto electoral|campana electoral|acto de campana/g,
 };
 const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
@@ -592,6 +595,10 @@ async function main() {
   // Fuera lo que no es de interés (deportes, cultura, economía...) y lo que no menciona Segovia ni ningún pueblo
   const interesa = n => n.categorias.length > 0 && n.municipio !== "General" && !relleno(n);
   const antes = nuevas.length;
+  // Registro de lo descartado en esta pasada (para revisar que el filtro no tire nada bueno)
+  const motivo = n => !n.categorias.length ? "sin tema" : n.municipio === "General" ? "fuera de Segovia" : "relleno";
+  const descartadas = nuevas.filter(n => !interesa(n)).map(n => ({ m: motivo(n), t: n.titulo, p: n.municipio, c: n.categorias, f: n.medios[0]?.nombre }));
+  await writeFile(new URL("../datos/descartadas.json", import.meta.url), JSON.stringify({ hora: horaMadrid(ahora), total: nuevas.length, descartadas }, null, 0));
   for (let i = nuevas.length - 1; i >= 0; i--) if (!interesa(nuevas[i])) nuevas.splice(i, 1);
   console.log(`Descartadas por no ser de interés: ${antes - nuevas.length}`);
 
@@ -603,7 +610,7 @@ async function main() {
   let añadidas = 0;
   for (const n of nuevas) {
     const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: n._dia };
-    const ya = existentes.find(e => e.n.id === n.id || mismaNoticia(e, yo));
+    const ya = existentes.find(e => e.n.id === n.id || comparteUrl(e.n, n) || mismaNoticia(e, yo));
     if (ya) { // añade enlaces de otros medios a la que ya estaba
       if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
       if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
@@ -636,6 +643,8 @@ async function main() {
       if (pf.length === 1) n.pueblo_fuente = pf[0]; else delete n.pueblo_fuente;
       if (!n.analisis) { const m = n.medios.find(m => cache[m.url]); if (m) n.analisis = limpiaAnalisis(cache[m.url]); }
       if (!n.analisis) delete n.analisis;
+      // Lo leído del cuerpo se revalida con las reglas actuales sobre la frase guardada
+      if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
@@ -662,7 +671,10 @@ async function main() {
     const a = recientesH[i]; if (borrar.has(a.n)) continue;
     juntaMedios(a.n.medios, []);
     for (let j = i + 1; j < recientesH.length; j++) {
-      const b = recientesH[j]; if (borrar.has(b.n) || !mismaNoticia(a, b)) continue;
+      const b = recientesH[j]; if (borrar.has(b.n) || !(comparteUrl(a.n, b.n) || mismaNoticia(a, b))) continue;
+      if (CONCRETO(b.n.municipio) && !CONCRETO(a.n.municipio)) a.n.municipio = b.n.municipio; // se queda el pueblo concreto
+      // Si la otra es de un día posterior (la historia ha avanzado), se queda el titular más reciente
+      if (b.dia > a.dia && b.n.publicado) { for (const k of ["titulo", "resumen", "publicado", "hora", "id", "analisis"]) if (b.n[k]) a.n[k] = b.n[k]; a.n.medios = [...b.n.medios]; }
       juntaMedios(a.n.medios, b.n.medios);
       if (!a.n.resumen && b.n.resumen) a.n.resumen = b.n.resumen;
       if (b.n.publicado && (!a.n.publicado || b.n.publicado < a.n.publicado)) a.n.publicado = b.n.publicado;
