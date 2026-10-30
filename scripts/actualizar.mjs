@@ -344,7 +344,7 @@ async function leeArticulo(url) {
 }
 // Indicios fuertes en el cuerpo (hacen falta al menos 2 menciones para contar)
 const FUERTE = {
-  policial: /detenid|detencion|guardia civil (ha )?(investiga|detiene|detuvo|esclarece|desarticula|busca)|agresion|apunal|reyerta|okupa|banda (latina|juvenil|organizada|criminal)|delito de odio|robo con (fuerza|violencia)|violencia de genero|atestado/g,
+  policial: /ha(n)? (sido )?detenid|detenid[oa]s? (a|al|por|como|en|tras)|detencion de|guardia civil (ha )?(investiga|detiene|detuvo|esclarece|desarticula|busca)|agresion|apunal|reyerta|okupa|banda (latina|juvenil|organizada|criminal)|delito de odio|robo con (fuerza|violencia)|violencia de genero|atestado/g,
   social: /concentracion|manifestacion|huelga|tractorada|protesta|movilizacion|recogida de firmas|plataforma (vecinal|ciudadana|contra|en defensa|de afectados)|cacerolada|pintadas|neonazi|\bultras?\b|extrema (derecha|izquierda)|antifascista|inmigra|migrantes|centro de acogida|desalojo|abuche|escrache|crispacion|enfrentamiento|alegaciones|se oponen|rechazo vecinal/g,
   autoridades: /visita (del|de la) (ministr|president|consejer|delegad|subdelegad|secretari)|visitara|mitin|acto electoral|campana electoral|acto de campana/g,
 };
