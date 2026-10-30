@@ -237,7 +237,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
-  if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
+  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && PATRONES[k].test(t)).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
@@ -330,7 +330,7 @@ function relleno(n) {
   const solo = ks => c.length && c.every(k => ks.includes(k));
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
-  if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias"])) return true;
+  if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias", "medioambiente"])) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Medio ambiente en la capital: solo si hay conflicto
