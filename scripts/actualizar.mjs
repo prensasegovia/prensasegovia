@@ -211,13 +211,15 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
   const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
-  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja" };
+  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
+  if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
@@ -280,6 +282,9 @@ const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carc
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
 const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
+// Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
+const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
+const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
 const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) ? pueblo : m;
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
@@ -355,7 +360,7 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   const cats = [], pistas = [];
   for (const [k, re] of Object.entries(FUERTE)) {
     const m = [...t.matchAll(re)];
-    if (m.length >= 2 || (k === "autoridades" && m.length)) { cats.push(k); pistas.push(m[0].index); }
+    if (m.length >= 2) { cats.push(k); pistas.push(m[0].index); }
   }
   // Frase que explica por qué interesa
   const frases = cuerpo.slice(0, 5000).split(/(?<=[.!?])\s+/);
@@ -386,7 +391,7 @@ function limpiaAnalisis(a) {
   return Object.keys(o).length ? o : null;
 }
 function conCuerpo(c, a, municipio) {
-  if (!a?.cats?.length) return c;
+  if (c.descartar || !a?.cats?.length) return c;
   const categorias = [...new Set([...c.categorias, ...a.cats])].slice(0, 3);
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
   if (a.extracto && ALTA.test(norm(a.extracto))) relevancia = "alta";
@@ -491,6 +496,7 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
+    municipio = fueraDeProvincia(g.titulo, municipio);
     const { categorias, relevancia } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
@@ -550,6 +556,7 @@ async function main() {
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
+      n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios)), n.analisis, n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
