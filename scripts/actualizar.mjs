@@ -335,7 +335,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta" && !politizado) relevancia = "media";
-  return { categorias, relevancia, porTexto: porTexto && !politizado, noAlta: NO_ALTA.test(tt) && !politizado };
+  return { categorias, relevancia, porTexto: porTexto && !politizado, noAlta: NO_ALTA.test(tt) && !politizado, politizado };
 }
 
 /* Fecha de convocatoria: "el próximo sábado", "el 14 de noviembre", "a las 19:00" */
@@ -551,8 +551,8 @@ function conCuerpo(c, a, municipio) {
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
   // El cuerpo solo sube a importante si la frase clave es grave y no es un acto de recuerdo
   if (!c.noAlta && a.extracto && ALTA.test(norm(a.extracto)) && !NO_ALTA.test(norm(a.extracto))) relevancia = "alta";
-  if (municipio === "Segovia" && relevancia === "alta" && !politizado) relevancia = "media";
-  return { categorias, relevancia, porTexto: false, noAlta: c.noAlta };
+  if (municipio === "Segovia" && relevancia === "alta" && !c.politizado) relevancia = "media";
+  return { categorias, relevancia, porTexto: false, noAlta: c.noAlta, politizado: c.politizado };
 }
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);
