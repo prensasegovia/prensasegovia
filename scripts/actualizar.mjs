@@ -19,23 +19,25 @@ const TZ = "Europe/Madrid";
 const AYUNTAMIENTOS_WEB = {"Aguilafuente": ["https://www.aguilafuente.es/home/-/asset_publisher/Sd1Q/rss"],"Arcones": ["https://www.arcones.es/home/-/asset_publisher/Sd1Q/rss"],"Ayllón": ["https://www.ayllon.es/home/-/asset_publisher/hr5A/rss"],"Bernardos": ["https://www.bernardos.es/feed/"],"Bernuy de Porreros": ["https://www.bernuydeporreros.es/home/-/asset_publisher/83tT/rss"],"Cantimpalos": ["https://www.cantimpalos.es/home/-/asset_publisher/KM33GUf3aML4/rss"],"Cedillo de la Torre": ["https://www.cedillodelatorre.es/home/-/asset_publisher/Sd1Q/rss"],"Chañe": ["https://www.chane.es/home/-/asset_publisher/Sd1Q/rss"],"Coca": ["https://www.coca.es/home/-/asset_publisher/Sd1Q/rss"],"Collado Hermoso": ["https://www.colladohermoso.es/home/-/asset_publisher/Sd1Q/rss"],"Duruelo": ["https://www.duruelo.es/home/-/asset_publisher/Sd1Q/rss"],"Escalona del Prado": ["https://www.escalonadelprado.es/home/-/asset_publisher/hr5A/rss"],"Espirdo": ["https://www.espirdo.es/home/-/asset_publisher/9AyG/rss"],"Fresno de Cantespino": ["https://www.fresnodecantespino.es/home/-/asset_publisher/r4Bp/rss"],"Fuente el Olmo de Fuentidueña": ["https://www.fuenteelolmodefuentiduena.es/home/-/asset_publisher/Sd1Q/rss"],"Fuentepelayo": ["https://www.fuentepelayo.es/home/-/asset_publisher/Sd1Q/rss"],"Fuenterrebollo": ["https://www.fuenterrebollo.es/home/-/asset_publisher/B92r/rss"],"Hontanares de Eresma": ["https://www.hontanaresdeeresma.es/home/-/asset_publisher/BwI6/rss"],"La Losa": ["https://www.lalosa.es/feed/"],"Labajos": ["https://www.labajos.es/home/-/asset_publisher/Sd1Q/rss"],"Lastras de Cuéllar": ["https://www.lastrasdecuellar.es/home/-/asset_publisher/ER3t/rss"],"Martín Muñoz de las Posadas": ["https://www.martinmunozdelasposadas.es/home/-/asset_publisher/u3LR/rss"],"Marugán": ["https://www.marugan.es/home/-/asset_publisher/1YZv/rss"],"Mozoncillo": ["https://www.mozoncillo.es/home/-/asset_publisher/hr5A/rss"],"Muñopedro": ["https://www.munopedro.es/home/-/asset_publisher/Sd1Q/rss"],"Nava de la Asunción": ["https://navadelaasuncion.org/feed/"],"Navafría": ["https://www.navafria.es/home/-/asset_publisher/Sd1Q/rss"],"Navalmanzano": ["https://www.navalmanzano.es/home/-/asset_publisher/X3h6/rss"],"Navas de Riofrío": ["https://www.navasderiofrio.es/home/-/asset_publisher/Sd1Q/rss"],"Navas de San Antonio": ["https://www.navasdesanantonio.es/home/-/asset_publisher/qv0K/rss"],"Ortigosa del Monte": ["https://www.ortigosadelmonte.es/home/-/asset_publisher/Sd1Q/rss"],"Otero de Herreros": ["https://oterodeherreros.es/feed/"],"Palazuelos de Eresma": ["https://palazuelosdeeresma.es/feed/"],"Pinarnegrillo": ["https://www.pinarnegrillo.es/home/-/asset_publisher/Sd1Q/rss"],"Prádena": ["https://www.pradena.es/home/-/asset_publisher/yCd5/rss"],"Sacramenia": ["https://www.sacramenia.es/home/-/asset_publisher/Sd1Q/rss"],"San Cristóbal de Cuéllar": ["https://www.sancristobaldecuellar.es/home/-/asset_publisher/Sd1Q/rss"],"San Cristóbal de Segovia": ["https://www.sancristobaldesegovia.es/home/-/asset_publisher/Sd1Q/rss","https://www.sancristobaldesegovia.es/home/-/asset_publisher/44OBUNgUJAZC/rss","https://www.sancristobaldesegovia.es/home/-/asset_publisher/A9Rer5EVgk4q/rss"],"Sauquillo de Cabezas": ["https://www.sauquillodecabezas.es/home/-/asset_publisher/Sd1Q/rss"],"Trescasas": ["https://www.aytotrescasas.es/feed/"],"Turégano": ["https://www.turegano.es/home/-/asset_publisher/Sd1Q/rss"],"Valseca": ["https://www.valseca.es/home/-/asset_publisher/kP7j/rss"],"Zarzuela del Monte": ["https://www.zarzueladelmonte.es/home/-/asset_publisher/Sd1Q/rss"]};
 // todas: lee todas las URLs (no solo la primera que funcione). pueblo: municipio por defecto si la noticia no lo dice.
 const FEEDS = [
-  { nombre: "SegoviaUdaz", urls: ["https://segoviaudaz.es/feed/"] },
-  { nombre: "esCuéllar", urls: ["https://escuellar.es/feed/"] },
-  { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/", "https://www.eladelantado.com/rss/"] },
+  { nombre: "SegoviaUdaz", urls: ["https://segoviaudaz.es/feed/"], local: true },
+  { nombre: "esCuéllar", urls: ["https://escuellar.es/feed/"], local: true },
+  { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/", "https://www.eladelantado.com/rss/"], local: /\/(segovia|provincia|sucesos|local)\// },
   { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss.xml"] },
-  { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/rss/DSGProvincia.xml", "http://www.eldiasegovia.es/RSS/DSGlocal.xml", "http://www.eldiasegovia.es/RSS/DSGPortada.xml"], todas: true },
-  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia", "https://www.elnortedecastilla.es/rss/2.0/portada"], soloSiMenciona: true },
-  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"] },
-  { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"] },
+  { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/rss/DSGProvincia.xml", "http://www.eldiasegovia.es/RSS/DSGlocal.xml"], todas: true, local: true },
+  { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/RSS/DSGPortada.xml"] },
+  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia"], local: true },
+  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/portada"], soloSiMenciona: true },
+  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"], local: true },
+  { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"], local: true },
   { nombre: "Segovia al día", urls: ["https://segoviaaldia.es/coverrss"] },
   { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/noticias?format=feed&type=rss", "https://www.elnordestedesegovia.es/?view=featured&id=1&format=feed&type=rss"] },
   { nombre: "El Espinar Información", urls: ["https://www.elespinar.org/feeds/posts/default?alt=rss"], pueblo: "El Espinar" },
   { nombre: "La Granja-Valsaín", urls: ["https://www.lagranja-valsain.com/feed/"], pueblo: "Real Sitio de San Ildefonso" },
-  { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia.xml"] },
+  { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia.xml"], local: true },
   { nombre: "COPE Segovia", urls: ["https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml", "https://www.cope.es/api/es/emisoras/castilla-y-leon/segovia-provincia/segovia/news/rss.xml"], soloSiMenciona: true },
-  { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"] },
+  { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"], local: true },
   { nombre: "Europa Press", urls: ["https://www.europapress.es/rss/rss.aspx?ch=283"], soloSiMenciona: true },
-  { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"] },
+  { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"], local: true },
   // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
@@ -216,11 +218,11 @@ function municipioDe(texto) {
 }
 
 const PATRONES = {
-  policial: /guardia civil|policia|\bpresos?\b|reclus|funcionario de prisiones|lesiona a|detenid|detencion|arrest|investigad|robo|robar|roband|robaron|retienen|retenido|pillad[oa] (robando|in fraganti)|sorprendid[oa] (robando|cuando)|ladron|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de (ladrones|delincuentes|atracadores|narcotraficantes))|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|\bparar\b|llamad[oa]s a (la huelga|parar|movilizarse|concentrarse)|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|recoge(n)? firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|indigna a|indignados|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
+  policial: /seguridad ciudadana|seguridad en las calles|inseguridad|guardia civil|policia|\bpresos?\b|reclus|funcionario de prisiones|lesiona a|detenid|detencion|arrest|investigad|robo|robar|roband|robaron|retienen|retenido|pillad[oa] (robando|in fraganti)|sorprendid[oa] (robando|cuando)|ladron|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de (ladrones|delincuentes|atracadores|narcotraficantes))|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|\bparar\b|llamad[oa]s a (la huelga|parar|movilizarse|concentrarse)|plataforma|movilizacion|se moviliza|movilizan|movilizarse|movilizara|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|recoge(n)? firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|indigna a|indignados|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
   // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
   proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|convenio|colectivo/,
-  medioambiente: /embalse|pantano|\bpresas? (de|del)\b|\bazud|rio (eresma|cega|duraton|riaza|voltoya|moros|piron|adaja|zapardiel|pirón)|caudal|vertido|contamina|purines|nitratos|acuifero|sequia|restricciones de agua|cortes? de(l)? (suministro de )?agua|agua potable|abastecimiento de agua|depuradora|\bedar\b|macrogranja|granja (porcina|de cerdos|avicola|intensiva)|explotacion porcina|biogas|biometano|planta (solar|fotovoltaica|de biogas|de biometano|de residuos|de reciclaje|de hidrogeno)|parque (solar|eolico|fotovoltaico)|fotovoltaic|huerto solar|aerogenerador|eolico|linea de (muy )?alta tension|subestacion|cantera|mineria|\bmina\b|extraccion de|gravera|vertedero|residuos|incendios? forestal|quema de rastrojos|\btala\b|talas|deforestac|plantacion (de|forestal)|repoblacion|monte publico|\bpinos\b|resina|\blobos?\b|ataques? de lobo|especies? invasora|plaga|espacio natural|red natura|\bzepa\b|parque (nacional|natural)|guadarrama|hoces del (duraton|riaza)|impacto ambiental|evaluacion ambiental|declaracion de impacto|medio ?ambient|ecologist|cambio climatico|calidad del agua|fauna|biodiversidad/,
+  medioambiente: /biomasa|red de calor|central termica|calefaccion de distrito|energia renovable|renovables|hidrogeno verde|bateria de almacenamiento|embalse|pantano|\bpresas? (de|del)\b|\bazud|rio (eresma|cega|duraton|riaza|voltoya|moros|piron|adaja|zapardiel|pirón)|caudal|vertido|contamina|purines|nitratos|acuifero|sequia|restricciones de agua|cortes? de(l)? (suministro de )?agua|agua potable|abastecimiento de agua|depuradora|\bedar\b|macrogranja|granja (porcina|de cerdos|avicola|intensiva)|explotacion porcina|biogas|biometano|planta (solar|fotovoltaica|de biogas|de biometano|de residuos|de reciclaje|de hidrogeno)|parque (solar|eolico|fotovoltaico)|fotovoltaic|huerto solar|aerogenerador|eolico|linea de (muy )?alta tension|subestacion|cantera|mineria|\bmina\b|extraccion de|gravera|vertedero|residuos|incendios? forestal|quema de rastrojos|\btala\b|talas|deforestac|plantacion (de|forestal)|repoblacion|monte publico|\bpinos\b|resina|\blobos?\b|ataques? de lobo|especies? invasora|plaga|espacio natural|red natura|\bzepa\b|parque (nacional|natural)|guadarrama|hoces del (duraton|riaza)|impacto ambiental|evaluacion ambiental|declaracion de impacto|medio ?ambient|ecologist|cambio climatico|calidad del agua|fauna|biodiversidad/,
   autoridades: /visita (del|de la|de los|de) (ministr|president|rey|reina|delegad|subdelegad|consejer|vicepresident|secretari|director general|procurador|senador|diputad|candidat|lider|alcalde)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|delegad[oa] de la junta|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|acto de campana|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ione belarra|irene montero|garcia-gallardo|pollan|carriedo|suarez-quinones|oscar puente|ministerio del interior|director general de la guardia civil|secretari[oa] de estado|comitiva|autoridades/,
   politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|votantes|\bvoto\b|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
   emergencias: /accidente|colision|choque|salida de via|atropell|herid|fallec|muere|murio|incendio|fuego|bomberos|rescat|112|desaparecid|inundacion|nevada|temporal|aviso (amarillo|naranja|rojo)|corte de (la )?carretera|trafico|\bdgt\b|\ba-1\b|\ba-6\b|\bap-6\b|\bap-61\b|n-110|n-603|cl-6\d\d|sg-\d|evacuad|derrumbe|explosion/,
@@ -237,6 +239,8 @@ const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
 const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera|banda|trinitarios|pandilla|organizacion criminal|delito de odio|racis|xenofob|neonazi|nazi|esvastica|falange|anarquis|antisistema|escrache|abuche|enfrentamiento|crispacion|inmigra|migrante|patera|centro de acogida|menores no acompanados|vertido|contaminacion del|muerte de peces|peces muertos|incendio forestal en|alegaciones contra|moratoria/;
 
+const SERVICIO = /operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
+const SERVICIO_MAL = /falta de|sin medico|sin pediatra|deficit|colapso|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
@@ -254,6 +258,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
+  // Servicios públicos con problemas (sanidad, educación, transporte): fuente habitual de protestas
+  if (!categorias.includes("social") && SERVICIO.test(tt) && SERVICIO_MAL.test(tt)) categorias.unshift("social");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   const porTexto = !categorias.length;
@@ -355,8 +361,6 @@ function relleno(n) {
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
   if (n.municipio === "Segovia" && n.porTexto && !n.analisis?.cats?.length) return true;
-  // Medio ambiente en la capital: solo si hay conflicto
-  if (n.municipio === "Segovia" && solo(["medioambiente", "politica", "eventos"]) && c.includes("medioambiente") && !CONFLICTO.test(tt)) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
   // 3) Estadísticas y trámites electorales (sí quedan candidaturas, mítines y visitas)
@@ -565,7 +569,7 @@ async function main() {
           for (const it of its.filter((x, k) => !x.sinFecha || k < 12)) {
             if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
             if (OPINION.test(it.url)) continue;
-            brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
+            brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo, local: f.local === true || (f.local instanceof RegExp && f.local.test(it.url)) }); n++;
           }
           ok = true; if (!f.todas) break;
         } catch (e) { error = e.message; }
@@ -584,7 +588,7 @@ async function main() {
         for (const it of items(await descarga(url)).filter((x, k) => !x.sinFecha || k < 12)) {
           if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           if (OPINION.test(it.url)) continue;
-          brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
+          brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo, local: f.local === true || (f.local instanceof RegExp && f.local.test(it.url)) }); n++;
         }
         estadoF[i] = { fuente: f.nombre, ok: true, noticias: n }; break;
       } catch (e) { estadoF[i] = { fuente: f.nombre, ok: false, error: e.message }; }
@@ -625,8 +629,9 @@ async function main() {
       if (!g.texto && b.texto) g.texto = b.texto;
       if ((b.cuerpo || "").length > (g.cuerpo || "").length) g.cuerpo = b.cuerpo;
       if (!g.img && b.img) g.img = b.img;
+      if (b.local) g.local = true;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
 
   // 3b) Leer el cuerpo de las noticias nuevas: lo interesante no siempre está en el titular
@@ -662,6 +667,7 @@ async function main() {
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
+    if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
@@ -670,6 +676,7 @@ async function main() {
       titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(porTexto ? { porTexto: true } : {}), ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
       ...(a ? { analisis: a } : {}),
       ...(g.img ? { img: g.img } : {}),
+      ...(g.local ? { local: true } : {}),
       medios: g.medios,
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
@@ -701,6 +708,7 @@ async function main() {
       if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
       if (!ya.n.analisis && n.analisis) ya.n.analisis = n.analisis; // otro medio cuenta más en el cuerpo
       if (!ya.n.img && n.img) ya.n.img = n.img;
+      if (n.local) ya.n.local = true;
       juntaMedios(ya.n.medios, n.medios);
       continue;
     }
@@ -736,6 +744,7 @@ async function main() {
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
+      if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo))) n.municipio = "Segovia";
       // Webs municipales de otro pueblo que se agruparon por error
       if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
