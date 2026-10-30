@@ -199,6 +199,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .medio div{flex:1}
 .medio b{font-weight:600}
 .medio span{display:block;font-size:13.5px;color:var(--muted)}
+.aytos{display:flex;flex-wrap:wrap;gap:6px;padding:0 2px 6px}
+.ayto{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:13.5px;font-weight:500}
 .dot{width:9px;height:9px;border-radius:50%;background:#3BA776;flex:none}
 .dot.ko{background:var(--baja)}
 
@@ -362,42 +364,6 @@ const I = {
 const ICON = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 const REFRESH_MS = 10*60*1000;
 
-const MEDIOS = [
-  {g:"Comarcales y locales", l:[
-    ["esCuéllar","https://escuellar.es","Cuéllar y Tierra de Pinares"],
-    ["El Nordeste de Segovia","https://www.elnordestedesegovia.es","Riaza, Ayllón, Sepúlveda, Boceguillas y el nordeste"],
-    ["El Espinar Información","https://www.elespinar.org","El Espinar, San Rafael, La Estación y Los Ángeles"],
-    ["La Granja-Valsaín","https://www.lagranja-valsain.com","Real Sitio de San Ildefonso"]]},
-  {g:"Digitales de la provincia", l:[
-    ["SegoviaUdaz","https://segoviaudaz.es","Pueblos, sucesos y convocatorias"],
-    ["Segovia Directo","https://segoviadirecto.com",""],
-    ["Segovia 24/7","https://segovia247.es",""],
-    ["Tribuna de Segovia","https://www.tribunasegovia.com",""],
-    ["Segovia al día","https://segoviaaldia.es",""],
-    ["Diario de Castilla y León – Segovia","https://www.diariodecastillayleon.es/segovia/",""],
-    ["Acueducto2","https://www.acueducto2.com",""]]},
-  {g:"Prensa provincial", l:[
-    ["El Adelantado de Segovia","https://www.eladelantado.com",""],
-    ["El Norte de Castilla – Segovia","https://www.elnortedecastilla.es/segovia/","Parte del contenido es de pago"],
-    ["El Día de Segovia","https://www.eldiasegovia.es",""]]},
-  {g:"Partidos y sindicatos (solo movilizaciones, visitas y actos)", l:[
-    ["PP de Segovia","https://ppsegovia.com",""],
-    ["PSOE de Segovia","https://www.psoesegovia.es",""],
-    ["PP de Castilla y León","https://www.ppcyl.es",""],
-    ["STECyL","https://stecyl.net","Sindicato de enseñanza"],
-    ["UGT Castilla y León","https://ugtcyl.es/web/",""]]},
-  {g:"Instituciones", l:[
-    ["Webs de 48 ayuntamientos","https://www.dipsegovia.es","Bandos, plenos, fiestas y avisos de cada pueblo"]]},
-  {g:"Medio agrario", l:[
-    ["Agronews Castilla y León","https://www.agronewscastillayleon.com","Solo lo que menciona Segovia"]]},
-  {g:"Radio, televisión y agencias", l:[
-    ["COPE Segovia","https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias",""],
-    ["Cadena SER – Radio Segovia y Radio Cuéllar","https://cadenaser.com/",""],
-    ["Onda Cero Segovia","https://www.ondacero.es/emisoras/castilla-y-leon/segovia/",""],
-    ["La 8 Segovia (CyLTV)","https://www.rtvcyl.es",""],
-    ["Agencia ICAL","https://www.agenciaical.es",""],
-    ["Europa Press Castilla y León","https://www.europapress.es/castilla-y-leon/",""]]}
-];
 
 /* ================= Utilidades ================= */
 const $ = s => document.querySelector(s);
@@ -431,7 +397,7 @@ const st = {
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   tema: store.get("tema","auto"),
-  periodicos: [], periodico: "todos", parteDesde: "24h", parteLinks: store.get("parteLinks", false),
+  periodicos: [], periodico: "todos", viaGoogle: [], parteDesde: "24h", parteLinks: store.get("parteLinks", false),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
   q:"", townQ:"",
   dias:[], fuentes:[], actualizado:"", loaded:false, error:false,
@@ -660,9 +626,9 @@ function viewPeriodicos(){
   const cnt = m => all.filter(n=>m==="todos"||n.medio===m).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
     <div class="chips" id="chips">
+      <button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span></button>
       ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span></button>`).join("")}
-      <button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>
     </div><div class="feed">`;
   if (!st.periodicos.length) return h + `<div class="empty"><b>Cargando periódicos…</b>Las noticias aparecen en la próxima actualización.</div></div>`;
   if (!list.length) return h + `<div class="empty"><b>Sin noticias</b>No hay noticias con este filtro.</div></div>`;
@@ -704,16 +670,30 @@ function viewParte(news){
     <p class="note" style="padding:0 4px">${plural(n,"noticia","noticias")} en el parte. Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p>
   </div>`;
 }
+const GRUPOS_MEDIOS = ["Periódicos y digitales de Segovia","Comarcales y locales","Radio","Agencias y medios regionales","Partidos y sindicatos","Sector agrario","Ayuntamientos","Google Noticias","Otros"];
 function viewMedios(){
-  let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>Se revisan cada hora. Además, se busca en Google Noticias por temas de interés y por los 209 municipios (todos cada 3 horas).</p></section>`;
-  if (st.fuentes.length){
-    const aytos = st.fuentes.filter(f=>/^Ayuntamiento de /.test(f.fuente)), resto = st.fuentes.filter(f=>!/^Ayuntamiento de /.test(f.fuente));
-    const aOk = aytos.filter(f=>f.ok).length, aN = aytos.reduce((t,f)=>t+(f.noticias||0),0);
-    h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>`;
-    if (aytos.length) h += `<div class="medio"><span class="dot ${aOk?"":"ko"}"></span><div><b>Webs de ${aytos.length} ayuntamientos</b><span>${aOk} responden · ${aN} avisos y noticias leídos · ${esc(aytos.map(f=>f.fuente.replace("Ayuntamiento de ","")).join(", "))}</span></div></div>`;
-    h += resto.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"No responde ahora: sus noticias llegan por Google Noticias"}</span></div></div>`).join("") + `</div>`;
+  const F = st.fuentes;
+  const ok = F.filter(f=>f.ok).length;
+  let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>${F.length} fuentes revisadas cada hora${st.actualizado?` · última revisión ${esc(st.actualizado.slice(11,16))}`:""}. ${ok} responden ahora.</p></section>`;
+  if (!F.length) return h + `<div class="empty"><b>Cargando…</b></div>`;
+  for (const g of GRUPOS_MEDIOS){
+    const l = F.filter(f=>(f.grupo||"Otros")===g);
+    if (!l.length) continue;
+    h += `<div class="mgroup"><h3>${esc(g)} <span style="font-weight:500;color:var(--muted);font-size:13.5px">· ${l.length}</span></h3>`;
+    if (g==="Ayuntamientos"){
+      const aOk = l.filter(f=>f.ok).length, aN = l.reduce((t,f)=>t+(f.noticias||0),0);
+      h += `<p class="note" style="padding:0 4px">Webs municipales con noticias activas. ${aOk} de ${l.length} responden · ${aN} avisos leídos. Solo pasan los que son de interés (no bandos, plenos ordinarios ni trámites).</p><div class="aytos">` +
+        l.map(f=>`<a class="ayto" href="${esc(f.web||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
+    } else if (g==="Google Noticias"){
+      const f = l[0];
+      h += `<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>Búsquedas en Google Noticias</b><span>${f.busquedas||""} búsquedas por temas y por los 208 municipios · ${f.noticias||0} resultados en la última revisión</span></div></div>`;
+      if (st.viaGoogle.length) h += `<p class="note" style="padding:0 4px">Medios que llegan por esta vía: ${st.viaGoogle.map(([m,n])=>`${esc(m)} (${n})`).join(", ")}.</p>`;
+    } else {
+      h += l.map(f=>`<a class="medio" href="${esc(f.web||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
+    }
+    h += `</div>`;
   }
-  for (const g of MEDIOS) h += `<div class="mgroup"><h3>${esc(g.g)}</h3>` + g.l.map(([n,u,d])=>`<a class="medio" href="${esc(u)}" target="_blank" rel="noopener"><div><b>${esc(n)}</b>${d?`<span>${esc(d)}</span>`:""}</div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("") + `</div>`;
+  h += `<p class="foot">Además se leen por completo los textos de las noticias nuevas para detectar temas, convocatorias y lugares que no aparecen en el titular.</p>`;
   return h;
 }
 
@@ -917,6 +897,7 @@ $("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending
 function applyData(j){
   st.dias = (j.dias||[]).filter(d=>d && d.fecha).sort((a,b)=>b.fecha.localeCompare(a.fecha));
   st.fuentes = j.fuentes || [];
+  st.viaGoogle = j.via_google || [];
   st.actualizado = j.actualizado || "";
   st.loaded = true; st.error = false; cacheNews = null;
   // Las guardadas se refrescan con la versión más reciente (más medios, mejor resumen)

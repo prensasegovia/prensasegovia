@@ -38,6 +38,14 @@ const FEEDS = [
   { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"], local: true },
   { nombre: "Europa Press", urls: ["https://www.europapress.es/rss/rss.aspx?ch=283"], soloSiMenciona: true },
   { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"], local: true },
+  { nombre: "Segovia Sur", urls: ["https://www.segoviasur.com/feed/"], local: true },
+  // Medios regionales y nacionales: solo lo que menciona Segovia o un pueblo
+  { nombre: "okdiario", urls: ["https://okdiario.com/noticias/segovia/feed"], soloSiMenciona: true },
+  { nombre: "Europa Press", urls: ["https://www.europapress.es/rss/rss.aspx?ch=304"], soloSiMenciona: true },
+  { nombre: "ABC Castilla y León", urls: ["https://www.abc.es/rss/2.0/espana/castilla-leon/"], soloSiMenciona: true },
+  { nombre: "20minutos", urls: ["https://www.20minutos.es/rss/castilla-y-leon/"], soloSiMenciona: true },
+  { nombre: "eldiario.es Castilla y León", urls: ["https://www.eldiario.es/rss/castilla-y-leon/"], soloSiMenciona: true },
+  { nombre: "El Español Castilla y León", urls: ["https://www.elespanol.com/rss/castilla-y-leon/"], soloSiMenciona: true },
   // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
@@ -53,6 +61,41 @@ const FEEDS = [
   { nombre: "Agronews Castilla y León", urls: ["https://www.agronewscastillayleon.com/feed/"], soloSiMenciona: true },
   ...Object.entries(AYUNTAMIENTOS_WEB).map(([pueblo, urls]) => ({ nombre: "Ayuntamiento de " + pueblo, urls, pueblo, todas: urls.length > 1, ayto: true })),
 ];
+
+
+// Clasificación y web de cada fuente (para la sección Medios de la app)
+const INFO_FUENTE = {
+  "El Adelantado": ["Periódicos y digitales de Segovia", "https://www.eladelantado.com"],
+  "El Norte de Castilla": ["Periódicos y digitales de Segovia", "https://www.elnortedecastilla.es/segovia/"],
+  "El Día de Segovia": ["Periódicos y digitales de Segovia", "https://www.eldiasegovia.es"],
+  "Tribuna de Segovia": ["Periódicos y digitales de Segovia", "https://www.tribunasegovia.com"],
+  "SegoviaUdaz": ["Periódicos y digitales de Segovia", "https://segoviaudaz.es"],
+  "Segovia Directo": ["Periódicos y digitales de Segovia", "https://segoviadirecto.com"],
+  "Segovia 24/7": ["Periódicos y digitales de Segovia", "https://segovia247.es"],
+  "Segovia al día": ["Periódicos y digitales de Segovia", "https://segoviaaldia.es"],
+  "Acueducto2": ["Periódicos y digitales de Segovia", "https://www.acueducto2.com"],
+  "esCuéllar": ["Comarcales y locales", "https://escuellar.es"],
+  "El Nordeste de Segovia": ["Comarcales y locales", "https://www.elnordestedesegovia.es"],
+  "El Espinar Información": ["Comarcales y locales", "https://www.elespinar.org"],
+  "La Granja-Valsaín": ["Comarcales y locales", "https://www.lagranja-valsain.com"],
+  "COPE Segovia": ["Radio", "https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias"],
+  "Onda Cero Segovia": ["Radio", "https://www.ondacero.es/emisoras/castilla-y-leon/segovia/"],
+  "Diario de Castilla y León": ["Agencias y medios regionales", "https://www.diariodecastillayleon.es/segovia/"],
+  "Europa Press": ["Agencias y medios regionales", "https://www.europapress.es/castilla-y-leon/"],
+  "Agronews Castilla y León": ["Sector agrario", "https://www.agronewscastillayleon.com"],
+  "Segovia Sur": ["Comarcales y locales", "https://www.segoviasur.com"],
+  "okdiario": ["Agencias y medios regionales", "https://okdiario.com/noticias/segovia"],
+  "ABC Castilla y León": ["Agencias y medios regionales", "https://www.abc.es/espana/castilla-leon/"],
+  "20minutos": ["Agencias y medios regionales", "https://www.20minutos.es/castilla-y-leon/"],
+  "eldiario.es Castilla y León": ["Agencias y medios regionales", "https://www.eldiario.es/castilla-y-leon/"],
+  "El Español Castilla y León": ["Agencias y medios regionales", "https://www.elespanol.com/castilla-y-leon/"],
+  "PP de Segovia": ["Partidos y sindicatos", "https://ppsegovia.com"],
+  "PSOE de Segovia": ["Partidos y sindicatos", "https://www.psoesegovia.es"],
+  "PP de Castilla y León": ["Partidos y sindicatos", "https://www.ppcyl.es"],
+  "STECyL": ["Partidos y sindicatos", "https://stecyl.net"],
+  "UGT Castilla y León": ["Partidos y sindicatos", "https://ugtcyl.es/web/"],
+};
+const infoFuente = f => f.nombre.startsWith("Ayuntamiento de ") ? ["Ayuntamientos", (f.urls[0].match(/^https?:\/\/[^/]+/) || [""])[0]] : (INFO_FUENTE[f.nombre] || ["Otros", ""]);
 
 // Búsquedas en Google Noticias (cubren también radios, agencias y medios sin RSS propio)
 const BUSQUEDAS = [
@@ -401,7 +444,7 @@ const CANON = { segoviaudaz: "SegoviaUdaz", escuellar: "esCuéllar", tribunadese
   eladelantado: "El Adelantado", eladelantadodesegovia: "El Adelantado", elnortedecastilla: "El Norte de Castilla", segoviadirectocom: "Segovia Directo",
   segoviadirecto: "Segovia Directo", cope: "COPE Segovia", copesegovia: "COPE Segovia", cadenaser: "Cadena SER", ondacero: "Onda Cero Segovia",
   diariodecastillayleon: "Diario de Castilla y León", diariodecastillayleonsegovia: "Diario de Castilla y León", europapress: "Europa Press",
-  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE", ppsegovia: "PP de Segovia", psoesegovia: "PSOE de Segovia", stecyl: "STECyL", lagranjavalsain: "La Granja-Valsaín", segoviaaldia: "Segovia al día", diariodecastillayleonsegovia2: "Diario de Castilla y León", ondacerosegovia: "Onda Cero Segovia", acueducto2: "Acueducto2", acueducto2com: "Acueducto2" };
+  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE", okdiario: "okdiario", okdiariocom: "okdiario", elespanol: "El Español Castilla y León", eldiarioes: "eldiario.es Castilla y León", abc: "ABC Castilla y León", abces: "ABC Castilla y León", "20minutos": "20minutos", "20minutoses": "20minutos", segoviasur: "Segovia Sur", ppsegovia: "PP de Segovia", psoesegovia: "PSOE de Segovia", stecyl: "STECyL", lagranjavalsain: "La Granja-Valsaín", segoviaaldia: "Segovia al día", diariodecastillayleonsegovia2: "Diario de Castilla y León", ondacerosegovia: "Onda Cero Segovia", acueducto2: "Acueducto2", acueducto2com: "Acueducto2" };
 const canonMedio = n => CANON[norm(n).replace(/[^a-z0-9]/g, "")] || String(n).replace(/[.\s]+$/, "");
 function juntaMedios(destino, origen) {
   for (const m of origen) {
@@ -574,14 +617,17 @@ async function main() {
           ok = true; if (!f.todas) break;
         } catch (e) { error = e.message; }
       }
-      estadoF[i] = ok ? { fuente: f.nombre, ok: true, noticias: n } : { fuente: f.nombre, ok: false, error };
+      const [grupo, web] = infoFuente(f);
+      estadoF[i] = ok ? { fuente: f.nombre, grupo, web, ok: true, noticias: n } : { fuente: f.nombre, grupo, web, ok: false, error };
     }
   }));
   // Segundo intento, con calma, para las que han fallado (algunos servidores frenan muchas peticiones seguidas)
+  let reintentos = 0;
   for (let i = 0; i < FEEDS.length; i++) {
-    if (estadoF[i]?.ok) continue;
+    if (estadoF[i]?.ok || reintentos >= 10) continue;
+    reintentos++;
     const f = FEEDS[i];
-    await new Promise(r => setTimeout(r, 3000));
+    await new Promise(r => setTimeout(r, 1500));
     for (const url of f.urls) {
       try {
         let n = 0;
@@ -590,11 +636,12 @@ async function main() {
           if (OPINION.test(it.url)) continue;
           brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo, local: f.local === true || (f.local instanceof RegExp && f.local.test(it.url)) }); n++;
         }
-        estadoF[i] = { fuente: f.nombre, ok: true, noticias: n }; break;
-      } catch (e) { estadoF[i] = { fuente: f.nombre, ok: false, error: e.message }; }
+        estadoF[i] = { ...estadoF[i], ok: true, noticias: n }; delete estadoF[i].error; break;
+      } catch (e) { estadoF[i] = { ...estadoF[i], ok: false, error: e.message }; }
     }
   }
-  estado.push(...estadoF);
+  // Un mismo medio con varios canales (portada y sección local) se muestra una vez
+  for (const e of estadoF) { const ya = estado.find(x => x.fuente === e.fuente); if (ya) { ya.ok = ya.ok || e.ok; ya.noticias = (ya.noticias || 0) + (e.noticias || 0); if (ya.ok) delete ya.error; } else estado.push({ ...e }); }
 
   // 2) Google Noticias
   let gTotal = 0, gFallos = 0;
@@ -613,7 +660,11 @@ async function main() {
     } catch (e) { gFallos++; }
     await new Promise(r => setTimeout(r, 900));
   }
-  estado.push({ fuente: "Google Noticias", ok: gFallos < busquedas.length, noticias: gTotal, error: gFallos ? `${gFallos} búsquedas fallidas` : undefined });
+  estado.push({ fuente: "Google Noticias", grupo: "Google Noticias", web: "https://news.google.com", busquedas: busquedas.length, ok: gFallos < busquedas.length, noticias: gTotal, error: gFallos ? `${gFallos} búsquedas fallidas` : undefined });
+  // Medios que llegan a través de Google Noticias (los que no leemos directamente)
+  const directos = new Set(FEEDS.map(f => canonMedio(f.nombre)));
+  const viaGoogle = {};
+  for (const b of brutos) if (!b.directo) { const m = canonMedio(b.medio); if (!directos.has(m)) viaGoogle[m] = (viaGoogle[m] || 0) + 1; }
 
   // 3) Filtrar por fecha y agrupar duplicados (las de medios directos primero: traen mejor enlace y entradilla)
   const recientes = brutos.filter(b => !isNaN(b.fecha) && b.fecha >= limite && b.fecha <= new Date(ahora.getTime() + 36e5))
@@ -817,6 +868,7 @@ async function main() {
   const salida = {
     actualizado: `${hoy} ${horaMadrid(ahora)}`,
     fuentes: estado,
+    via_google: Object.entries(viaGoogle).sort((a, b) => b[1] - a[1]).slice(0, 40),
     dias,
   };
   await writeFile(SALIDA, JSON.stringify(salida, null, 0));
