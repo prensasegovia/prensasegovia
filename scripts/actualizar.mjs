@@ -40,8 +40,8 @@ const FEEDS = [
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
   { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
-  { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", pueblo: "Provincia" },
-  { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", pueblo: "Provincia" },
+  { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", soloSiMenciona: true },
+  { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", soloSiMenciona: true },
   // Ayuntamientos con noticias propias (actos, plenos, fiestas, avisos)
   { nombre: "Ayuntamiento de Cuéllar", urls: ["https://www.aytocuellar.es/feed/"], pueblo: "Cuéllar" },
   { nombre: "Ayuntamiento de Cantalejo", urls: ["https://www.cantalejo.es/home/-/asset_publisher/QGA6lS8CBHs5/rss"], pueblo: "Cantalejo" },
@@ -308,6 +308,8 @@ const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carc
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
 const ORGANIZACIONES = new Set(FEEDS.filter(f => f.tipo === "organizacion").map(f => f.nombre));
+const SOLO_SI_MENCIONA = new Set(FEEDS.filter(f => f.soloSiMenciona).map(f => f.nombre));
+const PUEBLO_DE_FUENTE = new Map(FEEDS.filter(f => f.pueblo).map(f => [f.nombre, f.pueblo]));
 const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre));
 const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
@@ -326,7 +328,7 @@ function relleno(n) {
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
-  if (soloAyto(n.medios || []) && solo(["politica"]) && !/extraordinari|urgente|mocion de censura|dimision|toma de posesion/.test(tt)) return true;
+  if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
   // 3) Estadísticas y trámites electorales (sí quedan candidaturas, mítines y visitas)
@@ -342,7 +344,10 @@ const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Un titular que trae un cambio (se suspende, hay un detenido, fallece...) no se junta con el anterior: es otra noticia
 const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
 function mismaNoticia(a, b) {
-  if (parecido(a.tk, b.tk) >= 0.55) return true;
+  // Noticias de pueblos distintos nunca son la misma (p. ej. "Pleno extraordinario" en dos ayuntamientos)
+  if (CONCRETO(a.municipio) && CONCRETO(b.municipio) && a.municipio !== b.municipio) return false;
+  let comunes = 0; for (const w of a.tk) if (b.tk.has(w)) comunes++;
+  if (parecido(a.tk, b.tk) >= 0.55 && comunes >= 3) return true;
   if (a.titulo && b.titulo && DESARROLLO.test(norm(a.titulo)) !== DESARROLLO.test(norm(b.titulo))) return false;
   const dias = Math.abs(new Date(a.dia) - new Date(b.dia)) / 864e5;
   if (CONCRETO(a.municipio) && a.municipio === b.municipio && dias <= 2) {
@@ -624,12 +629,19 @@ async function main() {
       juntaMedios(n.medios, []);
       n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
       if (!n.medios.length || n.medios.every(m => OPINION.test(m.url))) return false;
+      // Fuentes regionales que solo valen si mencionan Segovia o un pueblo
+      if (n.medios.every(m => SOLO_SI_MENCIONA.has(m.nombre)) && !MENCIONA_SEGOVIA.test(norm(n.titulo + " " + (n.resumen || "")))) return false;
+      // El pueblo por defecto lo da la fuente actual (no lo guardado)
+      const pf = [...new Set(n.medios.map(m => PUEBLO_DE_FUENTE.get(m.nombre)).filter(Boolean))];
+      if (pf.length === 1) n.pueblo_fuente = pf[0]; else delete n.pueblo_fuente;
       if (!n.analisis) { const m = n.medios.find(m => cache[m.url]); if (m) n.analisis = limpiaAnalisis(cache[m.url]); }
       if (!n.analisis) delete n.analisis;
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
+      // Webs municipales de otro pueblo que se agruparon por error
+      if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
