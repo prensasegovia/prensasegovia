@@ -205,6 +205,9 @@ const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
+const PREVENTIVO = /preve|prevision|peligro|riesgo|recomendaciones|recomienda|operacion (salida|especial|retorno)|regulacion del trafico|corte(s)? (de )?trafico|bando|aviso amarillo|alerta amarilla|campana de|dispositivo especial|desplazamientos|accesos al cementerio|ruta/;
+const SUCESO = /herid|fallec|muere|murio|muert|accidente|colision|choque|atropell|incendio (en|declarado|forestal en|de una|de un)|arde|rescat|desaparecid|evacu|derrumbe|explosion|calcinad|vuelco|salida de via/;
+const CONFLICTO_POL = /polemica|critica|denuncia|enfrent|tension|dimi|censura|acusa|reprocha|bronco|crispa|abandona|expuls|imputad|querella|candidat|elecciones|electoral|29n|mitin|campana|protesta|exige|reclama|rechazo|pide la|tumba|bloque|veta|oposicion/;
 function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Las webs de ayuntamientos se juzgan solo por el titular (sus textos son avisos y bandos)
   if (soloTitulo) texto = "";
@@ -226,6 +229,13 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades"].includes(c))) relevancia = "alta";
   else if (categorias.includes("autoridades") && VISITA.test(tt)) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
+  // Relleno que no interesa aunque toque un tema útil:
+  // - estadísticas electorales (votantes en el extranjero, censo, sorteo de mesas)
+  if (/votantes|electores|censo electoral|\bcera\b|sorteo de (las )?mesas/.test(tt) && !categorias.some(c => ["policial", "social", "autoridades"].includes(c))) return { categorias: [], relevancia: "baja", descartar: true };
+  // - avisos preventivos de tráfico y emergencias: solo cuentan los sucesos reales
+  if (categorias.every(c => c === "emergencias") && PREVENTIVO.test(tt) && !SUCESO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
+  // - gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
+  if (municipio === "Segovia" && categorias.length && categorias.every(c => c === "politica") && !CONFLICTO_POL.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
