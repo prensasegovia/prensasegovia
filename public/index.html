@@ -265,7 +265,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   <div class="scrim" id="scrim"></div>
   <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="grab"></div>
-    <h2 id="sheetTitle">Filtros y ajustes</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between"><h2 id="sheetTitle">Filtros y ajustes</h2><button class="abtn" id="fX" type="button" aria-label="Cerrar">✕</button></div>
     <div class="row">
       <span class="t">Periodo</span>
       <div class="seg" id="segRango"><button data-v="3" type="button">3 días</button><button data-v="7" type="button">7 días</button><button data-v="21" type="button">21 días</button></div>
@@ -382,7 +382,7 @@ const isCapital = n => norm(n.municipio)==="segovia";
 const st = {
   view:"noticias",            // pestaña
   sub:null,                   // pantalla encima: {t:"pueblo",name} | {t:"imp"} | {t:"medios"}
-  cats: new Set((store.get("cats3", ALL)).filter(k=>CAT[k])),
+  cat: null,                  // tema elegido en la barra (null = todos); no se recuerda
   sinCapital: store.get("sinCapital2", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
@@ -395,8 +395,7 @@ const st = {
   abiertos: new Set(),        // tarjetas con todos los medios desplegados
   pending:null
 };
-if (!st.cats.size) st.cats = new Set(ALL);
-const saveF = () => { store.set("cats3",[...st.cats]); store.set("sinCapital2",st.sinCapital); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
+const saveF = () => { store.set("sinCapital2",st.sinCapital); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
 
 /* ================= Datos ================= */
 let cacheNews = null;
@@ -424,13 +423,13 @@ const enRango = n => n._dia >= addDays(today(), -(parseInt(st.rango,10)-1));
 function pasa(n){
   if (st.sinCapital && isCapital(n)) return false;
   if (st.soloKw && !kwHits(n)) return false;
-  if (!n._cats.some(c=>st.cats.has(c))) return false;
+  if (st.cat && !n._cats.includes(st.cat)) return false;
   return true;
 }
 const porHora = (a,b) => (b._ts||0)-(a._ts||0);
 const isNew = n => !st.seen.has(n._key);
 function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c) store.set("seen", [...st.seen].slice(-3000)); }
-const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cats.size<CATS.length?`${st.cats.size} de ${CATS.length} temas`:""].filter(Boolean);
+const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cat?CAT[st.cat].n.toLowerCase():""].filter(Boolean);
 
 function hl(text){
   let h = esc(text);
@@ -479,11 +478,13 @@ function card(n, opts={}){
 }
 
 function chipsBar(pool){
+  pool = pool.filter(n=>!(st.sinCapital && isCapital(n)) && !(st.soloKw && !kwHits(n)));
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
   let h = `<button class="chip filters" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${st.rango!=="3"||st.soloKw?`<span class="badge">●</span>`:""}</button>`;
   h += `<button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>`;
+  h += `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
   for (const c of CATS){ const k = counts[c.k]||0;
-    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cats.has(c.k)}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
+    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
   return `<div class="chips" id="chips">${h}</div>`;
 }
 const avisoFiltros = () => { const a = filtrosActivos(); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Ver todo</button></div>` : ""; };
@@ -570,7 +571,7 @@ function viewPueblos(news){
   let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
   if (st.townQ) list = list.filter(([k])=>norm(k).includes(norm(st.townQ)));
   let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">Últimos ${st.rango} días</span></div>
-    <div class="search">${I.search}<input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">`;
+    <div class="search">${I.search}<input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">${avisoFiltros()}`;
   if (!list.length && st.townQ){
     const otros = [...new Set(news.filter(n=>esPueblo(n.municipio) && norm(n.municipio).includes(norm(st.townQ))).map(n=>n.municipio))];
     h += otros.length ? otros.map(k=>`<button class="town none" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span><span class="cnt">más antiguas</span><span class="chev">›</span></button>`).join("")
@@ -598,8 +599,8 @@ function viewPueblo(news, name){
   return h + `</div>`;
 }
 function viewImportantes(news){
-  const list = news.filter(n=>enRango(n) && n.relevancia==="alta").sort(porHora);
-  let h = `<section class="subhero"><h1>Importantes</h1><p>${plural(list.length,"noticia","noticias")} en los últimos ${st.rango} días, de todos los temas y lugares.</p></section><div class="feed">`;
+  const list = news.filter(n=>enRango(n) && pasa(n) && n.relevancia==="alta").sort(porHora);
+  let h = `<section class="subhero"><h1>Importantes</h1><p>${plural(list.length,"noticia","noticias")} en los últimos ${st.rango} días.</p></section><div class="feed">${avisoFiltros()}`;
   return h + (list.length ? porDias(list) : `<div class="empty"><b>Nada importante</b>No hay noticias marcadas como importantes en este periodo.</div>`) + `</div>`;
 }
 function viewMedios(){
@@ -733,10 +734,10 @@ $("#app").addEventListener("click", e=>{
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
   if (!b){ if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen"); window.open(card.dataset.href, "_blank", "noopener"); } return; }
   const act = b.dataset.act;
-  if (b.dataset.cat){ const k=b.dataset.cat; if (st.cats.has(k) && st.cats.size>1) st.cats.delete(k); else st.cats.add(k); saveF(); render(true); }
+  if (b.dataset.cat !== undefined){ const k=b.dataset.cat; st.cat = (!k || st.cat===k) ? null : k; aplicaFiltro(); }
   else if (act==="filtros") openSheet();
-  else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); render(true); }
-  else if (act==="limpiar"){ st.sinCapital=false; st.soloKw=false; st.cats=new Set(ALL); st.rango="3"; saveF(); render(); }
+  else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
+  else if (act==="limpiar"){ st.sinCapital=false; st.soloKw=false; st.cat=null; st.rango="3"; saveF(); aplicaFiltro(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="medios") abrirSub({t:"medios"});
@@ -744,6 +745,14 @@ $("#app").addEventListener("click", e=>{
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);
 });
+
+// Al cambiar un filtro: se redibuja y, si estabas más abajo, la lista empieza justo bajo la barra de temas
+function aplicaFiltro(){
+  const ch0 = $("#chips"); const pegada = ch0 && ch0.classList.contains("stuck");
+  render(true);
+  const ch = $("#chips");
+  if (ch && pegada){ const sent = ch.previousElementSibling; const y = (sent ? sent.getBoundingClientRect().top : ch.getBoundingClientRect().top) + window.scrollY - $("#appbar").offsetHeight; window.scrollTo({top:Math.max(0,y)}); }
+}
 
 /* Búsqueda */
 function toggleSearch(on, sinRender){
@@ -772,19 +781,20 @@ function syncSheet(){
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
 }
 function openSheet(){ syncSheet(); $("#sheetWrap").classList.add("open"); }
-function closeSheet(){ $("#sheetWrap").classList.remove("open"); render(); }
+function closeSheet(){ $("#sheetWrap").classList.remove("open"); render(true); }
 $("#scrim").addEventListener("click", closeSheet);
 $("#fClose").addEventListener("click", closeSheet);
+$("#fX").addEventListener("click", closeSheet);
 $("#fMedios").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); abrirSub({t:"medios"}); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap").classList.contains("open")) closeSheet(); });
 $("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
-$("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); });
-$("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); });
-$("#fKw").addEventListener("change", e=>{ st.soloKw=e.target.checked; saveF(); });
-function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(k)===norm(v))){ st.kws.push(v); saveF(); } $("#kwIn").value=""; syncSheet(); }
+$("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); render(true); });
+$("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); render(true); });
+$("#fKw").addEventListener("change", e=>{ st.soloKw=e.target.checked; saveF(); render(true); });
+function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(k)===norm(v))){ st.kws.push(v); saveF(); render(true); } $("#kwIn").value=""; syncSheet(); }
 $("#kwAdd").addEventListener("click", addKw);
 $("#kwIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addKw(); } });
-$("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); syncSheet(); });
+$("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); render(true); syncSheet(); });
 $("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
 
 /* ================= Carga ================= */

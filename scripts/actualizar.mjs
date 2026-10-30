@@ -523,6 +523,7 @@ async function main() {
     if (ya) { // añade enlaces de otros medios a la que ya estaba
       if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
       if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
+      if (!ya.n.analisis && n.analisis) ya.n.analisis = n.analisis; // otro medio cuenta más en el cuerpo
       juntaMedios(ya.n.medios, n.medios);
       continue;
     }
