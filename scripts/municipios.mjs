@@ -8,6 +8,13 @@ export const AMBIGUOS = new Set(["Anaya","Coca","Cubillo","Encinas","Gallegos","
 export const ALIAS = {
   "La Granja": "Real Sitio de San Ildefonso",
   "Palazuelos": "Palazuelos de Eresma",
+  "Linares del Arroyo": "Maderuelo",
+  "Burgomillodo": "Carrascal del Río",
+  "Las Vencías": "Fuentidueña",
+  "Pontón Alto": "Real Sitio de San Ildefonso",
+  "Hoces del Duratón": "Sepúlveda",
+  "Hoces del Riaza": "Montejo de la Vega de la Serrezuela",
+  "Puente Alta": "Segovia",
   "Carbonero": "Carbonero el Mayor",
   "Navas de Riofrio": "Navas de Riofrío",
   "San Ildefonso": "Real Sitio de San Ildefonso",
