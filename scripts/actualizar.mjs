@@ -251,7 +251,7 @@ async function main() {
     if (tk.size < 2) continue;
     const g = grupos.find(g => parecido(g.tk, tk) >= 0.6);
     if (g) {
-      if (!g.medios.some(m => norm(m.nombre) === norm(b.medio)) && g.medios.length < 5) g.medios.push({ nombre: b.medio, url: b.url });
+      if (!g.medios.some(m => m.url === b.url || norm(m.nombre).replace(/^el /, "") === norm(b.medio).replace(/^el /, "")) && g.medios.length < 5) g.medios.push({ nombre: b.medio, url: b.url });
       if (!g.texto && b.texto) g.texto = b.texto;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
     } else grupos.push({ tk, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: b.medio, url: b.url }] });

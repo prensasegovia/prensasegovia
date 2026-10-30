@@ -384,7 +384,7 @@ function card(n, opts={}){
   const ev = n.fecha_evento && !opts.noEv ? `<span class="pill ev">${esc(fmtDayName(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
   const first = safeUrl((n.medios||[])[0]?.url);
   const vistos = new Set();
-  const medios = (n.medios||[]).filter(m=>{ const k=norm(String(m.nombre).replace(/[.\s]+$/,"")); if(vistos.has(k)) return false; vistos.add(k); return true; });
+  const medios = (n.medios||[]).filter(m=>{ const k=norm(String(m.nombre).replace(/[.\s]+$/,"").replace(/^el\s+/i,"")); const u=String(m.url||""); if(vistos.has(k)||vistos.has(u)) return false; vistos.add(k); vistos.add(u); return true; });
   const src = medios.slice(0,4).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("");
   const t = ago(n._dia, n.hora);
   return `<article class="card ${lvl}" ${first?`data-href="${esc(first)}"`:""}>
