@@ -1,0 +1,307 @@
+{
+ "https://segoviaaldia.es/coverrss": {
+  "status": 200,
+  "final": "https://segoviaaldia.es/coverrss",
+  "feed": true,
+  "items": 0,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:feedburner=\"http://rssnamespace.org/feedburner/ext/1.0\" xmlns:media=\"http://search.yahoo.com/mrss/\">\r\n \r\n\r\n\t<channel>\r\n        <atom:link href=\"https://segoviaaldia.es/coverrss\" rel=\"self\" type=\"application/rss+xml\" />\r\n        <title>Segovia al día</title>\r\n\t\t<link>https://segoviaaldia.es/coverrss</link>\r\n\t\t<description>Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia</description>\r\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:32 +0100</lastBuildDate>\r\n\t\t<language>es</language>\r\n\t\t<generator>FolioePress</generator>\r\n        \r\n\t</channel>\r\n</rss>",
+  "enlaces": [
+   "https://segoviaaldia.es/coverrss"
+  ],
+  "titulo": "Segovia al día"
+ },
+ "https://segoviadirecto.com/coverrss": {
+  "status": 200,
+  "final": "https://segoviadirecto.com/coverrss",
+  "feed": true,
+  "items": 99,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:feedburner=\"http://rssnamespace.org/feedburner/ext/1.0\" xmlns:media=\"http://search.yahoo.com/mrss/\">\r\n \r\n\r\n\t<channel>\r\n        <atom:link href=\"https://segoviadirecto.com/coverrss\" rel=\"self\" type=\"application/rss+xml\" />\r\n        <title>Segoviadirecto.com</title>\r\n\t\t<link>https://segoviadirecto.com/coverrss</link>\r\n\t\t<description>Noticias de Segovia hoy</description>\r\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:33 +0100</lastBuildDate>\r\n\t\t<language>es</language>\r\n\t\t<generator>FolioePress</generator>\r\n        \r\n\t\t<item>\r\n\t\t\t<title><![CDATA[OUIGO cancela todos sus trenes del 30 de octubre y el 2 de noviembre por la huelga de maquinistas]]></title>\r\n\t\t\t<link>https://segoviadirecto.com/art/56486/ouigo-cancela-todos-sus-trenes-del-30-de-octubre-y-el-2-de-noviembre-por-la-huelga-de-maquinistas</link>\r\n            <category domain=\"https://segoviadirecto.com/\"></category>\r\n\t\t\t<guid>https://segoviadirecto.com/art/56486/ouigo-cancela-todos-sus-trenes-del-30-de-octubre-y-el-2-de-noviembre-por-la-huelga-de-maquinistas</guid>\r\n\t\t\t<pubDate>Thu, 29 Oct 2026 18:39:57 +0100</pubDate>\r\n\r\n            <description><![CDATA[\r\n            \tOUIGO ha anunciado la cancelaci&oacute;n de todos sus trenes previstos para el viernes 30 de octubre y el lunes 2 de noviembre en todas sus rutas, en el contexto de la huelga de maquinistas convocada por el sindicato SEMAF. La decisi&oacute;n afecta, seg&uacute;",
+  "enlaces": [
+   "https://segoviadirecto.com/coverrss"
+  ],
+  "titulo": "Segoviadirecto.com"
+ },
+ "http://segovia247.es/coverrss": {
+  "status": 200,
+  "final": "http://segovia247.es/coverrss",
+  "feed": true,
+  "items": 50,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:feedburner=\"http://rssnamespace.org/feedburner/ext/1.0\" xmlns:media=\"http://search.yahoo.com/mrss/\">\r\n \r\n\r\n\t<channel>\r\n        <atom:link href=\"http://segovia247.es/coverrss\" rel=\"self\" type=\"application/rss+xml\" />\r\n        <title>Segovia 247 | La web que nos une. Producto local.</title>\r\n\t\t<link>http://segovia247.es/coverrss</link>\r\n\t\t<description>El diario digital #nonstop y más atrevido de Segovia, dirigido por Javier López Alarma</description>\r\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:34 +0100</lastBuildDate>\r\n\t\t<language>es</language>\r\n\t\t<generator>FolioePress</generator>\r\n        \r\n\t\t<item>\r\n\t\t\t<title><![CDATA[Segovia elegirá por sorteo a los miembros de las 63 mesas electorales para las elecciones del 29 de noviembre]]></title>\r\n\t\t\t<link>http://segovia247.es/art/13678/segovia-elegira-por-sorteo-a-los-miembros-de-las-63-mesas-electorales-para-las-elecciones-del-29-de-noviembre</link>\r\n            <category domain=\"http://segovia247.es/\"></category>\r\n\t\t\t<guid>http://segovia247.es/art/13678/segovia-elegira-por-sorteo-a-los-miembros-de-las-63-mesas-electorales-para-las-elecciones-del-29-de-noviembre</guid>\r\n\t\t\t<pubDate>Thu, 29 Oct 2026 18:22:57 +0100</pubDate>\r\n\r\n            <description><![CDATA[\r\n            \tEl pleno extraordinario se celebrar&aacute; el martes 3 de noviembre a las 9.00 horas y permitir&aacute; designar a 567 personas para la jornada electoral.\n\n&nbsp",
+  "enlaces": [
+   "http://segovia247.es/coverrss"
+  ],
+  "titulo": "Segovia 247 | La web que nos une. Producto local."
+ },
+ "https://www.eldiasegovia.es/listadorss": {
+  "status": 200,
+  "final": "https://www.eldiasegovia.es/listadorss",
+  "feed": false,
+  "enlaces": [
+   "https://www.eldiasegovia.es/listadorss",
+   "http://www.eldiasegovia.es/RSS/DSGPortada.xml",
+   "http://www.eldiasegovia.es/RSS/DSGlocal.xml",
+   "http://www.eldiasegovia.es/rss/DSGProvincia.xml",
+   "http://www.eldiasegovia.es/RSS/DSGactualidad.xml",
+   "http://www.eldiasegovia.es/RSS/DSGdeportes.xml",
+   "/listadorss"
+  ],
+  "titulo": "\r\n\tEl Día de Segovia: Sindicación RSS\r\n"
+ },
+ "https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml": {
+  "status": 200,
+  "final": "https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml",
+  "feed": true,
+  "items": 131,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss  version=\"2.0\">\n    <channel>\n        <title><![CDATA[Segovia]]></title>\n        <image>\n            <url>https://imagenes.cope.es/images/logo-rss.png</url>\n            <title><![CDATA[Segovia]]></title>\n            <link>https://www.cope.es/</link>\n        </image>\n        <description><![CDATA[Toda la información y el mejor entretenimiento en COPE Segovia. Noticias, audios, vídeos y acceso a los streamings de la provincia]]></description>\n        <link>https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia</link>\n        <language><![CDATA[es-es]]></language>\n        <lastBuildDate>Fri, 30 Oct 2026 14:28:59 +0100</lastBuildDate>\n        <docs>http://www.rssboard.org/rss-specification</docs>\n                \n<item>\n    <title><![CDATA[Los vecinos de El Espinar critican una posible privatización del Tejo sin saber qué futuro le espera a la presa: \"La reconstrucción de la presa ni siquiera está sobre la mesa\"]]></title>\n    <link>https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/vecinos-espinar-critican-posible-privatizacion-tejo-futuro-le-espera-presa-reconstruccion-presa-siquiera-sobre-mesa-20261030_3465894.html</link>\n    <guid isPermaLink=\"true\">https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/vecinos-espinar-critican-posible-privatizacion-tejo-futuro-le-espera-presa-reconstruccion-presa-siquiera-sobre-mesa-20261030_3465894.html</guid>\n    <enclosure typ",
+  "enlaces": [],
+  "titulo": ""
+ },
+ "https://www.cope.es/api/es/emisoras/castilla-y-leon/segovia-provincia/segovia/news/rss.xml": {
+  "status": 200,
+  "final": "https://www.cope.es/api/es/emisoras/castilla-y-leon/segovia-provincia/segovia/news/rss.xml",
+  "feed": true,
+  "items": 21,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss  version=\"2.0\">\n    <channel>\n        <title><![CDATA[RSS - Noticias de Segovia]]></title>\n        <image>\n            <url>https://imagenes.cope.es/images/logo-rss.png</url>\n            <title><![CDATA[RSS - Noticias de Segovia]]></title>\n            <link>https://www.cope.es/</link>\n        </image>\n        <description><![CDATA[Toda la información y el mejor entretenimiento en COPE Segovia. Noticias, audios, vídeos y acceso a los streamings de la provincia]]></description>\n        <link>https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia</link>\n        <language><![CDATA[es-es]]></language>\n        <lastBuildDate>Fri, 30 Oct 2026 14:44:03 +0100</lastBuildDate>\n        <docs>http://www.rssboard.org/rss-specification</docs>\n                \n<item>\n    <title><![CDATA[Los vecinos de El Espinar critican una posible privatización del Tejo sin saber qué futuro le espera a la presa: \"La reconstrucción de la presa ni siquiera está sobre la mesa\"]]></title>\n    <link>https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/vecinos-espinar-critican-posible-privatizacion-tejo-futuro-le-espera-presa-reconstruccion-presa-siquiera-sobre-mesa-20261030_3465894.html</link>\n    <guid isPermaLink=\"true\">https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/vecinos-espinar-critican-posible-privatizacion-tejo-futuro-le-espera-presa-reconstruccion-presa-siquiera-sobre-mesa-20261030_34",
+  "enlaces": [],
+  "titulo": ""
+ },
+ "https://www.elnordestedesegovia.es/index.php?option=com_content&view=featured&format=feed&type=rss": {
+  "status": 200,
+  "final": "https://www.elnordestedesegovia.es/index.php?option=com_content&view=featured&format=feed&type=rss",
+  "feed": true,
+  "items": 9,
+  "muestra": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- generator=\"\" -->\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n\t<channel>\n\t\t<title>Periódico digital | El Nordeste de Segovia</title>\n\t\t<description><![CDATA[]]></description>\n\t\t<link>https://www.elnordestedesegovia.es/?view=featured</link>\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:37 +0100</lastBuildDate>\n\t\t<generator></generator>\n\t\t<atom:link rel=\"self\" type=\"application/rss+xml\" href=\"https://www.elnordestedesegovia.es/?view=featured&amp;id=1&amp;format=feed&amp;type=rss\"/>\n\t\t<language>es-es</language>\n\t\t<item>\n\t\t\t<title>Peligro de incendios en Segovia hasta el 9 de noviembre</title>\n\t\t\t<link>https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</link>\n\t\t\t<guid isPermaLink=\"true\">https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</guid>\n\t\t\t<description><![CDATA[<div class=\"feed-description\"><p><img src=\"https://www.elnordestedesegovia.es/\" alt=\"\"></p><p>La decisión se recoge en una <strong>resolución de 27 de octubre de 2026</strong>, publicada este viernes, <strong>30 de octubre</strong>, en el <strong>Boletín Oficial de Castilla y León (BOCYL núm. 211)</strong>. El texto prolonga la declaración que estaba vigente desde el <strong>13 de octubre</strong> y que debía terminar el próximo <strong>31 de octubre</strong>.</p>\r\n<p>Según la resolución, las previsiones meteorológicas apuntan a una <strong>elevada probabil",
+  "enlaces": [
+   "https://www.elnordestedesegovia.es/?view=featured&id=1&format=feed&type=rss"
+  ],
+  "titulo": "Periódico digital | El Nordeste de Segovia"
+ },
+ "https://www.elnordestedesegovia.es/component/content/featured?format=feed&type=rss": {
+  "status": 200,
+  "final": "https://www.elnordestedesegovia.es/component/content/featured?format=feed&type=rss",
+  "feed": true,
+  "items": 9,
+  "muestra": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- generator=\"\" -->\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n\t<channel>\n\t\t<title>Periódico digital | El Nordeste de Segovia</title>\n\t\t<description><![CDATA[]]></description>\n\t\t<link>https://www.elnordestedesegovia.es/?view=featured</link>\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:37 +0100</lastBuildDate>\n\t\t<generator></generator>\n\t\t<atom:link rel=\"self\" type=\"application/rss+xml\" href=\"https://www.elnordestedesegovia.es/?view=featured&amp;id=1&amp;format=feed&amp;type=rss\"/>\n\t\t<language>es-es</language>\n\t\t<item>\n\t\t\t<title>Peligro de incendios en Segovia hasta el 9 de noviembre</title>\n\t\t\t<link>https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</link>\n\t\t\t<guid isPermaLink=\"true\">https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</guid>\n\t\t\t<description><![CDATA[<div class=\"feed-description\"><p><img src=\"https://www.elnordestedesegovia.es/\" alt=\"\"></p><p>La decisión se recoge en una <strong>resolución de 27 de octubre de 2026</strong>, publicada este viernes, <strong>30 de octubre</strong>, en el <strong>Boletín Oficial de Castilla y León (BOCYL núm. 211)</strong>. El texto prolonga la declaración que estaba vigente desde el <strong>13 de octubre</strong> y que debía terminar el próximo <strong>31 de octubre</strong>.</p>\r\n<p>Según la resolución, las previsiones meteorológicas apuntan a una <strong>elevada probabil",
+  "enlaces": [
+   "https://www.elnordestedesegovia.es/?view=featured&id=1&format=feed&type=rss"
+  ],
+  "titulo": "Periódico digital | El Nordeste de Segovia"
+ },
+ "https://www.elnordestedesegovia.es/noticias?format=feed&type=rss": {
+  "status": 200,
+  "final": "https://www.elnordestedesegovia.es/noticias?format=feed&type=rss",
+  "feed": true,
+  "items": 9,
+  "muestra": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- generator=\"\" -->\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n\t<channel>\n\t\t<title>Noticias </title>\n\t\t<description><![CDATA[]]></description>\n\t\t<link>https://www.elnordestedesegovia.es/noticias</link>\n\t\t<lastBuildDate>Fri, 30 Oct 2026 14:51:38 +0100</lastBuildDate>\n\t\t<generator></generator>\n\t\t<atom:link rel=\"self\" type=\"application/rss+xml\" href=\"https://www.elnordestedesegovia.es/noticias?format=feed&amp;type=rss\"/>\n\t\t<language>es-es</language>\n\t\t<item>\n\t\t\t<title>Peligro de incendios en Segovia hasta el 9 de noviembre</title>\n\t\t\t<link>https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</link>\n\t\t\t<guid isPermaLink=\"true\">https://www.elnordestedesegovia.es/noticias/1779-peligro-de-incendios-en-segovia-hasta-el-9-de-noviembre</guid>\n\t\t\t<description><![CDATA[<p><img src=\"https://www.elnordestedesegovia.es/\" alt=\"\"></p><p>La decisión se recoge en una <strong>resolución de 27 de octubre de 2026</strong>, publicada este viernes, <strong>30 de octubre</strong>, en el <strong>Boletín Oficial de Castilla y León (BOCYL núm. 211)</strong>. El texto prolonga la declaración que estaba vigente desde el <strong>13 de octubre</strong> y que debía terminar el próximo <strong>31 de octubre</strong>.</p>\r\n<p>Según la resolución, las previsiones meteorológicas apuntan a una <strong>elevada probabilidad de estabilidad atmosférica</strong> durante los primeros días de noviembre. Esa sit",
+  "enlaces": [
+   "https://www.elnordestedesegovia.es/noticias?format=feed&type=rss"
+  ],
+  "titulo": "Noticias "
+ },
+ "https://cadenaser.com/emisora/radio_segovia/": {
+  "status": 403,
+  "final": "https://cadenaser.com/radio-segovia/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "cadenaser.com"
+ },
+ "https://cadenaser.com/castilla-y-leon/segovia/": {
+  "status": 404,
+  "final": "https://cadenaser.com/castilla-y-leon/segovia/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Cadena SER: Noticias y Radio Online"
+ },
+ "https://cadenaser.com/rss/emisora/radio_segovia/": {
+  "status": 404,
+  "final": "https://cadenaser.com/rss/emisora/radio_segovia/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Cadena SER: Noticias y Radio Online"
+ },
+ "https://www.agenciaical.es/rss": {
+  "status": 404,
+  "final": "https://www.agenciaical.es/rss",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "404: archivo o directorio no encontrado."
+ },
+ "https://www.agenciaical.es/feed": {
+  "status": 404,
+  "final": "https://www.agenciaical.es/feed",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "404: archivo o directorio no encontrado."
+ },
+ "https://www.agenciaical.es/rss.xml": {
+  "status": 404,
+  "final": "https://www.agenciaical.es/rss.xml",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "404: archivo o directorio no encontrado."
+ },
+ "https://www.agenciaical.es/segovia": {
+  "status": 404,
+  "final": "https://www.agenciaical.es/segovia",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "404: archivo o directorio no encontrado."
+ },
+ "https://www.dipsegovia.es/rss": {
+  "status": 404,
+  "final": "https://www.dipsegovia.es/rss",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Inicio - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://www.dipsegovia.es/noticias": {
+  "status": 200,
+  "final": "https://www.dipsegovia.es/noticias",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Noticias - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://www.tribunasegovia.com/rss.xml": {
+  "status": 200,
+  "final": "https://www.tribunasegovia.com/rss.xml",
+  "feed": true,
+  "items": 200,
+  "muestra": "<?xml version='1.0' encoding='UTF-8'?><rss><item>  \t<title>El Pleno de Segovia aprueba definitivamente la ordenanza de la Zona de Bajas Emisiones (ZBE)</title>  \t<link>https://www.tribunasegovia.com/noticias/464717/el-pleno-de-segovia-aprueba-definitivamente-la-ordenanza-de-la-zona-de-bajas-emisiones-zbe</link>  \t<description>Ha sido una sesión sin debates de mociones, por el accidente ferroviario</description>\t</item><item>  \t<title>Condenado por agredir sexualmente a su expareja con discapacidad </title>  \t<link>https://www.tribunasegovia.com/noticias/464711/condenado-por-agredir-sexualmente-a-su-expareja-con-discapacidad</link>  \t<description>La víctima cuenta con una gran limitación neuromuscular en las extremidades y tras ser agredida le dijo al hombre que retomaban la relación para evitar que continuara</description>\t</item><item>  \t<title>Puente, sobre el centro de control de Atocha: \"Se ve dramáticamente como un tren avanza y otro está parado\"</title>  \t<link>https://www.tribunasegovia.com/noticias/464710/puente-sobre-el-centro-de-control-de-atocha-se-ve-dramaticamente-como-un-tren-avanza-y-otro-esta-parado</link>  \t<description>\"Seamos claros, quien sabe si hay una situación de ocupación del cantón por otro tren, en estas condiciones, es únicamente el centro de control\"</description>\t</item><item>  \t<title>El diccionario de la RAE suma nuevas palabras: de influencer a docuserie y hantavirus</title>  \t<link>https://www.tribunasegovia.com/noticias/464695/el-diccionario",
+  "enlaces": [],
+  "titulo": "El Pleno de Segovia aprueba definitivamente la ordenanza de la Zona de Bajas Emisiones (ZBE)"
+ },
+ "https://www.diariodecastillayleon.es/rss.html": {
+  "status": 200,
+  "final": "https://www.diariodecastillayleon.es/rss.html",
+  "feed": false,
+  "enlaces": [
+   "https://www.diariodecastillayleon.es/rss.html",
+   "https://es.wikipedia.org/wiki/RSS",
+   "https://www.diariodecastillayleon.es/rss/home.xml",
+   "https://www.diariodecastillayleon.es/rss/castilla-y-leon.xml",
+   "https://www.diariodecastillayleon.es/rss/avila.xml",
+   "https://www.diariodecastillayleon.es/rss/burgos.xml",
+   "https://www.diariodecastillayleon.es/rss/leon.xml",
+   "https://www.diariodecastillayleon.es/rss/leon/el-bierzo.xml",
+   "https://www.diariodecastillayleon.es/rss/palencia.xml",
+   "https://www.diariodecastillayleon.es/rss/salamanca.xml",
+   "https://www.diariodecastillayleon.es/rss/segovia.xml",
+   "https://www.diariodecastillayleon.es/rss/soria.xml",
+   "https://www.diariodecastillayleon.es/rss/valladolid.xml",
+   "https://www.diariodecastillayleon.es/rss/zamora.xml",
+   "https://www.diariodecastillayleon.es/rss/deportes.xml",
+   "https://www.diariodecastillayleon.es/rss/cultura.xml",
+   "https://www.diariodecastillayleon.es/rss/la-posada.xml",
+   "https://www.diariodecastillayleon.es/rss/mundo-agrario.xml",
+   "https://www.diariodecastillayleon.es/rss/innovadores.xml",
+   "https://www.diariodecastillayleon.es/rss/opinion.xml",
+   "/rss.html"
+  ],
+  "titulo": "RSS de Diario de Castilla y León | Diario de Castilla y León"
+ },
+ "https://www.elespinar.es/": {
+  "err": "The operation was aborted due to timeout"
+ },
+ "https://www.elespinar.es/feed/": {
+  "err": "The operation was aborted due to timeout"
+ },
+ "https://www.lagranja-valsain.com/feed/": {
+  "status": 200,
+  "final": "https://www.lagranja-valsain.com/feed/",
+  "feed": true,
+  "items": 11,
+  "muestra": "    <?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>Ayuntamiento del Real Sitio de San Ildefonso</title>\n\t<atom:link href=\"https://www.lagranja-valsain.com/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://www.lagranja-valsain.com</link>\n\t<description>Página Oficial del Ayuntamiento del Real Sitio de San Ildefonso. Canales municipales, actualidad, eventos, noticias, empleo...</description>\n\t<lastBuildDate>Thu, 29 Oct 2026 12:48:56 +0000</lastBuildDate>\n\t<language>es</language>\n\t<sy:updatePeriod>\n\thourly\t</sy:updatePeriod>\n\t<sy:updateFrequency>\n\t1\t</sy:updateFrequency>\n\t<generator>https://wordpress.org/?v=7.1.4</generator>\n\n<image>\n\t<url>https://www.lagranja-valsain.com/wp-content/uploads/2017/10/escudo-512-150x150.png</url>\n\t<title>Ayuntamiento del Real Sitio de San Ildefonso</title>\n\t<link>https://www.lagranja-valsain.com</link>\n\t<width>32</width>\n\t<height>32</height>\n</image> \n<site xmlns=\"com-wordpress:feed-additions:1\">119805041</site>\t<item>\n\t\t<title>Bolsa de empleo para conserjes en la Casa de la Cultura.</title>\n\t\t<link>https://www.lagranja-valsain.com/bolsa-de-empleo-para-conserjes-en-la-casa-de-la-cultura/</link>\n\t\t\n\t\t<dc:c",
+  "enlaces": [
+   "https://www.lagranja-valsain.com/feed/"
+  ],
+  "titulo": "Ayuntamiento del Real Sitio de San Ildefonso"
+ },
+ "https://www.cantalejo.es/feed/": {
+  "status": 404,
+  "final": "https://www.cantalejo.es/feed/",
+  "feed": false,
+  "enlaces": [
+   "https://www.cantalejo.es/home/-/asset_publisher/QGA6lS8CBHs5/rss"
+  ],
+  "titulo": "home - Ayuntamiento de Cantalejo - dipsegovia.es"
+ },
+ "https://www.riaza.es/feed/": {
+  "status": 404,
+  "final": "https://www.riaza.es/feed/",
+  "feed": false,
+  "enlaces": [
+   "https://www.riaza.es/home/-/asset_publisher/hr5A/rss"
+  ],
+  "titulo": "home - Ayuntamiento de Riaza - dipsegovia.es"
+ },
+ "https://www.sepulveda.es/feed/": {
+  "status": 404,
+  "final": "https://www.sepulveda.es/feed/",
+  "feed": false,
+  "enlaces": [
+   "https://www.sepulveda.es/home/-/asset_publisher/hr5A/rss",
+   "https://www.youtube.com/channel/UCCmTkb1bvQR2B3adXA0dMlQ/feed"
+  ],
+  "titulo": "Inicio - Ayuntamiento de Sepúlveda - dipsegovia.es"
+ },
+ "https://www.ayuntamientodecoca.es/feed/": {
+  "err": "fetch failed"
+ },
+ "https://www.palazuelosdeeresma.es/feed/": {
+  "err": "fetch failed"
+ },
+ "https://www.lalastrilla.es/feed/": {
+  "status": 404,
+  "final": "https://www.lalastrilla.es/feed/",
+  "feed": false,
+  "enlaces": [
+   "https://www.lalastrilla.es/home/-/asset_publisher/Sd1Q/rss"
+  ],
+  "titulo": "Inicio - Ayuntamiento de La Lastrilla - dipsegovia.es"
+ },
+ "https://www.subdelegacion.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.mpt.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html": {
+  "status": 404,
+  "final": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
+  "feed": false,
+  "enlaces": [
+   "/portal/footer/rss"
+  ],
+  "titulo": "Portal MPT | Error 404"
+ },
+ "https://www.interior.gob.es/opencms/es/detalle/rss": {
+  "status": 403,
+  "final": "https://www.interior.gob.es/opencms/es/detalle/rss",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Just a moment..."
+ },
+ "https://www.guardiacivil.es/es/prensa/noticias/index.html": {
+  "status": 404,
+  "final": "https://web.guardiacivil.es/es/prensa/noticias/index.html",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Error"
+ },
+ "https://www.eltiempo.es/rss": {
+  "status": 404,
+  "final": "https://www.eltiempo.es/rss",
+  "feed": false,
+  "enlaces": [
+   "https://www.eltiempo.es/rss",
+   "https://ca.eltiempo.es/rss",
+   "https://en.eltiempo.es/rss",
+   "https://de.eltiempo.es/rss",
+   "https://it.eltiempo.es/rss",
+   "https://fr.eltiempo.es/rss",
+   "https://eus.eltiempo.es/rss",
+   "https://gal.eltiempo.es/rss",
+   "https://www.clima.com/rss",
+   "https://www.climadobrasil.com.br/rss",
+   "https://www.otempo.pt/rss"
+  ],
+  "titulo": "Error 404 | El Tiempo"
+ }
+}
