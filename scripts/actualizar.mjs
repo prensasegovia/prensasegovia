@@ -524,6 +524,10 @@ async function periodicos(ahora) {
     }
     estado.push({ medio: p.nombre, ok, nuevas: n });
   }
+  // Noticias sin foto: se toma la imagen principal del artículo (unas pocas por pasada)
+  const sinFoto = [...porUrl.values()].filter(n => !n.img && !n.sinFoto).sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 15);
+  await Promise.all(sinFoto.map(async n => { await leeArticulo(n.url); const im = ultimaImg.get(n.url); if (im) n.img = im; else n.sinFoto = true; }));
+
   // Se guardan los últimos 4 días
   const limite = ahora.getTime() - 4 * 864e5;
   const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
@@ -786,6 +790,13 @@ async function main() {
   for (const [u, v] of Object.entries(cache)) if (Date.now() - (v.t || 0) > 5 * 864e5) delete cache[u];
   await writeFile(CACHE, JSON.stringify(cache));
 
+  // Noticias de interés sin foto: se toma la imagen principal del artículo (unas pocas por pasada)
+  const sinFotoN = dias.flatMap(d => d.noticias).filter(n => !n.img && !n.sinFoto).slice(0, 12);
+  await Promise.all(sinFotoN.map(async n => {
+    const u = n.medios.map(m => m.url).find(x => !/news\.google\./.test(x));
+    if (!u) { n.sinFoto = true; return; }
+    await leeArticulo(u); const im = ultimaImg.get(u); if (im) n.img = im; else n.sinFoto = true;
+  }));
   const salida = {
     actualizado: `${hoy} ${horaMadrid(ahora)}`,
     fuentes: estado,
