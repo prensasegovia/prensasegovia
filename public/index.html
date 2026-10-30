@@ -49,7 +49,9 @@ svg{flex:none}
 /* ---------- Barra superior ---------- */
 .appbar{position:sticky;top:0;z-index:30;background:var(--pine);color:#fff;height:var(--bar);padding:var(--safe-t) max(12px, calc((100vw - 680px)/2 + 12px)) 0;display:flex;align-items:center;gap:8px}
 .brand{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
-.brand img{width:30px;height:30px;border-radius:8px}
+.brand img{width:30px;height:30px;border-radius:8px;flex:none}
+.brand>div{min-width:0}
+.brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand .t{font-weight:800;font-size:19px;font-variation-settings:"wdth" 75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
 .brand small{display:block;font-weight:500;font-size:12px;opacity:.78;margin-top:1px}
 .ibtn{width:42px;height:42px;border-radius:12px;border:0;background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
@@ -212,7 +214,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 /* ---------- Barra inferior ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb, var(--surface) 92%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:5px 6px calc(5px + var(--safe-b))}
 .tabbar .in{max-width:680px;margin:0 auto;display:flex}
-.tab{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;min-height:52px;justify-content:center}
+.tab{flex:1;min-width:0;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;min-height:52px;justify-content:center}
 .tab svg{width:23px;height:23px}
 .tab .ic{padding:3px 18px;display:flex;border-radius:999px;transition:background .15s}
 .tab[aria-selected="true"]{color:var(--pine-2)}
@@ -251,6 +253,30 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .toast .btn{padding:8px 14px;font-size:13.5px;background:var(--new);min-height:36px}
 
+/* Letra grande o pantallas muy estrechas: todo se reorganiza en vez de cortarse */
+@media (max-width:350px){
+  .stats{grid-template-columns:1fr;gap:6px}
+  .stat{flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;min-height:46px;padding:7px 12px}
+  .stat .n{min-width:1.6em}
+  .stat .l{white-space:normal;font-size:14px;margin:0}
+  .brand small{display:none}
+  .tab .ic{padding:3px 10px}
+  .tab{font-size:11px}
+  .tab .lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .newhead{flex-wrap:wrap}
+  .ag-day{grid-template-columns:minmax(0,1fr);gap:6px}
+  .ag-date{position:static;display:flex;gap:8px;align-items:baseline;padding:6px 14px;justify-self:start}
+  .ag-date .d{font-size:20px}
+  .town{flex-wrap:wrap;padding:8px 14px;gap:6px 10px}
+  .town .name{flex-basis:100%}
+  .card .top{row-gap:4px}
+  .time{margin-left:0}
+}
+@media (max-width:240px){
+  .tab .lbl{display:none}
+  .appbar .ibtn{width:38px;height:38px}
+  .chips{padding:8px 10px}
+}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
 </style>
@@ -263,10 +289,10 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 
 <nav class="tabbar" aria-label="Secciones">
   <div class="in" role="tablist">
-    <button class="tab" role="tab" data-view="noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span>Noticias</button>
-    <button class="tab" role="tab" data-view="agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>Agenda<span class="b" id="agBadge" hidden></span></button>
-    <button class="tab" role="tab" data-view="pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>Pueblos</button>
-    <button class="tab" role="tab" data-view="guardadas" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span>Guardadas<span class="b" id="favBadge" hidden style="background:var(--pine-2)"></span></button>
+    <button class="tab" role="tab" data-view="noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span><span class="lbl">Noticias</span></button>
+    <button class="tab" role="tab" data-view="agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="lbl">Agenda</span><span class="b" id="agBadge" hidden></span></button>
+    <button class="tab" role="tab" data-view="pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="lbl">Pueblos</span></button>
+    <button class="tab" role="tab" data-view="guardadas" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span><span class="lbl">Guardadas</span><span class="b" id="favBadge" hidden style="background:var(--pine-2)"></span></button>
   </div>
 </nav>
 
@@ -519,7 +545,7 @@ function viewNoticias(news){
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
       <button class="stat alta" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
-      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Convocatorias ${I.chev}</div></button>
+      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Agenda 7 días ${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l">Pueblos ${I.chev}</div></button>
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
