@@ -230,7 +230,7 @@ const PATRONES = {
   deportes: /futbol|gimnastica segoviana|baloncesto|balonmano|atletismo|carrera popular|maraton|ciclismo|liga|campeonato|club deportivo|tenis|padel|deportista|jornada \d/,
 };
 // Deportes y cultura no interesan salvo que haya un suceso
-const DEPORTE = /colista|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|liga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
+const DEPORTE = /colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\b(?! de)|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|liga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 // Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
@@ -412,7 +412,7 @@ function juntaMedios(destino, origen) {
 // Páginas automáticas o de relleno que no son noticias
 // Artículos de opinión, cartas y blogs: no son noticias
 const OPINION = /\/(opinion|opiniones|tribuna|blogs?|cartas?-al-director|cartas-de-los-lectores|columnistas?|firmas)\//;
-const BASURA = /^(el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
+const BASURA = /^(resultados (de las )?elecciones|resultados electorales|el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
 const NO_ESPANA = /mexico|argentina|colombia|chile|peru|venezuela|tlaxcala|puebla|uruguay|ecuador|bolivia|paraguay|guatemala|honduras|panama|costa rica|cuba|dominicana|miami/;
 function parecido(a, b) {
   let comun = 0; for (const w of a) if (b.has(w)) comun++;
@@ -444,7 +444,7 @@ const FUERTE = {
 };
 const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
 function analizaCuerpo(titulo, cuerpo, publicada) {
-  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 2 };
+  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 3 };
   const t = norm(cuerpo.slice(0, 5000));
   const cats = [], pistas = [];
   for (const [k, re] of Object.entries(FUERTE)) {
@@ -468,9 +468,10 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   }
   const muni = municipioDe(cuerpo.slice(0, 1500));
   // Dónde ocurre, según el texto (para titulares que no nombran ningún sitio)
-  let lugar = municipioDe(cuerpo.slice(0, 4000));
-  if (lugar === "Provincia" && !/segovia/.test(norm(cuerpo.slice(0, 4000)))) lugar = "";
-  return { v: 2, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
+  // Dónde ocurre: solo cuenta si Segovia o un pueblo aparecen en la entradilla (no una mención de pasada más abajo)
+  let lugar = municipioDe(cuerpo.slice(0, 700));
+  if (!(CONCRETO(lugar) || lugar === "Segovia")) lugar = "";
+  return { v: 3, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
 function limpiaAnalisis(a) {
@@ -634,7 +635,7 @@ async function main() {
   let previoTmp = { dias: [] };
   try { previoTmp = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const conocidas = new Set((previoTmp.dias || []).flatMap(d => d.noticias.flatMap(n => n.medios.map(m => m.url))));
-  const analizada = u => cache[u] && cache[u].v === 2; // las de versiones anteriores se vuelven a leer
+  const analizada = u => cache[u] && cache[u].v === 3; // las de versiones anteriores se vuelven a leer
   const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || analizada(m.url)));
   let leidas = 0;
   const cola = pendientes.slice(0, 80);
@@ -659,7 +660,7 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
-    else if (municipio === "General" && a?.lugar && (a.lugar !== "Provincia" || a.v === 2)) municipio = a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
@@ -732,7 +733,7 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
-      else if (nuevo === "General" && n.analisis?.lugar && (n.analisis.lugar !== "Provincia" || n.analisis.v === 2)) nuevo = n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       // Webs municipales de otro pueblo que se agruparon por error
