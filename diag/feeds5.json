@@ -1,0 +1,376 @@
+{
+ "NoticiasCyL Segovia": [
+  {
+   "u": "https://www.noticiascyl.com/segovia/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.noticiascyl.com/t/segovia/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.noticiascyl.com/category/segovia/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.noticiascyl.com/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "El Español CyL Segovia": [
+  {
+   "u": "https://www.elespanol.com/castilla-y-leon/segovia/rss",
+   "status": 404,
+   "final": "https://www.elespanol.com/castilla-y-leon/segovia/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  },
+  {
+   "u": "https://www.elespanol.com/rss/castilla-y-leon/segovia/",
+   "status": 404,
+   "final": "https://www.elespanol.com/rss/castilla-y-leon/segovia/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  },
+  {
+   "u": "https://www.elespanol.com/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.elespanol.com/castilla-y-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "/rss/castilla-y-leon/",
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  }
+ ],
+ "okdiario Segovia": [
+  {
+   "u": "https://okdiario.com/noticias/segovia/feed",
+   "status": 200,
+   "final": "https://okdiario.com/noticias/segovia/feed",
+   "feed": true,
+   "items": 50,
+   "menciones_segovia": 443,
+   "ultimo": "Sun, 18 Oct 2026 08:00:36 +0200",
+   "enlaces": [
+    "https://okdiario.com/noticias/segovia/feed"
+   ]
+  },
+  {
+   "u": "https://okdiario.com/castilla-leon/feed",
+   "status": 200,
+   "final": "https://okdiario.com/castilla-leon/feed",
+   "feed": true,
+   "items": 50,
+   "menciones_segovia": 72,
+   "ultimo": "Wed, 14 Oct 2026 10:30:17 +0200",
+   "enlaces": [
+    "https://okdiario.com/castilla-leon/feed"
+   ]
+  }
+ ],
+ "Europa Press Segovia": [
+  {
+   "u": "https://www.europapress.es/rss/rss.aspx?ch=00283",
+   "status": 200,
+   "final": "https://www.europapress.es/rss/rss.aspx?ch=00283",
+   "feed": true,
+   "items": 10,
+   "menciones_segovia": 0,
+   "ultimo": "Fri, 30 Oct 2026 08:33:53 GMT",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.europapress.es/castilla-y-leon/segovia/",
+   "status": 200,
+   "final": "https://www.europapress.es/castilla-y-leon/segovia/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "https://www.europapress.es/rss/rss.aspx?ch=372"
+   ]
+  },
+  {
+   "u": "https://www.europapress.es/rss/rss.aspx?ch=304",
+   "status": 200,
+   "final": "https://www.europapress.es/rss/rss.aspx?ch=304",
+   "feed": true,
+   "items": 35,
+   "menciones_segovia": 0,
+   "ultimo": "Fri, 30 Oct 2026 18:16:53 GMT",
+   "enlaces": []
+  }
+ ],
+ "Segovia Sur": [
+  {
+   "u": "https://www.segoviasur.com/feed/",
+   "status": 200,
+   "final": "https://www.segoviasur.com/feed/",
+   "feed": true,
+   "items": 10,
+   "menciones_segovia": 379,
+   "ultimo": "Mon, 03 Aug 2026 09:59:43 +0000",
+   "enlaces": [
+    "https://www.segoviasur.com/feed/"
+   ]
+  },
+  {
+   "u": "https://segoviasur.com/feed/",
+   "status": 200,
+   "final": "https://www.segoviasur.com/feed/",
+   "feed": true,
+   "items": 10,
+   "menciones_segovia": 379,
+   "ultimo": "Mon, 03 Aug 2026 09:59:43 +0000",
+   "enlaces": [
+    "https://www.segoviasur.com/feed/"
+   ]
+  }
+ ],
+ "La Razón CyL": [
+  {
+   "u": "https://www.larazon.es/rss/castilla-y-leon.xml",
+   "status": 503,
+   "final": "https://www.larazon.es/rss/castilla-y-leon.xml",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.larazon.es/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.larazon.es/castilla-y-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "ABC CyL": [
+  {
+   "u": "https://www.abc.es/rss/2.0/espana/castilla-leon/",
+   "status": 200,
+   "final": "https://www.abc.es/rss/2.0/espana/castilla-leon/",
+   "feed": true,
+   "items": 25,
+   "menciones_segovia": 1,
+   "ultimo": "Fri, 30 Oct 2026 19:02:49 +0100",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.abc.es/espana/castilla-leon/",
+   "status": 200,
+   "final": "https://www.abc.es/espana/castilla-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "https://www.abc.es/rss/2.0/espana/",
+    "https://www.abc.es/rss/2.0/ultima-hora/"
+   ]
+  }
+ ],
+ "20minutos CyL": [
+  {
+   "u": "https://www.20minutos.es/rss/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.20minutos.es/rss/castilla-y-leon/",
+   "feed": true,
+   "items": 26,
+   "menciones_segovia": 6,
+   "ultimo": "Tue, 27 Oct 2026 13:48:29 +0100",
+   "enlaces": [
+    "https://www.20minutos.es/rss/castilla-y-leon/"
+   ]
+  },
+  {
+   "u": "https://www.20minutos.es/rss/",
+   "status": 200,
+   "final": "https://www.20minutos.es/rss",
+   "feed": true,
+   "items": 186,
+   "menciones_segovia": 0,
+   "ultimo": "Fri, 30 Oct 2026 11:19:32 +0100",
+   "enlaces": [
+    "https://www.20minutos.es/rss/"
+   ]
+  }
+ ],
+ "RTVE CyL": [
+  {
+   "u": "https://www.rtve.es/api/tematicas/castilla-y-leon.rss",
+   "status": 404,
+   "final": "https://www.rtve.es/api/tematicas/castilla-y-leon.rss",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.rtve.es/noticias/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.rtve.es/noticias/castilla-y-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "ICAL": [
+  {
+   "u": "https://www.agenciaical.es/",
+   "status": 200,
+   "final": "https://www.agenciaical.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://www.agenciaical.es/feed",
+   "status": 404,
+   "final": "https://www.agenciaical.es/feed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "Heraldo-Diario Segovia": [
+  {
+   "u": "https://www.diariodesegovia.es/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://diariodesegovia.es/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "Segovia en Directo radio": [
+  {
+   "u": "https://www.radiosegovia.es/feed/",
+   "status": 0,
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  },
+  {
+   "u": "https://cadenaser.com/rss/",
+   "status": 403,
+   "final": "https://cadenaser.com/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ],
+ "eldiario.es CyL": [
+  {
+   "u": "https://www.eldiario.es/rss/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.eldiario.es/rss/castilla-y-leon/",
+   "feed": true,
+   "items": 27,
+   "menciones_segovia": 12,
+   "ultimo": "",
+   "enlaces": [
+    "https://www.eldiario.es/rss/castilla-y-leon/"
+   ]
+  },
+  {
+   "u": "https://www.eldiario.es/castilla-y-leon/",
+   "status": 200,
+   "final": "https://www.eldiario.es/castilla-y-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "/rss/castilla-y-leon/",
+    "https://www.eldiario.es/rss/"
+   ]
+  }
+ ],
+ "Comunicación JCyL Segovia": [
+  {
+   "u": "https://comunicacion.jcyl.es/web/es/rss.html",
+   "status": 200,
+   "final": "https://comunicacion.jcyl.es/web/es/rss.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": [
+    "http://feeds.feedburner.com/Eucyl-Convocatorias-Subvenciones-Union-Europea",
+    "http://feeds.feedburner.com/Eucyl-Publicaciones-Union-Europea",
+    "https://eucyl.jcyl.es/web/es/rss.html"
+   ]
+  },
+  {
+   "u": "https://comunicacion.jcyl.es/web/jcyl/RSS/es/Plantilla100/1284184066930/_/_/_",
+   "status": 404,
+   "final": "https://comunicacion.jcyl.es/web/jcyl/RSS/es/Plantilla100/1284184066930/_/_/_",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "enlaces": []
+  }
+ ]
+}
