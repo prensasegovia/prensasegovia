@@ -43,6 +43,11 @@ const BUSQUEDAS = [
   'Segovia macrogranja OR biogás OR biometano OR fotovoltaica OR "planta solar" OR eólico',
   'Segovia pleno OR alcalde OR moción OR concejales',
   'Segovia fiestas OR encierros OR "concentración motera" OR festival',
+  'Segovia visita ministro OR ministra OR presidente OR consejero OR delegado',
+  'Segovia mitin OR "29N" OR campaña OR candidatos',
+  'Segovia pintadas OR vandalismo OR ultras OR "extrema derecha" OR antifascista',
+  'Segovia inmigrantes OR migrantes OR "centro de acogida" OR desalojo OR okupación',
+  'Segovia "Subdelegación del Gobierno" OR subdelegado OR "Diputación de Segovia"',
   // Pueblos grandes y cabeceras de comarca
   '(Cuéllar OR "Navas de Oro" OR Samboal OR Chañe OR Fuentepelayo) Segovia',
   '("El Espinar" OR "San Rafael" OR "Navas de San Antonio" OR "Otero de Herreros") Segovia',
@@ -152,8 +157,10 @@ function municipioDe(texto) {
 }
 
 const PATRONES = {
-  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|seprona|antidroga|narcotrafico/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|colectivo|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|en contra de|se oponen|rechazo|cacerolada|encierro|tractorada|agricultores|ganaderos|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|macrogranja|biogas|biometano|fotovoltaic|planta solar|parque solar|eolic|mineria|cantera|vertedero|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|convenio|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|inmigrant|migrantes|centro de acogida|refugiados|temporeros|okupa|ocupacion ilegal|desalojo|desahucio/,
+  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|okupa|ocupacion ilegal|desalojo|desahucio/,
+  // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
+  proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|inmigrant|migrantes|temporeros|convenio|colectivo/,
   autoridades: /visita (del|de la|de los) (ministr|president|rey|reina|delegad|consejer|vicepresident|secretari)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ministerio del interior|director general de la guardia civil/,
   politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
   emergencias: /accidente|colision|choque|salida de via|atropell|herid|fallec|muere|murio|incendio|fuego|bomberos|rescat|112|desaparecid|inundacion|nevada|temporal|aviso (amarillo|naranja|rojo)|corte de (la )?carretera|trafico|\bdgt\b|\ba-1\b|\ba-6\b|\bap-6\b|\bap-61\b|n-110|n-603|cl-6\d\d|sg-\d|evacuad|derrumbe|explosion/,
@@ -167,18 +174,23 @@ const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|b
 const EVENTO = /fiestas? (patronales|de |en honor|del )|encierros?|toros|capea|concentracion motera|festival|concierto|romeria|carrera popular|marcha (popular|reivindicativa)|cabalgata|verbena|penas|botellon|halloween|feria (de |del )|partido de alto riesgo|multitudinari/;
 const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
 
+const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
 function clasifica(titulo, texto, municipio) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
   const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
   if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja" };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
+  // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
+  if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
   if (EVENTO.test(tt) || (!categorias.length && EVENTO.test(t))) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
   if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades"].includes(c))) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
+  // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
+  if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
   return { categorias, relevancia };
 }
@@ -226,16 +238,29 @@ const MENCIONA_SEGOVIA = new RegExp("segovia|" + MUNICIPIOS.filter(m => !AMBIGUO
 /* Agrupar duplicados                                                  */
 /* ------------------------------------------------------------------ */
 const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que se su sus por para con sin sobre tras ante entre como mas lo le les es son ha han segovia segoviano segoviana provincia".split(" "));
-const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => w.slice(0, 5)));
+// Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
+const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
+  incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid" };
+const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
+// Un titular que trae un cambio (se suspende, hay un detenido, fallece...) no se junta con el anterior: es otra noticia
+const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
 function mismaNoticia(a, b) {
   if (parecido(a.tk, b.tk) >= 0.55) return true;
-  if (CONCRETO(a.municipio) && a.municipio === b.municipio && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 2 * 864e5) {
+  if (a.titulo && b.titulo && DESARROLLO.test(norm(a.titulo)) !== DESARROLLO.test(norm(b.titulo))) return false;
+  const dias = Math.abs(new Date(a.dia) - new Date(b.dia)) / 864e5;
+  if (CONCRETO(a.municipio) && a.municipio === b.municipio && dias <= 2) {
     const pueblo = tokens(a.municipio);
     let comun = 0; for (const w of a.tk) if (!pueblo.has(w) && b.tk.has(w)) comun++;
     if (comun >= 2) return true;
+  }
+  // Capital o provincia: mismo día y al menos 3 palabras clave en común
+  if (!CONCRETO(a.municipio) && !CONCRETO(b.municipio) && dias === 0) {
+    let comun = 0; for (const w of a.tk) if (b.tk.has(w)) comun++;
+    if (comun >= 3) return true;
   }
   return false;
 }
@@ -257,6 +282,8 @@ function juntaMedios(destino, origen) {
   destino.splice(0, destino.length, ...unicos);
 }
 // Páginas automáticas o de relleno que no son noticias
+// Artículos de opinión, cartas y blogs: no son noticias
+const OPINION = /\/(opinion|opiniones|tribuna|blogs?|cartas?-al-director|cartas-de-los-lectores|columnistas?|firmas)\//;
 const BASURA = /^(el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
 const NO_ESPANA = /mexico|argentina|colombia|chile|peru|venezuela|tlaxcala|puebla|uruguay|ecuador|bolivia|paraguay|guatemala|honduras|panama|costa rica|cuba|dominicana|miami/;
 function parecido(a, b) {
@@ -282,7 +309,8 @@ async function main() {
         let n = 0;
         for (const it of its) {
           if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
-          brutos.push({ ...it, medio: f.nombre, directo: true }); n++;
+          if (OPINION.test(it.url)) continue;
+        brutos.push({ ...it, medio: f.nombre, directo: true }); n++;
         }
         estado.push({ fuente: f.nombre, ok: true, noticias: n }); ok = true; break;
       } catch (e) { error = e.message; }
@@ -300,7 +328,7 @@ async function main() {
         let titulo = it.titulo, medio = (it.fuente || "Google Noticias").replace(/[.\s]+$/, "");
         if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
         const texto = norm(it.texto) === norm(it.titulo) || norm(it.texto).startsWith(norm(titulo)) ? "" : it.texto;
-        if (!MEDIOS_OK.test(norm(medio)) || BASURA.test(norm(titulo))) continue;
+        if (!MEDIOS_OK.test(norm(medio)) || BASURA.test(norm(titulo)) || /^opinion\b|^tribuna\b|carta al director/.test(norm(titulo))) continue;
         if (!MENCIONA_SEGOVIA.test(norm(titulo + " " + texto))) continue;
         brutos.push({ ...it, titulo, texto, medio, directo: false }); gTotal++;
       }
@@ -316,7 +344,7 @@ async function main() {
   for (const b of recientes) {
     const tk = tokens(b.titulo);
     if (tk.size < 2) continue;
-    const yo = { tk, municipio: municipioDe(b.titulo + " " + b.texto), dia: fechaMadrid(b.fecha) };
+    const yo = { tk, titulo: b.titulo, municipio: municipioDe(b.titulo + " " + b.texto), dia: fechaMadrid(b.fecha) };
     const g = grupos.find(g => mismaNoticia(g, yo));
     if (g) {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
@@ -352,10 +380,10 @@ async function main() {
   let previo = { dias: [] };
   try { previo = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const porDia = new Map((previo.dias || []).map(d => [d.fecha, { ...d, noticias: [...(d.noticias || [])] }]));
-  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo), municipio: n.municipio, dia: d.fecha })));
+  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha })));
   let añadidas = 0;
   for (const n of nuevas) {
-    const yo = { tk: tokens(n.titulo), municipio: n.municipio, dia: n._dia };
+    const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: n._dia };
     const ya = existentes.find(e => e.n.id === n.id || mismaNoticia(e, yo));
     if (ya) { // añade enlaces de otros medios a la que ya estaba
       if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
@@ -380,7 +408,7 @@ async function main() {
       if (BASURA.test(norm(n.titulo))) return false;
       juntaMedios(n.medios, []);
       n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
-      if (!n.medios.length) return false;
+      if (!n.medios.length || n.medios.every(m => OPINION.test(m.url))) return false;
       const nuevo = municipioDe(n.titulo + " " + (n.resumen || ""));
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       const c = clasifica(n.titulo, n.resumen || "", n.municipio);
@@ -397,7 +425,7 @@ async function main() {
   const desde = fechaMadrid(new Date(ahora.getTime() - 4 * 864e5));
   const NIVEL = { alta: 0, media: 1, baja: 2 };
   const recientesH = [...porDia.values()].filter(d => d.fecha >= desde).sort((a, b) => a.fecha.localeCompare(b.fecha))
-    .flatMap(d => d.noticias.map(n => ({ n, d, tk: tokens(n.titulo), municipio: n.municipio, dia: d.fecha })));
+    .flatMap(d => d.noticias.map(n => ({ n, d, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha })));
   const borrar = new Set();
   for (let i = 0; i < recientesH.length; i++) {
     const a = recientesH[i]; if (borrar.has(a.n)) continue;

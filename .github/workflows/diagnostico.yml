@@ -16,6 +16,6 @@ jobs:
       - run: |
           git config user.name prensa-bot
           git config user.email prensa-bot@users.noreply.github.com
-          git add diag/feeds.json
+          git add diag/
           git commit -m "Diagnóstico de medios" || exit 0
           for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
