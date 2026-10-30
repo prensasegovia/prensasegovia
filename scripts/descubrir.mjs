@@ -1,26 +1,6 @@
 // Diagnóstico (2ª ronda): páginas de RSS de los medios, desde los servidores de GitHub
 import { writeFileSync } from "node:fs";
-const URLS = [
-  "https://segoviaaldia.es/coverrss", "https://segoviadirecto.com/coverrss", "http://segovia247.es/coverrss",
-  "https://www.eldiasegovia.es/listadorss",
-  "https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml",
-  "https://www.cope.es/api/es/emisoras/castilla-y-leon/segovia-provincia/segovia/news/rss.xml",
-  "https://www.elnordestedesegovia.es/index.php?option=com_content&view=featured&format=feed&type=rss",
-  "https://www.elnordestedesegovia.es/component/content/featured?format=feed&type=rss",
-  "https://www.elnordestedesegovia.es/noticias?format=feed&type=rss",
-  "https://cadenaser.com/emisora/radio_segovia/", "https://cadenaser.com/castilla-y-leon/segovia/", "https://cadenaser.com/rss/emisora/radio_segovia/",
-  "https://www.agenciaical.es/rss", "https://www.agenciaical.es/feed", "https://www.agenciaical.es/rss.xml", "https://www.agenciaical.es/segovia",
-  "https://www.dipsegovia.es/rss", "https://www.dipsegovia.es/noticias",
-  "https://www.tribunasegovia.com/rss.xml",
-  "https://www.diariodecastillayleon.es/rss.html",
-  "https://www.elespinar.es/", "https://www.elespinar.es/feed/",
-  "https://www.lagranja-valsain.com/feed/", "https://www.cantalejo.es/feed/", "https://www.riaza.es/feed/", "https://www.sepulveda.es/feed/",
-  "https://www.ayuntamientodecoca.es/feed/", "https://www.palazuelosdeeresma.es/feed/", "https://www.lalastrilla.es/feed/",
-  "https://www.subdelegacion.es/", "https://www.mpt.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
-  "https://www.interior.gob.es/opencms/es/detalle/rss",
-  "https://www.guardiacivil.es/es/prensa/noticias/index.html",
-  "https://www.eltiempo.es/rss", 
-];
+const URLS = ["https://castillayleon.ccoo.es/", "https://castillayleon.ccoo.es/rss", "https://segovia.ccoo.es/", "https://www.ugtcyl.es/", "https://www.ugtcyl.es/feed/", "https://ugt-cyl.es/", "https://www.ecologistasenaccion.org/segovia/", "https://www.ecologistasenaccion.org/feed/", "https://www.ppsegovia.com/", "https://ppsegovia.es/", "https://www.psoesegovia.es/", "https://psoesegovia.es/feed/", "https://www.voxespana.es/", "https://www.voxespana.es/noticias/rss", "https://iusegovia.es/", "https://www.iusegovia.org/", "https://podemossegovia.info/", "https://segoviaenmarcha.es/", "https://www.asajasegovia.com/", "https://www.asajasegovia.com/feed/", "https://ucsegovia.es/", "https://www.uniondecampesinos.com/", "https://www.ccoo.es/rss", "https://csif.es/es/rss", "https://www.stecyl.net/feed/", "https://www.cgt.org.es/feed/", "https://www.ugt.es/rss.xml", "https://www.subdelegaciongobierno.es/", "https://www.dipsegovia.es/web/guest/noticias"];
 const UA = { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" };
 const out = {};
 for (const u of URLS) {
@@ -33,4 +13,4 @@ for (const u of URLS) {
     muestra: feed ? r.t.slice(0, 1500) : undefined, enlaces, titulo: (r.t.match(/<title>([^<]{0,120})/i) || [])[1] };
   console.log(u, r.status, feed);
 }
-writeFileSync("diag/feeds2.json", JSON.stringify(out, null, 1));
+writeFileSync("diag/feeds3.json", JSON.stringify(out, null, 1));
