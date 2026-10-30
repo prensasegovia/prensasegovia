@@ -211,7 +211,7 @@ const PATRONES = {
   deportes: /futbol|gimnastica segoviana|baloncesto|balonmano|atletismo|carrera popular|maraton|ciclismo|liga|campeonato|club deportivo|tenis|padel|deportista|jornada \d/,
 };
 // Deportes y cultura no interesan salvo que haya un suceso
-const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
+const DEPORTE = /colista|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|liga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 // Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
