@@ -117,7 +117,7 @@ const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@"
 
 async function descarga(url) {
   const r = await fetch(url, {
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; PrensaSegovia/1.0; +https://github.com)", "Accept": "application/rss+xml, application/xml, text/xml, */*" },
+    headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "application/rss+xml, application/xml, text/xml, */*", "Accept-Language": "es-ES,es;q=0.9" },
     signal: AbortSignal.timeout(20000), redirect: "follow",
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
@@ -321,6 +321,8 @@ function relleno(n) {
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
   if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)) return true;
   const solo = ks => c.length && c.every(k => ks.includes(k));
+  // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
+  if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && solo(["politica"]) && !/extraordinari|urgente|mocion de censura|dimision|toma de posesion/.test(tt)) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
