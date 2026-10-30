@@ -483,6 +483,23 @@ async function main() {
       estadoF[i] = ok ? { fuente: f.nombre, ok: true, noticias: n } : { fuente: f.nombre, ok: false, error };
     }
   }));
+  // Segundo intento, con calma, para las que han fallado (algunos servidores frenan muchas peticiones seguidas)
+  for (let i = 0; i < FEEDS.length; i++) {
+    if (estadoF[i]?.ok) continue;
+    const f = FEEDS[i];
+    await new Promise(r => setTimeout(r, 3000));
+    for (const url of f.urls) {
+      try {
+        let n = 0;
+        for (const it of items(await descarga(url)).filter((x, k) => !x.sinFecha || k < 12)) {
+          if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
+          if (OPINION.test(it.url)) continue;
+          brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo }); n++;
+        }
+        estadoF[i] = { fuente: f.nombre, ok: true, noticias: n }; break;
+      } catch (e) { estadoF[i] = { fuente: f.nombre, ok: false, error: e.message }; }
+    }
+  }
   estado.push(...estadoF);
 
   // 2) Google Noticias
