@@ -63,7 +63,7 @@ svg{flex:none}
 
 /* ---------- Cabecera del día ---------- */
 .hero{background:var(--pine);color:#fff;padding:4px 16px 16px;border-radius:0 0 26px 26px}
-.hero .day{font-weight:800;font-size:clamp(28px,8.6vw,44px);line-height:1;font-variation-settings:"wdth" 64;margin:6px 0 6px}
+.hero .day{font-weight:800;font-size:clamp(26px,7.4vw,40px);line-height:1;font-variation-settings:"wdth" 64;margin:6px 0 6px}
 .hero .sum{font-size:15px;color:var(--pine-ink);line-height:1.35}
 .hero .sum b{color:#fff;font-weight:700}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
@@ -277,7 +277,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <label class="sw" style="margin-top:12px"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Ver solo noticias con estas palabras</span><input type="checkbox" id="fKw"></label>
     </div>
     <div class="actions">
-      <button class="btn ghost" id="fMedios" type="button" style="flex:1">Medios y fuentes</button>
+      <button class="btn ghost" id="fMedios" type="button" style="flex:1">Medios</button>
       <button class="btn" id="fClose" type="button" style="flex:1">Ver noticias</button>
     </div>
   </section>
@@ -290,8 +290,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 /* ================= Configuración ================= */
 const CATS = [
   {k:"policial", n:"Policial y sucesos", d:"M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"},
-  {k:"social", n:"Movilizaciones y conflictos", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
-  {k:"autoridades", n:"Visitas y actos oficiales", d:"M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"},
+  {k:"social", n:"Movilizaciones y crispación", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
+  {k:"autoridades", n:"Visitas de autoridades", d:"M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"},
   {k:"politica", n:"Política", d:"M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M3 10l9-6 9 6z"},
   {k:"emergencias", n:"Tráfico y emergencias", d:"M12 3l9 16H3zM12 10v4M12 17h.01"},
   {k:"eventos", n:"Fiestas y eventos", d:"M4 21V4M4 4h12l-2 4 2 4H4"}
@@ -420,7 +420,7 @@ function pasa(n){
 const porHora = (a,b) => (b._ts||0)-(a._ts||0);
 const isNew = n => !st.seen.has(n._key);
 function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c) store.set("seen", [...st.seen].slice(-3000)); }
-const filtrosActivos = () => [st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cats.size<CATS.length?`${st.cats.size} de ${CATS.length} temas`:""].filter(Boolean);
+const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cats.size<CATS.length?`${st.cats.size} de ${CATS.length} temas`:""].filter(Boolean);
 
 function hl(text){
   let h = esc(text);
