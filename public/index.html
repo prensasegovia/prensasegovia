@@ -21,7 +21,7 @@
 :root{
   --pine:#1E4A3F; --pine-2:#2C6656; --pine-soft:#DCE8E3; --pine-ink:#CFE3DA;
   --stone:#EEF0EC; --surface:#FFFFFF; --ink:#16201D; --muted:#5E6A66; --line:#DCE0DC;
-  --alta:#C2362B; --alta-soft:#FBE7E4; --media:#B57B0E; --media-soft:#FBF1DC; --baja:#A7B0AC;
+  --alta:#C2362B; --alta-soft:#FBE7E4; --alta-ink:#B02E24; --media:#B57B0E; --media-soft:#FBF1DC; --baja:#A7B0AC;
   --new:#2F6FEB;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-t: env(safe-area-inset-top, 0px);
@@ -29,7 +29,7 @@
 }
 @media (prefers-color-scheme: dark){
   :root{ --stone:#0E1412; --surface:#171F1C; --ink:#E7ECE9; --muted:#97A39E; --line:#27312D;
-    --pine-soft:#1B2D27; --alta-soft:#3A1E1B; --media-soft:#33280F; --pine-2:#82C6B1; --media:#E0A53A; }
+    --pine-soft:#1B2D27; --alta-soft:#3B1F1C; --alta-ink:#FF9488; --media-soft:#33280F; --pine-2:#82C6B1; --media:#E0A53A; }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
@@ -108,20 +108,36 @@ a{color:inherit}
 .card.media::before{background:var(--media)}
 .card .top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;font-size:12.5px}
 .pill{font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--pine-soft);color:var(--pine-2);display:inline-flex;align-items:center;gap:4px;line-height:1.5}
-.pill.lvl-alta{background:var(--alta-soft);color:var(--alta)}
+.pill.lvl-alta{background:var(--alta-soft);color:var(--alta-ink)}
 .pill.lvl-media{background:var(--media-soft);color:var(--media)}
 .pill.ev{background:var(--alta);color:#fff}
+.ndot{width:9px;height:9px;border-radius:50%;background:var(--new);flex:none;transition:opacity .4s}
+.card:not(.unseen) .ndot{opacity:0;width:0;margin-right:-6px}
+.card.unseen{border-color:color-mix(in srgb,var(--new) 45%,var(--line))}
 .pill.nuevo{background:var(--new);color:#fff}
 .cat{color:var(--muted);display:inline-flex;align-items:center;gap:4px}
 .cat svg{width:14px;height:14px}
 .foot-card{margin:-2px 0 9px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-direction:row-reverse}
-.share{border:0;background:none;color:var(--pine-2);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px;padding:6px 2px 6px 8px;cursor:pointer;min-height:32px}
+.share{border:0;background:var(--pine-soft);color:var(--pine-2);border-radius:999px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer;flex:none;margin-left:auto}
 .share svg{width:16px;height:16px}
-.time{color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:5px;font-weight:500}
+.time{color:var(--muted);font-size:12.5px;margin-left:auto;white-space:nowrap;font-weight:500}
 .time svg{width:14px;height:14px}
 .card h4{margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
 .card p{margin:0 0 9px;color:var(--muted);font-size:14.5px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.srcs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bottom{display:flex;align-items:center;gap:8px}
+.srcs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-width:0}
+.more{font-size:12.5px;color:var(--muted);font-weight:600}
+.uptodate{display:flex;align-items:center;gap:10px;margin:14px 4px 4px;color:var(--pine-2);font-weight:700;font-size:14.5px}
+.uptodate::before,.uptodate::after{content:"";flex:1;height:1.5px;background:var(--line)}
+.uptodate span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.newhead{display:flex;justify-content:space-between;align-items:center;padding:16px 4px 8px;gap:10px}
+.newhead h3{margin:0;font-size:17px;font-weight:700;font-variation-settings:"wdth" 80;display:flex;align-items:center;gap:8px}
+.newhead h3 .cnt{background:var(--new);color:#fff;font-size:12.5px;border-radius:999px;padding:1px 8px}
+.linkbtn{border:0;background:none;color:var(--pine-2);font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;min-height:36px}
+.allread{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin:14px 0 4px}
+.allread .ok{width:34px;height:34px;border-radius:50%;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center;flex:none}
+.allread b{display:block}
+.allread span{font-size:13.5px;color:var(--muted)}
 .src{font-size:13px;font-weight:600;text-decoration:none;color:var(--pine-2);border:1.5px solid var(--line);padding:5px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;min-height:32px}
 .src svg{width:12px;height:12px}
 .src .pay{font-weight:400;color:var(--muted)}
@@ -240,7 +256,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <div class="seg" id="segRango"><button data-v="2" type="button">Hoy y ayer</button><button data-v="7" type="button">7 días</button><button data-v="30" type="button">30 días</button></div>
     </div>
     <div class="row">
-      <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Muestra solo los pueblos. Lo que afecta a toda la provincia se sigue viendo.</span></span><input type="checkbox" id="fCap"></label>
+      <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Quita las noticias que son solo de la capital. También desde el botón “Sin capital” de la barra de temas.</span></span><input type="checkbox" id="fCap"></label>
     </div>
     <div class="row">
       <label class="sw"><span class="t">Solo importantes</span><input type="checkbox" id="fAlta"></label>
@@ -332,7 +348,7 @@ function cuando(dia, hora){
   const fecha = dia===t ? "Hoy" : dia===addDays(t,-1) ? "Ayer"
     : cap(x.toLocaleDateString("es-ES",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,""));
   const a = ago(dia, hora);
-  return `${fecha}${hora?", "+hora:""}${a?" · "+a:""}`;
+  return a && dia===t ? `${fecha}, ${hora} · ${a}` : `${fecha}${hora?", "+hora:""}`;
 }
 
 /* ---------- Estado ---------- */
@@ -340,16 +356,16 @@ const st = {
   view:"noticias",
   cats: new Set(store.get("cats", TRABAJO)),
   rango: store.get("rango","2"),
-  sinCapital: store.get("sinCapital", true),
+  sinCapital: store.get("sinCapital2", false),
   soloAlta: store.get("soloAlta", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   q:"", muni:"", townQ:"",
   dias: [], fuentes: [], actualizado:"", loaded:false, error:false,
-  seen: new Set(store.get("seen", [])), firstVisit: !store.get("seen", null),
+  seen: new Set(store.get("seen2", null) ? store.get("seen", []) : []),
   pending:null
 };
-const saveF = () => { store.set("cats",[...st.cats]); store.set("rango",st.rango); store.set("sinCapital",st.sinCapital); store.set("soloAlta",st.soloAlta); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
+const saveF = () => { store.set("cats",[...st.cats]); store.set("rango",st.rango); store.set("sinCapital2",st.sinCapital); store.set("soloAlta",st.soloAlta); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
 
 /* ---------- Datos ---------- */
 function allNews(){
@@ -359,7 +375,10 @@ function allNews(){
       const key = n.id || norm(n.titulo);
       if (map.has(key)) continue;
       const resumen = String(n.resumen||"").replace(/<[^>]*>?/g," ").replace(/\s+/g," ").trim();
-      map.set(key, {...n, resumen, _key:key, _dia:d.fecha, _cats:(Array.isArray(n.categorias)&&n.categorias.length?n.categorias:["sociedad"]).filter(c=>CAT[c])});
+      const pub = n.publicado ? new Date(n.publicado) : null;
+      const dia = pub && !isNaN(pub) ? iso(pub) : d.fecha;
+      const hora = pub && !isNaN(pub) ? pub.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false}) : n.hora;
+      map.set(key, {...n, resumen, hora, _ts: pub && !isNaN(pub) ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats:(Array.isArray(n.categorias)&&n.categorias.length?n.categorias:["sociedad"]).filter(c=>CAT[c])});
     }
   }
   return [...map.values()];
@@ -381,7 +400,9 @@ function baseFilter(n, ignoreRange){
 }
 const catFilter = n => st.q ? true : n._cats.some(c=>st.cats.has(c));
 const rank = n => (n.relevancia==="alta"?0:n.relevancia==="media"?1:2) - (kwHits(n)?0.5:0);
-const isNew = n => !st.firstVisit && !st.seen.has(n._key);
+const porHora = (a,b) => (b._ts||0)-(a._ts||0);
+const isNew = n => !st.seen.has(n._key);
+function marcarVisto(keys){ let c=false; for (const k of keys) if(!st.seen.has(k)){ st.seen.add(k); c=true; } if(c) store.set("seen", [...st.seen].slice(-3000)); }
 
 function hl(text){
   let h = esc(text);
@@ -396,22 +417,17 @@ function hl(text){
 function card(n, opts={}){
   const lvl = n.relevancia==="alta"?"alta":n.relevancia==="media"?"media":"baja";
   const cats = n._cats.slice(0,1).map(c=>`<span class="cat">${ICON(CAT[c].d)}${esc(CAT[c].n)}</span>`).join("");
-  const ev = n.fecha_evento && !opts.noEv ? `<span class="pill ev">${esc(fmtDayName(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
-  const first = safeUrl((n.medios||[])[0]?.url);
+  const ev = n.fecha_evento && !opts.noEv ? `<span class="pill ev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>${esc(fmtDayName(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
   const vistos = new Set();
   const medios = (n.medios||[]).filter(m=>{ const k=norm(String(m.nombre).replace(/[.\s]+$/,"").replace(/^el\s+/i,"")); const u=String(m.url||""); if(vistos.has(k)||vistos.has(u)) return false; vistos.add(k); vistos.add(u); return true; });
-  const src = medios.slice(0,4).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("");
-  const t = cuando(n._dia, n.hora);
-  return `<article class="card ${lvl}" ${first?`data-href="${esc(first)}"`:""}>
-    <div class="top">
-      ${isNew(n)?'<span class="pill nuevo">Nuevo</span>':""}
-      ${n.municipio && n.municipio!=="General" ? `<span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio)}</span>` : ""}
-      ${ev}${cats}
-    </div>
+  const first = safeUrl(medios[0]?.url);
+  const src = medios.slice(0,3).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("") + (medios.length>3?`<span class="more">+${medios.length-3}</span>`:"");
+  const lugar = n.municipio && n.municipio!=="General" ? `<span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio)}</span>` : "";
+  return `<article class="card ${lvl} ${isNew(n)?"unseen":""}" data-k="${esc(n._key)}" ${first?`data-href="${esc(first)}"`:""}>
+    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cats}<span class="time">${esc(cuando(n._dia, n.hora))}</span></div>
     <h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
-    <div class="foot-card"><button class="share" type="button" data-share aria-label="Compartir noticia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>Compartir</button><span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t)}</span></div>
-    <div class="srcs">${src}</div>
+    <div class="bottom"><div class="srcs">${src}</div><button class="share" type="button" data-share aria-label="Compartir noticia"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button></div>
   </article>`;
 }
 
@@ -419,9 +435,10 @@ function chipsBar(pool){
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
   const isTrabajo = st.cats.size===TRABAJO.length && TRABAJO.every(c=>st.cats.has(c));
   const isTodo = st.cats.size===CATS.length;
-  const nf = (st.soloAlta?1:0)+(st.soloKw?1:0)+(!st.sinCapital?1:0)+(st.rango!=="2"?1:0);
+  const nf = (st.soloAlta?1:0)+(st.soloKw?1:0)+(st.rango!=="2"?1:0);
   let h = `<button class="chip filters" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${nf?`<span class="badge">${nf}</span>`:""}</button>`;
   if (st.muni) h += `<button class="chip" data-act="clearMuni" aria-pressed="true" type="button">${esc(st.muni)} ✕</button>`;
+  h += `<button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>`;
   h += `<button class="chip" data-preset="trabajo" aria-pressed="${isTrabajo}" type="button">De interés</button>`;
   h += `<button class="chip" data-preset="todo" aria-pressed="${isTodo}" type="button">Todo</button>`;
   for (const c of CATS){ const n = counts[c.k]||0;
@@ -429,14 +446,14 @@ function chipsBar(pool){
   return `<div class="chips" id="chips">${h}</div>`;
 }
 
-function heroBlock(news){
+function heroBlock(news, nuevas){
   const t = today();
   const pool = news.filter(n=>baseFilter(n) && catFilter(n));
   const alta = pool.filter(n=>n.relevancia==="alta");
   const pueblos = new Set(pool.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
   const ag = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7));
-  let sum = !pool.length ? "Sin noticias de interés con los filtros actuales."
-    : `<b>${pool.length} ${pool.length===1?"noticia":"noticias"} de interés</b>${pueblos.size?` en ${pueblos.size} ${pueblos.size===1?"pueblo":"pueblos"}`:""}${st.rango==="2"?" entre hoy y ayer":""}.`;
+  const sum = nuevas ? `<b>${nuevas} ${nuevas===1?"noticia nueva":"noticias nuevas"}</b> desde tu última visita.`
+    : pool.length ? `Estás al día. ${pool.length} ${pool.length===1?"noticia":"noticias"} entre hoy y ayer.` : "Sin noticias con los filtros actuales.";
   return `<section class="hero">
     <div class="day">${esc(fmtLong(t))}</div>
     <div class="sum">${sum}</div>
@@ -455,30 +472,38 @@ function viewNoticias(news){
   let h = "";
   if (st.q){
     h += `<div class="sect"><h2>Resultados</h2><span class="aux">${shown.length} ${shown.length===1?"noticia":"noticias"} en 21 días</span></div><div class="feed">`;
-    h += shown.length ? shown.sort((a,b)=>b._dia.localeCompare(a._dia)||rank(a)-rank(b)).map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados</b>Prueba con otra palabra o el nombre de un pueblo.</div>`;
+    h += shown.length ? shown.sort(porHora).map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados</b>Prueba con otra palabra o el nombre de un pueblo.</div>`;
     return h + `</div>`;
   }
-  h += heroBlock(news);
-  const urg = shown.filter(n=>n.relevancia==="alta").sort((a,b)=>b._dia.localeCompare(a._dia)).slice(0,8);
+  const nuevas = shown.filter(isNew).sort(porHora);
+  const vistas = shown.filter(n=>!isNew(n));
+  h += heroBlock(news, nuevas.length);
+  const urg = nuevas.filter(n=>n.relevancia==="alta").slice(0,8);
   if (urg.length && !st.soloAlta){
-    h += `<div class="sect"><h2>Lo importante</h2><span class="aux">${urg.length}</span></div><div class="rail">` +
+    h += `<div class="sect"><h2>Importante y nuevo</h2><span class="aux">${urg.length}</span></div><div class="rail">` +
       urg.map(n=>{ const u = safeUrl((n.medios||[])[0]?.url);
-        return `<a class="urg ${urg.length===1?"alone":""}" ${u?`href="${esc(u)}" target="_blank" rel="noopener"`:""}>
-          <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(esPueblo(n.municipio)||n.municipio==="Provincia"||n.municipio==="Segovia"?n.municipio:CAT[n._cats[0]]?.n||"")}</span>
+        return `<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${u?`href="${esc(u)}" target="_blank" rel="noopener"`:""}>
+          <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio && n.municipio!=="General"?n.municipio:(CAT[n._cats[0]]?.n||""))}</span>
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${n.fecha_evento?esc(fmtDayName(n.fecha_evento))+(n.hora_evento?", "+esc(n.hora_evento):""):esc(cuando(n._dia,n.hora))}</span></a>`; }).join("") + `</div>`;
   }
   h += chipsBar(pool);
   h += `<div class="feed">`;
   if (!shown.length){
-    h += `<div class="empty"><b>Nada con estos filtros</b>Amplía el periodo o pulsa “Todo” para ver el resto de temas.<br><button class="btn ghost" data-act="ampliar" type="button">Ver últimos 7 días</button></div>`;
+    return h + `<div class="empty"><b>Nada con estos filtros</b>Amplía el periodo o pulsa “Todo” para ver el resto de temas.<br><button class="btn ghost" data-act="ampliar" type="button">Ver últimos 7 días</button></div></div>`;
+  }
+  if (nuevas.length){
+    h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button">Marcar todo como visto</button></div>`;
+    h += nuevas.map(n=>card(n)).join("");
+    h += `<div class="uptodate"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Hasta aquí lo nuevo</span></div>`;
   } else {
-    const by = {}; for (const n of shown) (by[n._dia] ||= []).push(n);
-    for (const d of st.dias){ const it = by[d.fecha]; if(!it) continue;
-      it.sort((a,b)=>rank(a)-rank(b) || String(b.hora||"").localeCompare(String(a.hora||"")));
-      h += `<div class="dayhead"><h3>${esc(fmtDayName(d.fecha))}</h3><span>${it.length} ${it.length===1?"noticia":"noticias"}</span></div>`;
-      h += it.map(n=>card(n)).join("");
-    }
+    h += `<div class="allread"><span class="ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span><div><b>Estás al día</b><span>No hay nada nuevo desde tu última visita. Abajo tienes lo ya visto.</span></div></div>`;
+  }
+  const by = {}; for (const n of vistas) (by[n._dia] ||= []).push(n);
+  for (const d of Object.keys(by).sort().reverse()){
+    const it = by[d].sort(porHora);
+    h += `<div class="dayhead"><h3>${esc(fmtDayName(d))}${nuevas.length?" · ya visto":""}</h3><span>${it.length} ${it.length===1?"noticia":"noticias"}</span></div>`;
+    h += it.map(n=>card(n)).join("");
   }
   return h + `</div><p class="foot">Se actualiza sola cada hora.</p>`;
 }
@@ -552,8 +577,25 @@ function render(keepScroll){
   const ch = $("#chips");
   if (ch){ const sent = document.createElement("div"); ch.before(sent);
     chipObs = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 0 + 200), {rootMargin:`-${$(".appbar").offsetHeight+2}px 0px 0px 0px`}); chipObs.observe(sent); }
+  observarVistos();
   const tq = $("#townQ");
   if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); });
+}
+
+/* Una noticia cuenta como vista cuando ha estado en pantalla un segundo, o al abrirla */
+let vistoObs; const timers = new Map();
+function observarVistos(){
+  if (vistoObs) vistoObs.disconnect();
+  if (!("IntersectionObserver" in window)) return;
+  vistoObs = new IntersectionObserver(entries=>{
+    for (const e of entries){
+      const el = e.target, k = el.dataset.k;
+      if (e.isIntersecting){
+        if (!timers.has(el)) timers.set(el, setTimeout(()=>{ marcarVisto([k]); document.querySelectorAll(`.card[data-k="${CSS.escape(k)}"]`).forEach(c=>c.classList.remove("unseen")); vistoObs.unobserve(el); timers.delete(el); }, 1000));
+      } else if (timers.has(el)){ clearTimeout(timers.get(el)); timers.delete(el); }
+    }
+  }, {threshold:0.6});
+  document.querySelectorAll(".card.unseen").forEach(c=>vistoObs.observe(c));
 }
 
 /* ---------- Interacción ---------- */
@@ -565,11 +607,12 @@ function setView(v){
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{ if (st.view===t.dataset.view){ window.scrollTo({top:0,behavior:"smooth"}); return; } setView(t.dataset.view); }));
 
 $("#app").addEventListener("click", e=>{
-  if (e.target.closest("a")) return;
+  const a = e.target.closest("a"); 
+  if (a){ const c = a.closest("[data-k]"); if (c) marcarVisto([c.dataset.k]); return; }
   const sh = e.target.closest("[data-share]");
   if (sh){ compartir(sh.closest(".card")); return; }
   const b = e.target.closest("button");
-  if (!b){ const c = e.target.closest(".card[data-href]"); if (c) window.open(c.dataset.href, "_blank", "noopener"); return; }
+  if (!b){ const c = e.target.closest(".card[data-href]"); if (c){ marcarVisto([c.dataset.k]); c.classList.remove("unseen"); window.open(c.dataset.href, "_blank", "noopener"); } return; }
   if (b.dataset.preset==="trabajo"){ st.cats = new Set(TRABAJO); saveF(); render(true); }
   else if (b.dataset.preset==="todo"){ st.cats = new Set(CATS.map(c=>c.k)); saveF(); render(true); }
   else if (b.dataset.cat){
@@ -581,6 +624,8 @@ $("#app").addEventListener("click", e=>{
   else if (b.dataset.muni){ st.muni = b.dataset.muni; st.cats = new Set(CATS.map(c=>c.k)); setView("noticias"); }
   else if (b.dataset.act==="clearMuni"){ st.muni=""; st.cats=new Set(store.get("cats",TRABAJO)); render(true); }
   else if (b.dataset.act==="filtros") openSheet();
+  else if (b.dataset.act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); render(true); }
+  else if (b.dataset.act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (b.dataset.act==="alta"){ st.soloAlta=!st.soloAlta; saveF(); render(true); }
   else if (b.dataset.act==="agenda") setView("agenda");
   else if (b.dataset.act==="pueblos") setView("pueblos");
@@ -631,7 +676,7 @@ function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(
 $("#kwAdd").addEventListener("click", addKw);
 $("#kwIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addKw(); } });
 $("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); syncSheet(); });
-$("#fReset").addEventListener("click", ()=>{ st.cats=new Set(TRABAJO); st.rango="2"; st.sinCapital=true; st.soloAlta=false; st.soloKw=false; st.muni=""; saveF(); syncSheet(); });
+$("#fReset").addEventListener("click", ()=>{ st.cats=new Set(TRABAJO); st.rango="2"; st.sinCapital=false; st.soloAlta=false; st.soloKw=false; st.muni=""; saveF(); syncSheet(); });
 
 $("#btnReload").addEventListener("click", ()=>load(true));
 $("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
@@ -643,8 +688,11 @@ function applyData(j){
   st.actualizado = j.actualizado || "";
   st.loaded = true; st.error = false;
   render();
-  const keys = allNews().map(n=>n._key);
-  setTimeout(()=>{ const s = new Set([...st.seen, ...keys]); store.set("seen", [...s].slice(-2000)); }, 1500);
+  if (!store.get("seen2", null)){ // primera vez con la versión nueva: solo cuenta como nuevo lo de hoy
+    store.set("seen2", true);
+    marcarVisto(allNews().filter(n=>n._dia < today()).map(n=>n._key));
+    render();
+  }
 }
 async function fetchJSON(){
   const r = await fetch("datos.json?t="+Date.now(), {cache:"no-store"});

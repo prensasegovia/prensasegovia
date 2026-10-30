@@ -301,6 +301,7 @@ async function main() {
       titulo: g.titulo, resumen, categorias, municipio, relevancia,
       ...eventoDe(g.titulo, resumen, g.fecha),
       medios: g.medios,
+      publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
       _dia: fechaMadrid(g.fecha),
     };
@@ -316,7 +317,7 @@ async function main() {
     const yo = { tk: tokens(n.titulo), municipio: n.municipio, dia: n._dia };
     const ya = existentes.find(e => e.n.id === n.id || mismaNoticia(e, yo));
     if (ya) { // añade enlaces de otros medios a la que ya estaba
-      if (!ya.n.hora && n.hora && n._dia === ya.dia) ya.n.hora = n.hora;
+      if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
       if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
       juntaMedios(ya.n.medios, n.medios);
       continue;
@@ -333,7 +334,8 @@ async function main() {
   const ahoraHM = horaMadrid(ahora), hoyF = fechaMadrid(ahora);
   for (const d of porDia.values()) {
     d.noticias = d.noticias.filter(n => {
-      if (d.fecha === hoyF && n.hora && n.hora > ahoraHM) delete n.hora; // hora imposible (de otro día)
+      // Sin fecha de publicación real (noticias de las primeras cargas): fuera, se vuelven a recoger con su fecha correcta
+      if (!n.publicado) return false;
       if (BASURA.test(norm(n.titulo))) return false;
       juntaMedios(n.medios, []);
       n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
@@ -358,7 +360,7 @@ async function main() {
       const b = recientesH[j]; if (borrar.has(b.n) || !mismaNoticia(a, b)) continue;
       juntaMedios(a.n.medios, b.n.medios);
       if (!a.n.resumen && b.n.resumen) a.n.resumen = b.n.resumen;
-      if (!a.n.hora && b.n.hora && a.dia === b.dia) a.n.hora = b.n.hora;
+      if (b.n.publicado && (!a.n.publicado || b.n.publicado < a.n.publicado)) a.n.publicado = b.n.publicado;
       if (!a.n.fecha_evento && b.n.fecha_evento) { a.n.fecha_evento = b.n.fecha_evento; a.n.hora_evento = b.n.hora_evento; }
       if ((NIVEL[b.n.relevancia] ?? 2) < (NIVEL[a.n.relevancia] ?? 2)) a.n.relevancia = b.n.relevancia;
       borrar.add(b.n);
@@ -366,6 +368,19 @@ async function main() {
   }
   for (const d of porDia.values()) d.noticias = d.noticias.filter(n => !borrar.has(n));
   if (borrar.size) console.log(`Duplicados unidos: ${borrar.size}`);
+
+  // 5c) Cada noticia en el día en que se publicó de verdad
+  for (const d of [...porDia.values()]) {
+    for (const n of [...d.noticias]) {
+      const dia = fechaMadrid(new Date(n.publicado));
+      n.hora = horaMadrid(new Date(n.publicado));
+      if (dia !== d.fecha) {
+        d.noticias.splice(d.noticias.indexOf(n), 1);
+        if (!porDia.has(dia)) porDia.set(dia, { fecha: dia, noticias: [] });
+        porDia.get(dia).noticias.push(n);
+      }
+    }
+  }
   const hoy = fechaMadrid(ahora);
   if (!porDia.has(hoy)) porDia.set(hoy, { fecha: hoy, noticias: [] });
   porDia.get(hoy).generado = horaMadrid(ahora);
