@@ -196,7 +196,9 @@ const EVENTO = /fiestas? (patronales|de |en honor|del )|encierros?|toros|capea|c
 const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
 
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
-function clasifica(titulo, texto, municipio) {
+function clasifica(titulo, texto, municipio, soloTitulo = false) {
+  // Las webs de ayuntamientos se juzgan solo por el titular (sus textos son avisos y bandos)
+  if (soloTitulo) texto = "";
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
   const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
@@ -265,6 +267,7 @@ const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carc
   fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid" };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
+const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
 const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) ? pueblo : m;
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
@@ -380,7 +383,7 @@ async function main() {
   const nuevas = grupos.map(g => {
     const resumen = g.texto ? recorta(g.texto) : "";
     const municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
-    const { categorias, relevancia } = clasifica(g.titulo, resumen, municipio);
+    const { categorias, relevancia } = clasifica(g.titulo, resumen, municipio, soloAyto(g.medios));
     const evento = eventoDe(g.titulo, resumen, g.fecha, categorias);
     return {
       ...evento,
@@ -434,7 +437,7 @@ async function main() {
       if (!n.medios.length || n.medios.every(m => OPINION.test(m.url))) return false;
       const nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
-      const c = clasifica(n.titulo, n.resumen || "", n.municipio);
+      const c = clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios));
       n.categorias = c.categorias; n.relevancia = c.relevancia;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       if (n.publicado) Object.assign(n, eventoDe(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias));
