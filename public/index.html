@@ -114,7 +114,9 @@ a{color:inherit}
 .pill.nuevo{background:var(--new);color:#fff}
 .cat{color:var(--muted);display:inline-flex;align-items:center;gap:4px}
 .cat svg{width:14px;height:14px}
-.foot-card{margin:-2px 0 9px}
+.foot-card{margin:-2px 0 9px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-direction:row-reverse}
+.share{border:0;background:none;color:var(--pine-2);font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px;padding:6px 2px 6px 8px;cursor:pointer;min-height:32px}
+.share svg{width:16px;height:16px}
 .time{color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:5px;font-weight:500}
 .time svg{width:14px;height:14px}
 .card h4{margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
@@ -256,6 +258,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   </section>
 </div>
 
+<div class="toast" id="aviso" role="status" style="padding:10px 18px"></div>
 <div class="toast" id="toast" role="status"><span>Hay noticias nuevas</span><button class="btn" id="toastBtn" type="button">Ver</button></div>
 
 <script>
@@ -362,6 +365,7 @@ function allNews(){
   return [...map.values()];
 }
 const isCapital = n => norm(n.municipio)==="segovia";
+const esPueblo = m => !!m && !["segovia","provincia","general"].includes(norm(m));
 const kwHits = n => { if(!st.kws.length) return 0; const t = norm([n.titulo,n.resumen,n.municipio].join(" ")); return st.kws.filter(k=>t.includes(norm(k))).length; };
 function baseFilter(n, ignoreRange){
   if (!ignoreRange && !st.q && n._dia < addDays(today(), -(parseInt(st.rango,10)-1))) return false;
@@ -401,12 +405,12 @@ function card(n, opts={}){
   return `<article class="card ${lvl}" ${first?`data-href="${esc(first)}"`:""}>
     <div class="top">
       ${isNew(n)?'<span class="pill nuevo">Nuevo</span>':""}
-      <span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio||"Provincia")}</span>
+      ${n.municipio && n.municipio!=="General" ? `<span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio)}</span>` : ""}
       ${ev}${cats}
     </div>
     <h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
-    <div class="foot-card"><span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t)}</span></div>
+    <div class="foot-card"><button class="share" type="button" data-share aria-label="Compartir noticia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>Compartir</button><span class="time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${esc(t)}</span></div>
     <div class="srcs">${src}</div>
   </article>`;
 }
@@ -429,7 +433,7 @@ function heroBlock(news){
   const t = today();
   const pool = news.filter(n=>baseFilter(n) && catFilter(n));
   const alta = pool.filter(n=>n.relevancia==="alta");
-  const pueblos = new Set(pool.filter(n=>!isCapital(n) && norm(n.municipio)!=="provincia").map(n=>n.municipio));
+  const pueblos = new Set(pool.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
   const ag = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7));
   let sum = !pool.length ? "Sin noticias de interés con los filtros actuales."
     : `<b>${pool.length} ${pool.length===1?"noticia":"noticias"} de interés</b>${pueblos.size?` en ${pueblos.size} ${pueblos.size===1?"pueblo":"pueblos"}`:""}${st.rango==="2"?" entre hoy y ayer":""}.`;
@@ -450,7 +454,7 @@ function viewNoticias(news){
   const shown = pool.filter(catFilter);
   let h = "";
   if (st.q){
-    h += `<div class="sect"><h2>Resultados</h2><span class="aux">${shown.length} ${shown.length===1?"noticia":"noticias"} en 30 días</span></div><div class="feed">`;
+    h += `<div class="sect"><h2>Resultados</h2><span class="aux">${shown.length} ${shown.length===1?"noticia":"noticias"} en 21 días</span></div><div class="feed">`;
     h += shown.length ? shown.sort((a,b)=>b._dia.localeCompare(a._dia)||rank(a)-rank(b)).map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados</b>Prueba con otra palabra o el nombre de un pueblo.</div>`;
     return h + `</div>`;
   }
@@ -460,7 +464,7 @@ function viewNoticias(news){
     h += `<div class="sect"><h2>Lo importante</h2><span class="aux">${urg.length}</span></div><div class="rail">` +
       urg.map(n=>{ const u = safeUrl((n.medios||[])[0]?.url);
         return `<a class="urg ${urg.length===1?"alone":""}" ${u?`href="${esc(u)}" target="_blank" rel="noopener"`:""}>
-          <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio||"Provincia")}</span>
+          <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(esPueblo(n.municipio)||n.municipio==="Provincia"||n.municipio==="Segovia"?n.municipio:CAT[n._cats[0]]?.n||"")}</span>
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${n.fecha_evento?esc(fmtDayName(n.fecha_evento))+(n.hora_evento?", "+esc(n.hora_evento):""):esc(cuando(n._dia,n.hora))}</span></a>`; }).join("") + `</div>`;
   }
@@ -496,7 +500,7 @@ function viewAgenda(news){
 }
 
 function viewPueblos(news){
-  const pool = news.filter(n=>baseFilter(n) && catFilter(n) && n.municipio && norm(n.municipio)!=="provincia");
+  const pool = news.filter(n=>baseFilter(n) && catFilter(n) && esPueblo(n.municipio));
   const m = {};
   for (const n of pool){ const k=n.municipio; (m[k] ||= {n:0,a:0}); m[k].n++; if(n.relevancia==="alta") m[k].a++; }
   let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
@@ -562,6 +566,8 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{ i
 
 $("#app").addEventListener("click", e=>{
   if (e.target.closest("a")) return;
+  const sh = e.target.closest("[data-share]");
+  if (sh){ compartir(sh.closest(".card")); return; }
   const b = e.target.closest("button");
   if (!b){ const c = e.target.closest(".card[data-href]"); if (c) window.open(c.dataset.href, "_blank", "noopener"); return; }
   if (b.dataset.preset==="trabajo"){ st.cats = new Set(TRABAJO); saveF(); render(true); }
@@ -581,6 +587,18 @@ $("#app").addEventListener("click", e=>{
   else if (b.dataset.act==="ampliar"){ st.rango="7"; saveF(); render(true); }
   else if (b.dataset.act==="reload") load(true);
 });
+
+/* Compartir: menú del móvil (WhatsApp, Telegram…) o copiar enlace */
+async function compartir(c){
+  if (!c) return;
+  const titulo = c.querySelector("h4")?.textContent.trim() || "Noticia";
+  const url = c.dataset.href || location.href;
+  const text = `${titulo}\n${url}`;
+  try { if (navigator.share){ await navigator.share({ title: titulo, text: titulo, url }); return; } } catch(e){ if (e && e.name==="AbortError") return; }
+  try { await navigator.clipboard.writeText(text); aviso("Enlace copiado"); } catch(e){ aviso("No se pudo copiar"); }
+}
+let avisoT;
+function aviso(txt){ const el=$("#aviso"); el.textContent=txt; el.classList.add("show"); clearTimeout(avisoT); avisoT=setTimeout(()=>el.classList.remove("show"),1800); }
 
 /* Búsqueda */
 function toggleSearch(on){
@@ -636,7 +654,7 @@ async function fetchJSON(){
 async function load(manual){
   const btn = $("#btnReload"); btn.classList.add("spin");
   try{ applyData(await fetchJSON()); }
-  catch(e){ st.loaded = true; st.error = true; render(); }
+  catch(e){ st.loaded = true; st.error = !st.dias.length; render(); if (st.dias.length) aviso("Sin conexión: mostrando lo último guardado"); }
   finally{ setTimeout(()=>btn.classList.remove("spin"), 400); }
 }
 async function poll(){
@@ -650,6 +668,7 @@ async function poll(){
 }
 render();
 load();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible") poll(); });
 </script>

@@ -6,7 +6,7 @@ import { createHash } from "node:crypto";
 import { MUNICIPIOS, AMBIGUOS, ALIAS, BARRIOS_CAPITAL } from "./municipios.mjs";
 
 const SALIDA = new URL("../public/datos.json", import.meta.url);
-const DIAS_HISTORICO = 30;
+const DIAS_HISTORICO = 21;
 const HORAS_VENTANA = 72;          // se aceptan noticias publicadas en las últimas 72 h
 const TZ = "Europe/Madrid";
 
@@ -45,7 +45,8 @@ const BUSQUEDAS = [
   '("Santa María la Real de Nieva" OR Coca OR Bernardos OR Navalmanzano) Segovia',
 ];
 // Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
-const MEDIOS_OK = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
+const MEDIOS_OK_RE = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
+const MEDIOS_OK = { test: m => MEDIOS_OK_RE.test(m) && !NO_ESPANA.test(m) };
 const gnews = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:3d")}&hl=es&gl=ES&ceid=ES:es`;
 
 /* ------------------------------------------------------------------ */
@@ -132,7 +133,7 @@ function municipioDe(texto) {
   if (unicos.includes("Segovia")) return "Segovia";
   const n = norm(texto);
   if (/\bprovincia\b|diputacion|pueblos de segovia|toda segovia|comarca/.test(n)) return "Provincia";
-  return /segovia/.test(n) ? "Segovia" : "Provincia";
+  return /segovia/.test(n) ? "Segovia" : "General";
 }
 
 const PATRONES = {
@@ -193,7 +194,39 @@ const MENCIONA_SEGOVIA = new RegExp("segovia|" + MUNICIPIOS.filter(m => !AMBIGUO
 /* Agrupar duplicados                                                  */
 /* ------------------------------------------------------------------ */
 const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que se su sus por para con sin sobre tras ante entre como mas lo le les es son ha han segovia segoviano segoviana provincia".split(" "));
-const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)));
+const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => w.slice(0, 5)));
+const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
+// Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
+// de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
+function mismaNoticia(a, b) {
+  if (parecido(a.tk, b.tk) >= 0.55) return true;
+  if (CONCRETO(a.municipio) && a.municipio === b.municipio && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 2 * 864e5) {
+    const pueblo = tokens(a.municipio);
+    let comun = 0; for (const w of a.tk) if (!pueblo.has(w) && b.tk.has(w)) comun++;
+    if (comun >= 2) return true;
+  }
+  return false;
+}
+// Nombre único para cada medio ("Tribuna de Segovia." y "Tribuna de Segovia" son el mismo)
+const CANON = { segoviaudaz: "SegoviaUdaz", escuellar: "esCuéllar", tribunadesegovia: "Tribuna de Segovia", eldiadesegovia: "El Día de Segovia",
+  eladelantado: "El Adelantado", eladelantadodesegovia: "El Adelantado", elnortedecastilla: "El Norte de Castilla", segoviadirectocom: "Segovia Directo",
+  segoviadirecto: "Segovia Directo", cope: "COPE Segovia", copesegovia: "COPE Segovia", cadenaser: "Cadena SER", ondacero: "Onda Cero Segovia",
+  diariodecastillayleon: "Diario de Castilla y León", diariodecastillayleonsegovia: "Diario de Castilla y León", europapress: "Europa Press",
+  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE" };
+const canonMedio = n => CANON[norm(n).replace(/[^a-z0-9]/g, "")] || String(n).replace(/[.\s]+$/, "");
+function juntaMedios(destino, origen) {
+  for (const m of origen) {
+    const nombre = canonMedio(m.nombre);
+    if (!destino.some(x => x.url === m.url || canonMedio(x.nombre) === nombre) && destino.length < 5) destino.push({ ...m, nombre });
+  }
+  const vistos = new Set();
+  const unicos = destino.map(x => ({ ...x, nombre: canonMedio(x.nombre) }))
+    .filter(x => { const k1 = "n:" + x.nombre, k2 = "u:" + x.url; if (vistos.has(k1) || vistos.has(k2)) return false; vistos.add(k1); vistos.add(k2); return true; });
+  destino.splice(0, destino.length, ...unicos);
+}
+// Páginas automáticas o de relleno que no son noticias
+const BASURA = /^(el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
+const NO_ESPANA = /mexico|argentina|colombia|chile|peru|venezuela|tlaxcala|puebla|uruguay|ecuador|bolivia|paraguay|guatemala|honduras|panama|costa rica|cuba|dominicana|miami/;
 function parecido(a, b) {
   let comun = 0; for (const w of a) if (b.has(w)) comun++;
   return comun / Math.min(a.size, b.size || 1);
@@ -233,7 +266,7 @@ async function main() {
         let titulo = it.titulo, medio = (it.fuente || "Google Noticias").replace(/[.\s]+$/, "");
         if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
         const texto = norm(it.texto) === norm(it.titulo) || norm(it.texto).startsWith(norm(titulo)) ? "" : it.texto;
-        if (!MEDIOS_OK.test(norm(medio))) continue;
+        if (!MEDIOS_OK.test(norm(medio)) || BASURA.test(norm(titulo))) continue;
         if (!MENCIONA_SEGOVIA.test(norm(titulo + " " + texto))) continue;
         brutos.push({ ...it, titulo, texto, medio, directo: false }); gTotal++;
       }
@@ -249,12 +282,13 @@ async function main() {
   for (const b of recientes) {
     const tk = tokens(b.titulo);
     if (tk.size < 2) continue;
-    const g = grupos.find(g => parecido(g.tk, tk) >= 0.6);
+    const yo = { tk, municipio: municipioDe(b.titulo + " " + b.texto), dia: fechaMadrid(b.fecha) };
+    const g = grupos.find(g => mismaNoticia(g, yo));
     if (g) {
-      if (!g.medios.some(m => m.url === b.url || norm(m.nombre).replace(/^el /, "") === norm(b.medio).replace(/^el /, "")) && g.medios.length < 5) g.medios.push({ nombre: b.medio, url: b.url });
+      juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
       if (!g.texto && b.texto) g.texto = b.texto;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ tk, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: b.medio, url: b.url }] });
+    } else grupos.push({ ...yo, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
 
   // 4) Clasificar
@@ -276,22 +310,62 @@ async function main() {
   let previo = { dias: [] };
   try { previo = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const porDia = new Map((previo.dias || []).map(d => [d.fecha, { ...d, noticias: [...(d.noticias || [])] }]));
-  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo) })));
+  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo), municipio: n.municipio, dia: d.fecha })));
   let añadidas = 0;
   for (const n of nuevas) {
-    const tk = tokens(n.titulo);
-    const ya = existentes.find(e => e.n.id === n.id || parecido(e.tk, tk) >= 0.6);
+    const yo = { tk: tokens(n.titulo), municipio: n.municipio, dia: n._dia };
+    const ya = existentes.find(e => e.n.id === n.id || mismaNoticia(e, yo));
     if (ya) { // añade enlaces de otros medios a la que ya estaba
-      if (!ya.n.hora && n.hora) ya.n.hora = n.hora;
-      for (const m of n.medios) if (!ya.n.medios.some(x => norm(x.nombre) === norm(m.nombre)) && ya.n.medios.length < 5) ya.n.medios.push(m);
+      if (!ya.n.hora && n.hora && n._dia === ya.dia) ya.n.hora = n.hora;
+      if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
+      juntaMedios(ya.n.medios, n.medios);
       continue;
     }
     const { _dia, ...limpio } = n;
     if (!porDia.has(_dia)) porDia.set(_dia, { fecha: _dia, noticias: [] });
     porDia.get(_dia).noticias.push(limpio);
-    existentes.push({ n: limpio, tk });
+    existentes.push({ n: limpio, ...yo });
     añadidas++;
   }
+
+  // 5a) Limpieza del histórico con las reglas actuales (pueblo, medios de fuera, páginas de relleno)
+  const DIRECTOS = new Set(FEEDS.map(f => canonMedio(f.nombre)));
+  const ahoraHM = horaMadrid(ahora), hoyF = fechaMadrid(ahora);
+  for (const d of porDia.values()) {
+    d.noticias = d.noticias.filter(n => {
+      if (d.fecha === hoyF && n.hora && n.hora > ahoraHM) delete n.hora; // hora imposible (de otro día)
+      if (BASURA.test(norm(n.titulo))) return false;
+      juntaMedios(n.medios, []);
+      n.medios = n.medios.filter(m => DIRECTOS.has(m.nombre) || MEDIOS_OK.test(norm(m.nombre)));
+      if (!n.medios.length) return false;
+      const nuevo = municipioDe(n.titulo + " " + (n.resumen || ""));
+      if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
+      if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
+      return true;
+    });
+  }
+
+  // 5b) Repaso de los últimos 4 días: junta duplicados que se colaron antes y unifica nombres de medios
+  const desde = fechaMadrid(new Date(ahora.getTime() - 4 * 864e5));
+  const NIVEL = { alta: 0, media: 1, baja: 2 };
+  const recientesH = [...porDia.values()].filter(d => d.fecha >= desde).sort((a, b) => a.fecha.localeCompare(b.fecha))
+    .flatMap(d => d.noticias.map(n => ({ n, d, tk: tokens(n.titulo), municipio: n.municipio, dia: d.fecha })));
+  const borrar = new Set();
+  for (let i = 0; i < recientesH.length; i++) {
+    const a = recientesH[i]; if (borrar.has(a.n)) continue;
+    juntaMedios(a.n.medios, []);
+    for (let j = i + 1; j < recientesH.length; j++) {
+      const b = recientesH[j]; if (borrar.has(b.n) || !mismaNoticia(a, b)) continue;
+      juntaMedios(a.n.medios, b.n.medios);
+      if (!a.n.resumen && b.n.resumen) a.n.resumen = b.n.resumen;
+      if (!a.n.hora && b.n.hora && a.dia === b.dia) a.n.hora = b.n.hora;
+      if (!a.n.fecha_evento && b.n.fecha_evento) { a.n.fecha_evento = b.n.fecha_evento; a.n.hora_evento = b.n.hora_evento; }
+      if ((NIVEL[b.n.relevancia] ?? 2) < (NIVEL[a.n.relevancia] ?? 2)) a.n.relevancia = b.n.relevancia;
+      borrar.add(b.n);
+    }
+  }
+  for (const d of porDia.values()) d.noticias = d.noticias.filter(n => !borrar.has(n));
+  if (borrar.size) console.log(`Duplicados unidos: ${borrar.size}`);
   const hoy = fechaMadrid(ahora);
   if (!porDia.has(hoy)) porDia.set(hoy, { fecha: hoy, noticias: [] });
   porDia.get(hoy).generado = horaMadrid(ahora);
