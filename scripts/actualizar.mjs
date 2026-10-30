@@ -188,10 +188,13 @@ const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto"
 const DIAS = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
 const CONVOCA = /convoca|manifesta|concentrara|protestara|movilizara|convocatoria|concentrac|manifestac|huelga|paros|pleno|marcha|protesta|movilizac|tractorada|caravana|encierro|mitin|visita|visitara|acto |asamblea|recogida de firmas|cacerolada|celebrara|tendra lugar|se celebra|fiestas|encierros|concentracion motera|festival|romeria/;
 const LETRA_MES = { E: 0, F: 1, S: 8, O: 9, N: 10, D: 11 }; // 11N, 4D... (solo letras sin ambigüedad)
-function eventoDe(titulo, texto, publicada) {
+const AGENDA_TITULO = /convoca|manifesta|concentrac|protesta|huelga|paros|tractorada|caravana|encierro|cacerolada|mitin|visita|visitara|pleno|asamblea|marcha|movilizac|recogida de firmas|fiestas|encierros|concentracion motera|festival|romeria|acto (de|en|por)|homenaje|vigilia/;
+function eventoDe(titulo, texto, publicada, categorias = []) {
+  if (!categorias.some(c => ["social", "autoridades", "politica", "eventos"].includes(c))) return {};
+  const tt = norm(titulo);
+  if (!AGENDA_TITULO.test(tt)) return {};
   const t = norm(titulo + " " + texto);
   const tOrig = titulo + " " + texto;
-  if (!CONVOCA.test(t)) return {};
   const base = new Date(fechaMadrid(publicada) + "T12:00:00");
   const conAnio = f => { if (f < base) f.setFullYear(f.getFullYear() + 1); return (f - base) / 864e5 > 120 ? null : f; };
   let f = null, m;
@@ -205,9 +208,10 @@ function eventoDe(titulo, texto, publicada) {
     else { const delta = (DIAS.indexOf(m[1]) - f.getDay() + 7) % 7; f.setDate(f.getDate() + delta); }
   } else if ((m = t.match(/\b(?:el|este|proximo)\s+dia\s+(\d{1,2})\b/))) {
     f = new Date(base); f.setDate(+m[1]); if (f < base) f.setMonth(f.getMonth() + 1);
-  } else if (/\b(hoy|esta tarde|esta manana|esta noche|este mediodia)\b/.test(t)) f = new Date(base);
-  else if (/\bmanana\b/.test(t) && !/esta manana/.test(t)) { f = new Date(base); f.setDate(f.getDate() + 1); }
-  const convocatoria = /convoca|manifesta|concentrara|protestara|movilizara|concentrac|manifestac|huelga|paros|protesta|movilizac|tractorada|caravana|encierro|cacerolada|recogida de firmas|mitin|visita/.test(t);
+  } else if (/\b(hoy|esta tarde|esta noche|este mediodia)\b/.test(tt)) f = new Date(base);
+  else if (/\bmanana\b/.test(tt) && !/esta manana/.test(tt)) { f = new Date(base); f.setDate(f.getDate() + 1); }
+  // Solo es convocatoria si el titular anuncia algo que va a pasar (no crónicas de lo ya ocurrido)
+  const convocatoria = /convoca|llama(n)? a|anuncia|se concentrar(a|an)|se manifestar(a|an)|movilizar(a|an)|protestar(a|an)|secundar|visitara|participara|celebrara|preparan|proxim[oa]|mitin|tractorada|huelga (el|del|los|indefinida|general)|paros (el|los|del)|recogida de firmas/.test(tt);
   if (!f) return convocatoria ? { convocatoria: true } : {};
   const h = t.match(/a las (\d{1,2})(?:[:.,](\d{2}))?\s*(?:h|horas)?/) || t.match(/\b(\d{1,2})[:.](\d{2})\s*(?:h|horas)\b/);
   const out = { fecha_evento: f.toISOString().slice(0, 10) };
@@ -326,10 +330,11 @@ async function main() {
     const resumen = g.texto ? recorta(g.texto) : "";
     const municipio = municipioDe(g.titulo + " " + resumen);
     const { categorias, relevancia } = clasifica(g.titulo, resumen, municipio);
+    const evento = eventoDe(g.titulo, resumen, g.fecha, categorias);
     return {
+      ...evento,
       id: hash(norm(g.titulo)),
       titulo: g.titulo, resumen, categorias, municipio, relevancia,
-      ...eventoDe(g.titulo, resumen, g.fecha),
       medios: g.medios,
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
@@ -380,7 +385,8 @@ async function main() {
       if (CONCRETO(nuevo) || n.municipio !== "Provincia") n.municipio = nuevo;
       const c = clasifica(n.titulo, n.resumen || "", n.municipio);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
-      if (!n.fecha_evento && n.publicado) Object.assign(n, eventoDe(n.titulo, n.resumen || "", new Date(n.publicado)));
+      delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
+      if (n.publicado) Object.assign(n, eventoDe(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias));
       if (!interesa(n)) return false;
       if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
       return true;
