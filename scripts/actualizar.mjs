@@ -34,6 +34,12 @@ const FEEDS = [
   { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"] },
   { nombre: "Europa Press", urls: ["https://www.europapress.es/rss/rss.aspx?ch=283"], soloSiMenciona: true },
   { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"] },
+  // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
+  { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
+  { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
+  { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
+  { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", pueblo: "Provincia" },
+  { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", pueblo: "Provincia" },
   // Ayuntamientos con noticias propias (actos, plenos, fiestas, avisos)
   { nombre: "Ayuntamiento de Cuéllar", urls: ["https://www.aytocuellar.es/feed/"], pueblo: "Cuéllar" },
   { nombre: "Ayuntamiento de Cantalejo", urls: ["https://www.cantalejo.es/home/-/asset_publisher/QGA6lS8CBHs5/rss"], pueblo: "Cantalejo" },
@@ -291,6 +297,8 @@ const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carc
   fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid" };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
+const ORGANIZACIONES = new Set(FEEDS.filter(f => f.tipo === "organizacion").map(f => f.nombre));
+const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre));
 const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
 const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
@@ -302,6 +310,8 @@ const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
+  // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
+  if (soloOrganizacion(n.medios || []) && !c.some(k => ["social", "autoridades", "policial"].includes(k)) && !n.fecha_evento && !CONCRETO(n.municipio)) return true;
   const solo = ks => c.length && c.every(k => ks.includes(k));
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
@@ -338,7 +348,7 @@ const CANON = { segoviaudaz: "SegoviaUdaz", escuellar: "esCuéllar", tribunadese
   eladelantado: "El Adelantado", eladelantadodesegovia: "El Adelantado", elnortedecastilla: "El Norte de Castilla", segoviadirectocom: "Segovia Directo",
   segoviadirecto: "Segovia Directo", cope: "COPE Segovia", copesegovia: "COPE Segovia", cadenaser: "Cadena SER", ondacero: "Onda Cero Segovia",
   diariodecastillayleon: "Diario de Castilla y León", diariodecastillayleonsegovia: "Diario de Castilla y León", europapress: "Europa Press",
-  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE", lagranjavalsain: "La Granja-Valsaín", segoviaaldia: "Segovia al día", diariodecastillayleonsegovia2: "Diario de Castilla y León", ondacerosegovia: "Onda Cero Segovia", acueducto2: "Acueducto2", acueducto2com: "Acueducto2" };
+  elconfidencialdigital: "El Confidencial Digital", confidencialdigital: "El Confidencial Digital", segovia247: "Segovia 24/7", rtvees: "RTVE", ppsegovia: "PP de Segovia", psoesegovia: "PSOE de Segovia", stecyl: "STECyL", lagranjavalsain: "La Granja-Valsaín", segoviaaldia: "Segovia al día", diariodecastillayleonsegovia2: "Diario de Castilla y León", ondacerosegovia: "Onda Cero Segovia", acueducto2: "Acueducto2", acueducto2com: "Acueducto2" };
 const canonMedio = n => CANON[norm(n).replace(/[^a-z0-9]/g, "")] || String(n).replace(/[.\s]+$/, "");
 function juntaMedios(destino, origen) {
   for (const m of origen) {
