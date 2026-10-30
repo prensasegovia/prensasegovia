@@ -35,15 +35,17 @@ const BUSQUEDAS = [
   'Segovia accidente OR incendio OR rescate OR herido',
   'Segovia concentración OR manifestación OR protesta OR huelga',
   'Segovia pleno OR alcalde OR ayuntamiento',
-  'Cuéllar',
+  'Cuéllar Segovia',
   '"El Espinar" OR "San Rafael" Segovia',
   '"La Granja" OR "San Ildefonso" OR Valsaín Segovia',
-  'Cantalejo OR Riaza OR Sepúlveda OR Ayllón OR Boceguillas',
-  'Villacastín OR "Nava de la Asunción" OR "Carbonero el Mayor" OR "Navas de Oro" Segovia',
-  '"Palazuelos de Eresma" OR "La Lastrilla" OR "San Cristóbal de Segovia" OR Torrecaballeros',
-  'Turégano OR Fuentepelayo OR Aguilafuente OR Cantimpalos OR Pedraza Segovia',
-  '"Santa María la Real de Nieva" OR Coca OR Bernardos OR Navalmanzano Segovia',
+  '(Cantalejo OR Riaza OR Sepúlveda OR Ayllón OR Boceguillas) Segovia',
+  '(Villacastín OR "Nava de la Asunción" OR "Carbonero el Mayor" OR "Navas de Oro") Segovia',
+  '("Palazuelos de Eresma" OR "La Lastrilla" OR "San Cristóbal de Segovia" OR Torrecaballeros) Segovia',
+  '(Turégano OR Fuentepelayo OR Aguilafuente OR Cantimpalos OR Pedraza) Segovia',
+  '("Santa María la Real de Nieva" OR Coca OR Bernardos OR Navalmanzano) Segovia',
 ];
+// Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
+const MEDIOS_OK = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
 const gnews = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:3d")}&hl=es&gl=ES&ceid=ES:es`;
 
 /* ------------------------------------------------------------------ */
@@ -63,7 +65,7 @@ const fechaMadrid = d => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: 
 const horaMadrid = d => new Intl.DateTimeFormat("es-ES", { timeZone: TZ, hour: "2-digit", minute: "2-digit", hour12: false }).format(d);
 const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@", textNodeName: "#text", cdataPropName: false });
+const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@", textNodeName: "#text", cdataPropName: false, processEntities: false, htmlEntities: false });
 
 async function descarga(url) {
   const r = await fetch(url, {
@@ -108,13 +110,17 @@ const MUNI_RE = MUNIS.map(([nombre, municipio]) => {
   return { municipio, re: new RegExp(pre + "(" + n + ")(?![\\p{L}])", "u") };
 });
 
+const PERMITIDOS_ANTES = new Set(["Ayuntamiento","Villa","Comunidad","Tierra","Real","Sitio","Plaza","Colegio","Instituto","Club","Diputación","Alcalde","Alcaldesa","Centro","Hoces","Castillo","Feria","Fiestas","Polígono","Calle","Carretera","Puerto","Estación","Mancomunidad","Partido","Juzgado","Cuartel","Puesto","Municipio","Pueblo","Localidad","Noticias","Vecinos","Segovia","Provincia","Hoy","Ayer"]);
 function municipioDe(texto) {
   let t = " " + texto + " ";
   const hallados = [];
   for (const { municipio, re } of MUNI_RE) {
     const m = t.match(re);
     if (m) {
-      if (municipio) hallados.push(municipio);
+      const antes = t.slice(Math.max(0, m.index + m[0].indexOf(m[1]) - 30), m.index + m[0].indexOf(m[1]));
+      const prev = antes.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)[\s-]+$/u);
+      const esApellido = prev && !PERMITIDOS_ANTES.has(prev[1]);
+      if (municipio && !esApellido) hallados.push(municipio);
       t = t.replace(m[1], " ".repeat(m[1].length)); // evita que "Nieva" vuelva a contar dentro de "Santa María la Real de Nieva"
     }
   }
@@ -226,6 +232,7 @@ async function main() {
         let titulo = it.titulo, medio = it.fuente || "Google Noticias";
         if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
         const texto = norm(it.texto) === norm(it.titulo) || norm(it.texto).startsWith(norm(titulo)) ? "" : it.texto;
+        if (!MEDIOS_OK.test(norm(medio))) continue;
         if (!MENCIONA_SEGOVIA.test(norm(titulo + " " + texto))) continue;
         brutos.push({ ...it, titulo, texto, medio, directo: false }); gTotal++;
       }
