@@ -7,7 +7,7 @@ on:
   workflow_dispatch: {}
   push:
     branches: [main]
-    paths-ignore: ["public/datos.json"]
+    paths-ignore: ["public/datos.json", "diag/**", "scripts/descubrir.mjs", ".github/workflows/diagnostico.yml"]
 
 permissions:
   contents: write
