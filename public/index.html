@@ -134,6 +134,9 @@ a{color:inherit}
 .newhead h3{margin:0;font-size:17px;font-weight:700;font-variation-settings:"wdth" 80;display:flex;align-items:center;gap:8px}
 .newhead h3 .cnt{background:var(--new);color:#fff;font-size:12.5px;border-radius:999px;padding:1px 8px}
 .linkbtn{border:0;background:none;color:var(--pine-2);font-weight:600;font-size:14px;cursor:pointer;padding:8px 0;min-height:36px}
+.filtrado{display:flex;align-items:center;gap:10px;background:var(--media-soft);color:var(--ink);border-radius:14px;padding:10px 12px 10px 14px;margin:12px 0 2px;font-size:14px}
+.filtrado b{font-weight:700}
+.filtrado .linkbtn{margin-left:auto;white-space:nowrap}
 .allread{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin:14px 0 4px}
 .allread .ok{width:34px;height:34px;border-radius:50%;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center;flex:none}
 .allread b{display:block}
@@ -490,6 +493,8 @@ function viewNoticias(news){
   if (!shown.length){
     return h + `<div class="empty"><b>Nada con estos filtros</b>Amplía el periodo o pulsa “Todo” para ver el resto de temas.<br><button class="btn ghost" data-act="ampliar" type="button">Ver últimos 7 días</button></div></div>`;
   }
+  const activos = [st.muni ? `solo ${esc(st.muni)}` : "", st.soloAlta ? "solo importantes" : "", st.sinCapital ? "sin capital" : "", st.soloKw ? "solo palabras vigiladas" : "", st.cats.size<CATS.length ? `${st.cats.size} de ${CATS.length} temas` : ""].filter(Boolean);
+  if (activos.length) h += `<div class="filtrado"><span>Filtrando: <b>${activos.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Ver todo</button></div>`;
   if (nuevas.length){
     h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button">Marcar todo como visto</button></div>`;
     h += nuevas.map(n=>card(n)).join("");
@@ -608,7 +613,7 @@ function setView(v){
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
   render(); window.scrollTo({top:0});
 }
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{ if (st.view===t.dataset.view){ window.scrollTo({top:0,behavior:"smooth"}); return; } setView(t.dataset.view); }));
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{ if (st.view===t.dataset.view){ if (st.muni){ st.muni=""; render(); } window.scrollTo({top:0,behavior:"smooth"}); return; } setView(t.dataset.view); }));
 
 $("#app").addEventListener("click", e=>{
   const a = e.target.closest("a"); 
@@ -627,6 +632,7 @@ $("#app").addEventListener("click", e=>{
   else if (b.dataset.muni){ st.muni = b.dataset.muni; st.cats = new Set(CATS.map(c=>c.k)); setView("noticias"); }
   else if (b.dataset.act==="clearMuni"){ st.muni=""; st.cats=new Set(store.get("cats",TRABAJO)); render(true); }
   else if (b.dataset.act==="filtros") openSheet();
+  else if (b.dataset.act==="limpiar"){ st.muni=""; st.soloAlta=false; st.sinCapital=false; st.soloKw=false; st.cats=new Set(CATS.map(c=>c.k)); saveF(); render(); }
   else if (b.dataset.act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); render(true); }
   else if (b.dataset.act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (b.dataset.act==="alta"){ st.soloAlta=!st.soloAlta; saveF(); render(true); }
