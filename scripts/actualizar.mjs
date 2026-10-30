@@ -343,7 +343,7 @@ const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
 // Un titular que trae un cambio (se suspende, hay un detenido, fallece...) no se junta con el anterior: es otra noticia
-const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
+const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|retien|retenid|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
 // Si comparten el enlace de un artículo, son la misma noticia sin duda
 const comparteUrl = (a, b) => (a.medios || []).some(m => (b.medios || []).some(x => x.url === m.url));
 function mismaNoticia(a, b) {
