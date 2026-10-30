@@ -54,6 +54,7 @@ const gnews = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q 
 const norm = s => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const limpia = html => String(html ?? "")
   .replace(/<!\[CDATA\[|\]\]>/g, "")
+  .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;(?=#?\w+;)/g, "&")
   .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
   .replace(/<[^>]+>/g, " ")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
@@ -229,7 +230,7 @@ async function main() {
   for (const q of BUSQUEDAS) {
     try {
       for (const it of items(await descarga(gnews(q)))) {
-        let titulo = it.titulo, medio = it.fuente || "Google Noticias";
+        let titulo = it.titulo, medio = (it.fuente || "Google Noticias").replace(/[.\s]+$/, "");
         if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
         const texto = norm(it.texto) === norm(it.titulo) || norm(it.texto).startsWith(norm(titulo)) ? "" : it.texto;
         if (!MEDIOS_OK.test(norm(medio))) continue;
@@ -250,7 +251,7 @@ async function main() {
     if (tk.size < 2) continue;
     const g = grupos.find(g => parecido(g.tk, tk) >= 0.6);
     if (g) {
-      if (!g.medios.some(m => m.nombre === b.medio) && g.medios.length < 5) g.medios.push({ nombre: b.medio, url: b.url });
+      if (!g.medios.some(m => norm(m.nombre) === norm(b.medio)) && g.medios.length < 5) g.medios.push({ nombre: b.medio, url: b.url });
       if (!g.texto && b.texto) g.texto = b.texto;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
     } else grupos.push({ tk, titulo: b.titulo, texto: b.texto, fecha: b.fecha, medios: [{ nombre: b.medio, url: b.url }] });
@@ -266,6 +267,7 @@ async function main() {
       titulo: g.titulo, resumen, categorias, municipio, relevancia,
       ...eventoDe(g.titulo, resumen, g.fecha),
       medios: g.medios,
+      hora: horaMadrid(g.fecha),
       _dia: fechaMadrid(g.fecha),
     };
   });
@@ -280,7 +282,7 @@ async function main() {
     const tk = tokens(n.titulo);
     const ya = existentes.find(e => e.n.id === n.id || parecido(e.tk, tk) >= 0.6);
     if (ya) { // añade enlaces de otros medios a la que ya estaba
-      for (const m of n.medios) if (!ya.n.medios.some(x => x.nombre === m.nombre) && ya.n.medios.length < 5) ya.n.medios.push(m);
+      for (const m of n.medios) if (!ya.n.medios.some(x => norm(x.nombre) === norm(m.nombre)) && ya.n.medios.length < 5) ya.n.medios.push(m);
       continue;
     }
     const { _dia, ...limpio } = n;

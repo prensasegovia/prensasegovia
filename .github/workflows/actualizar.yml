@@ -2,8 +2,8 @@ name: Actualizar noticias
 
 on:
   schedule:
-    # Dos veces al día (hora UTC): ~7:46 y ~19:46 en invierno, ~8:46 y ~20:46 en verano (hora de Madrid)
-    - cron: "46 6,18 * * *"
+    # Cada 2 horas (minuto 17 para evitar la congestión de las horas en punto)
+    - cron: "17 */2 * * *"
   workflow_dispatch: {}
   push:
     branches: [main]
