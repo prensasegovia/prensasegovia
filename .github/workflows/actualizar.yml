@@ -2,8 +2,8 @@ name: Actualizar noticias
 
 on:
   schedule:
-    # Cada 2 horas (minuto 17 para evitar la congestión de las horas en punto)
-    - cron: "17 */2 * * *"
+    # Cada hora (minuto 17 para evitar la congestión de las horas en punto)
+    - cron: "17 * * * *"
   workflow_dispatch: {}
   push:
     branches: [main]

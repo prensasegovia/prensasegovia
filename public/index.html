@@ -8,10 +8,11 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Prensa SG">
-<meta name="description" content="Noticias de los pueblos de la provincia de Segovia, actualizadas cada 2 horas.">
+<meta name="description" content="Noticias de los pueblos de la provincia de Segovia, actualizadas cada hora.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" href="app-180.png">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <title>Prensa Segovia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,7 +209,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 </head>
 <body>
 <header class="appbar">
-  <div class="brand"><img src="icon-180.png" alt=""><div>Prensa Segovia<small id="syncTxt">Cargando…</small></div></div>
+  <div class="brand"><img src="brand.png" alt=""><div>Prensa Segovia<small id="syncTxt">Cargando…</small></div></div>
   <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
   <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button>
 </header>
@@ -464,7 +465,7 @@ function viewNoticias(news){
       h += it.map(n=>card(n)).join("");
     }
   }
-  return h + `</div><p class="foot">Se actualiza sola cada 2 horas.</p>`;
+  return h + `</div><p class="foot">Se actualiza sola cada hora.</p>`;
 }
 
 function viewAgenda(news){
@@ -497,7 +498,7 @@ function viewPueblos(news){
 }
 
 function viewMedios(){
-  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada 2 horas. Además de estos medios, busca en Google Noticias, que recoge radios, agencias y periódicos regionales.</p>`;
+  let h = `<div class="sect"><h2>Medios</h2></div><p class="note">La app se actualiza sola cada hora. Además de estos medios, busca en Google Noticias, que recoge radios, agencias y periódicos regionales.</p>`;
   if (st.fuentes.length){
     h += `<div class="mgroup"><h3>Última revisión${st.actualizado?`, ${esc(st.actualizado.slice(11,16))}`:""}</h3>` + st.fuentes.map(f=>`<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas`:"Sin RSS propio: llega por Google Noticias"}</span></div></div>`).join("") + `</div>`;
   }
@@ -524,7 +525,7 @@ function render(keepScroll){
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
   const news = allNews();
   if (!news.length && st.view!=="medios"){
-    app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada 2 horas."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
+    app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
   app.innerHTML = st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="medios" ? viewMedios() : viewNoticias(news);
