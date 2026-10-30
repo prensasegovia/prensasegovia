@@ -136,6 +136,8 @@ svg{flex:none}
 .cat svg{width:14px;height:14px}
 .time{color:var(--muted);margin-left:auto;white-space:nowrap;font-weight:500}
 .card{min-width:0}
+.thumb{float:right;width:96px;height:96px;object-fit:cover;border-radius:12px;margin:2px 0 8px 12px;background:var(--line)}
+.cbody::after{content:"";display:block;clear:both}
 .card h4{overflow-wrap:anywhere;margin:0 0 4px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
 .card p{margin:0 0 9px;color:var(--muted);font-size:14.5px;line-height:1.42;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .bottom{display:flex;align-items:flex-end;gap:8px}
@@ -264,6 +266,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .tab{font-size:11px}
   .tab .lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .newhead{flex-wrap:wrap}
+  .thumb{width:68px;height:68px}
   .ag-day{grid-template-columns:minmax(0,1fr);gap:6px}
   .ag-date{position:static;display:flex;gap:8px;align-items:baseline;padding:6px 14px;justify-self:start}
   .ag-date .d{font-size:20px}
@@ -509,8 +512,8 @@ function card(n, opts={}){
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
     <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${esc(cuando(n._dia, n.hora))}</span></div>
     ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
-    <h4>${hl(n.titulo)}</h4>
-    ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
+    <div class="cbody">${safeUrl(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
+    ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     <div class="bottom"><div class="srcs">${src}</div><div class="acts">
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>

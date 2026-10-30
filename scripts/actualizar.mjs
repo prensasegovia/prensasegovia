@@ -130,6 +130,24 @@ async function descarga(url) {
   return txt;
 }
 
+// Foto de la noticia en el RSS: media:content, media:thumbnail, enclosure o la primera <img> del texto
+function imagenDe(it) {
+  const at = v => (Array.isArray(v) ? v[0] : v)?.["@url"];
+  let u = at(it["media:content"]) || at(it["media:thumbnail"]) || (/image/.test((Array.isArray(it.enclosure) ? it.enclosure[0] : it.enclosure)?.["@type"] || "") ? at(it.enclosure) : "");
+  if (!u) {
+    const raw = [it["content:encoded"], it.description, it.content, it.summary].map(v => typeof v === "object" && v ? (v["#text"] ?? "") : (v ?? "")).join(" ")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+    u = (raw.match(/<img[^>]+src=["']([^"']+)["']/i) || [])[1];
+  }
+  return limpiaImg(u);
+}
+function limpiaImg(u) {
+  if (!u || typeof u !== "string") return "";
+  u = u.trim().replace(/&amp;/g, "&").replace(/^\/\//, "https://").replace(/^http:\/\//, "https://");
+  if (!/^https:\/\//.test(u) || /\.(svg|gif)(\?|$)|pixel|logo|avatar|gravatar|emoji|placeholder|1x1/i.test(u)) return "";
+  return u;
+}
+
 function items(xml) {
   const d = parser.parse(xml);
   // Sitemap de noticias de Google (El Día de Segovia no tiene RSS)
@@ -147,6 +165,7 @@ function items(xml) {
     if (Array.isArray(link)) link = (link.find(l => l?.["@rel"] === "alternate") ?? link[0]);
     link = typeof link === "object" ? (link?.["@href"] ?? link?.["#text"]) : link;
     return {
+      img: imagenDe(it),
       titulo: limpia(txt(it.title)),
       url: String(link ?? "").trim(),
       fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()),
@@ -400,11 +419,14 @@ function parecido(a, b) {
 /* ------------------------------------------------------------------ */
 /* Lectura del cuerpo de la noticia                                    */
 /* ------------------------------------------------------------------ */
+const ultimaImg = new Map(); // foto principal (og:image) de cada artículo leído
 async function leeArticulo(url) {
   try {
     const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html" }, signal: AbortSignal.timeout(10000), redirect: "follow" });
     if (!r.ok) return "";
     let html = (await r.text()).slice(0, 600000);
+    const og = (html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)/i) || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image/i) || [])[1];
+    ultimaImg.set(url, limpiaImg(og));
     const art = html.match(/<article[\s\S]*?<\/article>/i); if (art && art[0].length > 1500) html = art[0];
     const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => limpia(m[1])).filter(p => p.length > 60 && !/cookies|suscri|newsletter|todos los derechos|publicidad|comparte|whatsapp|telegram/i.test(p));
     return ps.join(" ").slice(0, 8000);
@@ -492,9 +514,9 @@ async function periodicos(ahora) {
       try {
         for (const it of items(await descarga(url))) {
           if (NO_PERIODICO.test(it.url) || DEPORTE.test(norm(it.titulo)) || BASURA.test(norm(it.titulo))) continue;
-          if (porUrl.has(it.url)) continue;
+          if (porUrl.has(it.url)) { const e = porUrl.get(it.url); if (!e.img && it.img) e.img = it.img; continue; }
           const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
-          porUrl.set(it.url, { medio: p.nombre, titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
+          porUrl.set(it.url, { medio: p.nombre, ...(it.img ? { img: it.img } : {}), titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
           n++;
         }
         ok = true;
@@ -592,8 +614,9 @@ async function main() {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
       if (!g.texto && b.texto) g.texto = b.texto;
       if ((b.cuerpo || "").length > (g.cuerpo || "").length) g.cuerpo = b.cuerpo;
+      if (!g.img && b.img) g.img = b.img;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
 
   // 3b) Leer el cuerpo de las noticias nuevas: lo interesante no siempre está en el titular
@@ -611,6 +634,7 @@ async function main() {
       let cuerpo = g.cuerpo && g.cuerpo.length > 400 ? g.cuerpo : "";
       const url = g.medios.map(m => m.url).find(u => !/news\.google\./.test(u));
       if (!cuerpo && url) { cuerpo = await leeArticulo(url); if (cuerpo) leidas++; }
+      if (!g.img && url && ultimaImg.get(url)) g.img = ultimaImg.get(url);
       const a = analizaCuerpo(g.titulo, cuerpo, g.fecha);
       for (const m of g.medios) cache[m.url] = { ...a, t: Date.now() };
     }
@@ -634,6 +658,7 @@ async function main() {
       id: hash(norm(g.titulo)),
       titulo: g.titulo, resumen, categorias, municipio, relevancia, ...(g.pueblo ? { pueblo_fuente: g.pueblo } : {}),
       ...(a ? { analisis: a } : {}),
+      ...(g.img ? { img: g.img } : {}),
       medios: g.medios,
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
@@ -664,6 +689,7 @@ async function main() {
       if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
       if (!ya.n.resumen && n.resumen) ya.n.resumen = n.resumen;
       if (!ya.n.analisis && n.analisis) ya.n.analisis = n.analisis; // otro medio cuenta más en el cuerpo
+      if (!ya.n.img && n.img) ya.n.img = n.img;
       juntaMedios(ya.n.medios, n.medios);
       continue;
     }
@@ -724,9 +750,10 @@ async function main() {
       const b = recientesH[j]; if (borrar.has(b.n) || !(comparteUrl(a.n, b.n) || mismaNoticia(a, b))) continue;
       if (CONCRETO(b.n.municipio) && !CONCRETO(a.n.municipio)) a.n.municipio = b.n.municipio; // se queda el pueblo concreto
       // Si la otra es de un día posterior (la historia ha avanzado), se queda el titular más reciente
-      if (b.dia > a.dia && b.n.publicado) { for (const k of ["titulo", "resumen", "publicado", "hora", "id", "analisis"]) if (b.n[k]) a.n[k] = b.n[k]; a.n.medios = [...b.n.medios]; }
+      if (b.dia > a.dia && b.n.publicado) { for (const k of ["titulo", "resumen", "publicado", "hora", "id", "analisis", "img"]) if (b.n[k]) a.n[k] = b.n[k]; a.n.medios = [...b.n.medios]; }
       juntaMedios(a.n.medios, b.n.medios);
       if (!a.n.resumen && b.n.resumen) a.n.resumen = b.n.resumen;
+      if (!a.n.img && b.n.img) a.n.img = b.n.img;
       if (b.n.publicado && (!a.n.publicado || b.n.publicado < a.n.publicado)) a.n.publicado = b.n.publicado;
       if (!a.n.fecha_evento && b.n.fecha_evento) { a.n.fecha_evento = b.n.fecha_evento; a.n.hora_evento = b.n.hora_evento; }
       if ((NIVEL[b.n.relevancia] ?? 2) < (NIVEL[a.n.relevancia] ?? 2)) a.n.relevancia = b.n.relevancia;
