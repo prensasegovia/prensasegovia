@@ -254,6 +254,7 @@ function municipioDe(texto) {
   const pueblos = unicos.filter(m => m !== "Segovia");
   if (pueblos.length === 1) return pueblos[0];
   if (pueblos.length > 1) return "Provincia";
+  if (/\b(un|una|el|la|varios|algunos) (pueblos?|localidad(es)?|municipios?) (de (la provincia de )?segovia|segovian[oa]s?)|provincia de segovia/.test(norm(texto))) return "Provincia";
   if (unicos.includes("Segovia")) return "Segovia";
   const n = norm(texto);
   if (/\bprovincia\b|diputacion|pueblos de segovia|toda segovia|comarca|nordeste|tierra de pinares|campina segoviana|sierra de ayllon|alcaldes de la zona/.test(n)) return "Provincia";
@@ -282,7 +283,10 @@ const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
 // IMPORTANTE (rojo): solo lo grave de verdad, y decidido por el titular
 const ALTA = /detenid|detien|detencion|arrestad|agresion|agredid|apunal|acuchill|reyerta|pelea multitudinaria|tiroteo|disparo|violencia de genero|violencia machista|asesin|homicid|mata a|muerte violenta|cadaver|robo con violencia|atraco|okupa|ocupacion ilegal|banda (latina|juvenil|organizada|criminal)|trinitarios|organizacion criminal|delito de odio|operacion (de la guardia civil|antidroga|policial)|desarticula|incautad|narcotrafic|manifestacion|concentracion (de|contra|en|frente|ante|convocada)|se concentrar|se manifestar|convoca(n|do|da)? (una |la )?(concentracion|manifestacion|huelga|protesta|movilizacion|tractorada|marcha)|huelga (indefinida|general)|tractorada|corte de (la )?(carretera|via|autovia)|cortan la|encierro (de|en) protesta|se encierran|desalojo|desahucio|disturbios|altercados|enfrentamiento|cargas policiales|pintadas|\bultras\b|ultraderech|neonazi|esvastica|fallec|muere|murio|muertos?\b|mortal|herido grave|heridos graves|incendio|desaparecid|rescat|evacuad|explosion|derrumbe|visita (del|de la) (ministr|president|rey|reina|vicepresident)|felipe vi|\bel rey\b|mitin|vertido|peces muertos|muerte de peces/;
-// Nunca importante: actos de recuerdo y conmemoración
+// Actos de recuerdo con carga política (franquismo, memoria histórica, terrorismo, partidos): sí son importantes
+const ACTO_RECUERDO = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
+const POLITIZADO = /franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
+// Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
 const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
 const SERVICIO = /operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
@@ -316,7 +320,9 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
-  if (ALTA.test(tt) && !NO_ALTA.test(tt) && categorias.some(c => ["policial", "social", "emergencias", "autoridades", "medioambiente"].includes(c))) relevancia = "alta";
+  const politizado = ACTO_RECUERDO.test(tt) && POLITIZADO.test(t);
+  if (politizado) { categorias = [...new Set(["social", "politica", ...categorias])].slice(0, 3); relevancia = "alta"; }
+  else if (ALTA.test(tt) && !NO_ALTA.test(tt) && categorias.some(c => ["policial", "social", "emergencias", "autoridades", "medioambiente"].includes(c))) relevancia = "alta";
   else if (categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(tt) && !NO_ALTA.test(tt)) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
   // Relleno que no interesa aunque toque un tema útil:
@@ -328,8 +334,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (municipio === "Segovia" && categorias.length && categorias.every(c => c === "politica") && !CONFLICTO_POL.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
-  if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
-  return { categorias, relevancia, porTexto, noAlta: NO_ALTA.test(tt) };
+  if (municipio === "Segovia" && relevancia === "alta" && !politizado) relevancia = "media";
+  return { categorias, relevancia, porTexto: porTexto && !politizado, noAlta: NO_ALTA.test(tt) && !politizado };
 }
 
 /* Fecha de convocatoria: "el próximo sábado", "el 14 de noviembre", "a las 19:00" */
@@ -545,7 +551,7 @@ function conCuerpo(c, a, municipio) {
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
   // El cuerpo solo sube a importante si la frase clave es grave y no es un acto de recuerdo
   if (!c.noAlta && a.extracto && ALTA.test(norm(a.extracto)) && !NO_ALTA.test(norm(a.extracto))) relevancia = "alta";
-  if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
+  if (municipio === "Segovia" && relevancia === "alta" && !politizado) relevancia = "media";
   return { categorias, relevancia, porTexto: false, noAlta: c.noAlta };
 }
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
