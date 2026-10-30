@@ -280,7 +280,10 @@ const DEPORTE = /colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
-const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|\bultras\b|ultraderech|ultraizquierd|grupo ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera|banda|trinitarios|pandilla|organizacion criminal|delito de odio|racis|xenofob|neonazi|nazi|esvastica|falange|anarquis|antisistema|escrache|abuche|enfrentamiento|crispacion|inmigra|migrante|patera|centro de acogida|menores no acompanados|vertido|contaminacion del|muerte de peces|peces muertos|incendio forestal en|alegaciones contra|moratoria/;
+// IMPORTANTE (rojo): solo lo grave de verdad, y decidido por el titular
+const ALTA = /detenid|detien|detencion|arrestad|agresion|agredid|apunal|acuchill|reyerta|pelea multitudinaria|tiroteo|disparo|violencia de genero|violencia machista|asesin|homicid|mata a|muerte violenta|cadaver|robo con violencia|atraco|okupa|ocupacion ilegal|banda (latina|juvenil|organizada|criminal)|trinitarios|organizacion criminal|delito de odio|operacion (de la guardia civil|antidroga|policial)|desarticula|incautad|narcotrafic|manifestacion|concentracion (de|contra|en|frente|ante|convocada)|se concentrar|se manifestar|convoca(n|do|da)? (una |la )?(concentracion|manifestacion|huelga|protesta|movilizacion|tractorada|marcha)|huelga (indefinida|general)|tractorada|corte de (la )?(carretera|via|autovia)|cortan la|encierro (de|en) protesta|se encierran|desalojo|desahucio|disturbios|altercados|enfrentamiento|cargas policiales|pintadas|\bultras\b|ultraderech|neonazi|esvastica|fallec|muere|murio|muertos?\b|mortal|herido grave|heridos graves|incendio|desaparecid|rescat|evacuad|explosion|derrumbe|visita (del|de la) (ministr|president|rey|reina|vicepresident)|felipe vi|\bel rey\b|mitin|vertido|peces muertos|muerte de peces/;
+// Nunca importante: actos de recuerdo y conmemoración
+const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
 const SERVICIO = /operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
 const SERVICIO_MAL = /falta de|sin medico|sin pediatra|deficit|colapso|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
@@ -301,6 +304,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
+  // Actos públicos de recuerdo o repulsa (minutos de silencio, vigilias, concentraciones de repulsa): gente en la calle
+  if (!categorias.includes("social") && /minutos? de silencio|concentracion de (repulsa|condena)|vigilia|homenaje a (las )?victima|ofrenda floral|recuerda a .{0,40}con/.test(tt)) categorias.unshift("social");
   // Servicios públicos con problemas (sanidad, educación, transporte): fuente habitual de protestas
   if (!categorias.includes("social") && SERVICIO.test(tt) && SERVICIO_MAL.test(tt)) categorias.unshift("social");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
@@ -311,8 +316,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
-  if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades", "medioambiente"].includes(c))) relevancia = "alta";
-  else if (categorias.includes("autoridades") && VISITA.test(tt)) relevancia = "alta";
+  if (ALTA.test(tt) && !NO_ALTA.test(tt) && categorias.some(c => ["policial", "social", "emergencias", "autoridades", "medioambiente"].includes(c))) relevancia = "alta";
+  else if (categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(tt) && !NO_ALTA.test(tt)) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
   // Relleno que no interesa aunque toque un tema útil:
   // - estadísticas electorales (votantes en el extranjero, censo, sorteo de mesas)
@@ -324,7 +329,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
-  return { categorias, relevancia, porTexto };
+  return { categorias, relevancia, porTexto, noAlta: NO_ALTA.test(tt) };
 }
 
 /* Fecha de convocatoria: "el próximo sábado", "el 14 de noviembre", "a las 19:00" */
@@ -538,9 +543,10 @@ function conCuerpo(c, a, municipio) {
   if (c.descartar || !a?.cats?.length) return c;
   const categorias = [...new Set([...c.categorias, ...a.cats])].slice(0, 3);
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
-  if (a.extracto && ALTA.test(norm(a.extracto))) relevancia = "alta";
+  // El cuerpo solo sube a importante si la frase clave es grave y no es un acto de recuerdo
+  if (!c.noAlta && a.extracto && ALTA.test(norm(a.extracto)) && !NO_ALTA.test(norm(a.extracto))) relevancia = "alta";
   if (municipio === "Segovia" && relevancia === "alta") relevancia = "media";
-  return { categorias, relevancia, porTexto: false };
+  return { categorias, relevancia, porTexto: false, noAlta: c.noAlta };
 }
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);

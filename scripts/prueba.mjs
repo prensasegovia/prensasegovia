@@ -18,5 +18,5 @@ for (const c of casos) {
   const ok = n.categorias.length > 0 && m !== "General" && !M.relleno(n);
   out.push({ ok, m, cats: n.categorias.join(","), rel: k.relevancia, t: c.t, motivo: !n.categorias.length ? "sin tema" : m === "General" ? "fuera" : M.relleno(n) ? "relleno" : "" });
 }
-for (const o of out.sort((a, b) => b.ok - a.ok)) console.log(o.ok ? "SI " : "no ", (o.motivo || "").padEnd(8), o.m.slice(0, 12).padEnd(12), o.cats.padEnd(28), o.t.slice(0, 95));
+for (const o of out.sort((a, b) => b.ok - a.ok)) console.log(o.ok ? "SI " : "no ", (o.motivo || "").padEnd(8), o.m.slice(0, 12).padEnd(12), o.rel.slice(0,1).toUpperCase(), o.cats.padEnd(28), o.t.slice(0, 95));
 console.log(out.filter(o => o.ok).length, "de", out.length);
