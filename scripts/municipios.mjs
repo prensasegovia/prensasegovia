@@ -7,6 +7,9 @@ export const AMBIGUOS = new Set(["Anaya","Coca","Cubillo","Encinas","Gallegos","
 // Núcleos y nombres populares -> municipio
 export const ALIAS = {
   "La Granja": "Real Sitio de San Ildefonso",
+  "Palazuelos": "Palazuelos de Eresma",
+  "Carbonero": "Carbonero el Mayor",
+  "Navas de Riofrio": "Navas de Riofrío",
   "San Ildefonso": "Real Sitio de San Ildefonso",
   "Valsaín": "Real Sitio de San Ildefonso",
   "Riofrío": "Navas de Riofrío",

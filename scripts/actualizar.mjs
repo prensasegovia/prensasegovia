@@ -57,7 +57,9 @@ const BUSQUEDAS = [
   'Segovia fiestas OR encierros OR "concentración motera" OR festival',
   'Segovia visita ministro OR ministra OR presidente OR consejero OR delegado',
   'Segovia mitin OR "29N" OR campaña OR candidatos',
-  'Segovia pintadas OR vandalismo OR ultras OR "extrema derecha" OR antifascista',
+  'Segovia pintadas OR vandalismo OR ultras OR "extrema derecha" OR "extrema izquierda" OR antifascista OR neonazi',
+  'Segovia banda OR bandas OR pandilla OR "delito de odio" OR racismo',
+  'Segovia polémica OR tensión OR crispación OR abucheos OR "malestar vecinal"',
   'Segovia inmigrantes OR migrantes OR "centro de acogida" OR desalojo OR okupación',
   'Segovia "Subdelegación del Gobierno" OR subdelegado OR "Diputación de Segovia"',
   // Pueblos grandes y cabeceras de comarca
@@ -173,17 +175,17 @@ function municipioDe(texto) {
   if (pueblos.length > 1) return "Provincia";
   if (unicos.includes("Segovia")) return "Segovia";
   const n = norm(texto);
-  if (/\bprovincia\b|diputacion|pueblos de segovia|toda segovia|comarca/.test(n)) return "Provincia";
+  if (/\bprovincia\b|diputacion|pueblos de segovia|toda segovia|comarca|nordeste|tierra de pinares|campina segoviana|sierra de ayllon|alcaldes de la zona/.test(n)) return "Provincia";
   return /segovia/.test(n) ? "Segovia" : "General";
 }
 
 const PATRONES = {
-  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico/,
-  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|okupa|ocupacion ilegal|desalojo|desahucio/,
+  policial: /guardia civil|policia|detenid|detencion|arrest|investigad|robo|robar|hurto|estafa|timo|droga|marihuana|cocaina|juzgado|tribunal|audiencia provincial|condena|juicio|prision|carcel|penitenciari|agresion|agredid|violencia de genero|maltrato|delito|operacion|okupa|atraco|sustraccion|incautad|furtiv|apunal|reyerta|pelea|altercado|seprona|antidroga|narcotrafico|bandas? (latina|juvenil|organizada|criminal|de)|trinitarios|dominican don|pandilla|clan familiar|grupo organizado|organizacion criminal|delito de odio|delitos de odio|racis|xenofob|homofob|amenaza|extorsion|ocupacion|okupad/,
+  social: /concentracion|manifestacion|protesta|huelga|paros|plataforma|movilizacion|moviliza|reivindica|pancarta|sindicat|ccoo|\bugt\b|\bcgt\b|\bcsif\b|\bstecyl\b|asociacion vecinal|vecinos (denuncian|protestan|reclaman|se oponen|se movilizan|exigen)|recogida de firmas|firmas contra|marea blanca|se oponen|cacerolada|encierro|tractorada|asaja|\bupa\b|\bcoag\b|union de campesinos|ecologistas|alegaciones|\bere\b|\berte\b|despidos|cierre de la (empresa|fabrica|planta)|comite de empresa|ultra|extrema (derecha|izquierda)|antifa|fascis|pintadas|vandal|disturbios|radical|yihad|terroris|centro de acogida|refugiados|inmigra|migrante|temporeros|menores no acompanados|\bmenas?\b|patera|en situacion irregular|regularizacion|neonazi|nazi|esvastica|franquis|falange|anarquis|antisistema|abertzale|polemica|crispacion|tension|enfrentamiento|abuche|insultos|boicot|escrache|indignacion|malestar|(vecinos|padres|familias|trabajadores|plantilla|agricultores|ganaderos|usuarios|hosteleros|comerciantes|sanitarios|medicos|enfermer\w+|profesores|docentes|alumnos|estudiantes|afectados|jubilados|pensionistas|taxistas|transportistas)( de [\w ]{2,30})? (critican|denuncian|protestan|reclaman|exigen|se quejan|muestran su malestar|se oponen|rechazan|se movilizan|alertan|estallan|se plantan)|okupa|ocupacion ilegal|desalojo|desahucio/,
   // Temas que solo interesan si hay conflicto (rechazo vecinal, alegaciones, moratorias...)
-  proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|inmigrant|migrantes|temporeros|convenio|colectivo/,
-  autoridades: /visita (del|de la|de los) (ministr|president|rey|reina|delegad|consejer|vicepresident|secretari)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ministerio del interior|director general de la guardia civil/,
-  politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
+  proyecto: /macrogranja|granja porcina|biogas|biometano|fotovoltaic|planta solar|parque solar|placas solares|eolic|aerogenerador|mineria|cantera|vertedero|depuradora|linea de alta tension|agricultores|ganaderos|convenio|colectivo/,
+  autoridades: /visita (del|de la|de los|de) (ministr|president|rey|reina|delegad|subdelegad|consejer|vicepresident|secretari|director general|procurador|senador|diputad|candidat|lider|alcalde)|visitara|ministr[oa] .{0,40}(segovia|visita)|felipe vi|\bel rey\b|la reina|princesa leonor|manueco|presidente de la junta|delegado del gobierno|delegad[oa] de la junta|subdelegad[oa] del gobierno|mitin|campana electoral|acto electoral|acto de campana|cierre de campana|candidat|cabeza de lista|abascal|feijoo|pedro sanchez|yolanda diaz|ione belarra|irene montero|garcia-gallardo|pollan|carriedo|suarez-quinones|oscar puente|ministerio del interior|director general de la guardia civil|secretari[oa] de estado|comitiva|autoridades/,
+  politica: /pleno|alcalde|alcaldesa|concejal|oposicion|cortes de castilla|consejer|subdelegad|delegado del gobierno|procurador|senador|diputad[oa]s? (provincial|nacional)|\bministr|\bpp\b|psoe|\bvox\b|podemos|izquierda unida|por avila|elecciones|electoral|votantes|\bvoto\b|mocion|dimision|dimite|cese|denuncia (el|la) (pp|psoe|vox|grupo)|partido popular|partido socialista|gobierno municipal|equipo de gobierno/,
   emergencias: /accidente|colision|choque|salida de via|atropell|herid|fallec|muere|murio|incendio|fuego|bomberos|rescat|112|desaparecid|inundacion|nevada|temporal|aviso (amarillo|naranja|rojo)|corte de (la )?carretera|trafico|\bdgt\b|\ba-1\b|\ba-6\b|\bap-6\b|\bap-61\b|n-110|n-603|cl-6\d\d|sg-\d|evacuad|derrumbe|explosion/,
   economia: /empresa|empleo|paro registrado|inversion|millones de euros|industria|agricultor|ganader|poligono|comercio|negocio|turismo|hosteleria|subvencion|ayudas|precio/,
   sociedad: /sanidad|centro de salud|consultorio|hospital|colegio|instituto|educacion|vivienda|mayores|residencia|despoblacion|servicios sociales|universidad|medico/,
@@ -196,8 +198,10 @@ const DEPORTE = /gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|b
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
-const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera/;
+const ALTA = /tractorada|corte de (la )?(carretera|via)|encierro|despidos|\bere\b|cierre de la|ultra|extrema|antifa|fascis|pintadas|vandal|disturbios|altercado|radical|yihad|terroris|desalojo|desahucio|ocupacion ilegal|visita (del|de la) (ministr|president|rey|reina)|felipe vi|mitin|recogida de firmas|plataforma|cacerolada|detenid|detien|detencion|arrest|guardia civil (ha )?(detenido|investiga|esclarece|desarticula)|operacion|fallec|muere|murio|mortal|herido grave|incendio|desaparecid|rescat|concentracion|manifestacion|protesta|huelga|movilizacion|okupa|agresion|violencia de genero|reyerta|apunal|evacuad|plataforma .* (contra|rechaza)|corte de (la )?carretera|banda|trinitarios|pandilla|organizacion criminal|delito de odio|racis|xenofob|neonazi|nazi|esvastica|falange|anarquis|antisistema|escrache|abuche|enfrentamiento|crispacion|inmigra|migrante|patera|centro de acogida|menores no acompanados/;
 
+const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
+const CARGO = /ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
 function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Las webs de ayuntamientos se juzgan solo por el titular (sus textos son avisos y bandos)
@@ -207,6 +211,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   const UTILES = ["policial", "social", "politica", "emergencias", "autoridades"];
   if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia/.test(t)) return { categorias: [], relevancia: "baja" };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
+  // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
+  if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   if (!categorias.length) categorias = UTILES.filter(k => PATRONES[k].test(t)).slice(0, 2);
@@ -214,6 +220,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   categorias = categorias.slice(0, 3);
   let relevancia = "baja";
   if (ALTA.test(t) && categorias.some(c => ["policial", "social", "emergencias", "autoridades"].includes(c))) relevancia = "alta";
+  else if (categorias.includes("autoridades") && VISITA.test(tt)) relevancia = "alta";
   else if (categorias.length) relevancia = "media";
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|operacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
