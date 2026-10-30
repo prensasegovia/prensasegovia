@@ -1,0 +1,192 @@
+{
+ "https://castillayleon.ccoo.es/": {
+  "status": 200,
+  "final": "https://castillayleon.ccoo.es/",
+  "feed": false,
+  "enlaces": [
+   "/rss.php"
+  ],
+  "titulo": "CCOO de Castilla y León"
+ },
+ "https://castillayleon.ccoo.es/rss": {
+  "status": 404,
+  "final": "https://castillayleon.ccoo.es/rss",
+  "feed": false,
+  "enlaces": []
+ },
+ "https://segovia.ccoo.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.ugtcyl.es/": {
+  "status": 200,
+  "final": "https://ugtcyl.es/web/",
+  "feed": false,
+  "enlaces": [
+   "https://ugtcyl.es/web/feed",
+   "https://ugtcyl.es/web/comments/feed",
+   "https://ugtcyl.es/web/wp-includes/wlwmanifest.xml"
+  ],
+  "titulo": "UGTCyL o Unión General de Trabajadores de Castilla y León, sindicato"
+ },
+ "https://www.ugtcyl.es/feed/": {
+  "status": 404,
+  "final": "https://www.ugtcyl.es/feed/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "404 Not Found"
+ },
+ "https://ugt-cyl.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.ecologistasenaccion.org/segovia/": {
+  "status": 403,
+  "final": "https://www.ecologistasenaccion.org/segovia/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Just a moment..."
+ },
+ "https://www.ecologistasenaccion.org/feed/": {
+  "status": 403,
+  "final": "https://www.ecologistasenaccion.org/feed/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Just a moment..."
+ },
+ "https://www.ppsegovia.com/": {
+  "status": 200,
+  "final": "https://ppsegovia.com/",
+  "feed": false,
+  "enlaces": [
+   "https://ppsegovia.com/feed/",
+   "https://ppsegovia.com/comments/feed/"
+  ],
+  "titulo": "PP Segovia - Partido Popular de Segovia | Web del PP en la provincia de Segovia"
+ },
+ "https://ppsegovia.es/": {
+  "status": 200,
+  "final": "https://ppsegovia.es/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "ppsegovia.es"
+ },
+ "https://www.psoesegovia.es/": {
+  "status": 200,
+  "final": "https://www.psoesegovia.es/",
+  "feed": false,
+  "enlaces": [
+   "https://www.psoesegovia.es/feed/",
+   "https://www.psoesegovia.es/comments/feed/",
+   "https://www.psoesegovia.es/inicio/feed/"
+  ],
+  "titulo": "PSOE Segovia &#8211; Gobernando con hechos"
+ },
+ "https://psoesegovia.es/feed/": {
+  "status": 200,
+  "final": "https://www.psoesegovia.es/feed/",
+  "feed": true,
+  "items": 10,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>PSOE Segovia</title>\n\t<atom:link href=\"https://www.psoesegovia.es/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://www.psoesegovia.es</link>\n\t<description>Gobernando con hechos</description>\n\t<lastBuildDate>Tue, 27 Oct 2026 12:37:42 +0000</lastBuildDate>\n\t<language>es</language>\n\t<sy:updatePeriod>\n\thourly\t</sy:updatePeriod>\n\t<sy:updateFrequency>\n\t1\t</sy:updateFrequency>\n\t<generator>https://wordpress.org/?v=6.9.11</generator>\n\t<item>\n\t\t<title>El PSOE exige a Mazarías recuperar el proyecto para rehabilitar 313 viviendas en San José</title>\n\t\t<link>https://www.psoesegovia.es/el-psoe-exige-a-mazarias-recuperar-el-proyecto-para-rehabilitar-313-viviendas-en-san-jose/</link>\n\t\t\n\t\t<dc:creator><![CDATA[PSOE MUNICIPAL SEGOVIA]]></dc:creator>\n\t\t<pubDate>Tue, 27 Oct 2026 12:18:22 +0000</pubDate>\n\t\t\t\t<category><![CDATA[+ Noticias]]></category>\n\t\t<category><![CDATA[Noticias]]></category>\n\t\t<category><![CDATA[Noticias Grupo Municipal Segovia capital]]></category>\n\t\t<guid isPermaLink=\"false\">https://www.psoesegovia.es/?p=17789</guid>\n\n\t\t\t\t\t<description><![CDATA[Segovia 27 de octubre de 2026. El grupo",
+  "enlaces": [
+   "https://www.psoesegovia.es/feed/"
+  ],
+  "titulo": "PSOE Segovia"
+ },
+ "https://www.voxespana.es/": {
+  "status": 403,
+  "final": "https://www.voxespana.es/",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Just a moment..."
+ },
+ "https://www.voxespana.es/noticias/rss": {
+  "status": 403,
+  "final": "https://www.voxespana.es/noticias/rss",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Just a moment..."
+ },
+ "https://iusegovia.es/": {
+  "status": 200,
+  "final": "https://iusegovia.es/sg/",
+  "feed": false,
+  "enlaces": [
+   "https://iusegovia.es/sg/feed/",
+   "https://iusegovia.es/sg/comments/feed/"
+  ],
+  "titulo": "Izquierda Unida Segovia"
+ },
+ "https://www.iusegovia.org/": {
+  "err": "fetch failed"
+ },
+ "https://podemossegovia.info/": {
+  "err": "fetch failed"
+ },
+ "https://segoviaenmarcha.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.asajasegovia.com/": {
+  "err": "fetch failed"
+ },
+ "https://www.asajasegovia.com/feed/": {
+  "err": "fetch failed"
+ },
+ "https://ucsegovia.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.uniondecampesinos.com/": {
+  "status": 200,
+  "final": "https://www.uniondecampesinos.com/",
+  "feed": false,
+  "enlaces": [
+   "https://www.uniondecampesinos.com/feed/",
+   "https://www.uniondecampesinos.com/comments/feed/"
+  ],
+  "titulo": "Organización Profesional Agraria"
+ },
+ "https://www.ccoo.es/rss": {
+  "status": 404,
+  "final": "https://www.ccoo.es/rss",
+  "feed": false,
+  "enlaces": []
+ },
+ "https://csif.es/es/rss": {
+  "status": 404,
+  "final": "https://www.csif.es/es/rss",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "An Error Occurred: Not Found"
+ },
+ "https://www.stecyl.net/feed/": {
+  "status": 200,
+  "final": "https://stecyl.net/feed/",
+  "feed": true,
+  "items": 31,
+  "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>STECyL-i</title>\n\t<atom:link href=\"https://stecyl.net/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://stecyl.net/</link>\n\t<description>Sindicatos Trabajadores Enseñanza</description>\n\t<lastBuildDate>Fri, 30 Oct 2026 14:54:31 +0000</lastBuildDate>\n\t<language>es</language>\n\t<sy:updatePeriod>\n\thourly\t</sy:updatePeriod>\n\t<sy:updateFrequency>\n\t1\t</sy:updateFrequency>\n\t<generator>https://wordpress.org/?v=7.1.4</generator>\n\n<image>\n\t<url>https://stecyl.net/wp-content/uploads/2024/06/cropped-cropped-logo-mes-orgullo-32x32.jpg</url>\n\t<title>STECyL-i</title>\n\t<link>https://stecyl.net/</link>\n\t<width>32</width>\n\t<height>32</height>\n</image> \n\t<item>\n\t\t<title>Asamblea informativa sobre la Huelga General del 11 de noviembre. Inscríbete, infórmate y participa</title>\n\t\t<link>https://stecyl.net/asamblea-informativa-sobre-la-huelga-general-del-11-de-noviembre-inscribete-informate-y-participa/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=asamblea-informativa-sobre-la-huelga-general-del-11-de-noviembre-inscribete-informate-y-participa</link>\n\t\t\n\t\t<dc:creator><![CDATA[webmaster]]></dc:creator>\n",
+  "enlaces": [
+   "https://stecyl.net/feed/"
+  ],
+  "titulo": "STECyL-i"
+ },
+ "https://www.cgt.org.es/feed/": {
+  "err": "fetch failed"
+ },
+ "https://www.ugt.es/rss.xml": {
+  "status": 200,
+  "final": "https://www.ugt.es/rss.xml",
+  "feed": true,
+  "items": 10,
+  "muestra": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<rss xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\" xml:base=\"https://www.ugt.es/\">\n  <channel>\n    <title>UGT - Sindicato Unión General de Trabajadoras y Trabajadores de España</title>\n    <link>https://www.ugt.es/</link>\n    <description/>\n    <language>es</language>\n    \n    <item>\n  <title>UGT clausura las jornadas ‘Retos y desafíos en materia de Seguridad Social’ para abordar los nuevos retos de la negociación colectiva</title>\n  <link>https://www.ugt.es/ugt-clausura-las-jornadas-retos-y-desafios-en-materia-de-seguridad-social-para-abordar-los-nuevos</link>\n  <description>\n&lt;span&gt;UGT clausura las jornadas ‘Retos y desafíos en materia de Seguridad Social’ para abordar los nuevos retos de la negociación colectiva&lt;/span&gt;\n\n            &lt;div&gt;La secretaria ejecutiva de UGT, Cristina Estévez, ha cerrado el acto ofreciendo las conclusiones y propuestas del sindicato en el Diálogo Social en materia de Seguridad Social y pensiones&lt;/div&gt;\n      \n&lt;span&gt;&lt;span&gt;dvicente&lt;/span&gt;&lt;/span&gt;\n\n&lt;span&gt;&lt;time datetime=\"2026-03-11T18:54:06+01:00\" title=\"Miércoles, Marzo 11, 2026 - 18:54\"&gt;Mié, 11/03/2026 - 18:54&lt;/time&gt;\n&lt;/span&gt;\n\n      &lt;div&gt;\n              &lt;div&gt;&lt;a href=\"https://www.ugt.es/seguridad-social-0\" hreflang=\"es\"&gt;Seguridad Social&lt;/a&gt;&lt;/div&gt;\n          &lt;/div&gt;\n  \n      &lt;div&gt;\n              &lt;div&gt;  &lt;img loading=\"lazy\" src=\"https://www",
+  "enlaces": [],
+  "titulo": "UGT - Sindicato Unión General de Trabajadoras y Trabajadores de España"
+ },
+ "https://www.subdelegaciongobierno.es/": {
+  "err": "fetch failed"
+ },
+ "https://www.dipsegovia.es/web/guest/noticias": {
+  "status": 404,
+  "final": "https://www.dipsegovia.es/web/guest/noticias",
+  "feed": false,
+  "enlaces": [],
+  "titulo": "Home - dipsegovia.es"
+ }
+}
