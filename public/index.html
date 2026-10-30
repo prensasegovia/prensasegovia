@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E4A3F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Prensa SG">
+<meta name="description" content="Noticias de los pueblos de la provincia de Segovia, actualizadas dos veces al día.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Prensa Segovia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#1E4A3F; --pine-2:#2C6656; --pine-soft:#DCE8E3;
+  --stone:#ECEEEA; --surface:#FFFFFF; --ink:#16201D; --muted:#5E6A66; --line:#D7DCD8;
+  --alta:#C2362B; --alta-soft:#FBE7E4; --media:#C98A12; --media-soft:#FBF1DC; --baja:#9AA4A0;
+  --new:#2F6FEB;
+  --r-lg:20px; --r-md:14px; --r-sm:10px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --stone:#0F1513; --surface:#18201D; --ink:#E8EDEA; --muted:#93A09B; --line:#2A3531;
+    --pine-soft:#1C2E28; --alta-soft:#3A1E1B; --media-soft:#352A14; --pine-2:#7FC2AE; }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--stone);color:var(--ink)}
+body{font:400 15.5px/1.45 "Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;padding-bottom:calc(76px + var(--safe-b))}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2.5px solid var(--new);outline-offset:2px;border-radius:6px}
+.cond{font-variation-settings:"wdth" 68}
+.shell{max-width:720px;margin:0 auto}
+
+/* Barra superior */
+.appbar{position:sticky;top:0;z-index:20;background:var(--pine);color:#fff;padding:calc(10px + var(--safe-t)) max(18px, calc((100vw - 720px)/2 + 18px)) 10px;display:flex;align-items:center;gap:12px}
+.appbar .brand{white-space:nowrap;font-weight:800;font-size:19px;font-variation-settings:"wdth" 75;letter-spacing:.01em;flex:1;display:flex;align-items:center;gap:9px}
+.appbar .brand svg{flex:none}
+.sync{display:flex;align-items:center;gap:6px;font-size:12.5px;opacity:.9;background:rgba(255,255,255,.12);padding:5px 10px;border-radius:999px;border:0;cursor:pointer;color:#fff}
+.sync .dot{width:7px;height:7px;border-radius:50%;background:#7EE0B8}
+.sync.stale .dot{background:#F2C14E}
+
+/* Cabecera del día */
+.hero{background:var(--pine);color:#fff;padding:6px 18px 22px;border-radius:0 0 28px 28px}
+.hero .day{font-weight:800;font-size:44px;line-height:.95;font-variation-settings:"wdth" 62;margin:2px 0 10px}
+.hero .sum{font-size:15px;color:#D5E6DF;max-width:46ch}
+.hero .sum b{color:#fff;font-weight:700}
+.stats{display:flex;gap:8px;margin-top:14px}
+.stat{flex:1;background:rgba(255,255,255,.1);border-radius:var(--r-md);padding:10px 12px;border:0;color:#fff;text-align:left;cursor:pointer}
+.stat .n{font-weight:800;font-size:26px;line-height:1;font-variation-settings:"wdth" 70}
+.stat .l{font-size:12.5px;color:#CFE3DA;margin-top:3px}
+.stat.alta .n{color:#FFB4AB}
+.stat[aria-pressed="true"]{background:#fff;color:var(--pine)}
+.stat[aria-pressed="true"] .l{color:var(--pine)}
+
+/* Urgente */
+.sect{padding:20px 18px 6px;display:flex;align-items:baseline;justify-content:space-between}
+.sect h2{margin:0;font-size:22px;font-weight:800;font-variation-settings:"wdth" 72}
+.sect .aux{font-size:13px;color:var(--muted)}
+.rail{display:flex;gap:10px;overflow-x:auto;padding:4px 18px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.urg{flex:0 0 78%;max-width:320px;scroll-snap-align:start;background:var(--alta);color:#fff;border-radius:var(--r-lg);padding:14px 15px 13px;display:flex;flex-direction:column;gap:8px;text-decoration:none;min-height:150px}
+.urg .where{font-size:12.5px;font-weight:600;opacity:.9;display:flex;gap:6px;align-items:center}
+.urg h3{margin:0;font-size:18px;line-height:1.2;font-weight:700;font-variation-settings:"wdth" 82}
+.urg .when{margin-top:auto;font-size:12.5px;background:rgba(255,255,255,.18);align-self:flex-start;padding:3px 9px;border-radius:999px}
+
+/* Chips de categoría */
+.chips{position:sticky;top:calc(52px + var(--safe-t));z-index:15;background:var(--stone);display:flex;gap:8px;overflow-x:auto;padding:10px 18px;scrollbar-width:none;border-bottom:1px solid transparent}
+.chips.stuck{border-bottom-color:var(--line)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px;font-weight:500;white-space:nowrap}
+.chip svg{width:16px;height:16px}
+.chip .c{font-size:12px;color:var(--muted);font-weight:600}
+.chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+.chip[aria-pressed="true"] .c{color:#BFE0D3}
+.chip.filters{border-style:dashed}
+.chip .badge{background:var(--new);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:0 6px;line-height:17px}
+
+/* Feed */
+.feed{padding:0 14px}
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;padding:18px 4px 8px}
+.dayhead h3{margin:0;font-size:17px;font-weight:700;font-variation-settings:"wdth" 80}
+.dayhead span{font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border-radius:var(--r-lg);padding:14px 15px 13px 18px;margin-bottom:10px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--baja)}
+.card.alta::before{background:var(--alta)}
+.card.media::before{background:var(--media)}
+.card .top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--pine-soft);color:var(--pine-2);display:inline-flex;align-items:center;gap:4px}
+.pill.lvl-alta{background:var(--alta-soft);color:var(--alta)}
+.pill.lvl-media{background:var(--media-soft);color:var(--media)}
+.pill.ev{background:var(--alta-soft);color:var(--alta)}
+.pill.nuevo{background:var(--new);color:#fff}
+.cat{font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}
+.cat svg{width:14px;height:14px}
+.card h4{margin:0 0 5px;font-size:17px;line-height:1.28;font-weight:700;font-variation-settings:"wdth" 90}
+.card p{margin:0 0 10px;color:var(--muted);font-size:14.5px}
+.card.collapsed p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.srcs{display:flex;gap:6px;flex-wrap:wrap}
+.src{font-size:13px;font-weight:600;text-decoration:none;color:var(--pine-2);border:1.5px solid var(--line);padding:4px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center}
+.src svg{width:12px;height:12px}
+.src .pay{font-weight:400;color:var(--muted)}
+mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
+
+/* Agenda */
+.ag-day{display:grid;grid-template-columns:58px 1fr;gap:10px;margin:14px 0}
+.ag-date{background:var(--pine);color:#fff;border-radius:var(--r-md);text-align:center;padding:8px 0;align-self:start;position:sticky;top:calc(110px + var(--safe-t))}
+.ag-date .d{font-size:26px;font-weight:800;line-height:1;font-variation-settings:"wdth" 65}
+.ag-date .m{font-size:12px;text-transform:capitalize;opacity:.85}
+.ag-date.today{background:var(--alta)}
+
+/* Pueblos */
+.search{margin:14px 18px 6px;position:relative}
+.search input{width:100%;font:inherit;font-size:16px;padding:12px 14px 12px 42px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.towns{padding:4px 14px}
+.town{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.town .name{flex:1;font-weight:600}
+.town .cnt{font-weight:800;font-variation-settings:"wdth" 70;font-size:20px;color:var(--pine-2)}
+.town .al{font-size:12px;font-weight:700;color:#fff;background:var(--alta);border-radius:999px;padding:1px 8px}
+
+/* Medios */
+.mgroup{padding:6px 14px}
+.mgroup h3{font-size:16px;margin:16px 4px 8px;font-weight:700;font-variation-settings:"wdth" 80}
+.medio{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:11px 14px;margin-bottom:8px}
+.medio b{font-weight:600}
+.medio span{display:block;font-size:13.5px;color:var(--muted)}
+
+/* Vacíos */
+.empty{text-align:center;color:var(--muted);padding:48px 28px}
+.empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px;font-variation-settings:"wdth" 80}
+.empty button{margin-top:14px}
+.btn{border:0;background:var(--pine);color:#fff;font-weight:600;padding:11px 18px;border-radius:999px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--pine-2);border:1.5px solid var(--line)}
+.skel{height:110px;border-radius:var(--r-lg);background:linear-gradient(90deg,var(--surface),var(--line),var(--surface));background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:10px}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* Barra inferior */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + var(--safe-b))}
+.tabbar .in{max-width:720px;margin:0 auto;display:flex}
+.tab{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;position:relative}
+.tab svg{width:24px;height:24px}
+.tab[aria-selected="true"]{color:var(--pine-2)}
+.tab[aria-selected="true"] .ic{background:var(--pine-soft);border-radius:999px}
+.tab .ic{padding:3px 16px;display:flex}
+.tab .b{position:absolute;top:2px;left:calc(50% + 10px);background:var(--alta);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;padding:0 5px;line-height:16px}
+
+/* Hoja de filtros */
+.scrim{position:fixed;inset:0;background:rgba(10,20,16,.45);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.sheet{visibility:hidden;position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-radius:24px 24px 0 0;padding:10px 20px calc(20px + var(--safe-b));transform:translateY(105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);max-width:720px;margin:0 auto;max-height:88vh;overflow:auto}
+.open .scrim{opacity:1;pointer-events:auto}
+.open .sheet{transform:none;visibility:visible}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+.sheet h2{margin:0 0 4px;font-size:22px;font-variation-settings:"wdth" 72;font-weight:800}
+.row{padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-of-type{border-bottom:0}
+.row .t{font-weight:600;margin-bottom:8px}
+.row .h{font-size:13px;color:var(--muted);margin-top:4px}
+.seg{display:flex;background:var(--stone);border-radius:12px;padding:3px}
+.seg button{flex:1;border:0;background:none;padding:8px 4px;border-radius:9px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
+.sw input{appearance:none;width:48px;height:28px;border-radius:999px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .15s}
+.sw input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.sw input:checked{background:var(--pine-2)}
+.sw input:checked::after{transform:translateX(20px)}
+.kwin{display:flex;gap:8px}
+.kwin input{flex:1;min-width:0;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--stone);color:var(--ink)}
+.kws{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.kw{background:#FFE58A;color:#1b1b1b;border-radius:999px;padding:4px 6px 4px 11px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.kw button{border:0;background:rgba(0,0,0,.08);border-radius:50%;width:20px;height:20px;cursor:pointer;line-height:1}
+
+/* Aviso */
+.toast{position:fixed;left:50%;bottom:calc(86px + var(--safe-b));transform:translate(-50%,20px);opacity:0;z-index:35;background:var(--ink);color:var(--stone);padding:10px 10px 10px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:14px;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast .btn{padding:7px 14px;font-size:13px;background:var(--new)}
+
+.foot{padding:20px 18px 8px;font-size:12.5px;color:var(--muted);text-align:center}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
+@media (min-width:760px){ .hero{border-radius:0 0 32px 32px} .urg{flex-basis:300px} }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="7" fill="#fff" opacity=".15"/><path d="M7 9h12M7 13h12M7 17h7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    Prensa Segovia
+  </div>
+  <button class="sync" id="sync" type="button" aria-label="Estado de actualización"><span class="dot"></span><span id="syncTxt">Cargando…</span></button>
+</header>
+
+<main class="shell" id="app"></main>
+
+<nav class="tabbar" aria-label="Secciones">
+  <div class="in" role="tablist">
+    <button class="tab" role="tab" data-view="noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span>Noticias</button>
+    <button class="tab" role="tab" data-view="agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>Agenda<span class="b" id="agBadge" hidden></span></button>
+    <button class="tab" role="tab" data-view="pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>Pueblos</button>
+    <button class="tab" role="tab" data-view="medios" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a8 8 0 0 1 8 8M4 5a14 14 0 0 1 14 14"/><circle cx="5" cy="18" r="1.5"/></svg></span>Medios</button>
+  </div>
+</nav>
+
+<div id="sheetWrap">
+  <div class="scrim" id="scrim"></div>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab"></div>
+    <h2 id="sheetTitle">Filtros</h2>
+    <div class="row">
+      <div class="t">Periodo</div>
+      <div class="seg" id="segRango">
+        <button data-v="2">Hoy y ayer</button><button data-v="7">7 días</button><button data-v="30">30 días</button>
+      </div>
+    </div>
+    <div class="row">
+      <label class="sw"><span><span class="t" style="display:block;margin:0">Ocultar Segovia capital</span><span class="h">Muestra solo los pueblos. Lo que afecta a toda la provincia se sigue viendo.</span></span><input type="checkbox" id="fCap"></label>
+    </div>
+    <div class="row">
+      <label class="sw"><span class="t" style="margin:0">Solo relevancia alta</span><input type="checkbox" id="fAlta"></label>
+    </div>
+    <div class="row">
+      <div class="t">Palabras vigiladas</div>
+      <div class="kwin"><input id="kwIn" placeholder="Guardia Civil, Turégano, incendio…" enterkeyhint="done"><button class="btn" id="kwAdd" type="button">Añadir</button></div>
+      <div class="kws" id="kws"></div>
+      <label class="sw" style="margin-top:12px"><span class="h" style="margin:0;font-size:14px;color:var(--ink)">Mostrar solo noticias con estas palabras</span><input type="checkbox" id="fKw"></label>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn ghost" id="fReset" type="button" style="flex:1">Restablecer</button>
+      <button class="btn" id="fClose" type="button" style="flex:2">Ver noticias</button>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status"><span>Hay noticias nuevas</span><button class="btn" id="toastBtn" type="button">Ver</button></div>
+
+<script>
+/* ---------- Configuración ---------- */
+const CATS = [
+  {k:"policial", n:"Policial", d:"M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"},
+  {k:"social", n:"Movimientos sociales", d:"M7 21v-4l-3-3 2-6h3l2 4h4M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21v-6l2-2-1-4h-4"},
+  {k:"politica", n:"Política", d:"M3 21h18M5 21V10M19 21V10M9 21v-7M15 21v-7M3 10l9-6 9 6z"},
+  {k:"emergencias", n:"Tráfico y emergencias", d:"M12 3l9 16H3zM12 10v4M12 17h.01"},
+  {k:"economia", n:"Economía", d:"M4 19h16M7 15l4-4 3 3 5-6"},
+  {k:"sociedad", n:"Sociedad", d:"M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0M17 11a2.5 2.5 0 1 0 0-5M21 20a5 5 0 0 0-4-5"},
+  {k:"cultura", n:"Cultura y fiestas", d:"M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"},
+  {k:"deportes", n:"Deportes", d:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7l4 3-1.5 5h-5L8 10z"}
+];
+const TRABAJO = ["policial","social","politica","emergencias"];
+const CAT = Object.fromEntries(CATS.map(c=>[c.k,c]));
+const ICON = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+const EXT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>`;
+const REFRESH_MS = 10*60*1000;
+
+const MEDIOS = [
+  {g:"Comarcales y locales", l:[
+    ["esCuéllar","https://escuellar.es","Cuéllar y Tierra de Pinares"],
+    ["El Nordeste de Segovia","https://www.elnordestedesegovia.es","Riaza, Ayllón, Sepúlveda, Boceguillas y el nordeste"],
+    ["El Espinar Información","https://www.elespinar.org","El Espinar, San Rafael, La Estación y Los Ángeles"]]},
+  {g:"Digitales de la provincia", l:[
+    ["SegoviaUdaz","https://segoviaudaz.es","Sección de pueblos, sucesos y convocatorias"],
+    ["Tribuna de Segovia","https://www.tribunasegovia.com",""],
+    ["Segovia al día","https://segoviaaldia.es","Noticias por municipio"],
+    ["Diario de Castilla y León – Segovia","https://www.diariodecastillayleon.es/segovia/","Páginas por pueblo"],
+    ["El Español – Castilla y León","https://www.elespanol.com/castilla-y-leon/",""]]},
+  {g:"Prensa provincial", l:[
+    ["El Adelantado de Segovia","https://www.eladelantado.com","Sección Provincia"],
+    ["El Norte de Castilla – Segovia","https://www.elnortedecastilla.es/segovia/","Parte del contenido es de pago"],
+    ["El Día de Segovia","https://www.eldiasegovia.es",""]]},
+  {g:"Radio y televisión", l:[
+    ["COPE Segovia","https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias",""],
+    ["Cadena SER – Radio Segovia y Radio Cuéllar","https://cadenaser.com/",""],
+    ["Onda Cero Segovia","https://www.ondacero.es/emisoras/castilla-y-leon/segovia/","98.3 FM Segovia, 103.1 FM Cuéllar"],
+    ["La 8 Segovia (CyLTV)","https://www.rtvcyl.es","Informativo provincial"]]},
+  {g:"Agencias y fuentes oficiales", l:[
+    ["Agencia ICAL","https://www.agenciaical.es",""],
+    ["Europa Press Castilla y León","https://www.europapress.es/castilla-y-leon/",""],
+    ["Subdelegación del Gobierno en Segovia","https://mpt.gob.es/delegaciones_gobierno/delegaciones/castillaleon/sub_segovia.html",""],
+    ["Diputación de Segovia","https://www.dipsegovia.es",""]]}
+];
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
+const safeUrl = u => /^https?:\/\//i.test(u||"") ? u : null;
+const iso = d => { const x = new Date(d); x.setMinutes(x.getMinutes()-x.getTimezoneOffset()); return x.toISOString().slice(0,10); };
+const today = () => iso(new Date());
+const addDays = (s,n) => { const d = new Date(s+"T12:00:00"); d.setDate(d.getDate()+n); return iso(d); };
+const D = s => new Date(s+"T12:00:00");
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const fmtLong = s => cap(D(s).toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"}));
+const fmtDayName = s => { const t=today(); if(s===t) return "Hoy"; if(s===addDays(t,-1)) return "Ayer"; if(s===addDays(t,1)) return "Mañana"; return fmtLong(s); };
+const store = {
+  get(k,d){ try{ const v = localStorage.getItem("psg:"+k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k,v){ try{ localStorage.setItem("psg:"+k, JSON.stringify(v)); }catch(e){} }
+};
+
+/* ---------- Estado ---------- */
+const st = {
+  view:"noticias",
+  cats: new Set(store.get("cats", TRABAJO)),
+  rango: store.get("rango","2"),
+  sinCapital: store.get("sinCapital", true),
+  soloAlta: store.get("soloAlta", false),
+  kws: store.get("kws", ["Guardia Civil"]),
+  soloKw: store.get("soloKw", false),
+  muni: "", townQ: "",
+  dias: [], actualizado: "", loaded:false, error:false,
+  seen: new Set(store.get("seen", [])), firstVisit: !store.get("seen", null),
+  pending: null
+};
+const saveF = () => { store.set("cats",[...st.cats]); store.set("rango",st.rango); store.set("sinCapital",st.sinCapital); store.set("soloAlta",st.soloAlta); store.set("kws",st.kws); store.set("soloKw",st.soloKw); };
+
+/* ---------- Datos ---------- */
+function allNews(){
+  const map = new Map();
+  for (const d of st.dias){ // dias en orden desc: la versión más reciente gana
+    for (const n of (d.noticias||[])){
+      const key = n.id || norm(n.titulo);
+      if (map.has(key)) continue;
+      map.set(key, {...n, _key:key, _dia:d.fecha, _cats:(Array.isArray(n.categorias)&&n.categorias.length?n.categorias:["sociedad"]).filter(c=>CAT[c])});
+    }
+  }
+  return [...map.values()];
+}
+const isCapital = n => norm(n.municipio)==="segovia";
+const kwHits = n => { if(!st.kws.length) return 0; const t = norm([n.titulo,n.resumen,n.municipio].join(" ")); return st.kws.filter(k=>t.includes(norm(k))).length; };
+function baseFilter(n, ignoreRange){
+  if (!ignoreRange && n._dia < addDays(today(), -(parseInt(st.rango,10)-1))) return false;
+  if (st.sinCapital && isCapital(n)) return false;
+  if (st.soloAlta && n.relevancia!=="alta") return false;
+  if (st.soloKw && !kwHits(n)) return false;
+  if (st.muni && n.municipio!==st.muni) return false;
+  return true;
+}
+const catFilter = n => n._cats.some(c=>st.cats.has(c));
+const rank = n => (n.relevancia==="alta"?0:n.relevancia==="media"?1:2) - (kwHits(n)?0.5:0);
+const isNew = n => !st.firstVisit && !st.seen.has(n._key);
+
+function hl(text){
+  let h = esc(text);
+  for (const w of st.kws){ if(!w) continue;
+    const re = new RegExp("("+esc(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+    h = h.replace(re,"<mark>$1</mark>"); }
+  return h;
+}
+
+/* ---------- Componentes ---------- */
+function card(n, opts={}){
+  const lvl = n.relevancia==="alta"?"alta":n.relevancia==="media"?"media":"baja";
+  const cats = n._cats.slice(0,2).map(c=>`<span class="cat">${ICON(CAT[c].d)}${esc(CAT[c].n)}</span>`).join("");
+  const ev = n.fecha_evento ? `<span class="pill ev">${esc(fmtDayName(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
+  const src = (n.medios||[]).map(m=>{ const u=safeUrl(m.url); return u?`<a class="src" href="${esc(u)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${EXT}</a>`:""; }).join("");
+  return `<article class="card ${lvl} ${n.resumen && n.resumen.length>140?"collapsed":""}" data-k="${esc(n._key)}">
+    <div class="top">
+      ${isNew(n)?'<span class="pill nuevo">Nuevo</span>':""}
+      <span class="pill ${lvl!=="baja"?"lvl-"+lvl:""}">${esc(n.municipio||"Provincia")}</span>
+      ${opts.noEv?"":ev}
+      ${cats}
+    </div>
+    <h4>${hl(n.titulo)}</h4>
+    ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}
+    <div class="srcs">${src}</div>
+  </article>`;
+}
+
+function chipsBar(pool){
+  const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
+  const isTrabajo = st.cats.size===TRABAJO.length && TRABAJO.every(c=>st.cats.has(c));
+  const isTodo = st.cats.size===CATS.length;
+  const nf = (st.soloAlta?1:0)+(st.soloKw?1:0)+(!st.sinCapital?1:0)+(st.rango!=="2"?1:0);
+  let h = `<button class="chip filters" data-act="filtros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${nf?`<span class="badge">${nf}</span>`:""}</button>`;
+  h += `<button class="chip" data-preset="trabajo" aria-pressed="${isTrabajo}">De interés</button>`;
+  h += `<button class="chip" data-preset="todo" aria-pressed="${isTodo}">Todo</button>`;
+  if (st.muni) h += `<button class="chip" data-act="clearMuni" aria-pressed="true">${esc(st.muni)} ✕</button>`;
+  for (const c of CATS) h += `<button class="chip" data-cat="${c.k}" aria-pressed="${st.cats.has(c.k)&&!isTodo}">${ICON(c.d)}${esc(c.n)}<span class="c">${counts[c.k]||0}</span></button>`;
+  return `<div class="chips" id="chips">${h}</div>`;
+}
+
+function heroBlock(news){
+  const t = today();
+  const pool = news.filter(n=>baseFilter(n) && catFilter(n));
+  const alta = pool.filter(n=>n.relevancia==="alta");
+  const pueblos = new Set(pool.filter(n=>!isCapital(n) && norm(n.municipio)!=="provincia").map(n=>n.municipio));
+  const ag = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7));
+  const lastDay = st.dias[0] ? st.dias[0].fecha : t;
+  let sum;
+  if (!pool.length) sum = "Sin noticias de interés con los filtros actuales.";
+  else sum = `<b>${pool.length} ${pool.length===1?"noticia":"noticias"} de interés</b>${pueblos.size?` en ${pueblos.size} ${pueblos.size===1?"pueblo":"pueblos"}`:""}${alta.length?`, <b>${alta.length} ${alta.length===1?"importante":"importantes"}</b>`:""}.`;
+  return `<section class="hero">
+    <div class="day">${esc(fmtLong(t))}</div>
+    <div class="sum">${sum}</div>
+    <div class="stats">
+      <button class="stat alta" data-act="alta" aria-pressed="${st.soloAlta}"><div class="n">${alta.length}</div><div class="l">Importantes</div></button>
+      <button class="stat" data-act="agenda"><div class="n">${ag.length}</div><div class="l">Convocatorias 7 días</div></button>
+      <button class="stat" data-act="pueblos"><div class="n">${pueblos.size}</div><div class="l">Pueblos</div></button>
+    </div>
+  </section>`;
+}
+
+/* ---------- Vistas ---------- */
+function viewNoticias(news){
+  const pool = news.filter(n=>baseFilter(n));
+  const shown = pool.filter(catFilter);
+  const urg = shown.filter(n=>n.relevancia==="alta").sort((a,b)=>b._dia.localeCompare(a._dia)).slice(0,8);
+  let h = heroBlock(news);
+  if (urg.length && !st.soloAlta){
+    h += `<div class="sect"><h2>Lo importante</h2><span class="aux">Desliza</span></div><div class="rail">` +
+      urg.map(n=>{ const u = safeUrl((n.medios||[])[0]?.url);
+        return `<a class="urg" ${u?`href="${esc(u)}" target="_blank" rel="noopener"`:""}>
+          <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d).replace('<svg','<svg width="14" height="14"')}${esc(n.municipio||"Provincia")}</span>
+          <h3>${esc(n.titulo)}</h3>
+          <span class="when">${n.fecha_evento?esc(fmtDayName(n.fecha_evento))+(n.hora_evento?", "+esc(n.hora_evento):""):esc(fmtDayName(n._dia))}</span></a>`; }).join("") + `</div>`;
+  }
+  h += chipsBar(pool);
+  h += `<div class="feed">`;
+  if (!shown.length){
+    h += `<div class="empty"><b>Nada con estos filtros</b>Amplía el periodo o pulsa “Todo” para ver el resto de temas.<br><button class="btn ghost" data-act="ampliar">Ver últimos 7 días</button></div>`;
+  } else {
+    const by = {}; for (const n of shown) (by[n._dia] ||= []).push(n);
+    for (const d of st.dias){ const it = by[d.fecha]; if(!it) continue;
+      it.sort((a,b)=>rank(a)-rank(b));
+      h += `<div class="dayhead"><h3>${esc(fmtDayName(d.fecha))}</h3><span>${it.length} ${it.length===1?"noticia":"noticias"}</span></div>`;
+      h += it.map(n=>card(n)).join("");
+    }
+  }
+  h += `</div>`;
+  return h;
+}
+
+function viewAgenda(news){
+  const t = today();
+  const ev = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t)
+                 .sort((a,b)=>(a.fecha_evento+(a.hora_evento||"")).localeCompare(b.fecha_evento+(b.hora_evento||"")));
+  let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Convocatorias y eventos previstos</span></div>`;
+  h += chipsBar(news.filter(n=>baseFilter(n,true) && n.fecha_evento && n.fecha_evento>=t));
+  if (!ev.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Cuando la prensa anuncie concentraciones, plenos o eventos, aparecerán aquí por fecha.</div>`;
+  const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
+  h += `<div class="feed">`;
+  for (const d of Object.keys(by).sort()){
+    const x = D(d);
+    h += `<div class="ag-day"><div class="ag-date ${d===t?"today":""}"><div class="d">${x.getDate()}</div><div class="m">${esc(x.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</div><div class="m">${esc(d===t?"hoy":x.toLocaleDateString("es-ES",{weekday:"short"}).replace(".",""))}</div></div><div>${by[d].map(n=>card(n,{noEv:true})).join("")}</div></div>`;
+  }
+  return h + `</div>`;
+}
+
+function viewPueblos(news){
+  const pool = news.filter(n=>baseFilter(n) && catFilter(n) && n.municipio);
+  const m = {};
+  for (const n of pool){ const k=n.municipio; (m[k] ||= {n:0,a:0}); m[k].n++; if(n.relevancia==="alta") m[k].a++; }
+  let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
+  if (st.townQ) list = list.filter(([k])=>norm(k).includes(norm(st.townQ)));
+  let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">${esc(st.rango==="2"?"Hoy y ayer":"Últimos "+st.rango+" días")}</span></div>
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">`;
+  if (!list.length) h += `<div class="empty"><b>Sin resultados</b>No hay noticias de ese pueblo en el periodo elegido.</div>`;
+  h += list.map(([k,v])=>`<button class="town" data-muni="${esc(k)}"><span class="name">${esc(k)}</span>${v.a?`<span class="al">${v.a} imp.</span>`:""}<span class="cnt">${v.n}</span></button>`).join("");
+  return h + `</div>`;
+}
+
+function viewMedios(){
+  let h = `<div class="sect"><h2>Medios revisados</h2></div><p style="padding:0 18px;margin:4px 0 0;color:var(--muted);font-size:14px">La app se actualiza sola dos veces al día (hacia las 8:00 y las 20:00). Además de estos medios, busca en Google Noticias, que recoge radios, agencias y periódicos regionales.</p>`;
+  if (st.fuentes && st.fuentes.length){
+    h += `<div class="mgroup"><h3>Última revisión</h3>` + st.fuentes.map(f=>`<div class="medio"><b>${esc(f.fuente)}</b><span>${f.ok?`Leída: ${f.noticias} noticias`:`No se pudo leer${f.error?": "+esc(f.error):""}`}</span></div>`).join("") + `</div>`;
+  }
+  for (const g of MEDIOS){
+    h += `<div class="mgroup"><h3>${esc(g.g)}</h3>` + g.l.map(([n,u,d])=>`<a class="medio" href="${esc(u)}" target="_blank" rel="noopener"><b>${esc(n)}</b>${d?`<span>${esc(d)}</span>`:""}</a>`).join("") + `</div>`;
+  }
+  return h;
+}
+
+/* ---------- Render ---------- */
+function syncLabel(){
+  const el = $("#sync"), tx = $("#syncTxt");
+  if (!st.actualizado){ tx.textContent = st.loaded ? "Sin datos" : "Cargando…"; return; }
+  const m = st.actualizado.match(/(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
+  if (!m){ tx.textContent = "Actualizado"; return; }
+  const when = new Date(`${m[1]}T${m[2]}:${m[3]}:00`);
+  const h = (Date.now()-when.getTime())/36e5;
+  tx.textContent = h < 1 ? "Hace un momento" : h < 24 ? `Hace ${Math.floor(h)} h` : fmtDayName(m[1]);
+  el.classList.toggle("stale", h > 13);
+}
+
+function render(keepScroll){
+  syncLabel();
+  const app = $("#app");
+  const y = window.scrollY;
+  if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:16px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
+  const news = allNews();
+  if (!news.length && st.view!=="medios"){
+    app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola dos veces al día."}<br><button class="btn" data-act="reload">Volver a cargar</button></div>`;
+    return;
+  }
+  app.innerHTML = st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="medios" ? viewMedios() : viewNoticias(news);
+  const t = today();
+  const nAg = news.filter(n=>baseFilter(n,true) && catFilter(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,2)).length;
+  const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
+  if (keepScroll) window.scrollTo(0,y);
+  const ch = $("#chips"); if (ch){ const o = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", e.intersectionRatio<1), {threshold:[1], rootMargin:"-53px 0px 0px 0px"}); o.observe(ch); }
+  const tq = $("#townQ"); if (tq){ tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); }); }
+}
+
+/* ---------- Interacción ---------- */
+function setView(v){
+  st.view = v;
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
+  render(); window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>setView(t.dataset.view)));
+
+$("#app").addEventListener("click", e=>{
+  const b = e.target.closest("button");
+  const card = e.target.closest(".card.collapsed");
+  if (card && !e.target.closest("a")) { card.classList.remove("collapsed"); return; }
+  if (!b) return;
+  if (b.dataset.preset==="trabajo"){ st.cats = new Set(TRABAJO); saveF(); render(true); }
+  else if (b.dataset.preset==="todo"){ st.cats = new Set(CATS.map(c=>c.k)); saveF(); render(true); }
+  else if (b.dataset.cat){
+    const k=b.dataset.cat;
+    if (st.cats.size===CATS.length) st.cats = new Set([k]);
+    else if (st.cats.has(k) && st.cats.size>1) st.cats.delete(k); else st.cats.add(k);
+    saveF(); render(true);
+  }
+  else if (b.dataset.muni){ st.muni = b.dataset.muni; setView("noticias"); }
+  else if (b.dataset.act==="clearMuni"){ st.muni=""; render(true); }
+  else if (b.dataset.act==="filtros") openSheet();
+  else if (b.dataset.act==="alta"){ st.soloAlta=!st.soloAlta; saveF(); render(true); }
+  else if (b.dataset.act==="agenda") setView("agenda");
+  else if (b.dataset.act==="pueblos") setView("pueblos");
+  else if (b.dataset.act==="ampliar"){ st.rango="7"; saveF(); render(true); }
+  else if (b.dataset.act==="reload") load(true);
+});
+
+/* Hoja de filtros */
+function syncSheet(){
+  document.querySelectorAll("#segRango button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.rango));
+  $("#fCap").checked = st.sinCapital; $("#fAlta").checked = st.soloAlta; $("#fKw").checked = st.soloKw;
+  $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias y suben arriba.</span>`;
+}
+function openSheet(){ syncSheet(); $("#sheetWrap").classList.add("open"); }
+function closeSheet(){ $("#sheetWrap").classList.remove("open"); render(); }
+$("#scrim").addEventListener("click", closeSheet);
+$("#fClose").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap").classList.contains("open")) closeSheet(); });
+$("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; saveF(); syncSheet(); });
+$("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); });
+$("#fAlta").addEventListener("change", e=>{ st.soloAlta=e.target.checked; saveF(); });
+$("#fKw").addEventListener("change", e=>{ st.soloKw=e.target.checked; saveF(); });
+function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(k)===norm(v))){ st.kws.push(v); saveF(); } $("#kwIn").value=""; syncSheet(); }
+$("#kwAdd").addEventListener("click", addKw);
+$("#kwIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addKw(); } });
+$("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); syncSheet(); });
+$("#fReset").addEventListener("click", ()=>{ st.cats=new Set(TRABAJO); st.rango="2"; st.sinCapital=true; st.soloAlta=false; st.soloKw=false; st.muni=""; saveF(); syncSheet(); });
+
+$("#sync").addEventListener("click", ()=>load(true));
+$("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
+
+/* ---------- Carga ---------- */
+function applyData(j){
+  st.dias = (j.dias||[]).filter(d=>d && d.fecha).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  st.fuentes = j.fuentes || [];
+  st.actualizado = j.actualizado || (st.dias[0] ? `${st.dias[0].fecha} ${st.dias[0].generado||"00:00"}` : "");
+  st.loaded = true; st.error = false;
+  render();
+  // Lo que se ha mostrado pasa a "visto" para la próxima visita
+  const keys = allNews().map(n=>n._key);
+  setTimeout(()=>{ const s = new Set([...st.seen, ...keys]); store.set("seen", [...s].slice(-1500)); }, 1500);
+}
+async function fetchJSON(){
+  const r = await fetch("datos.json?t="+Date.now(), {cache:"no-store"});
+  if (!r.ok) throw new Error("http "+r.status);
+  return r.json();
+}
+async function load(manual){
+  try{
+    applyData(await fetchJSON());
+  }catch(e){ st.loaded = true; st.error = true; render(); }
+}
+async function poll(){
+  try{
+    const j = await fetchJSON();
+    if (j.actualizado && j.actualizado !== st.actualizado){
+      if (window.scrollY < 80 && !$("#sheetWrap").classList.contains("open")) applyData(j);
+      else { st.pending = j; $("#toast").classList.add("show"); }
+    } else syncLabel();
+  }catch(e){}
+}
+render();
+load();
+setInterval(poll, REFRESH_MS);
+document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible") poll(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "prensa-segovia",
+  "private": true,
+  "type": "module",
+  "description": "Recopila cada día las noticias de la provincia de Segovia y las publica en una web estática.",
+  "scripts": { "actualizar": "node scripts/actualizar.mjs" },
+  "dependencies": { "fast-xml-parser": "^4.5.0" }
+}
