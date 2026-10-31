@@ -376,6 +376,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .compacta .card h4{font-size:16px;margin-bottom:6px}
 .compacta .feed{gap:6px}
 @media (min-width:1024px){ .chip.filters{display:none} }
+@media (max-width:420px){ .sy-l{display:none} #syncTxt{text-transform:none} #syncTxt::first-letter{text-transform:uppercase} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
 </style>
@@ -837,9 +838,12 @@ function syncLabel(){
   if (!st.actualizado){ tx.textContent = st.loaded ? (st.error?"Sin conexión":"Sin datos") : "Cargando…"; return; }
   const m = st.actualizado.match(/(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
   if (!m){ tx.textContent = "Actualizado"; return; }
-  const h = (Date.now()-new Date(`${m[1]}T${m[2]}:${m[3]}:00`).getTime())/36e5;
-  tx.textContent = h < 1 ? "Actualizado hace un momento" : h < 24 ? `Actualizado hace ${Math.floor(h)} h` : `Actualizado ${fmtDayName(m[1]).toLowerCase()}`;
+  const min = Math.max(0, Math.round((Date.now()-new Date(`${m[1]}T${m[2]}:${m[3]}:00`).getTime())/6e4));
+  const dia = m[1]===today() ? "hoy" : m[1]===addDays(today(),-1) ? "ayer" : fmtCorto(m[1]).toLowerCase();
+  const hace = min < 2 ? "ahora mismo" : min < 60 ? `hace ${min} min` : min < 1440 ? `hace ${Math.floor(min/60)} h` : "";
+  tx.innerHTML = `<span class="sy-l">Actualizado </span>${dia}, ${m[2]}:${m[3]}${hace?` · ${hace}`:""}`;
 }
+setInterval(syncLabel, 60000);
 
 let chipObs;
 function render(keepScroll){
