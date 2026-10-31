@@ -1,0 +1,1159 @@
+{
+ "Diputación noticias": [
+  {
+   "u": "https://www.dipsegovia.es/noticias",
+   "status": 200,
+   "final": "https://www.dipsegovia.es/noticias",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 242,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "https://www.dipsegovia.es/la-provincia/mancomunidades-y-comunidades-historicas | Mancomunidades y Comunidades Históricas",
+    "https://www.dipsegovia.es/ayuntamientos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ayuntamientos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ayuntamientos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/subvencionesyayudas | SUBVENCIONES, AYUDAS Y BECAS",
+    "https://www.dipsegovia.es/ciudadanos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ciudadanos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ciudadanos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/el-teatro-juan-bravo-cumple-con-la-tradici%C3%B3n-del-1-de-noviembre-gracias-al-don-juan-en-los-infiernos-de-teatro-che-y-moche?p_r_p_assetEntryId=20676483&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676483 | El Teatro Juan Bravo cumple con la tradición del 1 de noviembre gracias al ‘Don Juan en los infiernos’ de Teatro Che y Moche",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-alianza-entre-la-diputaci%C3%B3n-de-segovia-y-recoletas-salud-acumula-casi-3.500-revisiones-oculares-gratuitas-por-toda-la-provincia?p_r_p_assetEntryId=20675762&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675762 | La alianza entre la Diputación de Segovia y Recoletas Salud acumula casi 3.500 revisiones oculares gratuitas por toda la provincia",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/el-%C3%A1rea-de-asuntos-sociales-contin%C3%BAa-reforzando-la-atenci%C3%B3n-y-el-cuidado-en-sus-centros-residenciales-con-la-toma-de-posesi%C3%B3n-de-dos-subgobernantas?p_r_p_assetEntryId=20681797&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20681797 | El Área de Asuntos Sociales continúa reforzando la atención y el cuidado en sus centros residenciales con la toma de posesión de dos subgobernantas",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-comedia-existencial-feliz-d%C3%ADa-llega-al-teatro-juan-bravo-de-la-mano-de-la-compa%C3%B1%C3%ADa-argentina-sutottos?p_r_p_assetEntryId=20676234&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676234 | La comedia existencial ‘Feliz día’ llega al Teatro Juan Bravo de la mano de la compañía argentina Sutottos",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-provincia-de-segovia-se-prepara-para-un-fin-de-semana-festivo-entre-la-tradici%C3%B3n-del-d%C3%ADa-de-todos-los-santos-y-el-terror-de-halloween?p_r_p_assetEntryId=20675692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675692 | La provincia de Segovia se prepara para un fin de semana festivo entre la tradición del Día de Todos los Santos y el terror de Halloween",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/spasmo-teatro-se-mantiene-fiel-a-su-cita-con-el-juan-bravo-y-llega-a-segovia-con-m%C3%A1s-mix-?p_r_p_assetEntryId=20662705&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662705 | Spasmo Teatro se mantiene fiel a su cita con el Juan Bravo y llega a Segovia con ‘Más mix’",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-emite-su-pleno-en-directo-a-trav%C3%A9s-de-youtube-29?p_r_p_assetEntryId=20674528&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20674528 | La Diputación emite su Pleno en directo a través de Youtube",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-dignidad-de-la-figura-del-cuidador-vertebra-la-gu%C3%ADa-que-ha-editado-la-diputaci%C3%B3n-de-segovia-para-conmemorar-el-d%C3%ADa-internacional-de-los-cuidados-y-el-apoyo?p_r_p_assetEntryId=20668692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20668692 | La dignidad de la figura del cuidador vertebra la guía que ha editado la Diputación de Segovia para conmemorar el Día Internacional de los Cuidados y el Apoyo",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/profesionales-del-servicio-de-bibliobuses-de-la-diputaci%C3%B3n-de-segovia-participan-en-el-congreso-nacional-de-bibliotecas-m%C3%B3viles-celebrado-en-santiago-de-compostela?p_r_p_assetEntryId=20662630&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662630 | Profesionales del servicio de bibliobuses de la Diputación de Segovia participan en el Congreso Nacional de Bibliotecas Móviles celebrado en Santiago de Compostela",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-anticipa-m%C3%A1s-de-1-4-millones-de-euros-a-los-ayuntamientos-de-la-provincia-por-la-recaudaci%C3%B3n-de-tributos-de-este-ejercicio?p_r_p_assetEntryId=20661702&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20661702 | La Diputación anticipa más de 1’4 millones de euros a los ayuntamientos de la provincia por la recaudación de tributos de este ejercicio",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-contin%C3%BAa-favoreciendo-las-investigaciones-arqueol%C3%B3gicas-en-la-provincia-con-su-apoyo-econ%C3%B3mico-a-los-trabajos-en-siete-yacimientos-del-territorio?p_r_p_assetEntryId=20634949&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20634949 | La Diputación continúa favoreciendo las investigaciones arqueológicas en la provincia con su apoyo económico a los trabajos en siete yacimientos del territorio"
+   ]
+  },
+  {
+   "u": "https://www.dipsegovia.es/es/noticias",
+   "status": 200,
+   "final": "https://www.dipsegovia.es/es/noticias",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 242,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "https://www.dipsegovia.es/la-provincia/mancomunidades-y-comunidades-historicas | Mancomunidades y Comunidades Históricas",
+    "https://www.dipsegovia.es/ayuntamientos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ayuntamientos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ayuntamientos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/subvencionesyayudas | SUBVENCIONES, AYUDAS Y BECAS",
+    "https://www.dipsegovia.es/ciudadanos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ciudadanos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ciudadanos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/el-teatro-juan-bravo-cumple-con-la-tradici%C3%B3n-del-1-de-noviembre-gracias-al-don-juan-en-los-infiernos-de-teatro-che-y-moche?p_r_p_assetEntryId=20676483&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676483 | El Teatro Juan Bravo cumple con la tradición del 1 de noviembre gracias al ‘Don Juan en los infiernos’ de Teatro Che y Moche",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-alianza-entre-la-diputaci%C3%B3n-de-segovia-y-recoletas-salud-acumula-casi-3.500-revisiones-oculares-gratuitas-por-toda-la-provincia?p_r_p_assetEntryId=20675762&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675762 | La alianza entre la Diputación de Segovia y Recoletas Salud acumula casi 3.500 revisiones oculares gratuitas por toda la provincia",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/el-%C3%A1rea-de-asuntos-sociales-contin%C3%BAa-reforzando-la-atenci%C3%B3n-y-el-cuidado-en-sus-centros-residenciales-con-la-toma-de-posesi%C3%B3n-de-dos-subgobernantas?p_r_p_assetEntryId=20681797&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20681797 | El Área de Asuntos Sociales continúa reforzando la atención y el cuidado en sus centros residenciales con la toma de posesión de dos subgobernantas",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-comedia-existencial-feliz-d%C3%ADa-llega-al-teatro-juan-bravo-de-la-mano-de-la-compa%C3%B1%C3%ADa-argentina-sutottos?p_r_p_assetEntryId=20676234&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676234 | La comedia existencial ‘Feliz día’ llega al Teatro Juan Bravo de la mano de la compañía argentina Sutottos",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-provincia-de-segovia-se-prepara-para-un-fin-de-semana-festivo-entre-la-tradici%C3%B3n-del-d%C3%ADa-de-todos-los-santos-y-el-terror-de-halloween?p_r_p_assetEntryId=20675692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675692 | La provincia de Segovia se prepara para un fin de semana festivo entre la tradición del Día de Todos los Santos y el terror de Halloween",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/spasmo-teatro-se-mantiene-fiel-a-su-cita-con-el-juan-bravo-y-llega-a-segovia-con-m%C3%A1s-mix-?p_r_p_assetEntryId=20662705&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662705 | Spasmo Teatro se mantiene fiel a su cita con el Juan Bravo y llega a Segovia con ‘Más mix’",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-emite-su-pleno-en-directo-a-trav%C3%A9s-de-youtube-29?p_r_p_assetEntryId=20674528&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20674528 | La Diputación emite su Pleno en directo a través de Youtube",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-dignidad-de-la-figura-del-cuidador-vertebra-la-gu%C3%ADa-que-ha-editado-la-diputaci%C3%B3n-de-segovia-para-conmemorar-el-d%C3%ADa-internacional-de-los-cuidados-y-el-apoyo?p_r_p_assetEntryId=20668692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20668692 | La dignidad de la figura del cuidador vertebra la guía que ha editado la Diputación de Segovia para conmemorar el Día Internacional de los Cuidados y el Apoyo",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/profesionales-del-servicio-de-bibliobuses-de-la-diputaci%C3%B3n-de-segovia-participan-en-el-congreso-nacional-de-bibliotecas-m%C3%B3viles-celebrado-en-santiago-de-compostela?p_r_p_assetEntryId=20662630&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662630 | Profesionales del servicio de bibliobuses de la Diputación de Segovia participan en el Congreso Nacional de Bibliotecas Móviles celebrado en Santiago de Compostela",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-anticipa-m%C3%A1s-de-1-4-millones-de-euros-a-los-ayuntamientos-de-la-provincia-por-la-recaudaci%C3%B3n-de-tributos-de-este-ejercicio?p_r_p_assetEntryId=20661702&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20661702 | La Diputación anticipa más de 1’4 millones de euros a los ayuntamientos de la provincia por la recaudación de tributos de este ejercicio",
+    "https://www.dipsegovia.es/es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-contin%C3%BAa-favoreciendo-las-investigaciones-arqueol%C3%B3gicas-en-la-provincia-con-su-apoyo-econ%C3%B3mico-a-los-trabajos-en-siete-yacimientos-del-territorio?p_r_p_assetEntryId=20634949&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fes%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20634949 | La Diputación continúa favoreciendo las investigaciones arqueológicas en la provincia con su apoyo económico a los trabajos en siete yacimientos del territorio"
+   ]
+  },
+  {
+   "u": "https://www.dipsegovia.es/noticias/-/asset_publisher/rss",
+   "status": 200,
+   "final": "https://www.dipsegovia.es/noticias/-/asset_publisher/rss",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 242,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/rss",
+    "https://www.dipsegovia.es/noticias?p_p_id=com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=%2Fnoticias%2F-%2Fasset_publisher%2Frss&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_delta=12&p_r_p_resetCur=false&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur=2"
+   ],
+   "noticias": [
+    "https://www.dipsegovia.es/la-provincia/mancomunidades-y-comunidades-historicas | Mancomunidades y Comunidades Históricas",
+    "https://www.dipsegovia.es/ayuntamientos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ayuntamientos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ayuntamientos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/subvencionesyayudas | SUBVENCIONES, AYUDAS Y BECAS",
+    "https://www.dipsegovia.es/ciudadanos/publicaciones-/-bibliotecas | Publicaciones / Bibliotecas",
+    "https://www.dipsegovia.es/ciudadanos/sede-electronica-y-oficina-virtual-tributaria | Sede electrónica y Oficina Virtual Tributaria",
+    "https://www.dipsegovia.es/ciudadanos/sostenibilidad-y-medio-ambiente | Sostenibilidad y Medio Ambiente",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/el-teatro-juan-bravo-cumple-con-la-tradici%C3%B3n-del-1-de-noviembre-gracias-al-don-juan-en-los-infiernos-de-teatro-che-y-moche?p_r_p_assetEntryId=20676483&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676483 | El Teatro Juan Bravo cumple con la tradición del 1 de noviembre gracias al ‘Don Juan en los infiernos’ de Teatro Che y Moche",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-alianza-entre-la-diputaci%C3%B3n-de-segovia-y-recoletas-salud-acumula-casi-3.500-revisiones-oculares-gratuitas-por-toda-la-provincia?p_r_p_assetEntryId=20675762&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675762 | La alianza entre la Diputación de Segovia y Recoletas Salud acumula casi 3.500 revisiones oculares gratuitas por toda la provincia",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/el-%C3%A1rea-de-asuntos-sociales-contin%C3%BAa-reforzando-la-atenci%C3%B3n-y-el-cuidado-en-sus-centros-residenciales-con-la-toma-de-posesi%C3%B3n-de-dos-subgobernantas?p_r_p_assetEntryId=20681797&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20681797 | El Área de Asuntos Sociales continúa reforzando la atención y el cuidado en sus centros residenciales con la toma de posesión de dos subgobernantas",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-comedia-existencial-feliz-d%C3%ADa-llega-al-teatro-juan-bravo-de-la-mano-de-la-compa%C3%B1%C3%ADa-argentina-sutottos?p_r_p_assetEntryId=20676234&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20676234 | La comedia existencial ‘Feliz día’ llega al Teatro Juan Bravo de la mano de la compañía argentina Sutottos",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-provincia-de-segovia-se-prepara-para-un-fin-de-semana-festivo-entre-la-tradici%C3%B3n-del-d%C3%ADa-de-todos-los-santos-y-el-terror-de-halloween?p_r_p_assetEntryId=20675692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20675692 | La provincia de Segovia se prepara para un fin de semana festivo entre la tradición del Día de Todos los Santos y el terror de Halloween",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/spasmo-teatro-se-mantiene-fiel-a-su-cita-con-el-juan-bravo-y-llega-a-segovia-con-m%C3%A1s-mix-?p_r_p_assetEntryId=20662705&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662705 | Spasmo Teatro se mantiene fiel a su cita con el Juan Bravo y llega a Segovia con ‘Más mix’",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-emite-su-pleno-en-directo-a-trav%C3%A9s-de-youtube-29?p_r_p_assetEntryId=20674528&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20674528 | La Diputación emite su Pleno en directo a través de Youtube",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-dignidad-de-la-figura-del-cuidador-vertebra-la-gu%C3%ADa-que-ha-editado-la-diputaci%C3%B3n-de-segovia-para-conmemorar-el-d%C3%ADa-internacional-de-los-cuidados-y-el-apoyo?p_r_p_assetEntryId=20668692&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20668692 | La dignidad de la figura del cuidador vertebra la guía que ha editado la Diputación de Segovia para conmemorar el Día Internacional de los Cuidados y el Apoyo",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/profesionales-del-servicio-de-bibliobuses-de-la-diputaci%C3%B3n-de-segovia-participan-en-el-congreso-nacional-de-bibliotecas-m%C3%B3viles-celebrado-en-santiago-de-compostela?p_r_p_assetEntryId=20662630&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20662630 | Profesionales del servicio de bibliobuses de la Diputación de Segovia participan en el Congreso Nacional de Bibliotecas Móviles celebrado en Santiago de Compostela",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-anticipa-m%C3%A1s-de-1-4-millones-de-euros-a-los-ayuntamientos-de-la-provincia-por-la-recaudaci%C3%B3n-de-tributos-de-este-ejercicio?p_r_p_assetEntryId=20661702&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20661702 | La Diputación anticipa más de 1’4 millones de euros a los ayuntamientos de la provincia por la recaudación de tributos de este ejercicio",
+    "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-contin%C3%BAa-favoreciendo-las-investigaciones-arqueol%C3%B3gicas-en-la-provincia-con-su-apoyo-econ%C3%B3mico-a-los-trabajos-en-siete-yacimientos-del-territorio?p_r_p_assetEntryId=20634949&_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_redirect=https%3A%2F%2Fwww.dipsegovia.es%2Fnoticias%3Fp_p_id%3Dcom_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26_com_liferay_asset_publisher_web_portlet_AssetPublisherPortlet_INSTANCE_1xkM_cur%3D0%26p_r_p_resetCur%3Dfalse%26p_r_p_assetEntryId%3D20634949 | La Diputación continúa favoreciendo las investigaciones arqueológicas en la provincia con su apoyo económico a los trabajos en siete yacimientos del territorio"
+   ]
+  },
+  {
+   "u": "https://www.dipsegovia.es/home/-/asset_publisher/Sd1Q/rss",
+   "status": 403,
+   "final": "https://www.dipsegovia.es/home/-/asset_publisher/Sd1Q/rss",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "Subdelegación Segovia": [
+  {
+   "u": "https://mpt.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
+   "status": 404,
+   "final": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 9,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "/portal/footer/rss"
+   ],
+   "noticias": [
+    "/portal/ministerio/organigrama_organos/ministro | Portada de Ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/ministro/gabinete_del_ministro | Director del Gabinete del ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/sept | Portada de Secretaría de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/se-pt | Secretaria de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/sgeneral_coordinacion_territorial | Secretaría General de Coordinación Territorial",
+    "/portal/ministerio/organigrama_organos/semd | Portada de Secretaría de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/se_md | Secretario de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas | Portada de Dirección General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas/zoraida-hijosa | Directora General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Promocion_Memoria_Democratica | Dirección General de Promoción de la Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial | Portada de Subsecretaría de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/subsecretaria-de-pol-tica-territorial-y-memoria-democratica | Subsecretaria de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/secretaria_general_tecnica | Secretaría General Técnica",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-para-la-reconstrucci-n-de-la-isla-de-la-palma | Comisionado especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-dana | Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA en diferentes municipios entre el 28 de octubre y el 4 de noviembre de 2024.",
+    "/portal/ministerio/organigrama_organos/comisionada-para-la-celebraci-n-de-los-50-a-os-de-espa-a-en-libertad | Comisionada para la celebración de los 50 años de España en Libertad",
+    "/portal/ministerio/organos/cnal | Comisión Nacional de la Administración Local (CNAL)",
+    "/portal/ministerio/organos/cicape | Comisión Interministerial de Coordinación de la Administración Periférica del Estado (CICAPE)",
+    "/portal/ministerio/comisionado-lapalma | Portada de Comisionado Especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/comisionado-lapalma/puerto-naos-y-la-bombilla---mapa-interactivo | Puerto Naos y la Bombilla - Mapa interactivo",
+    "/portal/ministerio/comisionado-lapalma/situacion-naos-bombilla | Situación Puerto Naos y la Bombilla",
+    "/portal/ministerio/comisionado-lapalma/visor-portal-registral-de-emergencias | Visor Portal Registral de Emergencias",
+    "/portal/ministerio/comisionado-especial-dana | Portada de Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025 | Portada de DANA, Orden TMD/101/2025 (art. 5 RD-ley 6/2024)",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025/instrucciones-modelos-info-tmd-101-2025 | Modelos normalizados y bases de precios"
+   ]
+  },
+  {
+   "u": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
+   "status": 404,
+   "final": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 9,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "/portal/footer/rss"
+   ],
+   "noticias": [
+    "/portal/ministerio/organigrama_organos/ministro | Portada de Ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/ministro/gabinete_del_ministro | Director del Gabinete del ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/sept | Portada de Secretaría de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/se-pt | Secretaria de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/sgeneral_coordinacion_territorial | Secretaría General de Coordinación Territorial",
+    "/portal/ministerio/organigrama_organos/semd | Portada de Secretaría de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/se_md | Secretario de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas | Portada de Dirección General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas/zoraida-hijosa | Directora General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Promocion_Memoria_Democratica | Dirección General de Promoción de la Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial | Portada de Subsecretaría de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/subsecretaria-de-pol-tica-territorial-y-memoria-democratica | Subsecretaria de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/secretaria_general_tecnica | Secretaría General Técnica",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-para-la-reconstrucci-n-de-la-isla-de-la-palma | Comisionado especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-dana | Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA en diferentes municipios entre el 28 de octubre y el 4 de noviembre de 2024.",
+    "/portal/ministerio/organigrama_organos/comisionada-para-la-celebraci-n-de-los-50-a-os-de-espa-a-en-libertad | Comisionada para la celebración de los 50 años de España en Libertad",
+    "/portal/ministerio/organos/cnal | Comisión Nacional de la Administración Local (CNAL)",
+    "/portal/ministerio/organos/cicape | Comisión Interministerial de Coordinación de la Administración Periférica del Estado (CICAPE)",
+    "/portal/ministerio/comisionado-lapalma | Portada de Comisionado Especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/comisionado-lapalma/puerto-naos-y-la-bombilla---mapa-interactivo | Puerto Naos y la Bombilla - Mapa interactivo",
+    "/portal/ministerio/comisionado-lapalma/situacion-naos-bombilla | Situación Puerto Naos y la Bombilla",
+    "/portal/ministerio/comisionado-lapalma/visor-portal-registral-de-emergencias | Visor Portal Registral de Emergencias",
+    "/portal/ministerio/comisionado-especial-dana | Portada de Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025 | Portada de DANA, Orden TMD/101/2025 (art. 5 RD-ley 6/2024)",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025/instrucciones-modelos-info-tmd-101-2025 | Modelos normalizados y bases de precios"
+   ]
+  },
+  {
+   "u": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.rss",
+   "status": 404,
+   "final": "https://mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/actualidad/notas_de_prensa.rss",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 9,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "/portal/footer/rss"
+   ],
+   "noticias": [
+    "/portal/ministerio/organigrama_organos/ministro | Portada de Ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/ministro/gabinete_del_ministro | Director del Gabinete del ministro de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/sept | Portada de Secretaría de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/se-pt | Secretaria de Estado de Política Territorial",
+    "/portal/ministerio/organigrama_organos/sept/sgeneral_coordinacion_territorial | Secretaría General de Coordinación Territorial",
+    "/portal/ministerio/organigrama_organos/semd | Portada de Secretaría de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/se_md | Secretario de Estado de Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas | Portada de Dirección General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Atencion_victimas/zoraida-hijosa | Directora General de Atención a las Víctimas",
+    "/portal/ministerio/organigrama_organos/semd/DG_Promocion_Memoria_Democratica | Dirección General de Promoción de la Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial | Portada de Subsecretaría de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/subsecretaria-de-pol-tica-territorial-y-memoria-democratica | Subsecretaria de Política Territorial y Memoria Democrática",
+    "/portal/ministerio/organigrama_organos/subse_politica_territorial/secretaria_general_tecnica | Secretaría General Técnica",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-para-la-reconstrucci-n-de-la-isla-de-la-palma | Comisionado especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/organigrama_organos/comisionado-especial-dana | Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA en diferentes municipios entre el 28 de octubre y el 4 de noviembre de 2024.",
+    "/portal/ministerio/organigrama_organos/comisionada-para-la-celebraci-n-de-los-50-a-os-de-espa-a-en-libertad | Comisionada para la celebración de los 50 años de España en Libertad",
+    "/portal/ministerio/organos/cnal | Comisión Nacional de la Administración Local (CNAL)",
+    "/portal/ministerio/organos/cicape | Comisión Interministerial de Coordinación de la Administración Periférica del Estado (CICAPE)",
+    "/portal/ministerio/comisionado-lapalma | Portada de Comisionado Especial para la Reconstrucción de la isla de La Palma",
+    "/portal/ministerio/comisionado-lapalma/puerto-naos-y-la-bombilla---mapa-interactivo | Puerto Naos y la Bombilla - Mapa interactivo",
+    "/portal/ministerio/comisionado-lapalma/situacion-naos-bombilla | Situación Puerto Naos y la Bombilla",
+    "/portal/ministerio/comisionado-lapalma/visor-portal-registral-de-emergencias | Visor Portal Registral de Emergencias",
+    "/portal/ministerio/comisionado-especial-dana | Portada de Comisionado especial para la reconstrucción y reparación de los daños provocados por la DANA",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025 | Portada de DANA, Orden TMD/101/2025 (art. 5 RD-ley 6/2024)",
+    "/portal/ministerio/comisionado-especial-dana/dana-orden-tmd-101-2025/instrucciones-modelos-info-tmd-101-2025 | Modelos normalizados y bases de precios"
+   ]
+  },
+  {
+   "u": "https://www.mptmd.gob.es/portal/delegaciones_gobierno/delegaciones/castillayleon/segovia.html",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "Guardia Civil prensa": [
+  {
+   "u": "https://web.guardiacivil.es/es/prensa/noticias/index.html",
+   "status": 404,
+   "final": "https://web.guardiacivil.es/es/prensa/noticias/index.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/es/tramites/cuandirigirsegc-00001/ | Cuándo dirigirse a la Guardia Civil",
+    "/es/tramites/denuncias/informacion-en-lectura-facil/ | Información en lectura fácil",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/ | Licencias y autorizaciones para el uso de armas y explosivos",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/nueva_funcionalidad_sms_email_icae/ | Avisos a titulares de licencias de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/tasas_armaexplo/ | Tasas de trámites de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/formulariosarmasexplo/ | Modelos de formularios en PDF",
+    "/es/tramites/citas-previas/cita-previa-infracciones-penales/ | Cita previa para denuncias de infracciones penales y administrativas",
+    "/es/tramites/citas-previas/cita_previa/ | Cita previa para trámites en las intervenciones de armas",
+    "/es/tramites/ingresos/ingresogc/ | Modalidades y carrera profesional",
+    "/es/tramites/ingresos/convocatoria-acceso-a-la-escala-de-oficiales/ | Escala de Oficiales: proceso de selección",
+    "/es/tramites/ingresos/ingresocuerpo/ | Escala Cabos y Guardias: proceso de selección",
+    "/es/tramites/ingresos/Colegio_Guardias_Jovenes/ | Plazas del Colegio de Guardias Jóvenes: proceso de selección",
+    "/es/tramites/seguridad-privada/guacampo/ | Guardas Rurales: pruebas de selección",
+    "/es/tramites/seguridad-privada/instructiro/ | Instructores de tiro: pruebas de selección",
+    "/es/tramites/seguridad-privada/armasseguprivada/ | Armas de Seguridad Privada",
+    "/es/tramites/seguridad-privada/formulariossegpriva/ | Modelos de formularios en PDF",
+    "/es/tramites/quejasysugerencias/QuejasSobreAccesibilidad/ | Quejas sobre accesibilidad",
+    "/es/tramites/quejasysugerencias/ReclamacionesSobreAccesibilidad/ | Reclamaciones sobre accesibilidad",
+    "/es/tramites/proteccion_datos/formularios/ | Formularios para ejercicio derechos LOPDGDD",
+    "/es/tramites/otros/ | Otros trámites y solicitudes",
+    "/es/tramites/canal_interno_de_comunicacion/ | Canal Interno de Información",
+    "/es/institucional/conocenos/especialidades/ | Funciones y especialidades",
+    "/es/institucional/gesestrategi/ | Estrategia Institucional 2030",
+    "/es/institucional/cartaservicios/carta_servicios_electronica/ | Carta de Servicios Electrónica",
+    "/es/institucional/cartaservicios/carta_servicios_icae/ | Carta de Servicios de la Intervención de Armas y Explosivos"
+   ]
+  },
+  {
+   "u": "https://web.guardiacivil.es/es/prensa/noticias/rss.xml",
+   "status": 0,
+   "err": "The operation was aborted due to timeout",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://web.guardiacivil.es/rss/noticias.xml",
+   "status": 404,
+   "final": "https://web.guardiacivil.es/rss/noticias.xml",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/es/tramites/cuandirigirsegc-00001/ | Cuándo dirigirse a la Guardia Civil",
+    "/es/tramites/denuncias/informacion-en-lectura-facil/ | Información en lectura fácil",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/ | Licencias y autorizaciones para el uso de armas y explosivos",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/nueva_funcionalidad_sms_email_icae/ | Avisos a titulares de licencias de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/tasas_armaexplo/ | Tasas de trámites de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/formulariosarmasexplo/ | Modelos de formularios en PDF",
+    "/es/tramites/citas-previas/cita-previa-infracciones-penales/ | Cita previa para denuncias de infracciones penales y administrativas",
+    "/es/tramites/citas-previas/cita_previa/ | Cita previa para trámites en las intervenciones de armas",
+    "/es/tramites/ingresos/ingresogc/ | Modalidades y carrera profesional",
+    "/es/tramites/ingresos/convocatoria-acceso-a-la-escala-de-oficiales/ | Escala de Oficiales: proceso de selección",
+    "/es/tramites/ingresos/ingresocuerpo/ | Escala Cabos y Guardias: proceso de selección",
+    "/es/tramites/ingresos/Colegio_Guardias_Jovenes/ | Plazas del Colegio de Guardias Jóvenes: proceso de selección",
+    "/es/tramites/seguridad-privada/guacampo/ | Guardas Rurales: pruebas de selección",
+    "/es/tramites/seguridad-privada/instructiro/ | Instructores de tiro: pruebas de selección",
+    "/es/tramites/seguridad-privada/armasseguprivada/ | Armas de Seguridad Privada",
+    "/es/tramites/seguridad-privada/formulariossegpriva/ | Modelos de formularios en PDF",
+    "/es/tramites/quejasysugerencias/QuejasSobreAccesibilidad/ | Quejas sobre accesibilidad",
+    "/es/tramites/quejasysugerencias/ReclamacionesSobreAccesibilidad/ | Reclamaciones sobre accesibilidad",
+    "/es/tramites/proteccion_datos/formularios/ | Formularios para ejercicio derechos LOPDGDD",
+    "/es/tramites/otros/ | Otros trámites y solicitudes",
+    "/es/tramites/canal_interno_de_comunicacion/ | Canal Interno de Información",
+    "/es/institucional/conocenos/especialidades/ | Funciones y especialidades",
+    "/es/institucional/gesestrategi/ | Estrategia Institucional 2030",
+    "/es/institucional/cartaservicios/carta_servicios_electronica/ | Carta de Servicios Electrónica",
+    "/es/institucional/cartaservicios/carta_servicios_icae/ | Carta de Servicios de la Intervención de Armas y Explosivos"
+   ]
+  },
+  {
+   "u": "https://www.guardiacivil.es/es/prensa/rss/index.html",
+   "status": 404,
+   "final": "https://web.guardiacivil.es/es/prensa/rss/index.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/es/tramites/cuandirigirsegc-00001/ | Cuándo dirigirse a la Guardia Civil",
+    "/es/tramites/denuncias/informacion-en-lectura-facil/ | Información en lectura fácil",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/ | Licencias y autorizaciones para el uso de armas y explosivos",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/nueva_funcionalidad_sms_email_icae/ | Avisos a titulares de licencias de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/tasas_armaexplo/ | Tasas de trámites de armas",
+    "/es/tramites/autorizaciones-de-armas-y-explosivos/formulariosarmasexplo/ | Modelos de formularios en PDF",
+    "/es/tramites/citas-previas/cita-previa-infracciones-penales/ | Cita previa para denuncias de infracciones penales y administrativas",
+    "/es/tramites/citas-previas/cita_previa/ | Cita previa para trámites en las intervenciones de armas",
+    "/es/tramites/ingresos/ingresogc/ | Modalidades y carrera profesional",
+    "/es/tramites/ingresos/convocatoria-acceso-a-la-escala-de-oficiales/ | Escala de Oficiales: proceso de selección",
+    "/es/tramites/ingresos/ingresocuerpo/ | Escala Cabos y Guardias: proceso de selección",
+    "/es/tramites/ingresos/Colegio_Guardias_Jovenes/ | Plazas del Colegio de Guardias Jóvenes: proceso de selección",
+    "/es/tramites/seguridad-privada/guacampo/ | Guardas Rurales: pruebas de selección",
+    "/es/tramites/seguridad-privada/instructiro/ | Instructores de tiro: pruebas de selección",
+    "/es/tramites/seguridad-privada/armasseguprivada/ | Armas de Seguridad Privada",
+    "/es/tramites/seguridad-privada/formulariossegpriva/ | Modelos de formularios en PDF",
+    "/es/tramites/quejasysugerencias/QuejasSobreAccesibilidad/ | Quejas sobre accesibilidad",
+    "/es/tramites/quejasysugerencias/ReclamacionesSobreAccesibilidad/ | Reclamaciones sobre accesibilidad",
+    "/es/tramites/proteccion_datos/formularios/ | Formularios para ejercicio derechos LOPDGDD",
+    "/es/tramites/otros/ | Otros trámites y solicitudes",
+    "/es/tramites/canal_interno_de_comunicacion/ | Canal Interno de Información",
+    "/es/institucional/conocenos/especialidades/ | Funciones y especialidades",
+    "/es/institucional/gesestrategi/ | Estrategia Institucional 2030",
+    "/es/institucional/cartaservicios/carta_servicios_electronica/ | Carta de Servicios Electrónica",
+    "/es/institucional/cartaservicios/carta_servicios_icae/ | Carta de Servicios de la Intervención de Armas y Explosivos"
+   ]
+  }
+ ],
+ "Junta CyL comunicación": [
+  {
+   "u": "https://comunicacion.jcyl.es/web/es/comunicacion-junta-castilla-leon.html",
+   "status": 200,
+   "final": "https://comunicacion.jcyl.es/web/es/comunicacion-junta-castilla-leon.html",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "https://gobierno.jcyl.es | Organización Gobierno Abierto",
+    "https://comunicacion.jcyl.es/ | Comunicación Hacienda y Finanzas Públicas",
+    "https://empleopublico.jcyl.es/ | Empleados Públicos Administración Pública",
+    "https://accionexterior.jcyl.es/ | Acción exterior Estadística",
+    "https://medioambiente.jcyl.es | Medio Ambiente Vivienda y Urbanismo",
+    "https://serviciossociales.jcyl.es/ | Servicios Sociales Juventud",
+    "https://familia.jcyl.es/ | Familia y mujer Inmigración",
+    "https://consumo.jcyl.es | Consumo Empleo y Empresa Empleo",
+    "https://empresas.jcyl.es/ | Empresa Agricultura y Ganadería",
+    "https://economia.jcyl.es/ | Economía Energía y Minería",
+    "https://patrimoniocultural.jcyl.es/ | Patrimonio Cultural Cultura",
+    "https://www.tramitacastillayleon.jcyl.es/ | Sede electrónica Contratación administrativa",
+    "http://bocyl.jcyl.es/ | Boletín Oficial Suscripciones a noticias y boletines",
+    "https://www.jcyl.es/web/es/administracionpublica/atencion-ciudadano/servicio-atencion-ciudadano.html | Atención al Ciudadano - 012",
+    "https://tributos.jcyl.es/web/es/oficina-virtual-impuestos-autonomicos.html | Oficina Virtual de Impuestos Autonómicos",
+    "https://comunicacion.jcyl.es/web/es/agenda-gobierno/presidente.html | Presidente Vicepresidente Primero",
+    "https://comunicacion.jcyl.es/web/es/agenda-gobierno/consejeria-presidencia.html | Consejería de la Presidencia",
+    "https://comunicacion.jcyl.es/web/es/agenda-gobierno/consejeria-economia-hacienda.html | Consejería de Economía y Hacienda",
+    "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284721378153/_/_/_ | Consejería de Industria, Universidades, Empleo y Comercio",
+    "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284721381621/_/_/_ | Consejería de Desregulación, Familia y Ayudas Sociales",
+    "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284721379235/_/_/_ | Consejería de Medio Ambiente y Energía",
+    "https://comunicacion.jcyl.es/web/es/agenda-gobierno/consejeria-movilidad-transformacion-digital.html | Consejería de Movilidad, Transformación Digital e Inteligencia Artificial",
+    "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284721381185/_/_/_ | Consejería de Agricultura, Ganadería, Medio Rural y Política Ambiental",
+    "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284721381431/_/_/_ | Consejería de Sanidad y Bienestar Social",
+    "https://comunicacion.jcyl.es/web/es/agenda-gobierno/consejeria-cultura-turismo.html | Consejería de Cultura, Turismo y Deporte"
+   ]
+  },
+  {
+   "u": "https://comunicacion.jcyl.es/web/es/buscador.html?q=Segovia",
+   "status": 404,
+   "final": "https://comunicacion.jcyl.es/web/es/buscador.html?q=Segovia",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "http://www.jcyl.es | página principal de la Junta de Castilla y León."
+   ]
+  },
+  {
+   "u": "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284177186046/_/_/_?rss=1",
+   "status": 404,
+   "final": "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284177186046/_/_/_?rss=1",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "http://www.jcyl.es | página principal de la Junta de Castilla y León."
+   ]
+  }
+ ],
+ "CyLTV / RTVCyL": [
+  {
+   "u": "https://www.rtvcyl.es/",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.rtvcyl.es/rss/segovia.xml",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.rtvcyl.es/Segovia",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.cyltv.es/",
+   "status": 200,
+   "final": "https://www.cyltv.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 13,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/SalaDePrensa | Sala de Prensa Quiénes somos",
+    "/ficha/Manual-de-identidad | Manual de identidad Contacto",
+    "/?fc=alwaysshow | Preferencias de Privacidad",
+    "/avisolegal | Aviso legal Política de Privacidad",
+    "/canaldedenuncias | Canal de denuncias Política de Cookies",
+    "/participacion | Condiciones de participación"
+   ]
+  },
+  {
+   "u": "https://www.lasexta.com/rss/",
+   "status": 200,
+   "final": "https://www.lasexta.com/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://www.lasexta.com/rss/",
+    "https://www.lasexta.com/rss/351437.xml",
+    "https://www.lasexta.com/rss/351439.xml",
+    "https://www.lasexta.com/rss/351435.xml",
+    "https://www.lasexta.com/rss/355426.xml",
+    "https://www.lasexta.com/rss/351410.xml",
+    "https://www.lasexta.com/rss/351711.xml"
+   ],
+   "noticias": [
+    "https://www.lasexta.com/noticias/cultura/ | Cultura Ciencia y Tecnología",
+    "https://www.lasexta.com/loteria/ | Loterías y Sorteos Directo",
+    "https://www.lasexta.com/programas/ | Todos los programas Al Rojo Vivo",
+    "https://www.lasexta.com/programas/mas-vale-tarde/ | Más Vale Tarde El Intermedio",
+    "https://www.lasexta.com/programas/lasexta-clave/ | laSexta Clave Cara al Show",
+    "https://www.lasexta.com/programas/sexta-columna/ | laSexta Columna Equipo de Investigación",
+    "https://www.lasexta.com/programas/el-objetivo/ | El Objetivo laSexta Xplica",
+    "https://www.lasexta.com/programas/salvados/ | Salvados Pesadilla en la Cocina",
+    "https://www.lasexta.com/series/ | Series Tecnoxplora - Tecnología",
+    "https://www.lasexta.com/viajestic/ | Viajestic - Viajes Centímetros Cúbicos",
+    "https://www.lasexta.com/ahoraqueleo/libros/ | Libros Recomendados Lotómetro",
+    "https://www.lasexta.com/elecciones/pactometro/ | Pactómetro Barómetro laSexta",
+    "https://www.lasexta.com/programacion/ | Programación TV Sextómetro",
+    "https://www.lasexta.com/noticias/sociedad/choque-trenes-directo_202610286ae1b2e502501232156a9847.html | Sigue la última hora tras el choque de trenes en Urda (Toledo)",
+    "https://www.lasexta.com/webpush.html | Configuración de notificaciones"
+   ]
+  }
+ ],
+ "El Mundo CyL": [
+  {
+   "u": "https://e00-elmundo.uecdn.es/elmundo/rss/castillayleon.xml",
+   "status": 200,
+   "final": "https://e00-elmundo.uecdn.es/elmundo/rss/castillayleon.xml",
+   "feed": true,
+   "items": 13,
+   "menciones_segovia": 0,
+   "ultimo": "Thu, 18 Jul 2013 17:32:41 +0200",
+   "titulos": [
+    "Castilla y León // elmundo.es",
+    "Citan a declarar a viajeros y guardias civiles por el accidente de Tornadizos",
+    "Localizado el cuerpo sin vida del operario desaparecido en la presa de Rioscuro",
+    "La AUGC denuncia presiones a los agentes para que aumenten las denuncias",
+    "Los bomberos controlan un incendio en el campo de maniobras de Los Montalvos",
+    "La plantilla de Antibióticos pide al juez que retire la gestión a los propietarios",
+    "Impulsan en Salamanca la primera unidad de largos supervivientes oncológicos"
+   ],
+   "enlacesFeed": [
+    "http://estaticos.elmundo.es/elmundo/rss/castillayleon.xml"
+   ],
+   "noticias": []
+  },
+  {
+   "u": "https://www.elmundo.es/rss/castillayleon.xml",
+   "status": 404,
+   "final": "https://www.elmundo.es/rss/castillayleon.xml",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "esCuéllar": [
+  {
+   "u": "https://escuellar.es/feed/",
+   "status": 200,
+   "final": "https://escuellar.es/feed/",
+   "feed": true,
+   "items": 10,
+   "menciones_segovia": 0,
+   "ultimo": "Sat, 31 Oct 2026 10:26:44 +0000",
+   "titulos": [
+    "esCuellar",
+    "El séptimo arte tomará Cuéllar en su Festival Internacional de Cine",
+    "Varapalo al Racing Cuéllar en la pista del colista",
+    "PSOE e IU sacan adelante la modificación de normas para frenar las plantas de biogás en Cuéllar",
+    "El programa Tierra de Oportunidades premia a cuatro proyectos de la comarca",
+    "Marina Muñoz logra un &#8216;top 15&#8217; en la Copa del Mundo celebrada en Tongyeong",
+    "La Universidad de la Experiencia inicia un nuevo curso en Cuéllar"
+   ],
+   "enlacesFeed": [
+    "https://escuellar.es/feed/"
+   ],
+   "noticias": []
+  },
+  {
+   "u": "https://www.escuellar.es/feed/",
+   "status": 200,
+   "final": "https://escuellar.es/feed/",
+   "feed": true,
+   "items": 10,
+   "menciones_segovia": 0,
+   "ultimo": "Sat, 31 Oct 2026 10:26:44 +0000",
+   "titulos": [
+    "esCuellar",
+    "El séptimo arte tomará Cuéllar en su Festival Internacional de Cine",
+    "Varapalo al Racing Cuéllar en la pista del colista",
+    "PSOE e IU sacan adelante la modificación de normas para frenar las plantas de biogás en Cuéllar",
+    "El programa Tierra de Oportunidades premia a cuatro proyectos de la comarca",
+    "Marina Muñoz logra un &#8216;top 15&#8217; en la Copa del Mundo celebrada en Tongyeong",
+    "La Universidad de la Experiencia inicia un nuevo curso en Cuéllar"
+   ],
+   "enlacesFeed": [
+    "https://escuellar.es/feed/"
+   ],
+   "noticias": []
+  },
+  {
+   "u": "https://escuellar.es/",
+   "status": 200,
+   "final": "https://escuellar.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 15,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://escuellar.es/feed/",
+    "https://escuellar.es/home-2/feed/"
+   ],
+   "noticias": [
+    "https://escuellar.es/el-septimo-arte-tomara-cuellar-en-su-festival-internacional-de-cine/ | El séptimo arte tomará Cuéllar en su Festival Internacional de Cine",
+    "https://escuellar.es/psoe-e-iu-sacan-adelante-la-modificacion-de-normas-para-frenar-las-plantas-de-biogas-en-cuellar/ | PSOE e IU sacan adelante la modificación de normas para frenar las plantas de biogás en Cuéllar",
+    "https://escuellar.es/marina-munoz-logra-un-top-15-en-la-copa-del-mundo-celebrada-en-tongyeong/ | Marina Muñoz logra un &#8216;top 15&#8217; en la Copa del Mundo celebrada en Tongyeong",
+    "https://escuellar.es/cuellar-guarda-silencio-por-las-victimas-del-accidente-ferroviario-de-toledo/ | Cuéllar guarda silencio por las víctimas del accidente ferroviario de Toledo",
+    "https://escuellar.es/el-ayuntamiento-de-cuellar-destinara-55-000-euros-a-pavimentar-los-pasillos-de-la-zona-nueva-del-cementerio/ | El Ayuntamiento de Cuéllar destinará 55.000 euros a pavimentar los pasillos de la zona nueva del cementerio",
+    "https://escuellar.es/el-programa-tierra-de-oportunidades-premia-a-cuatro-proyectos-de-la-comarca/ | El programa Tierra de Oportunidades premia a cuatro proyectos de la comarca",
+    "https://escuellar.es/la-universidad-de-la-experiencia-inicia-un-nuevo-curso-en-cuellar/ | La Universidad de la Experiencia inicia un nuevo curso en Cuéllar",
+    "https://escuellar.es/un-ciclista-resulta-herido-tras-la-colision-con-un-turismo-en-la-va-223-en-campaspero/ | Un ciclista resulta herido tras la colisión con un turismo en la VA-223 en Campaspero",
+    "https://escuellar.es/fernandez-manueco-inaugura-la-nueva-planta-de-procesado-de-maiz-dulce-de-huercasa-en-sanchonuno/ | Fernández Mañueco inaugura la nueva planta de procesado de maíz dulce de Huercasa en Sanchonuño",
+    "https://escuellar.es/el-c-d-chane-pone-en-marcha-raicesg-un-nuevo-proyecto-europeo-erasmus-en-el-medio-rural/ | El C.D. Chañe pone en marcha &#8216;RAICESG&#8217;, un nuevo proyecto europeo Erasmus+ en el medio rural",
+    "https://escuellar.es/gomezserracin-vivira-manana-su-primer-encierro-campero/ | Gomezserracín vivirá mañana su primer encierro campero",
+    "https://escuellar.es/la-diputacion-y-la-fundacion-empresa-familiar-impulsan-un-programa-para-acercar-a-los-jovenes-a-las-oportunidades-profesionales-de-su-entorno/ | La Diputación y la Fundación Empresa Familiar impulsan un programa para acercar a los jóvenes a las oportunidades profesionales de su entorno",
+    "https://escuellar.es/varapalo-al-racing-cuellar-en-la-pista-del-colista/ | Varapalo al Racing Cuéllar en la pista del colista",
+    "https://escuellar.es/fs-cuellar-cojalba-se-reencuentra-con-la-victoria-en-un-gran-partido-ante-tres-columnas/ | FS Cuéllar Cojalba se reencuentra con la victoria en un gran partido ante Tres Columnas",
+    "https://escuellar.es/el-cd-cuellar-se-desinfla-en-un-partido-trabado-ante-carbonero/ | El CD Cuéllar se desinfla en un partido trabado ante Carbonero",
+    "https://escuellar.es/el-fs-cuellar-cojalba-recibe-hoy-al-tres-columnas-cuarto-clasificado/ | El FS Cuéllar Cojalba recibe hoy al Tres Columnas, cuarto clasificado",
+    "https://escuellar.es/despedida-a-un-buen-amigo-jonas-garcia-velasco/ | Despedida a un buen amigo. Jonás García Velasco",
+    "https://escuellar.es/partido-de-resina-agranda-su-leyenda-y-la-de-los-encierros-de-cuellar/ | Partido de Resina agranda su leyenda y la de los encierros de Cuéllar",
+    "https://escuellar.es/pregonero-sensaciones/ | Pregonero, sensaciones&#8230;",
+    "https://escuellar.es/cambios-en-el-santuario-de-el-henar/ | Cambios en el Santuario de El Henar",
+    "https://escuellar.es/centenario-del-nacimiento-del-padre-balbino-velasco-1926-2026/ | Centenario del nacimiento del padre Balbino Velasco (1926-2026)",
+    "https://escuellar.es/la-exposicion-paco-rabal-huella-y-memoria-llegara-a-cuellar-en-noviembre-en-el-marco-del-ficc/ | La exposición &#8216;Paco Rabal. Huella y memoria&#8217; llegará a Cuéllar en noviembre en el marco del FICC",
+    "https://escuellar.es/la-coral-cuellarana-repasa-en-una-exposicion-sus-cuatro-decadas-de-historia/ | La Coral Cuellarana repasa en una exposición sus cuatro décadas de historia",
+    "https://escuellar.es/mas-de-mil-turistas-registraron-visita-en-la-oficina-de-turismo-de-cuellar-durante-el-puente-del-pilar/ | Más de mil turistas registraron visita en la Oficina de Turismo de Cuéllar durante el puente del Pilar",
+    "https://escuellar.es/la-iglesia-de-san-miguel-centrara-una-edicion-especial-de-con-el-patrimonio-puntualmente-en-cuellar/ | La iglesia de San Miguel centrará una edición especial de &#8216;Con el Patrimonio puntualmente&#8217; en Cuéllar"
+   ]
+  }
+ ],
+ "Diario de Ávila": [
+  {
+   "u": "http://www.diariodeavila.es/rss/DAVProvincia.xml",
+   "status": 404,
+   "final": "https://www.diariodeavila.es/rss/DAVProvincia.xml",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "/listadorss"
+   ],
+   "noticias": [
+    "https://www.promecal.es | Grupo Promecal Diario de Ávila",
+    "https://www.diariodeburgos.es/ | Diario de Burgos Diario Palentino",
+    "https://www.eldiasegovia.es/ | El Dia de Segovia El Dia de Soria",
+    "https://www.eldiadelarioja.es/ | El Día de la Rioja La Tribuna de Albacete",
+    "javascript:Didomi.preferences.show() | Preferencias de Privacidad"
+   ]
+  },
+  {
+   "u": "http://www.diariodeavila.es/RSS/DAVlocal.xml",
+   "status": 404,
+   "final": "https://www.diariodeavila.es/RSS/DAVlocal.xml",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "/listadorss"
+   ],
+   "noticias": [
+    "https://www.promecal.es | Grupo Promecal Diario de Ávila",
+    "https://www.diariodeburgos.es/ | Diario de Burgos Diario Palentino",
+    "https://www.eldiasegovia.es/ | El Dia de Segovia El Dia de Soria",
+    "https://www.eldiadelarioja.es/ | El Día de la Rioja La Tribuna de Albacete",
+    "javascript:Didomi.preferences.show() | Preferencias de Privacidad"
+   ]
+  },
+  {
+   "u": "https://www.diariodeavila.es/listadorss",
+   "status": 200,
+   "final": "https://www.diariodeavila.es/listadorss",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://www.diariodeavila.es/listadorss",
+    "http://www.diariodeavila.es/RSS/DAPortada.xml",
+    "http://www.diariodeavila.es/RSS/DAlocal.xml",
+    "http://www.diariodeavila.es/rss/DAProvincia.xml",
+    "http://www.diariodeavila.es/RSS/DAactualidad.xml",
+    "http://www.diariodeavila.es/RSS/DAdeportes.xml",
+    "/listadorss"
+   ],
+   "noticias": [
+    "http://www.diariodeavila.es/RSS/DAPortada.xml | http://www.diariodeavila.es/RSS/DAPortada.xml",
+    "http://www.diariodeavila.es/RSS/DAlocal.xml | http://www.diariodeavila.es/RSS/DAlocal.xml",
+    "http://www.diariodeavila.es/rss/DAProvincia.xml | http://www.diariodeavila.es/RSS/DAProvincia.xml",
+    "http://www.diariodeavila.es/RSS/DAactualidad.xml | http://www.diariodeavila.es/RSS/DAactualidad.xml",
+    "http://www.diariodeavila.es/RSS/DAdeportes.xml | http://www.diariodeavila.es/RSS/DAdeportes.xml",
+    "https://www.promecal.es | Grupo Promecal Diario de Ávila",
+    "https://www.diariodeburgos.es/ | Diario de Burgos Diario Palentino",
+    "https://www.eldiasegovia.es/ | El Dia de Segovia El Dia de Soria",
+    "https://www.eldiadelarioja.es/ | El Día de la Rioja La Tribuna de Albacete",
+    "javascript:Didomi.preferences.show() | Preferencias de Privacidad"
+   ]
+  }
+ ],
+ "Diario de Valladolid": [
+  {
+   "u": "https://www.diariodevalladolid.es/rss/provincia",
+   "status": 410,
+   "final": "https://www.diariodevalladolid.es/rss/provincia",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.diariodevalladolid.es/rss/",
+   "status": 410,
+   "final": "https://www.diariodevalladolid.es/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.diariodevalladolid.es/",
+   "status": 200,
+   "final": "https://www.diariodevalladolid.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 4,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://www.diariodevalladolid.es/rss/home.xml",
+    "/rss.html"
+   ],
+   "noticias": [
+    "https://www.elcorreodeburgos.com/ | El Correo de Burgos Heraldo-Diario de Soria",
+    "https://www.diariodevalladolid.es/valladolid/261031/287713/adjudicada-5-millones-construccion-48-pisos-viejo-cuartel-vadillos-valladolid.html | Adjudicada por 5,3 millones la construcción de los 48 pisos del viejo cuartel de Vadillos",
+    "https://www.diariodevalladolid.es/valladolid/261030/287707/luz-verde-ambiental-modificacion-pgou-llegada-gotion-valladolid.html | Luz verde ambiental a la modificación del PGOU para la llegada de Gotion a Valladolid",
+    "https://www.diariodevalladolid.es/valladolid/261029/287682/viajeros-tren-valladolid-cojo-tren-pavor.html | Viajeros en Campo Grande tras la tragedia de Urda: \"Si cojo el tren ahora, voy con pavor\"",
+    "https://www.diariodevalladolid.es/valladolid/261028/287649/vallisoletano-tragedia-ferroviaria-urda-me-senti-trapo-lado-lado-vagon.html | Un vallisoletano en la tragedia ferroviaria de Urda: \"Me sentí un trapo de lado a lado del vagón\"",
+    "https://www.diariodevalladolid.es/castilla-y-leon/261029/287695/dos-mujeres-bierzo-avila-desaparecidos-accidente-urda.html | Dos mujeres del Bierzo y Ávila, entre los desaparecidos",
+    "https://www.diariodevalladolid.es/valladolid/261030/287712/mensaje-postumo-historico-alcalde-tudela-valladolid-buscadme-recuerdo-bonito-vivimos.html | El mensaje póstumo del histórico alcalde de Tudela: \"Buscadme en cada recuerdo bonito que vivimos\"",
+    "https://www.diariodevalladolid.es/valladolid/261030/287701/muere-oscar-soto-historico-alcalde-tudela-duero-valladolid-actual-teniente-alcalde.html | Muere Óscar Soto, alcalde de Tudela de Duero",
+    "https://www.diariodevalladolid.es/cultura/261029/287673/conexion-valladolid-da-forma-proxima-edicion-son-primeros-artistas-confirmados.html | El Conexión Valladolid da forma a su próxima edición: estos son los primeros artistas confirmados",
+    "https://www.diariodevalladolid.es/valladolid/261026/287571/ruta-gastronomica-de-bunuelos-huesos-santo-valladolid.html | Ruta gastronómica de buñuelos y huesos de santo por Valladolid",
+    "https://www.diariodevalladolid.es/valladolid/261029/287659/elecciones-29-n-comprueba-te-toca-ser-mesa-valladolid.html | Elecciones 29-N: comprueba si te toca ser mesa electoral en Valladolid",
+    "https://www.diariodevalladolid.es/valladolid/261030/287718/una-tractorada-provocara-cortes-de-trafico-este-sabado-en-valladolid.html | Una tractorada provocará cortes de tráfico este sábado en Valladolid",
+    "https://www.diariodevalladolid.es/valladolid/261030/287674/interior-dota-30-valladolid-camaras-sensores-afrontar-emergencias-real.html | Interior dota la VA-30 de cámaras y sensores para afrontar emergencias en tiempo real",
+    "https://www.diariodevalladolid.es/valladolid/261029/287683/paso-decisivo-60-valladolid-luz-verde-trazado-aeropuerto-mudarra.html | Paso decisivo para la A-60: luz verde al trazado entre el aeropuerto y La Mudarra",
+    "https://www.diariodevalladolid.es/valladolid/261030/287703/clinico-valladolid-unico-hospital-castilla-leon-bajan-tiempos-espera-quirurgica.html | El Clínico de Valladolid, único hospital de Castilla y León donde baja la espera quirúrgica",
+    "https://www.diariodevalladolid.es/valladolid/provincia/261030/287706/arroyo-valladolid-adjudica-las-obras-para-su-nueva-comisaria-por-26-millones-de-euros.html | Arroyo adjudica las obras para su nueva comisaría por 2,6 millones de euros",
+    "https://www.diariodevalladolid.es/cultura/261029/287685/elvira-minguez-reivindica-raices-recibir-espiga-honor-seminci.html | Elvira Mínguez reivindica sus raíces al recibir la Espiga de Honor de la Seminci",
+    "https://www.diariodevalladolid.es/cultura/261028/287653/seminci-se-rinde-a-la-cineasta-chilena-valeria-sarmiento-espiga-de-honor-y-estreno-de-su-ultima-pelicula.html | Seminci se rinde a la cineasta chilena Valeria Sarmiento: Espiga de Honor y estreno de su última película",
+    "https://www.diariodevalladolid.es/cultura/261027/287582/un-documental-sobre-arguinano-en-la-seminci-karlos-es-una-figura-muy-popular-pero-nadie-le-conoce.html | Un documental sobre Arguiñano en la Seminci: \"Karlos es una figura muy popular, pero nadie le conoce\"",
+    "https://www.diariodevalladolid.es/cultura/261029/287676/seminci-suspende-gala-clausura-senal-luto-tragedia-ferroviaria-urda.html | Seminci suspende la gala de clausura en señal de luto por la tragedia ferroviaria de Urda",
+    "https://www.diariodevalladolid.es/cultura/261028/287646/seminci-suspende-sus-actuaciones-de-noche-en-el-desierto-rojo-y-bizarro-tras-el-accidente-ferroviario-de-toledo.html | Seminci cancela sus actuaciones de Noche en el Desierto Rojo y Bizarro tras el accidente ferroviario de Toledo",
+    "https://www.diariodevalladolid.es/valladolid/261030/287711/la-libertad-doble-de-lisandro-alonso-pone-el-broche-final-a-la-competicion-de-la-seminci.html | ‘La libertad doble’ de Lisandro Alonso pone el broche final a la competición de la Seminci",
+    "https://www.diariodevalladolid.es/cultura/261030/287704/irani-ali-asgari-lleva-seminci-canto-vida-frente-represion-bit-of-light.html | Ali Asgari lleva a la Seminci de Valladolid un canto a la vida frente a la represión iraní",
+    "https://www.diariodevalladolid.es/negocios-cyl/261027/287619/horse-valladolid-y-sindicatos-arrancan-la-negociacion-del-nuevo-convenio.html | Horse Valladolid y sindicatos arrancan la negociación del nuevo convenio",
+    "https://www.diariodevalladolid.es/negocios-cyl/261022/287469/renault-ampliara-actividad-valladolid-reacondicionara-baterias-vehiculos-electrificados.html | Renault ampliará su actividad en Valladolid: reacondicionará baterías de vehículos electrificados"
+   ]
+  }
+ ],
+ "El Norte Valladolid provincia": [
+  {
+   "u": "https://www.elnortedecastilla.es/rss/2.0/?section=valladolid/provincia",
+   "status": 200,
+   "final": "https://www.elnortedecastilla.es/rss/2.0/?section=valladolid/provincia",
+   "feed": true,
+   "items": 100,
+   "menciones_segovia": 7,
+   "ultimo": "Fri, 30 Oct 2026 14:28:58 +0100",
+   "titulos": [
+    "Adiós a Óscar Soto, el entregado político que dedicó media vida a hacer de Tudela un pueblo mejor",
+    "La A-11 recupera por Los Santos el acceso al polígono de La Mora con el ya firme renovado",
+    "Muere Óscar Soto, regidor de Tudela de Duero durante 16 años y actual teniente de alcalde",
+    "José Mota, Óscar de la Fuente y Carla Díaz, padrinos de La Vuelta el Cole Unoentrecienmil contra la leucemia infantil",
+    "Recaudan fondos para mantener el bar Estela, «el sueño» del hostelero fallecido por meningitis en Peñafiel",
+    "Aprobado definitivamente el trazado de la autovía hacia León entre Villanubla y La Mudarra",
+    "«Queremos seguir construyendo esa identidad de Tordesillas como Villa Gastronómica»"
+   ],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/rss/2.0/?section=castillayleon",
+   "status": 200,
+   "final": "https://www.elnortedecastilla.es/rss/2.0/?section=castillayleon",
+   "feed": true,
+   "items": 100,
+   "menciones_segovia": 93,
+   "ultimo": "Sat, 31 Oct 2026 10:39:39 +0100",
+   "titulos": [
+    "El instituto de Venta de Baños obtiene uno de los máximos reconocimientos a la innovación educativa",
+    "El ciclo 'Con el patrimonio puntualmente' sale de Cuéllar a la comarca",
+    "La buena costumbre de no perder",
+    "Palazuelos de Eresma y Torrecaballeros recuerdan con emoción a la pequeña Olivia",
+    "Cuéllar aprueba sin consenso el cambio de normas para frenar a las plantas de biogás",
+    "El 31% de las sociedades registradas en el censo segoviano permanecen inactivas",
+    "Segovia es la provincia del país que menos empresas crea por cada una que disuelve"
+   ],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "La Voz del Guadarrama / Sierra": [
+  {
+   "u": "https://www.guadarramanoticias.com/feed/",
+   "status": 404,
+   "final": "https://guadarramanoticias.com/feed/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://guadarramanoticias.com/coverrss"
+   ],
+   "noticias": [
+    "sec/local-urbanismo | Urbanismo Servicios Sociales",
+    "sec/biblioteca | Biblioteca Centros Educativos",
+    "sec/comercios-eventos | Eventos Impulsa tu negocio",
+    "sec/elecciones-elecciones-europeas-9j-2024 | Elecciones Europeas 9J 2024",
+    "sec/elecciones-elecciones-28-de-mayo-2023 | Elecciones 28 de mayo 2023",
+    "sec/elecciones-elecciones-municipales-2019 | Elecciones Municipales 2019",
+    "sec/local | Sección Local Desarrollo Local",
+    "sec/local-servicios-sociales | Servicios Sociales Transportes",
+    "sec/policia-local | Policía Local Protección Civil",
+    "sec/cultura | Sección Cultura Biblioteca",
+    "sec/elecciones | Sección Elecciones Elecciones Europeas 9J 2024",
+    "sec/salud | Sección Salud #PasiónporCuidarte",
+    "/pag/lopd | Ver nuestra Política de Privacidad y Cookies"
+   ]
+  },
+  {
+   "u": "https://www.lavozdelasierra.es/feed/",
+   "status": 304,
+   "final": "https://lavozdelasierra.es/feed/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://sierrapress.es/feed/",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "Cadena SER CyL": [
+  {
+   "u": "https://cadenaser.com/rss/castilla-y-leon/",
+   "status": 404,
+   "final": "https://cadenaser.com/rss/castilla-y-leon/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 1,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/politica-de-cookies/ | Política de cookies La SER en tu móvil",
+    "https://elpais.com/ | El PAÍS Los 40 principales",
+    "https://www.santillana.com/ | Santillana Santillana Compartir",
+    "https://www.cadenadial.com/ | Cadena Dial EL PAÍS Semanal",
+    "https://www.podiumpodcast.com/ | Podium podcasts El PaÍs ICON",
+    "/actualidad/economia-y-negocios/ | Economía y negocios Ciencia y tecnología",
+    "/deportes/futbol/segunda/ | LaLiga Hypermotion Champions League",
+    "/deportes/futbol/europa_league/ | Europa League Supercopa de España",
+    "/tag/fantasy_manager/a/ | LALIGA FANTASY Motociclismo",
+    "/tarifas-cadena-ser/ | Tarifas Cadena SER Ahora en directo Programación Local",
+    "/cadena-ser/programacion/ | ver programación ver programas",
+    "/podcast/cadena-ser/la-ventana/324/ | La Ventana Carles Francino Explorar nuestros podcast Ver todos",
+    "/podcast/por-tema/actualidad/ | Actualidad Cultura y Sociedad",
+    "/podcast/por-tema/economia-y-negocios/ | Economía y Negocios Ciencia Y Tecnología",
+    "https://cadenaser.com/podcast/cadena-ser/boletines/1043/ | Noticias en 3′ Noticias en 3′ Últimos programas"
+   ]
+  },
+  {
+   "u": "https://cadenaser.com/tag/segovia/rss/",
+   "status": 404,
+   "final": "https://cadenaser.com/tag/segovia/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 1,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/politica-de-cookies/ | Política de cookies La SER en tu móvil",
+    "https://elpais.com/ | El PAÍS Los 40 principales",
+    "https://www.santillana.com/ | Santillana Santillana Compartir",
+    "https://www.cadenadial.com/ | Cadena Dial EL PAÍS Semanal",
+    "https://www.podiumpodcast.com/ | Podium podcasts El PaÍs ICON",
+    "/actualidad/economia-y-negocios/ | Economía y negocios Ciencia y tecnología",
+    "/deportes/futbol/segunda/ | LaLiga Hypermotion Champions League",
+    "/deportes/futbol/europa_league/ | Europa League Supercopa de España",
+    "/tag/fantasy_manager/a/ | LALIGA FANTASY Motociclismo",
+    "/tarifas-cadena-ser/ | Tarifas Cadena SER Ahora en directo Programación Local",
+    "/cadena-ser/programacion/ | ver programación ver programas",
+    "/podcast/cadena-ser/la-ventana/324/ | La Ventana Carles Francino Explorar nuestros podcast Ver todos",
+    "/podcast/por-tema/actualidad/ | Actualidad Cultura y Sociedad",
+    "/podcast/por-tema/economia-y-negocios/ | Economía y Negocios Ciencia Y Tecnología",
+    "https://cadenaser.com/podcast/cadena-ser/boletines/1043/ | Noticias en 3′ Noticias en 3′ Últimos programas"
+   ]
+  },
+  {
+   "u": "https://cadenaser.com/castilla-y-leon/rss/",
+   "status": 404,
+   "final": "https://cadenaser.com/castilla-y-leon/rss/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 1,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "/politica-de-cookies/ | Política de cookies La SER en tu móvil",
+    "https://elpais.com/ | El PAÍS Los 40 principales",
+    "https://www.santillana.com/ | Santillana Santillana Compartir",
+    "https://www.cadenadial.com/ | Cadena Dial EL PAÍS Semanal",
+    "https://www.podiumpodcast.com/ | Podium podcasts El PaÍs ICON",
+    "/actualidad/economia-y-negocios/ | Economía y negocios Ciencia y tecnología",
+    "/deportes/futbol/segunda/ | LaLiga Hypermotion Champions League",
+    "/deportes/futbol/europa_league/ | Europa League Supercopa de España",
+    "/tag/fantasy_manager/a/ | LALIGA FANTASY Motociclismo",
+    "/tarifas-cadena-ser/ | Tarifas Cadena SER Ahora en directo Programación Local",
+    "/cadena-ser/programacion/ | ver programación ver programas",
+    "/podcast/cadena-ser/la-ventana/324/ | La Ventana Carles Francino Explorar nuestros podcast Ver todos",
+    "/podcast/por-tema/actualidad/ | Actualidad Cultura y Sociedad",
+    "/podcast/por-tema/economia-y-negocios/ | Economía y Negocios Ciencia Y Tecnología",
+    "https://cadenaser.com/podcast/cadena-ser/boletines/1043/ | Noticias en 3′ Noticias en 3′ Últimos programas"
+   ]
+  }
+ ],
+ "La 8 Segovia": [
+  {
+   "u": "https://www.la8segovia.es/",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.rtvcyl.es/la8segovia",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "ICAL Segovia": [
+  {
+   "u": "https://www.agenciaical.es/segovia",
+   "status": 404,
+   "final": "https://www.agenciaical.es/segovia",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://www.agenciaical.es/noticias/segovia",
+   "status": 200,
+   "final": "https://www.agenciaical.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "tel:983325051 | 983 32 50 51 - redaccion@agenciaical.es"
+   ]
+  },
+  {
+   "u": "https://www.agenciaical.es/",
+   "status": 200,
+   "final": "https://www.agenciaical.es/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 2,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "tel:983325051 | 983 32 50 51 - redaccion@agenciaical.es"
+   ]
+  }
+ ],
+ "Ecologistas Segovia blog": [
+  {
+   "u": "https://ecologistassegovia.blogspot.com/feeds/posts/default",
+   "status": 404,
+   "final": "https://ecologistassegovia.blogspot.com/feeds/posts/default",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 3,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": [
+    "http://www.blogger.com/create-blog.g?defaultSubdomain=ecologistassegovia | Registrar ecologistassegovia"
+   ]
+  },
+  {
+   "u": "https://www.ecologistasenaccion.org/ambito/segovia/feed/",
+   "status": 403,
+   "final": "https://www.ecologistasenaccion.org/ambito/segovia/feed/",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 3,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  }
+ ],
+ "Asociaciones y plataformas": [
+  {
+   "u": "https://www.salvemoselpinar.org/feed/",
+   "status": 0,
+   "err": "fetch failed",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 0,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [],
+   "noticias": []
+  },
+  {
+   "u": "https://plataformasegoviana.wordpress.com/feed/",
+   "status": 200,
+   "final": "https://wordpress.com/typo/?subdomain=plataformasegoviana",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 4,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://wordpress.com/blog/feed/",
+    "https://s1.wp.com/opensearch.xml",
+    "https://wordpress.com/osd.xml"
+   ],
+   "noticias": [
+    "https://wordpress.com/domains/ | Domains Site&nbsp;migration",
+    "https://wordpress.com/blog/ | Latest&nbsp;news Browse&nbsp;blogs",
+    "https://wordpress.com/business-name-generator/ | Business name&nbsp;generator",
+    "https://wordpress.com/support/ | Support&nbsp;center Guides",
+    "https://wordpress.com/tos/ | Terms of service Privacy policy"
+   ]
+  },
+  {
+   "u": "https://segoviaporelclima.wordpress.com/feed/",
+   "status": 200,
+   "final": "https://wordpress.com/typo/?subdomain=segoviaporelclima",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 4,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://wordpress.com/blog/feed/",
+    "https://s1.wp.com/opensearch.xml",
+    "https://wordpress.com/osd.xml"
+   ],
+   "noticias": [
+    "https://wordpress.com/domains/ | Domains Site&nbsp;migration",
+    "https://wordpress.com/blog/ | Latest&nbsp;news Browse&nbsp;blogs",
+    "https://wordpress.com/business-name-generator/ | Business name&nbsp;generator",
+    "https://wordpress.com/support/ | Support&nbsp;center Guides",
+    "https://wordpress.com/tos/ | Terms of service Privacy policy"
+   ]
+  },
+  {
+   "u": "https://mareablancasegovia.wordpress.com/feed/",
+   "status": 200,
+   "final": "https://wordpress.com/typo/?subdomain=mareablancasegovia",
+   "feed": false,
+   "items": 0,
+   "menciones_segovia": 4,
+   "ultimo": "",
+   "titulos": [],
+   "enlacesFeed": [
+    "https://wordpress.com/blog/feed/",
+    "https://s1.wp.com/opensearch.xml",
+    "https://wordpress.com/osd.xml"
+   ],
+   "noticias": [
+    "https://wordpress.com/domains/ | Domains Site&nbsp;migration",
+    "https://wordpress.com/blog/ | Latest&nbsp;news Browse&nbsp;blogs",
+    "https://wordpress.com/business-name-generator/ | Business name&nbsp;generator",
+    "https://wordpress.com/support/ | Support&nbsp;center Guides",
+    "https://wordpress.com/tos/ | Terms of service Privacy policy"
+   ]
+  }
+ ]
+}
