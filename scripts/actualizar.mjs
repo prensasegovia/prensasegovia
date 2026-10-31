@@ -508,6 +508,9 @@ function parecido(a, b) {
 /* Lectura del cuerpo de la noticia                                    */
 /* ------------------------------------------------------------------ */
 const ultimaImg = new Map(); // foto principal (og:image) de cada artículo leído
+// El Norte de Castilla marca todos sus artículos como no gratuitos (muro con unas pocas lecturas gratis al mes)
+const DE_PAGO = /elnortedecastilla\.es/;
+const esPago = u => DE_PAGO.test(u) || ultimaPago.get(u) === true;
 const ultimaPago = new Map(); // artículos que el propio medio marca como de pago (schema.org isAccessibleForFree=false)
 async function leeArticulo(url) {
   try {
@@ -627,7 +630,7 @@ async function periodicos(ahora) {
   // Noticias sin foto: se toma la imagen principal del artículo (unas pocas por pasada)
   const sinFoto = [...porUrl.values()].filter(n => !n.img && !n.sinFoto).sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 15);
   await Promise.all(sinFoto.map(async n => { await leeArticulo(n.url); const im = ultimaImg.get(n.url); if (im) n.img = im; else n.sinFoto = true; }));
-  for (const n of porUrl.values()) if (ultimaPago.get(n.url)) n.pago = true;
+  for (const n of porUrl.values()) if (esPago(n.url)) n.pago = true;
 
   // Se guardan los últimos 4 días
   const limite = ahora.getTime() - 4 * 864e5;
@@ -777,7 +780,7 @@ async function main() {
       ...(g.img ? { img: g.img } : {}),
       ...(g.local ? { local: true } : {}),
       // Los de pago, al final: así el primer enlace es una versión que se puede leer entera
-      medios: g.medios.map(m => cache[m.url]?.pago ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0)),
+      medios: g.medios.map(m => cache[m.url]?.pago || esPago(m.url) ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0)),
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
       _dia: fechaMadrid(g.fecha),
@@ -885,6 +888,9 @@ async function main() {
   for (const d of porDia.values()) d.noticias = d.noticias.filter(n => !borrar.has(n));
   if (borrar.size) console.log(`Duplicados unidos: ${borrar.size}`);
 
+  // 5b2) Enlaces de pago (también en lo ya guardado): marcados y al final, para que el primero se pueda leer entero
+  for (const d of porDia.values()) for (const n of d.noticias)
+    n.medios = n.medios.map(m => esPago(m.url) ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
   // 5c) Cada noticia en el día en que se publicó de verdad
   for (const d of [...porDia.values()]) {
     for (const n of [...d.noticias]) {
