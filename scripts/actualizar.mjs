@@ -153,7 +153,7 @@ const limpia = html => String(html ?? "")
   .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
   .replace(/<[^>]+>/g, " ")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
-  .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n)).replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+  .replace(/&#x([0-9a-f]+);/gi, (_, n) => { try { return String.fromCodePoint(parseInt(n, 16)); } catch { return " "; } }).replace(/&#(\d+);/g, (_, n) => { try { return String.fromCodePoint(+n); } catch { return " "; } }).replace(/&lt;/g, "<").replace(/&gt;/g, ">")
   .replace(/\s+/g, " ").trim();
 const sinColas = s => String(s || "").split(/\s(?:M[aá]s informaci[oó]n|Leer m[aá]s|Sigue leyendo|La entrada .{0,200}? se public[oó] primero en)\b/i)[0].trim();
 const recorta = (s, n = 260) => s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n)) + "…";

@@ -1,5 +1,5 @@
 // Prensa Segovia: siempre intenta la red primero; si no hay cobertura, abre con lo último guardado.
-const CACHE = "prensa-segovia-v17";
+const CACHE = "prensa-segovia-v18";
 self.addEventListener("install", e => { self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener("fetch", e => {
@@ -17,4 +17,10 @@ self.addEventListener("fetch", e => {
       throw err;
     }
   })());
+});
+// Avisos: al pulsar, abre la noticia (o vuelve a la app)
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "./";
+  e.waitUntil(self.clients.openWindow(url));
 });
