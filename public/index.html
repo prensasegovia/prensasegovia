@@ -555,17 +555,29 @@ function pasa(n){
   return true;
 }
 const porHora = (a,b) => (b._ts||0)-(a._ts||0);
+const hh = h => h ? String(h).padStart(5,"0") : "99:99";
+const porEvento = (a,b) => (a.fecha_evento+hh(a.hora_evento)).localeCompare(b.fecha_evento+hh(b.hora_evento));
+// Agenda: lo que tiene día (de hoy en adelante) y lo anunciado sin fecha de los últimos 5 días. Todos los contadores usan esto.
+function agendaDe(news, conFiltros=true){
+  const t = today(), base = conFiltros ? news.filter(pasa) : news;
+  return { ev: base.filter(n=>n.fecha_evento && n.fecha_evento>=t).sort(porEvento),
+           sinFecha: base.filter(n=>n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)).sort(porHora) };
+}
 const isNew = n => !st.seen.has(n._key);
+function actualizaTitulo(news = allNews()){
+  const nu = news.filter(n=>pasa(n) && enRango(n) && isNew(n)).length;
+  document.title = nu ? `(${nu}) Prensa Segovia` : "Prensa Segovia";
+}
 function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c) store.set("seen", [...st.seen].slice(-3000)); }
 const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cat?CAT[st.cat].n.toLowerCase():""].filter(Boolean);
 
+const SIN_TILDE = { a:"[aáàä]", e:"[eéèë]", i:"[iíìï]", o:"[oóòö]", u:"[uúùü]", n:"[nñ]", c:"[cç]" };
 function hl(text){
-  let h = esc(text);
-  const words = [...st.kws, ...(st.q ? st.q.split(/\s+/).filter(w=>w.length>2) : [])];
-  for (const w of words){ if(!w) continue;
-    const re = new RegExp("("+esc(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
-    h = h.replace(re,"<mark>$1</mark>"); }
-  return h;
+  text = String(text ?? "");
+  const words = [...st.kws, ...(st.q ? st.q.split(/\s+/).filter(w=>w.length>2) : [])].map(w=>norm(w).trim()).filter(Boolean).sort((a,b)=>b.length-a.length);
+  if (!words.length) return esc(text);
+  const re = new RegExp("(" + words.map(w=>[...w].map(ch=>SIN_TILDE[ch] || ch.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("")).join("|") + ")", "gi");
+  return text.split(re).map((p,i)=> i%2 ? `<mark>${esc(p)}</mark>` : esc(p)).join("");
 }
 
 /* ================= Tarjeta ================= */
@@ -627,7 +639,7 @@ function viewNoticias(news){
   const t = today();
   const alta = shown.filter(n=>n.relevancia==="alta");
   const pueblos = new Set(shown.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
-  const ag = news.filter(n=>pasa(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7));
+  const ag = agendaDe(news).ev;
   const sum = nuevas.length ? `<b>${plural(nuevas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
@@ -675,11 +687,9 @@ function viewBusqueda(news){
 
 function viewAgenda(news){
   const t = today();
-  const base = news.filter(pasa);
-  const ev = base.filter(n=>n.fecha_evento && n.fecha_evento>=t).sort((a,b)=>(a.fecha_evento+(a.hora_evento||"99")).localeCompare(b.fecha_evento+(b.hora_evento||"99")));
-  const sinFecha = base.filter(n=>n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)).sort(porHora);
+  const { ev, sinFecha } = agendaDe(news);
   let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Con día concreto</span></div>`;
-  h += chipsBar(news.filter(n=>(n.fecha_evento && n.fecha_evento>=t) || (n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)))) + `<div class="feed">` + avisoFiltros();
+  h += chipsBar((({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news,false))) + `<div class="feed">` + avisoFiltros();
   if (!ev.length && !sinFecha.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Aquí salen las concentraciones, manifestaciones, huelgas, tractoradas, mítines, visitas oficiales y fiestas que la prensa anuncia con fecha.</div></div>`;
   const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
   for (const d of Object.keys(by).sort()){
@@ -740,7 +750,7 @@ function periodicosNews(){
 function viewPeriodicos(){
   const all = periodicosNews();
   const list = all.filter(n=>st.periodico==="todos" || n.medio===st.periodico).filter(n=>!(st.sinCapital && isCapital(n)));
-  const cnt = m => all.filter(n=>m==="todos"||n.medio===m).length;
+  const cnt = m => all.filter(n=>(m==="todos"||n.medio===m) && !(st.sinCapital && isCapital(n))).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
     <div class="chips" id="chips">
       <button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>
@@ -759,8 +769,9 @@ function textoParte(news){
   const base = news.filter(pasa);
   const rec = base.filter(n=>(n._ts||0) >= desde).sort(porHora);
   const imp = rec.filter(n=>n.relevancia==="alta");
-  const ag = base.filter(n=>n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7)).sort((a,b)=>(a.fecha_evento+(a.hora_evento||"99")).localeCompare(b.fecha_evento+(b.hora_evento||"99")));
+  const ag = base.filter(n=>n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,7)).sort(porEvento);
   const resto = rec.filter(n=>n.relevancia!=="alta" && !ag.includes(n));
+  const unicas = new Set([...imp, ...ag, ...resto].map(n=>n._key)).size;
   const lugar = n => n.municipio && n.municipio!=="General" ? n.municipio : "Provincia";
   const fuente = n => { const m = mediosDe(n)[0]; return m ? ` (${m.nombre})` + (st.parteLinks ? `\n  ${m.url}` : "") : ""; };
   const linea = n => `• ${lugar(n)} — ${n.titulo}${fuente(n)}`;
@@ -774,7 +785,7 @@ function textoParte(news){
     x += `\n*RESTO DE NOTICIAS*\n`;
     for (const c of CATS){ const l = resto.filter(n=>n._cats[0]===c.k); if (l.length) x += `_${c.n}_\n` + l.map(linea).join("\n") + "\n"; }
   }
-  return { x, n: imp.length + ag.length + resto.length };
+  return { x, n: unicas };
 }
 function viewParte(news){
   const { x, n } = textoParte(news);
@@ -800,13 +811,13 @@ function viewMedios(){
     if (g==="Ayuntamientos"){
       const aOk = l.filter(f=>f.ok).length, aN = l.reduce((t,f)=>t+(f.noticias||0),0);
       h += `<p class="note" style="padding:0 4px">Webs municipales con noticias activas. ${aOk} de ${l.length} responden · ${aN} avisos leídos. Solo pasan los que son de interés (no bandos, plenos ordinarios ni trámites).</p><div class="aytos">` +
-        l.map(f=>`<a class="ayto" href="${esc(f.web||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
+        l.map(f=>`<a class="ayto" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
     } else if (g==="Google Noticias"){
       const f = l[0];
       h += `<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>Búsquedas en Google Noticias</b><span>${f.busquedas||""} búsquedas por temas y por los 208 municipios · ${f.noticias||0} resultados en la última revisión</span></div></div>`;
       if (st.viaGoogle.length) h += `<p class="note" style="padding:0 4px">Medios que llegan por esta vía: ${st.viaGoogle.map(([m,n])=>`${esc(m)} (${n})`).join(", ")}.</p>`;
     } else {
-      h += l.map(f=>`<a class="medio" href="${esc(f.web||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
+      h += l.map(f=>`<a class="medio" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
     }
     h += `</div>`;
   }
@@ -870,7 +881,7 @@ function render(keepScroll){
   if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
   else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
   const t = today();
-  const nAg = news.filter(n=>pasa(n) && n.fecha_evento && n.fecha_evento>=t && n.fecha_evento<=addDays(t,3)).length;
+  const nAg = agendaDe(news).ev.length;
   const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
   const nf = Object.keys(st.favs).length; const fb = $("#favBadge"); fb.hidden = !nf; fb.textContent = nf;
   if (keepScroll) window.scrollTo(0,y);
@@ -885,8 +896,7 @@ function render(keepScroll){
     chipObs = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 200), {rootMargin:`-${$("#appbar").offsetHeight+2}px 0px 0px 0px`}); chipObs.observe(sent); }
   observarVistos();
   renderAside(news);
-  const nu = news.filter(n=>pasa(n) && enRango(n) && isNew(n)).length;
-  document.title = nu ? `(${nu}) Prensa Segovia` : "Prensa Segovia";
+  actualizaTitulo(news);
   const tq = $("#townQ");
   if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); });
 }
@@ -900,7 +910,7 @@ function observarVistos(){
     for (const e of entries){
       const el = e.target, k = el.dataset.k;
       if (e.isIntersecting){
-        if (!timers.has(el)) timers.set(el, setTimeout(()=>{ marcarVisto([k]); document.querySelectorAll(`.card[data-k="${CSS.escape(k)}"]`).forEach(c=>c.classList.remove("unseen")); vistoObs.unobserve(el); timers.delete(el); }, 1000));
+        if (!timers.has(el)) timers.set(el, setTimeout(()=>{ marcarVisto([k]); document.querySelectorAll(`.card[data-k="${CSS.escape(k)}"]`).forEach(c=>c.classList.remove("unseen")); vistoObs.unobserve(el); actualizaTitulo(); timers.delete(el); }, 1000));
       } else if (timers.has(el)){ clearTimeout(timers.get(el)); timers.delete(el); }
     }
   }, {threshold:0.6});
@@ -917,8 +927,9 @@ function setView(v){
 function abrirSub(sub){
   scrollPrevio = window.scrollY;
   if (!$("#searchbar").hidden) toggleSearch(false, true);
+  const yaHabia = !!st.sub && history.state && history.state.sub;
   st.sub = sub; render(); window.scrollTo({top:0});
-  history.pushState({sub:true}, "");
+  if (yaHabia) history.replaceState({sub:true}, ""); else history.pushState({sub:true}, "");
 }
 function cerrarSub(desdeHistorial){
   if (!st.sub) return;
@@ -927,6 +938,7 @@ function cerrarSub(desdeHistorial){
 }
 window.addEventListener("popstate", ()=>{ if (st.sub) cerrarSub(true); });
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{
+  if (!$("#searchbar").hidden) toggleSearch(false, true);
   if (!st.sub && st.view===t.dataset.view){ window.scrollTo({top:0,behavior:"smooth"}); return; }
   if (st.sub && history.state && history.state.sub) history.back();
   setView(t.dataset.view);
@@ -996,7 +1008,7 @@ function renderAside(news){
   if (!esPC() || !st.loaded){ el.innerHTML = ""; return; }
   const t = today();
   const base = news.filter(pasa);
-  const ag = base.filter(n=>n.fecha_evento && n.fecha_evento>=t).sort((a,b)=>(a.fecha_evento+(a.hora_evento||"99")).localeCompare(b.fecha_evento+(b.hora_evento||"99"))).slice(0,7);
+  const ag = agendaDe(news).ev.slice(0,7);
   const imp = base.filter(n=>enRango(n) && n.relevancia==="alta").sort(porHora).slice(0,5);
   const cnt = {}; for (const n of base.filter(n=>enRango(n) && esPueblo(n.municipio))) cnt[n.municipio]=(cnt[n.municipio]||0)+1;
   const pue = Object.entries(cnt).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"es")).slice(0,8);
@@ -1023,21 +1035,21 @@ $("#aside").addEventListener("click", e=>{
 });
 document.querySelector(".side-extra").addEventListener("click", e=>{
   const b = e.target.closest("[data-side]"); if (!b) return;
-  if (st.sub && history.state && history.state.sub) history.back();
   const v = b.dataset.side;
   if (v==="filtros") openSheet(); else abrirSub({t:v});
 });
 let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (st.loaded) renderAside(allNews()); }, 150); });
 // Atajo de teclado: "/" para buscar
 document.addEventListener("keydown", e=>{
-  if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName)){ e.preventDefault(); toggleSearch(true); }
+  if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName) && !$("#sheetWrap").classList.contains("open")){ e.preventDefault(); toggleSearch(true); }
+  else if (e.key==="Escape" && st.sub && !$("#sheetWrap").classList.contains("open") && !/input|textarea/i.test(document.activeElement.tagName)) cerrarSub();
 });
 
 /* Búsqueda */
 function toggleSearch(on, sinRender){
   const bar = $("#searchbar"); const show = on ?? bar.hidden;
   bar.hidden = !show; document.body.classList.toggle("searching", show);
-  if (show){ if (st.view!=="noticias" || st.sub){ st.sub=null; setView("noticias"); } else appbar(); $("#q").focus(); }
+  if (show){ if (st.sub && history.state && history.state.sub){ st.sub=null; history.back(); } if (st.view!=="noticias" || st.sub){ st.sub=null; setView("noticias"); } else appbar(); $("#q").focus(); }
   else { st.q=""; $("#q").value=""; if (!sinRender) render(); }
 }
 let qT; $("#q").addEventListener("input", e=>{ clearTimeout(qT); qT=setTimeout(()=>{ st.q=e.target.value.trim(); render(); },180); });
@@ -1111,10 +1123,11 @@ function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(
 $("#kwAdd").addEventListener("click", addKw);
 $("#kwIn").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addKw(); } });
 $("#kws").addEventListener("click", e=>{ const b=e.target.closest("[data-i]"); if(!b) return; st.kws.splice(+b.dataset.i,1); saveF(); render(true); syncSheet(); });
-$("#toastBtn").addEventListener("click", ()=>{ applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
+$("#toastBtn").addEventListener("click", ()=>{ if (st.pending) applyData(st.pending); st.pending=null; $("#toast").classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); });
 
 /* ================= Carga ================= */
 function applyData(j){
+  st.pending = null; $("#toast").classList.remove("show");
   st.dias = (j.dias||[]).filter(d=>d && d.fecha).sort((a,b)=>b.fecha.localeCompare(a.fecha));
   st.fuentes = j.fuentes || [];
   st.viaGoogle = j.via_google || [];
@@ -1157,7 +1170,6 @@ async function poll(){
 }
 render();
 load();
-cargaPeriodicos();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible") poll(); });
