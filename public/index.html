@@ -679,7 +679,7 @@ function viewAgenda(news){
   const ev = base.filter(n=>n.fecha_evento && n.fecha_evento>=t).sort((a,b)=>(a.fecha_evento+(a.hora_evento||"99")).localeCompare(b.fecha_evento+(b.hora_evento||"99")));
   const sinFecha = base.filter(n=>n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)).sort(porHora);
   let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Con día concreto</span></div>`;
-  h += chipsBar(news.filter(n=>(n.fecha_evento && n.fecha_evento>=t) || n.convocatoria)) + `<div class="feed">` + avisoFiltros();
+  h += chipsBar(news.filter(n=>(n.fecha_evento && n.fecha_evento>=t) || (n.convocatoria && !n.fecha_evento && n._dia>=addDays(t,-5)))) + `<div class="feed">` + avisoFiltros();
   if (!ev.length && !sinFecha.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Aquí salen las concentraciones, manifestaciones, huelgas, tractoradas, mítines, visitas oficiales y fiestas que la prensa anuncia con fecha.</div></div>`;
   const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
   for (const d of Object.keys(by).sort()){
