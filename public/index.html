@@ -367,6 +367,12 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .prow b{font-variation-settings:"wdth" 70;color:var(--pine-2)}
 .prow:hover span{color:var(--pine-2)}
 .aempty{font-size:13.5px;color:var(--muted);padding:4px 0 8px}
+/* vista compacta */
+.compacta .card p,.compacta .card .pista,.compacta .card .thumb{display:none}
+.compacta .card{padding-top:10px;padding-bottom:8px}
+.compacta .card h4{font-size:16px;margin-bottom:6px}
+.compacta .feed{gap:6px}
+@media (min-width:1024px){ .chip.filters{display:none} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
 </style>
@@ -407,6 +413,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <span class="t">Aspecto</span>
       <div class="seg" id="segTema"><button data-v="auto" type="button">Automático</button><button data-v="light" type="button">Claro</button><button data-v="dark" type="button">Oscuro</button></div>
       <span class="h">Automático sigue el modo claro u oscuro del móvil.</span>
+    </div>
+    <div class="row">
+      <label class="sw"><span><span class="t">Vista compacta</span><span class="h">Solo titulares, sin fotos ni resumen: caben muchas más noticias en pantalla.</span></span><input type="checkbox" id="fCompacta"></label>
     </div>
     <div class="row">
       <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Se recuerda. También con el botón “Sin capital” de la barra de temas.</span></span><input type="checkbox" id="fCap"></label>
@@ -485,6 +494,7 @@ const st = {
   sub:null,                   // pantalla encima: {t:"pueblo",name} | {t:"imp"} | {t:"medios"}
   cat: null,                  // tema elegido en la barra (null = todos); no se recuerda
   sinCapital: store.get("sinCapital2", false),
+  compacta: store.get("compacta", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   tema: store.get("tema","auto"),
@@ -606,7 +616,7 @@ function viewNoticias(news){
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
-      <button class="stat alta" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
+      <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
       <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Agenda ${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l">Pueblos ${I.chev}</div></button>
     </div>
@@ -852,6 +862,8 @@ function render(keepScroll){
     chipObs = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 200), {rootMargin:`-${$("#appbar").offsetHeight+2}px 0px 0px 0px`}); chipObs.observe(sent); }
   observarVistos();
   renderAside(news);
+  const nu = news.filter(n=>pasa(n) && enRango(n) && isNew(n)).length;
+  document.title = nu ? `(${nu}) Prensa Segovia` : "Prensa Segovia";
   const tq = $("#townQ");
   if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); });
 }
@@ -1021,7 +1033,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", aplicaTe
 function syncSheet(){
   document.querySelectorAll("#segTema button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.tema));
   document.querySelectorAll("#segRango button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.rango));
-  $("#fCap").checked = st.sinCapital; $("#fKw").checked = st.soloKw;
+  $("#fCap").checked = st.sinCapital; $("#fCompacta").checked = st.compacta; $("#fKw").checked = st.soloKw;
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
 }
 function openSheet(){ syncSheet(); $("#sheetWrap").classList.add("open"); }
@@ -1034,6 +1046,9 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap")
 $("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
 $("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); render(true); });
 $("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); render(true); });
+const aplicaCompacta = () => document.documentElement.classList.toggle("compacta", !!st.compacta);
+aplicaCompacta();
+$("#fCompacta").addEventListener("change", e=>{ st.compacta=e.target.checked; store.set("compacta", st.compacta); aplicaCompacta(); });
 $("#fKw").addEventListener("change", e=>{ st.soloKw=e.target.checked; saveF(); render(true); });
 function addKw(){ const v=$("#kwIn").value.trim(); if(v && !st.kws.some(k=>norm(k)===norm(v))){ st.kws.push(v); saveF(); render(true); } $("#kwIn").value=""; syncSheet(); }
 $("#kwAdd").addEventListener("click", addKw);
