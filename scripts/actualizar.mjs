@@ -27,6 +27,10 @@ const FEEDS = [
   { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/RSS/DSGPortada.xml"] },
   { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia"], local: true },
   { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/portada"], soloSiMenciona: true },
+  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=castillayleon"], soloSiMenciona: true },
+  { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=valladolid/provincia"], soloSiMenciona: true },
+  { nombre: "Diario de Ávila", urls: ["https://www.diariodeavila.es/rss/DAProvincia.xml", "https://www.diariodeavila.es/RSS/DAlocal.xml"], todas: true, soloSiMenciona: true },
+  { nombre: "Diputación de Segovia", urls: ["https://www.dipsegovia.es/noticias"] },
   { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"], local: true },
   { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"], local: true },
   { nombre: "Segovia al día", urls: ["https://segoviaaldia.es/coverrss"] },
@@ -83,6 +87,8 @@ const INFO_FUENTE = {
   "Diario de Castilla y León": ["Agencias y medios regionales", "https://www.diariodecastillayleon.es/segovia/"],
   "Europa Press": ["Agencias y medios regionales", "https://www.europapress.es/castilla-y-leon/"],
   "Agronews Castilla y León": ["Sector agrario", "https://www.agronewscastillayleon.com"],
+  "Diario de Ávila": ["Agencias y medios regionales", "https://www.diariodeavila.es"],
+  "Diputación de Segovia": ["Instituciones", "https://www.dipsegovia.es/noticias"],
   "Segovia Sur": ["Comarcales y locales", "https://www.segoviasur.com"],
   "okdiario": ["Agencias y medios regionales", "https://okdiario.com/noticias/segovia"],
   "ABC Castilla y León": ["Agencias y medios regionales", "https://www.abc.es/espana/castilla-leon/"],
@@ -200,6 +206,13 @@ function limpiaImg(u) {
 }
 
 function items(xml) {
+  // Páginas de noticias sin RSS (portales Liferay como el de la Diputación): titulares enlazados del listado
+  if (!/^\s*(<\?xml|<rss|<feed|<rdf)/i.test(String(xml).slice(0, 300)) && /asset_publisher\/[^/"']+\/content\//.test(xml)) {
+    const vistos = new Set();
+    return [...String(xml).matchAll(/<a[^>]+href=["'](https:\/\/[^"'?#]+\/-\/asset_publisher\/[^/"']+\/content\/[^"'?#]+)[^"']*["'][^>]*>([\s\S]{15,400}?)<\/a>/gi)]
+      .map(m => ({ titulo: limpia(m[2]), url: m[1], fecha: new Date(), sinFecha: true, texto: "", cuerpo: "", fuente: "" }))
+      .filter(x => x.titulo.length > 25 && !vistos.has(x.url) && vistos.add(x.url));
+  }
   const d = parser.parse(xml);
   // Sitemap de noticias de Google (El Día de Segovia no tiene RSS)
   if (d?.urlset) {
