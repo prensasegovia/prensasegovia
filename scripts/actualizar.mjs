@@ -215,10 +215,18 @@ function limpiaImg(u) {
 function items(xml) {
   // Páginas de noticias sin RSS (portales Liferay como el de la Diputación): titulares enlazados del listado
   if (!/^\s*(<\?xml|<rss|<feed|<rdf)/i.test(String(xml).slice(0, 300)) && /asset_publisher\/[^/"']+\/content\//.test(xml)) {
-    const vistos = new Set();
-    return [...String(xml).matchAll(/<a[^>]+href=["'](https:\/\/[^"'?#]+\/-\/asset_publisher\/[^/"']+\/content\/[^"'?#]+)[^"']*["'][^>]*>([\s\S]{15,400}?)<\/a>/gi)]
-      .map(m => ({ titulo: limpia(m[2]), url: m[1], fecha: new Date(), sinFecha: true, texto: "", cuerpo: "", fuente: "" }))
-      .filter(x => x.titulo.length > 25 && !vistos.has(x.url) && vistos.add(x.url));
+    // Cada noticia puede tener varios enlaces (foto, "fecha + área", titular): se queda el titular y se aprovecha la fecha
+    const MESES = { enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5, julio: 6, agosto: 7, septiembre: 8, octubre: 9, noviembre: 10, diciembre: 11 };
+    const porUrl = new Map();
+    for (const m of String(xml).matchAll(/<a[^>]+href=["'](https:\/\/[^"'?#]+\/-\/asset_publisher\/[^/"']+\/content\/[^"'?#]+)[^"']*["'][^>]*>([\s\S]{1,600}?)<\/a>/gi)) {
+      const txt = limpia(m[2]); const o = porUrl.get(m[1]) || { url: m[1], titulo: "", fecha: null };
+      const f = norm(txt).match(/^(\d{1,2}) (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) (\d{4})/);
+      if (f) o.fecha = new Date(Date.UTC(+f[3], MESES[f[2]], +f[1], 10));
+      else if (txt.length > o.titulo.length) o.titulo = txt;
+      porUrl.set(m[1], o);
+    }
+    return [...porUrl.values()].filter(x => x.titulo.length > 25)
+      .map(x => ({ titulo: x.titulo, url: x.url, fecha: x.fecha || new Date(), sinFecha: !x.fecha, texto: "", cuerpo: "", fuente: "" }));
   }
   const d = parser.parse(xml);
   // Sitemap de noticias de Google (El Día de Segovia no tiene RSS)
