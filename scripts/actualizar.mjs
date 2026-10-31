@@ -155,6 +155,7 @@ const limpia = html => String(html ?? "")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
   .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n)).replace(/&lt;/g, "<").replace(/&gt;/g, ">")
   .replace(/\s+/g, " ").trim();
+const sinColas = s => String(s || "").split(/\s(?:M[aá]s informaci[oó]n|Leer m[aá]s|Sigue leyendo|La entrada .{0,200}? se public[oó] primero en)\b/i)[0].trim();
 const recorta = (s, n = 260) => s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n)) + "…";
 const hash = s => createHash("sha1").update(s).digest("hex").slice(0, 12);
 const fechaMadrid = d => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
@@ -319,7 +320,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   const porTexto = !categorias.length;
-  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && PATRONES[k].test(t)).slice(0, 2);
+  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && PATRONES[k].test(t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
@@ -415,6 +416,8 @@ function relleno(n) {
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
   if (/\blicita\b|licitacion|adjudica|contrato de|pliego/.test(tt) && solo(["politica", "autoridades", "emergencias", "medioambiente"])) return true;
+  // Estadísticas y datos (porcentajes, INE, tasas): no son sucesos ni emergencias
+  if (/\d+ ?%|por ciento|estadistic|\bine\b|tasa de|segun (el|los) datos|cada vez (mas|menos)|en lo que va de ano|balance/.test(tt) && solo(["emergencias", "medioambiente", "politica"]) && !/detenid|incendio (en|declarado)|accidente (en|de|mortal)/.test(tt)) return true;
   // Periodismo de servicio (consejos, guías, precios): no son noticias para la unidad salvo sucesos o movilizaciones
   if (/^(ventajas|consejos|claves|trucos|como (ahorrar|calentar|elegir|hacer|preparar)|cuanto cuesta|el precio de|guia (para|de)|todo lo que|lo que (debes|tienes que)|asi (es|son|se|puedes)|estos son los mejores|que hacer|planes para|recomendaciones)/.test(tt) && !c.some(k => ["policial", "social"].includes(k))) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
@@ -736,7 +739,7 @@ async function main() {
 
   // 4) Clasificar
   const nuevas = grupos.map(g => {
-    const resumen = g.texto ? recorta(g.texto) : "";
+    const resumen = g.texto ? recorta(sinColas(g.texto)) : "";
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
@@ -812,6 +815,7 @@ async function main() {
       if (pf.length === 1) n.pueblo_fuente = pf[0]; else delete n.pueblo_fuente;
       if (!n.analisis) { const m = n.medios.find(m => cache[m.url]); if (m) n.analisis = limpiaAnalisis(cache[m.url]); }
       if (!n.analisis) delete n.analisis;
+      if (n.resumen) n.resumen = sinColas(n.resumen);
       // Lo leído del cuerpo se revalida con las reglas actuales sobre la frase guardada
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
