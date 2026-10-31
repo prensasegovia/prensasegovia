@@ -1,7 +1,7 @@
 // Recopila noticias de la provincia de Segovia desde RSS y Google Noticias,
 // las clasifica por pueblo, tema y relevancia, y actualiza public/datos.json.
 import { XMLParser } from "fast-xml-parser";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { MUNICIPIOS, AMBIGUOS, ALIAS, BARRIOS_CAPITAL } from "./municipios.mjs";
 
@@ -946,9 +946,42 @@ async function main() {
     dias,
   };
   await writeFile(SALIDA, JSON.stringify(salida, null, 0));
+  try { await archivar(dias, ahora); } catch (e) { console.log("Archivo: error", e.message); }
   try { await periodicos(ahora); } catch (e) { console.log("Periódicos: error", e.message); }
   console.log(`Noticias leídas: ${brutos.length}. Agrupadas: ${grupos.length}. Nuevas añadidas: ${añadidas}.`);
   for (const e of estado) console.log(` - ${e.fuente}: ${e.ok ? "ok (" + e.noticias + ")" : "FALLO " + e.error}`);
+}
+
+// Archivo histórico: todo lo que ha pasado el filtro, guardado por meses (public/archivo/AAAA-MM.json) para buscar en el pasado.
+// Los días de las últimas 3 semanas se copian tal cual están ahora (con las reglas actuales); los anteriores ya no se tocan.
+async function archivar(dias, ahora) {
+  const DIR = new URL("../public/archivo/", import.meta.url);
+  await mkdir(DIR, { recursive: true });
+  const ventana = fechaMadrid(new Date(ahora.getTime() - 21 * 864e5));
+  const limpiaN = ({ sinFoto, porTexto, pueblo_fuente, local, ...n }) => n;
+  const porMes = new Map();
+  for (const d of dias) { const m = d.fecha.slice(0, 7); if (!porMes.has(m)) porMes.set(m, []); porMes.get(m).push(d); }
+  // También los meses de la ventana aunque hoy no tengan días (para vaciar días que ya no tienen nada)
+  for (let t = new Date(ventana + "T12:00:00Z"); fechaMadrid(t) <= fechaMadrid(ahora); t = new Date(t.getTime() + 864e5)) { const m = fechaMadrid(t).slice(0, 7); if (!porMes.has(m)) porMes.set(m, []); }
+  let indice = { meses: [] };
+  try { indice = JSON.parse(await readFile(new URL("indice.json", DIR), "utf8")); } catch {}
+  for (const [mes, ds] of porMes) {
+    const f = new URL(mes + ".json", DIR);
+    let arc = { mes, dias: {} };
+    try { arc = JSON.parse(await readFile(f, "utf8")); } catch {}
+    for (const fecha of Object.keys(arc.dias)) if (fecha >= ventana) delete arc.dias[fecha];
+    for (const d of ds) {
+      const nuevas = d.noticias.map(limpiaN);
+      if (d.fecha >= ventana) arc.dias[d.fecha] = nuevas;
+      else { const ya = arc.dias[d.fecha] || []; const ids = new Set(ya.map(n => n.id)); arc.dias[d.fecha] = [...ya, ...nuevas.filter(n => !ids.has(n.id))]; }
+    }
+    for (const k of Object.keys(arc.dias)) if (!arc.dias[k].length) delete arc.dias[k];
+    const n = Object.values(arc.dias).reduce((a, l) => a + l.length, 0);
+    await writeFile(f, JSON.stringify(arc));
+    indice.meses = [...indice.meses.filter(x => x.mes !== mes), ...(n ? [{ mes, n }] : [])].sort((a, b) => b.mes.localeCompare(a.mes));
+  }
+  indice.actualizado = `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`;
+  await writeFile(new URL("indice.json", DIR), JSON.stringify(indice));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

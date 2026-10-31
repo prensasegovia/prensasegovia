@@ -385,6 +385,35 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .syncpill b{font-weight:700}
   .syncpill.viejo{background:#B3261E}
 }
+/* archivo */
+.arcbox{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:18px 0 10px;padding:14px 16px;border:1px dashed var(--line);border-radius:16px;background:var(--surface)}
+.arcbox b{display:block;font-size:15px}.arcbox span{font-size:13.5px;color:var(--muted)}
+.dayhead.arch h3{color:var(--pine-2)}
+.empty.small{padding:14px 0 6px;font-size:14px}
+/* panel ampliado (ordenador) */
+.card.sel{border-color:var(--pine-2);box-shadow:0 0 0 2px color-mix(in srgb,var(--pine-2) 40%,transparent)}
+.detalle{padding:14px 16px 12px}
+.detalle.alta{border-color:color-mix(in srgb,var(--alta) 55%,var(--line))}
+.dt-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.dt-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;font-size:13px;color:var(--muted)}
+.dt-meta .time{margin-left:auto}
+.dt-x{order:2;width:32px;height:32px;border-radius:10px;border:0;background:var(--stone);color:var(--ink);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.dt-img{width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:10px;background:var(--line)}
+.dt-t{font-size:19px;line-height:1.25;margin:0 0 8px;font-weight:800}
+.dt-cats{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.dt-ev{display:flex;gap:8px;align-items:center;background:var(--pine-soft);border-radius:10px;padding:7px 10px;margin:4px 0 10px;font-size:14px}
+.dt-r{font-size:15px;line-height:1.5;color:var(--ink);margin:0 0 10px}
+.dt-acts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.dt-acts .btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.dt-acts .btn svg{width:14px;height:14px}
+.dt-med{display:flex;flex-direction:column;margin-top:12px;border-top:1px solid var(--line);padding-top:10px;font-size:14px}
+.dt-med b{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.dt-med a{display:flex;align-items:center;gap:6px;padding:6px 0;color:var(--pine-2);text-decoration:none;font-weight:600}
+.dt-med a svg{width:13px;height:13px}
+.pay-s{font-size:11.5px;font-weight:600;color:#8a5a00;background:#FFE7B3;border-radius:999px;padding:0 6px}
+[data-theme="dark"] .pay-s{background:#4a3a12;color:#FFD98A}
+.dt-hint{font-size:12px;color:var(--muted);margin-top:10px}
+@media (min-width:1024px){ .card{cursor:pointer} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
 </style>
@@ -538,23 +567,47 @@ const saveF = () => { store.set("sinCapital2",st.sinCapital); store.set("kws",st
 
 /* ================= Datos ================= */
 let cacheNews = null;
+function procesa(n, fecha){
+  const key = n.id || norm(n.titulo);
+  const resumen = String(n.resumen||"").replace(/<[^>]*>?/g," ").replace(/\s+/g," ").trim();
+  const pub = n.publicado ? new Date(n.publicado) : null;
+  const ok = pub && !isNaN(pub);
+  const dia = ok ? iso(pub) : fecha;
+  const hora = ok ? pub.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:TZ}) : n.hora;
+  const cats = (Array.isArray(n.categorias)?n.categorias:[]).filter(c=>CAT[c]);
+  return {...n, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]};
+}
 function allNews(){
   if (cacheNews) return cacheNews;
   const map = new Map();
-  for (const d of st.dias){
-    for (const n of (d.noticias||[])){
-      const key = n.id || norm(n.titulo);
-      if (map.has(key)) continue;
-      const resumen = String(n.resumen||"").replace(/<[^>]*>?/g," ").replace(/\s+/g," ").trim();
-      const pub = n.publicado ? new Date(n.publicado) : null;
-      const ok = pub && !isNaN(pub);
-      const dia = ok ? iso(pub) : d.fecha;
-      const hora = ok ? pub.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:TZ}) : n.hora;
-      const cats = (Array.isArray(n.categorias)?n.categorias:[]).filter(c=>CAT[c]);
-      map.set(key, {...n, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]});
-    }
-  }
+  for (const d of st.dias) for (const n of (d.noticias||[])){ const x = procesa(n, d.fecha); if (!map.has(x._key)) map.set(x._key, x); }
   return (cacheNews = [...map.values()]);
+}
+/* ================= Archivo histórico (meses anteriores) ================= */
+const arc = { estado: "no", news: [], desde: "" }; // no | cargando | ok | error
+async function cargaArchivo(){
+  if (arc.estado==="cargando" || arc.estado==="ok") return;
+  arc.estado = "cargando"; render(true);
+  try {
+    const ind = await (await fetch("archivo/indice.json?t="+Date.now(), {cache:"no-store"})).json();
+    const meses = await Promise.all((ind.meses||[]).map(m=>fetch(`archivo/${m.mes}.json?t=${Date.now()}`, {cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)));
+    const map = new Map();
+    for (const a of meses) if (a) for (const [f, l] of Object.entries(a.dias||{})) for (const n of l){ const x = procesa(n, f); if (!map.has(x._key)) map.set(x._key, x); }
+    arc.news = [...map.values()]; arc.estado = "ok";
+    arc.desde = (ind.meses||[]).map(m=>m.mes).sort()[0] || "";
+  } catch(e){ arc.estado = "error"; }
+  render(true);
+}
+// Lo del archivo que no está ya en los datos actuales (más antiguo que la ventana de 21 días)
+const soloArchivo = news => { const ya = new Set(news.map(n=>n._key)); return arc.news.filter(n=>!ya.has(n._key)); };
+const mesLargo = m => { if (!m) return ""; const [y,mo] = m.split("-"); return new Date(+y, +mo-1, 15).toLocaleDateString("es-ES",{month:"long",year:"numeric"}); };
+function bloqueArchivo(news, filtro, que){
+  if (arc.estado==="no") return `<div class="arcbox"><div><b>¿Buscas algo más antiguo?</b><span>La app guarda todo lo que ha salido desde que empezó, mes a mes.</span></div><button class="btn" data-act="archivo" type="button">Buscar en el archivo</button></div>`;
+  if (arc.estado==="cargando") return `<div class="arcbox"><div><b>Cargando el archivo…</b></div></div>`;
+  if (arc.estado==="error") return `<div class="arcbox"><div><b>No se pudo cargar el archivo</b><span>Comprueba la conexión.</span></div><button class="btn" data-act="archivo" type="button">Reintentar</button></div>`;
+  const res = soloArchivo(news).filter(filtro).sort(porHora);
+  return `<div class="dayhead arch"><h3>En el archivo${arc.desde?` (desde ${esc(mesLargo(arc.desde))})`:""}</h3><span>${plural(res.length,"noticia","noticias")}</span></div>` +
+    (res.length ? porDias(res) : `<div class="empty small">Nada más antiguo ${esc(que)}.</div>`);
 }
 const kwHits = n => { if(!st.kws.length) return 0; const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto].join(" ")); return st.kws.filter(k=>t.includes(norm(k))).length; };
 const enRango = n => n._dia >= addDays(today(), -(parseInt(st.rango,10)-1));
@@ -604,7 +657,9 @@ function extractoDe(n){
   const nf = norm(f).slice(0,60);
   return norm(n.resumen||"").includes(nf) || norm(n.titulo).includes(nf) ? "" : f;
 }
+const tarjetas = new Map(); // noticias dibujadas, para el panel ampliado
 function card(n, opts={}){
+  tarjetas.set(n._key, n);
   const lvl = n.relevancia==="alta"?"alta":n.relevancia==="media"?"media":"baja";
   const cat = n._cats[0] ? `<span class="cat">${ICON(CAT[n._cats[0]].d)}${esc(CAT[n._cats[0]].n)}</span>` : "";
   const ev = n.fecha_evento && !opts.noEv && n.fecha_evento>=today() ? `<span class="pill ev">${I.cal.replace('<svg','<svg width="12" height="12"')}${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
@@ -615,7 +670,7 @@ function card(n, opts={}){
     + (medios.length>2 ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-2} ${medios.length-2===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
-  return `<article class="card ${lvl} ${isNew(n)?"unseen":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
+  return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
     <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${esc(cuando(n._dia, n.hora))}</span></div>
     ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
     <div class="cbody">${safeUrl(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
@@ -692,8 +747,10 @@ function porDias(list, extra=""){
 function viewBusqueda(news){
   const words = norm(st.q).split(/\s+/).filter(Boolean);
   const res = news.filter(n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); }).sort(porHora);
+  const coincide = n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); };
   return `<div class="sect"><h2>Resultados</h2><span class="aux">${plural(res.length,"noticia","noticias")} en 21 días, sin filtros</span></div><div class="feed">` +
-    (res.length ? res.map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados</b>Prueba con otra palabra o el nombre de un pueblo.</div>`) + `</div>`;
+    (res.length ? res.map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados en los últimos 21 días</b>Prueba con otra palabra, el nombre de un pueblo o busca en el archivo.</div>`) +
+    bloqueArchivo(news, coincide, "con esa búsqueda") + `</div>`;
 }
 
 function viewAgenda(news){
@@ -746,7 +803,7 @@ function viewPueblo(news, name){
   let h = `<section class="subhero"><h1>${esc(name)}</h1><p>${plural(all.length,"noticia","noticias")} en los últimos 21 días${alta?`, ${plural(alta,"importante","importantes")}`:""}.</p></section><div class="feed">`;
   if (prox.length) h += `<div class="dayhead"><h3>Próximas convocatorias</h3><span>${prox.length}</span></div>` + prox.map(n=>card(n,{hev:true})).join("");
   h += all.length ? porDias(all.filter(n=>!prox.includes(n))) : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés de ${esc(name)} en los últimos 21 días.</div>`;
-  return h + `</div>`;
+  return h + bloqueArchivo(news, n=>n.municipio===name, "de " + name) + `</div>`;
 }
 function viewImportantes(news){
   const list = news.filter(n=>enRango(n) && pasa(n) && n.relevancia==="alta").sort(porHora);
@@ -958,7 +1015,7 @@ document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{
 /* ================= Acciones ================= */
 function toggleFav(k){
   if (st.favs[k]) delete st.favs[k];
-  else { const n = allNews().find(x=>x._key===k) || periodicosNews().find(x=>x._key===k) || Object.values(st.favs).find(f=>f.n._key===k)?.n; if (!n) return;
+  else { const n = allNews().find(x=>x._key===k) || periodicosNews().find(x=>x._key===k) || tarjetas.get(k) || Object.values(st.favs).find(f=>f.n._key===k)?.n; if (!n) return;
     const { _ts, ...guardar } = n; st.favs[k] = { n: guardar, t: Date.now() }; aviso("Guardada"); }
   store.set("favs", st.favs);
 }
@@ -985,7 +1042,17 @@ $("#app").addEventListener("click", e=>{
     if (b.hasAttribute("data-more")){ st.abiertos.has(k) ? st.abiertos.delete(k) : st.abiertos.add(k); render(true); return; }
   }
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
-  if (!b){ if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen"); window.open(card.dataset.href, "_blank", "noopener"); } return; }
+  if (!b){
+    if (card && esPC() && tarjetas.has(card.dataset.k)){ // ordenador: se amplía en el panel de la derecha
+      marcarVisto([card.dataset.k]); card.classList.remove("unseen");
+      st.detalle = st.detalle===card.dataset.k ? null : card.dataset.k;
+      document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel"));
+      if (st.detalle) card.classList.add("sel");
+      renderAside(allNews()); $("#aside").scrollTop = 0; return;
+    }
+    if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen"); window.open(card.dataset.href, "_blank", "noopener"); }
+    return;
+  }
   const act = b.dataset.act;
   if (b.dataset.per){ st.periodico = b.dataset.per; aplicaFiltro(); return; }
   if (b.dataset.cat !== undefined){ const k=b.dataset.cat; st.cat = (!k || st.cat===k) ? null : k; aplicaFiltro(); }
@@ -1001,6 +1068,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);
+  else if (act==="archivo"){ arc.estado = "no"; cargaArchivo(); }
 });
 
 // Al cambiar un filtro: se redibuja y, si estabas más abajo, la lista empieza justo bajo la barra de temas
@@ -1014,9 +1082,36 @@ function aplicaFiltro(){
 
 /* ================= Panel derecho (ordenador) ================= */
 const esPC = () => matchMedia("(min-width:1024px)").matches;
+function panelDetalle(n){
+  const medios = mediosDe(n);
+  const libre = medios.find(m=>!m.pago) || medios[0];
+  const cats = n._cats.filter(c=>CAT[c]).map(c=>`<span class="cat">${ICON(CAT[c].d)}${esc(CAT[c].n)}</span>`).join("");
+  const lugar = n.municipio && n.municipio!=="General" ? n.municipio : "Provincia";
+  const fav = !!st.favs[n._key];
+  const ext = extractoDe(n);
+  const ev = n.fecha_evento ? `<div class="dt-ev">${I.cal.replace('<svg','<svg width="16" height="16"')}<span><b>${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", a las "+esc(n.hora_evento):""}</b>${n.fecha_evento<today()?" (ya pasó)":""}</span></div>` : "";
+  return `<div class="abox detalle ${n.relevancia==="alta"?"alta":""}">
+    <div class="dt-top"><button class="dt-x" data-dt="cerrar" type="button" aria-label="Cerrar">×</button>
+      <span class="dt-meta"><button class="pill" data-pueblo="${esc(lugar==="Provincia"?"":lugar)}" type="button" ${lugar==="Provincia"?"disabled":""}>${esc(lugar)}</button>${n.relevancia==="alta"?'<span class="pill lvl-alta">Importante</span>':""}<span class="time">${esc(cuando(n._dia, n.hora))}</span></span></div>
+    ${safeUrl(n.img)?`<img class="dt-img" src="${esc(n.img)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`:""}
+    <h3 class="dt-t">${hl(n.titulo)}</h3>
+    ${cats?`<div class="dt-cats">${cats}</div>`:""}
+    ${ev}
+    ${n.resumen?`<p class="dt-r">${hl(n.resumen)}</p>`:""}
+    ${ext?`<div class="pista"><b>En la noticia:</b> ${hl(ext)}</div>`:""}
+    <div class="dt-acts">
+      ${libre?`<a class="btn" href="${esc(libre.url)}" target="_blank" rel="noopener">Leer en ${esc(libre.nombre)} ${I.ext}</a>`:""}
+      <button class="btn ghost" data-dt="fav" type="button" aria-pressed="${fav}">${fav?"Guardada ✓":"Guardar"}</button>
+      <button class="btn ghost" data-dt="share" type="button">Compartir</button>
+    </div>
+    ${medios.length>1?`<div class="dt-med"><b>La cuentan ${medios.length} medios</b>${medios.map(m=>`<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay-s">Suscriptores</span>':""}${I.ext}</a>`).join("")}</div>`:""}
+    <div class="dt-hint">Pulsa otra noticia para verla aquí, o Esc para cerrar.</div>
+  </div>`;
+}
 function renderAside(news){
   const el = $("#aside"); if (!el) return;
   if (!esPC() || !st.loaded){ el.innerHTML = ""; return; }
+  if (st.detalle && tarjetas.has(st.detalle)){ el.innerHTML = panelDetalle(tarjetas.get(st.detalle)); return; }
   const t = today();
   const base = news.filter(pasa);
   const ag = agendaDe(news).ev.slice(0,7);
@@ -1037,6 +1132,13 @@ function renderAside(news){
   if (f){ const ok = st.fuentes.filter(x=>x.ok).length; f.innerHTML = `${ok} de ${st.fuentes.length} fuentes responden<br><span style="opacity:.8">Atajo: tecla <b>/</b> para buscar</span>`; }
 }
 $("#aside").addEventListener("click", e=>{
+  const dt = e.target.closest("[data-dt]");
+  if (dt){
+    const n = tarjetas.get(st.detalle); const v = dt.dataset.dt;
+    if (v==="cerrar" || !n){ cerrarDetalle(); return; }
+    if (v==="fav"){ toggleFav(n._key); render(true); return; }
+    if (v==="share"){ const m = mediosDe(n).find(m=>!m.pago) || mediosDe(n)[0]; compartir({ querySelector:()=>({textContent:n.titulo}), dataset:{ href: m ? m.url : "" } }); return; }
+  }
   const a = e.target.closest("a[data-k]"); if (a){ marcarVisto([a.dataset.k]); return; }
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.pueblo) abrirSub({t:"pueblo", name:b.dataset.pueblo});
@@ -1049,10 +1151,12 @@ document.querySelector(".side-extra").addEventListener("click", e=>{
   const v = b.dataset.side;
   if (v==="filtros") openSheet(); else abrirSub({t:v});
 });
+function cerrarDetalle(){ st.detalle = null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); renderAside(allNews()); }
 let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (st.loaded) renderAside(allNews()); }, 150); });
 // Atajo de teclado: "/" para buscar
 document.addEventListener("keydown", e=>{
   if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName) && !$("#sheetWrap").classList.contains("open")){ e.preventDefault(); toggleSearch(true); }
+  else if (e.key==="Escape" && st.detalle && !$("#sheetWrap").classList.contains("open") && !/input|textarea/i.test(document.activeElement.tagName)) cerrarDetalle();
   else if (e.key==="Escape" && st.sub && !$("#sheetWrap").classList.contains("open") && !/input|textarea/i.test(document.activeElement.tagName)) cerrarSub();
 });
 
