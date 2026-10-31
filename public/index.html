@@ -38,7 +38,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 html,body{margin:0;background:var(--stone);color:var(--ink)}
-body{font:400 16px/1.45 "Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;padding-bottom:calc(74px + var(--safe-b));overscroll-behavior-y:contain}
+body{font:400 16px/1.45 "Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;padding-bottom:calc(74px + var(--safe-b));overscroll-behavior-y:contain;min-height:calc(100vh + env(safe-area-inset-top, 0px));box-sizing:border-box}
 button{font:inherit;color:inherit}
 a{color:inherit}
 :focus-visible{outline:2.5px solid var(--new);outline-offset:2px;border-radius:8px}
