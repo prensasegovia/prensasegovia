@@ -423,14 +423,14 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe" };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
 const ORGANIZACIONES = new Set(FEEDS.filter(f => f.tipo === "organizacion").map(f => f.nombre));
 const SOLO_SI_MENCIONA = new Set(FEEDS.filter(f => f.soloSiMenciona).map(f => f.nombre));
 const PUEBLO_DE_FUENTE = new Map(FEEDS.filter(f => f.pueblo).map(f => [f.nombre, f.pueblo]));
 const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre));
-const soloAyto = medios => medios.every(m => /^ayuntamiento/i.test(m.nombre));
+const soloAyto = medios => medios.every(m => /^(ayuntamiento|diputaci)/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
 const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
 const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
@@ -453,8 +453,10 @@ function relleno(n) {
   if (/^(ventajas|consejos|claves|trucos|como (ahorrar|calentar|elegir|hacer|preparar)|cuanto cuesta|el precio de|guia (para|de)|todo lo que|lo que (debes|tienes que)|asi (es|son|se|puedes)|estos son los mejores|que hacer|planes para|recomendaciones)/.test(tt) && !c.some(k => ["policial", "social"].includes(k))) return true;
   // Cultura, moda y divulgación científica sin conflicto (pasarelas, exposiciones, fósiles, estudios): no interesan
   if (/pasarela|desfile de moda|exposicion (de|sobre)|muestra de (arte|pintura|fotografia)|\bfosil|paleontolog|yacimiento|investigadores|estudio cientifico|un estudio (de|revela|confirma)|confirman? un cambio climatico/.test(tt) && !n.politizado && !/protesta|reclam|denunc|critic|rechaz|firmas|concentracion|manifest|polemica|expolio|robo|detenid/.test(tt)) return true;
+  // Gestión ordinaria de la capital (ordenanzas, ZBE, ORA, aparcamientos, presupuestos, urbanismo) sin polémica: no es de la unidad
+  if (n.municipio === "Segovia" && /ordenanza|\bzbe\b|bajas emisiones|\bora\b|aparcamiento|presupuesto|licencia|urbanis|\bpgou\b/.test(tt) && !/protesta|polemica|critic|rechaz|denunc|concentracion|manifest|firmas|recurso|tension|bronc|oposicion/.test(tt)) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
-  if (soloAyto(n.medios || []) && solo(["politica"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
+  if (soloAyto(n.medios || []) && c.includes("politica") && solo(["politica", "eventos"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
   if (n.municipio === "Segovia" && n.porTexto && !n.analisis?.cats?.length) return true;
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
