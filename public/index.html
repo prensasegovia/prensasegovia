@@ -144,7 +144,10 @@ svg{flex:none}
 .srcs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-width:0;flex:1}
 .src{font-size:13px;font-weight:600;text-decoration:none;color:var(--pine-2);border:1.5px solid var(--line);padding:4px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;min-height:32px}
 .src svg{width:12px;height:12px}
-.src .pay{font-weight:400;color:var(--muted)}
+.src .pay{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:12px;color:#8a5a00;background:#FFE7B3;border-radius:999px;padding:1px 7px 1px 5px;margin-left:2px}
+.src .pay svg{width:12px;height:12px}
+[data-theme="dark"] .src .pay{background:#4a3a12;color:#FFD98A}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .src .pay{background:#4a3a12;color:#FFD98A} }
 .more{font-size:13px;color:var(--pine-2);font-weight:700;border:1.5px dashed var(--line);background:none;border-radius:999px;padding:4px 10px;min-height:32px;cursor:pointer}
 .acts{display:flex;gap:6px;flex:none}
 .abtn{border:0;background:var(--pine-soft);color:var(--pine-2);border-radius:999px;width:38px;height:38px;display:grid;place-items:center;cursor:pointer}
@@ -576,7 +579,7 @@ function card(n, opts={}){
   const medios = mediosDe(n);
   const abierto = st.abiertos.has(n._key);
   const visibles = abierto ? medios : medios.slice(0,2);
-  const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay">de pago</span>':""}${I.ext}</a>`).join("")
+  const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
     + (medios.length>2 ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-2} ${medios.length-2===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
@@ -723,7 +726,7 @@ function viewImportantes(news){
 /* Periódicos: todas las noticias de los tres principales, sin filtro de temas (sin deportes ni opinión) */
 const PERIODICOS = ["El Adelantado","El Norte de Castilla","El Día de Segovia"];
 function periodicosNews(){
-  return st.periodicos.map(n=>{ const d = new Date(n.publicado); return { ...n, _key:"p:"+n.url, _ts:d.getTime(), _dia:iso(d), hora:d.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false}), _cats:[], relevancia:"baja", medios:[{nombre:n.medio,url:n.url}] }; });
+  return st.periodicos.map(n=>{ const d = new Date(n.publicado); return { ...n, _key:"p:"+n.url, _ts:d.getTime(), _dia:iso(d), hora:d.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false}), _cats:[], relevancia:"baja", medios:[{nombre:n.medio,url:n.url,...(n.pago?{pago:true}:{})}] }; });
 }
 function viewPeriodicos(){
   const all = periodicosNews();

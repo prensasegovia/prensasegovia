@@ -135,7 +135,10 @@ const BUSQUEDAS = [
 ];
 // Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
 const MEDIOS_OK_RE = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
-const MEDIOS_OK = { test: m => MEDIOS_OK_RE.test(m) && !NO_ESPANA.test(m) };
+// Medios locales de otras provincias (Onda Cero Jaén, Tribuna de León, Ayuntamiento de ... Fuerteventura): fuera.
+// Ávila, Valladolid, Madrid y Soria se dejan pasar porque a veces cuentan cosas de pueblos de Segovia limítrofes.
+const OTRA_PROVINCIA = /alava|albacete|alicante|almeria|asturias|badajoz|baleares|barcelona|burgos|caceres|cadiz|cantabria|castellon|ciudad real|cordoba|coruna|cuenca|girona|granada|guadalajara|gipuzkoa|guipuzcoa|huelva|huesca|jaen|\bleon\b|lleida|rioja|lugo|malaga|murcia|navarra|ourense|palencia|las palmas|pontevedra|salamanca|tenerife|santander|sevilla|tarragona|teruel|toledo|valencia|vizcaya|bizkaia|bilbao|zamora|zaragoza|fuerteventura|lanzarote|canarias|galicia|andalucia|cataluna|aragon|extremadura|ceuta|melilla|mallorca|ibiza|menorca|gijon|oviedo|vigo|elche|cartagena|jerez|marbella|puerto del rosario/;
+const MEDIOS_OK = { test: m => MEDIOS_OK_RE.test(m) && !NO_ESPANA.test(m) && !(OTRA_PROVINCIA.test(m) && !/segovia|castilla y leon|castilla-leon/.test(m)) };
 const GRUPOS_PUEBLOS = (() => {
   const nombres = MUNICIPIOS.map(m => m.includes(" ") || AMBIGUOS.has(m) ? `"${m}"` : m);
   const g = []; for (let i = 0; i < nombres.length; i += 12) g.push(`(${nombres.slice(i, i + 12).join(" OR ")}) Segovia`);
@@ -492,6 +495,7 @@ function parecido(a, b) {
 /* Lectura del cuerpo de la noticia                                    */
 /* ------------------------------------------------------------------ */
 const ultimaImg = new Map(); // foto principal (og:image) de cada artículo leído
+const ultimaPago = new Map(); // artículos que el propio medio marca como de pago (schema.org isAccessibleForFree=false)
 async function leeArticulo(url) {
   try {
     const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html" }, signal: AbortSignal.timeout(10000), redirect: "follow" });
@@ -499,6 +503,7 @@ async function leeArticulo(url) {
     let html = (await r.text()).slice(0, 600000);
     const og = (html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)/i) || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image/i) || [])[1];
     ultimaImg.set(url, limpiaImg(og));
+    if (/"isAccessibleForFree"\s*:\s*"?(false|False)/.test(html) || /<meta[^>]+(name|property)=["'](article:)?content_tier["'][^>]+content=["'](locked|metered|premium)/i.test(html)) ultimaPago.set(url, true);
     const art = html.match(/<article[\s\S]*?<\/article>/i); if (art && art[0].length > 1500) html = art[0];
     const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => limpia(m[1])).filter(p => p.length > 60 && !/cookies|suscri|newsletter|todos los derechos|publicidad|comparte|whatsapp|telegram/i.test(p));
     return ps.join(" ").slice(0, 8000);
@@ -609,6 +614,7 @@ async function periodicos(ahora) {
   // Noticias sin foto: se toma la imagen principal del artículo (unas pocas por pasada)
   const sinFoto = [...porUrl.values()].filter(n => !n.img && !n.sinFoto).sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 15);
   await Promise.all(sinFoto.map(async n => { await leeArticulo(n.url); const im = ultimaImg.get(n.url); if (im) n.img = im; else n.sinFoto = true; }));
+  for (const n of porUrl.values()) if (ultimaPago.get(n.url)) n.pago = true;
 
   // Se guardan los últimos 4 días
   const limite = ahora.getTime() - 4 * 864e5;
@@ -732,7 +738,7 @@ async function main() {
       if (!cuerpo && url) { cuerpo = await leeArticulo(url); if (cuerpo) leidas++; }
       if (!g.img && url && ultimaImg.get(url)) g.img = ultimaImg.get(url);
       const a = analizaCuerpo(g.titulo, cuerpo, g.fecha);
-      for (const m of g.medios) cache[m.url] = { ...a, t: Date.now() };
+      for (const m of g.medios) cache[m.url] = { ...a, t: Date.now(), ...(m.url === url && ultimaPago.get(url) ? { pago: true } : {}) };
     }
   }));
   // Lo ya analizado en pasadas anteriores también cuenta
@@ -757,7 +763,8 @@ async function main() {
       ...(a ? { analisis: a } : {}),
       ...(g.img ? { img: g.img } : {}),
       ...(g.local ? { local: true } : {}),
-      medios: g.medios,
+      // Los de pago, al final: así el primer enlace es una versión que se puede leer entera
+      medios: g.medios.map(m => cache[m.url]?.pago ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0)),
       publicado: g.fecha.toISOString(),
       hora: horaMadrid(g.fecha),
       _dia: fechaMadrid(g.fecha),
