@@ -1,0 +1,476 @@
+{
+ "El Día de Segovia": [
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z710c0d91-e74e-4879-af732caeaa5fc93b/202610/un-zamorano-gana-el-certamen-sobre-el-eclipse-miradas-cajaviva",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 14,
+   "chars": 8768,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/zba009ce6-564a-4dc1-a83e2d92c692949f/202610/una-periodista-rusa-que-vive-en-segovia-os-manipulan",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 8,
+   "chars": 8850,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z8a730786-a2af-4675-bdb6cbe4be496fd2/202610/segovia-acoge-una-pasarela-de-moda-circular",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 12,
+   "chars": 9702,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/zbef0e08c-4eb9-4706-87f0c8f5266e685f/202610/hacienda-desbloquea-la-contratacion-de-la-piscina-cubierta",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 9,
+   "chars": 8046,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z0cd1a38c-f021-4161-8a533c963e67047a/202610/el-pleno-municipal-rechaza-la-propuesta-para-hacer-el-ferial",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 9,
+   "chars": 8848,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/zd308f044-ee5d-429c-814cbd8ce43949d4/202610/aprobada-definitivamente-la-ordenanza-de-la-zbe-de-segovia",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 9,
+   "chars": 9229,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z3c64d44b-5984-4642-93d5740db10f44f0/202610/un-familiar-de-miembros-del-mester-entre-los-desaparecidos",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 8,
+   "chars": 8229,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z1f675e32-e326-4b86-9c10f5f70a38288a/202610/tres-contratos-para-la-cabalgata-de-reyes-suman-117-000-euros",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 17,
+   "chars": 10559,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z82d5a075-b948-4796-850f51c6db3c7297/202610/cancelaciones-y-retrasos-en-guiomar-por-las-huelgas",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 8,
+   "chars": 8017,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z5181878d-f8d0-4421-b7b2e1b43a2264ea/202610/somacyl-licita-la-depuracion-y-mejora-del-agua-en-ocho-pueblos",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 19,
+   "chars": 11750,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z74786a67-d6f6-4394-aa429b2f11e1e5cf/202610/la-cara-mas-fea-de-la-muralla",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 10,
+   "chars": 7729,
+   "ctx": ""
+  },
+  {
+   "u": "https://www.eldiasegovia.es/noticia/z8fb1b26e-e203-41e0-8b2c288615bb1992/202610/un-debut-literario-entre-el-amor-y-las-meigas",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [],
+   "parrafos": 9,
+   "chars": 9210,
+   "ctx": ""
+  }
+ ],
+ "El Adelantado": [
+  {
+   "u": "https://eladelantado.com/provincia/2026/10/31/algunos-difuntos-ilustres-que-descansan-en-cementerios-segovianos/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 11,
+   "chars": 14481,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/provincia/2026/10/31/las-necesidades-de-la-provincia-estan-cubiertas/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 10,
+   "chars": 13942,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/segovia/2026/10/31/segovia-despide-el-tiempo-de-animas/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 8,
+   "chars": 13636,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/segovia/2026/10/31/el-40-de-los-fallecidos-en-segovia-tienen-mas-de-90-anos/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 11,
+   "chars": 14518,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/suplementos/2026/10/31/confort-energetico-2026/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 3,
+   "chars": 11234,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/segovia/2026/10/31/el-festival-corea-de-arauxo-dedica-a-las-victimas-de-urda-su-concierto-de-esta-tarde/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 14,
+   "chars": 14961,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/castilla-leon/2026/10/30/siete-condenados-por-el-cambiazo-de-ataudes-en-la-funeraria-el-salvador/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 14,
+   "chars": 16144,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/castilla-leon/2026/10/30/las-cortes-regionales-debatiran-sobre-la-seguridad-en-las-calles-en-el-proximo-pleno/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 10,
+   "chars": 13458,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/castilla-leon/2026/10/30/sube-en-18-dias-la-espera-media-para-ser-operado-hasta-los-119/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 14,
+   "chars": 15506,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/provincia/2026/10/30/palazuelos-de-eresma-rinde-un-homenaje-a-olivia-garcia/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 6,
+   "chars": 11981,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/provincia/2026/10/30/la-banda-de-musica-y-la-banda-de-la-escuela-de-musica-se-unen-por-santa-cecilia/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 7,
+   "chars": 12554,
+   "ctx": ""
+  },
+  {
+   "u": "https://eladelantado.com/provincia/2026/10/30/talleres-para-prevenir-el-deterioro-cognitivo-en-cantimpalos/",
+   "status": 200,
+   "free": "",
+   "tier": "",
+   "prem": [
+    "on+",
+    "premium"
+   ],
+   "parrafos": 8,
+   "chars": 12559,
+   "ctx": ""
+  }
+ ],
+ "El Norte de Castilla": [
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/ciclo-patrimonio-puntualmente-sale-cuellar-comarca-20261031193439-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 22,
+   "chars": 5142,
+   "ctx": ".voc-d span.paywall[data-15be3f6ae5dbb9d458d],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/buena-costumbre-perder-20261031103143-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 19,
+   "chars": 7361,
+   "ctx": ".voc-d span.paywall[data-4cb9316ae5dbbc774c4],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/palazuelos-eresma-torrecaballeros-recuerdan-emocion-pequena-olivia-20261031101809-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 20,
+   "chars": 3803,
+   "ctx": ".voc-d span.paywall[data-7c32a96ae5d96370f85],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/cuellar-aprueba-consenso-cambio-normas-frenar-plantas-20261031003257-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 24,
+   "chars": 5925,
+   "ctx": ".voc-d span.paywall[data-df819b6ae5db3d4eecb],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/sociedades-registradas-censo-segoviano-permanecen-inactivas-20261031111514-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 22,
+   "chars": 5362,
+   "ctx": ".voc-d span.paywall[data-f80bb06ae5d99a1cc7a],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/segovia-provincia-pais-empresas-crea-disuelve-20261031100333-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 25,
+   "chars": 9195,
+   "ctx": ".voc-d span.paywall[data-ddb61f6ae5d99be48b2],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/mujer-herida-empotrarse-coche-muro-angeles-san-20261030211600-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 18,
+   "chars": 3830,
+   "ctx": ".voc-d span.paywall[data-1bd8236ae5dbebe55e3],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/nueva-jornada-caos-incertidumbre-trenes-segovia-tras-20261030190841-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 22,
+   "chars": 5980,
+   "ctx": ".voc-d span.paywall[data-d634cb6ae5da8c41534],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/segovia-amplia-plazas-aparcamiento-facilitar-acceso-cementerio-20261030133420-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 24,
+   "chars": 5039,
+   "ctx": ".voc-d span.paywall[data-4dd5196ae5d996edf9e],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/segovia-aprueba-definitivamente-ordenanza-bajas-emisiones-20261030133137-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 24,
+   "chars": 5608,
+   "ctx": ".voc-d span.paywall[data-3fb9f86ae5dc478b432],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/francia-argentina-concentran-tres-diez-electores-segovianos-20261030080730-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 20,
+   "chars": 4940,
+   "ctx": ".voc-d span.paywall[data-a9cff56ae5dc47ededa],"
+  },
+  {
+   "u": "https://www.elnortedecastilla.es/segovia/segovia-suma-550-votantes-extranjero-2023-plena-20261030080703-nt.html",
+   "status": 200,
+   "free": "false",
+   "tier": "",
+   "prem": [
+    "paywall",
+    "on+",
+    "premium",
+    "suscriptores",
+    "ev-paywall"
+   ],
+   "parrafos": 29,
+   "chars": 10256,
+   "ctx": ".voc-d span.paywall[data-000b036ae5d962a3e1b],"
+  }
+ ]
+}
