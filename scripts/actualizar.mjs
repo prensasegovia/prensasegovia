@@ -542,7 +542,7 @@ const FUERTE = {
 };
 const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
 function analizaCuerpo(titulo, cuerpo, publicada) {
-  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 3 };
+  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 4 };
   const t = norm(cuerpo.slice(0, 5000));
   const cats = [], pistas = [];
   for (const [k, re] of Object.entries(FUERTE)) {
@@ -569,7 +569,7 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   // Dónde ocurre: solo cuenta si Segovia o un pueblo aparecen en la entradilla (no una mención de pasada más abajo)
   let lugar = municipioDe(cuerpo.slice(0, 700));
   if (!(CONCRETO(lugar) || lugar === "Segovia")) lugar = "";
-  return { v: 3, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
+  return { v: 4, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
 function limpiaAnalisis(a) {
@@ -750,7 +750,7 @@ async function main() {
   let previoTmp = { dias: [] };
   try { previoTmp = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const conocidas = new Set((previoTmp.dias || []).flatMap(d => d.noticias.flatMap(n => n.medios.map(m => m.url))));
-  const analizada = u => cache[u] && cache[u].v === 3; // las de versiones anteriores se vuelven a leer
+  const analizada = u => cache[u] && cache[u].v === 4; // las de versiones anteriores se vuelven a leer
   const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || analizada(m.url)));
   let leidas = 0;
   const cola = pendientes.slice(0, 80);
