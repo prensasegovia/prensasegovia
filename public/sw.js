@@ -1,5 +1,5 @@
 // Prensa Segovia: siempre intenta la red primero; si no hay cobertura, abre con lo último guardado.
-const CACHE = "prensa-segovia-v22";
+const CACHE = "prensa-segovia-v23";
 self.addEventListener("install", e => { self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener("fetch", e => {

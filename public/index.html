@@ -377,6 +377,14 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .compacta .feed{gap:6px}
 @media (min-width:1024px){ .chip.filters{display:none} }
 @media (max-width:420px){ .sy-l{display:none} #syncTxt{text-transform:none} #syncTxt::first-letter{text-transform:uppercase} }
+.syncpill{display:none}
+@media (min-width:1024px){
+  .brand small{display:none}
+  .syncpill{display:flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;font-size:14.5px;white-space:nowrap;margin-right:4px}
+  .syncpill svg{width:18px;height:18px;opacity:.9}
+  .syncpill b{font-weight:700}
+  .syncpill.viejo{background:#B3261E}
+}
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
 </style>
@@ -811,11 +819,13 @@ function appbar(){
   const bar = $("#appbar");
   if (st.sub){
     const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="parte" ? "Parte del día" : "Medios";
-    bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div>`;
+    bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div><div class="syncpill" id="syncPill" title="Las noticias se revisan cada hora"></div>`;
+    syncLabel();
     $("#btnBack").onclick = () => cerrarSub();
     return;
   }
   bar.innerHTML = `<div class="brand"><img src="brand.png" alt=""><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
+    <div class="syncpill" id="syncPill" title="Las noticias se revisan cada hora"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
     <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar">${I.reload}</button>`;
   $("#btnSearch").onclick = () => toggleSearch();
@@ -834,14 +844,16 @@ function avisoViejo(){
   return `<div class="viejo-w"><div class="viejo"><b>Sin actualizar desde hace ${t}</b> (última revisión: ${esc(fmtCorto(st.actualizado.slice(0,10)))}, ${esc(st.actualizado.slice(11,16))}). Puede faltar lo más reciente.</div></div>`;
 }
 function syncLabel(){
-  const tx = $("#syncTxt"); if (!tx) return;
-  if (!st.actualizado){ tx.textContent = st.loaded ? (st.error?"Sin conexión":"Sin datos") : "Cargando…"; return; }
+  const tx = $("#syncTxt") || {}; const pl0 = $("#syncPill");
+  if (!$("#syncTxt") && !pl0) return;
+  if (!st.actualizado){ tx.textContent = st.loaded ? (st.error?"Sin conexión":"Sin datos") : "Cargando…"; if (pl0) pl0.textContent = tx.textContent; return; }
   const m = st.actualizado.match(/(\d{4}-\d{2}-\d{2})[ T](\d{2}):(\d{2})/);
   if (!m){ tx.textContent = "Actualizado"; return; }
   const min = Math.max(0, Math.round((Date.now()-new Date(`${m[1]}T${m[2]}:${m[3]}:00`).getTime())/6e4));
   const dia = m[1]===today() ? "hoy" : m[1]===addDays(today(),-1) ? "ayer" : fmtCorto(m[1]).toLowerCase();
   const hace = min < 2 ? "ahora mismo" : min < 60 ? `hace ${min} min` : min < 1440 ? `hace ${Math.floor(min/60)} h` : "";
   tx.innerHTML = `<span class="sy-l">Actualizado </span>${dia}, ${m[2]}:${m[3]}${hace?` · ${hace}`:""}`;
+  const pl = $("#syncPill"); if (pl){ pl.classList.toggle("viejo", min > 150); pl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Actualizado <b>${dia} a las ${m[2]}:${m[3]}</b>${hace?` · ${hace}`:""}</span>`; }
 }
 setInterval(syncLabel, 60000);
 
@@ -999,7 +1011,7 @@ function renderAside(news){
   h += `</div>`;
   el.innerHTML = h;
   const f = $("#sideFoot");
-  if (f){ const ok = st.fuentes.filter(x=>x.ok).length; f.innerHTML = `${st.actualizado?`Última revisión: ${esc(fmtCorto(st.actualizado.slice(0,10)))}, ${esc(st.actualizado.slice(11,16))}<br>`:""}${ok} de ${st.fuentes.length} fuentes responden<br><span style="opacity:.8">Atajo: tecla <b>/</b> para buscar</span>`; }
+  if (f){ const ok = st.fuentes.filter(x=>x.ok).length; f.innerHTML = `${ok} de ${st.fuentes.length} fuentes responden<br><span style="opacity:.8">Atajo: tecla <b>/</b> para buscar</span>`; }
 }
 $("#aside").addEventListener("click", e=>{
   const a = e.target.closest("a[data-k]"); if (a){ marcarVisto([a.dataset.k]); return; }
