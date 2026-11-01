@@ -1,22 +1,22 @@
-// Diagnóstico (7ª ronda): por qué 3 webs WordPress devuelven HTTP 415
+// Diagnóstico (8ª ronda): ¿podemos usar los modelos de IA de GitHub gratis desde Actions?
 import { writeFileSync } from "node:fs";
-const URLS = ["https://ppsegovia.com/feed/", "https://www.lalosa.es/feed/", "https://navadelaasuncion.org/feed/"];
-const H = {
-  rss: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "application/rss+xml, application/xml, text/xml, */*", "Accept-Language": "es-ES,es;q=0.9" },
-  nav: { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" },
-  html: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "es-ES,es;q=0.9", "Accept-Encoding": "gzip, deflate, br" },
-  feedly: { "User-Agent": "Feedly/1.0 (+http://www.feedly.com/fetcher.html; like FeedFetcher-Google)" },
-  nada: {},
-};
+const T = process.env.GITHUB_TOKEN;
 const out = {};
-for (const base of URLS) {
-  out[base] = {};
-  for (const u of [base, base.replace(/\/feed\/$/, "/?feed=rss2"), base.replace(/\/feed\/$/, "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title")]) {
-    for (const [k, h] of Object.entries(H)) {
-      try { const r = await fetch(u, { headers: h, redirect: "follow", signal: AbortSignal.timeout(15000) }); const t = await r.text();
-        out[base][u.slice(base.length - 6) + " " + k] = { s: r.status, feed: /<(rss|feed)[\s>]/i.test(t.slice(0, 2000)), json: t.trim().startsWith("["), len: t.length, server: r.headers.get("server"), muestra: t.slice(0, 160) };
-      } catch (e) { out[base][u.slice(base.length - 6) + " " + k] = { err: String(e.message).slice(0, 60) }; }
-    }
+const prueba = [
+  "Detenido un joven en Cuéllar por agredir a dos personas en las fiestas",
+  "El Nava se enreda en el último asalto",
+  "La planta de biometano enfrenta posturas y aviva la polémica en Cantalejo",
+  "Los jefes de dotación del servicio de bomberos perfeccionan sus técnicas",
+];
+const prompt = `Eres analista de la unidad de Información de la Guardia Civil en la provincia de Segovia. Para cada titular, responde SOLO un JSON array con objetos {"i":n,"interesa":true|false,"tema":"policial|movilizaciones|politica|medioambiente|emergencias|autoridades|eventos|ninguno","grave":true|false}. Interesa: sucesos, movilizaciones y conflictos sociales, extremismos, política y visitas de cargos, medio ambiente con conflicto, emergencias reales, grandes eventos. No interesa: deporte, cultura, trámites.\n` + prueba.map((t, i) => `${i}. ${t}`).join("\n");
+for (const [k, url] of Object.entries({ usuario: "https://models.github.ai/inference/chat/completions", org: "https://models.github.ai/orgs/prensasegovia/inference/chat/completions" })) {
+  for (const model of ["openai/gpt-4.1-mini", "openai/gpt-4o-mini"]) {
+    try {
+      const t0 = Date.now();
+      const r = await fetch(url, { method: "POST", headers: { Authorization: `Bearer ${T}`, "Content-Type": "application/json", Accept: "application/vnd.github+json" }, body: JSON.stringify({ model, temperature: 0, messages: [{ role: "user", content: prompt }] }), signal: AbortSignal.timeout(60000) });
+      const txt = await r.text();
+      out[`${k} ${model}`] = { status: r.status, ms: Date.now() - t0, limites: Object.fromEntries([...r.headers].filter(([h]) => /ratelimit|retry/i.test(h))), respuesta: txt.slice(0, 1500) };
+    } catch (e) { out[`${k} ${model}`] = { err: String(e.message) }; }
   }
 }
-writeFileSync("diag/feeds7.json", JSON.stringify(out, null, 1));
+writeFileSync("diag/ia.json", JSON.stringify(out, null, 1));
