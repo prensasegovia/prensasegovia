@@ -385,6 +385,16 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .syncpill b{font-weight:700}
   .syncpill.viejo{background:#B3261E}
 }
+/* hemeroteca */
+.hlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.hrow{display:flex;flex-direction:column;gap:3px;padding:11px 14px;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.hrow:first-child{border-top:0}
+.hrow b{font-size:15px;line-height:1.3;font-weight:600}
+.hrow span{font-size:12.5px;color:var(--muted)}
+.hrow em{font-style:normal;font-size:13.5px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hrow:hover b{color:var(--pine-2)}
+.gbox .gbtns{display:flex;gap:8px;flex-wrap:wrap}
+.gbox .btn{text-decoration:none;display:inline-flex;align-items:center}
 /* archivo */
 .arcbox{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:18px 0 10px;padding:14px 16px;border:1px dashed var(--line);border-radius:16px;background:var(--surface)}
 .arcbox b{display:block;font-size:15px}.arcbox span{font-size:13.5px;color:var(--muted)}
@@ -583,6 +593,43 @@ function allNews(){
   for (const d of st.dias) for (const n of (d.noticias||[])){ const x = procesa(n, d.fecha); if (!map.has(x._key)) map.set(x._key, x); }
   return (cacheNews = [...map.values()]);
 }
+/* ================= Hemeroteca: todo lo publicado por nuestros medios ================= */
+const hem = { estado: "no", meses: [], cargados: [], items: [], desde: "" };
+async function cargaHemeroteca(masMeses){
+  if (hem.estado==="cargando") return;
+  hem.estado = "cargando"; render(true);
+  try {
+    if (!hem.meses.length){ const ind = await (await fetch("hemeroteca/indice.json?t="+Date.now(), {cache:"no-store"})).json(); hem.meses = (ind.meses||[]).map(m=>m.mes).sort().reverse(); }
+    const faltan = hem.meses.filter(m=>!hem.cargados.includes(m)).slice(0, masMeses ? 3 : 3);
+    const arcs = await Promise.all(faltan.map(m=>fetch(`hemeroteca/${m}.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
+    for (const a of arcs) if (a){ hem.items.push(...(a.n||[]).map(x=>({...x, _n: norm([x.t,x.r,x.m,x.p].join(" "))}))); }
+    hem.cargados.push(...faltan);
+    hem.desde = [...hem.cargados].sort()[0] || "";
+    hem.estado = "ok";
+  } catch(e){ hem.estado = "error"; }
+  render(true);
+}
+function bloqueHemeroteca(words){
+  const intro = `<div class="dayhead arch"><h3>Hemeroteca: todo lo publicado</h3><span>todos nuestros medios</span></div>`;
+  if (hem.estado==="no") return `<div class="arcbox"><div><b>Buscar en todo lo publicado</b><span>Todas las noticias de nuestros medios, también las que la app no consideró de interés.</span></div><button class="btn" data-act="hemeroteca" type="button">Buscar en la hemeroteca</button></div>`;
+  if (hem.estado==="cargando") return intro + `<div class="empty small">Cargando la hemeroteca…</div>`;
+  if (hem.estado==="error") return `<div class="arcbox"><div><b>No se pudo cargar la hemeroteca</b><span>Puede que aún no tenga datos o que no haya conexión.</span></div><button class="btn" data-act="hemeroteca" type="button">Reintentar</button></div>`;
+  const res = hem.items.filter(x=>words.every(w=>x._n.includes(w)));
+  const vistos = new Set(); const unicos = res.filter(x=>{ const k = norm(x.t); if (vistos.has(k)) return false; vistos.add(k); return true; });
+  const mas = hem.meses.some(m=>!hem.cargados.includes(m));
+  let h = `<div class="dayhead arch"><h3>Hemeroteca${hem.desde?` (desde ${esc(mesLargo(hem.desde))})`:""}</h3><span>${plural(unicos.length,"noticia","noticias")}</span></div>`;
+  h += unicos.length ? `<div class="hlist">` + unicos.slice(0,150).map(x=>`<a class="hrow" href="${esc(safeUrl(x.u)||"#")}" target="_blank" rel="noopener"><b>${hl(x.t)}</b><span>${esc(x.m||"")} · ${esc(cuando(x.f.slice(0,10), x.f.slice(11,16)))}${x.p?` · ${esc(x.p)}`:""}</span>${x.r?`<em>${hl(x.r)}</em>`:""}</a>`).join("") + `</div>` + (unicos.length>150?`<div class="empty small">Se muestran las 150 más recientes. Afina la búsqueda con más palabras.</div>`:"")
+    : `<div class="empty small">Nada en la hemeroteca con esa búsqueda.</div>`;
+  if (mas) h += `<div class="arcbox"><div><b>¿Más atrás?</b><span>Cargar los meses anteriores de la hemeroteca.</span></div><button class="btn ghost" data-act="hemeroteca-mas" type="button">Cargar meses anteriores</button></div>`;
+  return h;
+}
+// Búsqueda en Google limitada a nuestros medios (también busca años atrás)
+const DOMINIOS = ["eladelantado.com","elnortedecastilla.es","eldiasegovia.es","segoviaudaz.es","segoviadirecto.com","tribunasegovia.com","acueducto2.com","escuellar.es","elnordestedesegovia.es","diariodecastillayleon.es","europapress.es","cope.es","ondacero.es","hoycyl.com","segovia247.es","cadenaser.com"];
+function bloqueGoogle(q){
+  const g = "https://www.google.com/search?q=" + encodeURIComponent(q + " (" + DOMINIOS.map(d=>"site:"+d).join(" OR ") + ")");
+  const gn = "https://news.google.com/search?q=" + encodeURIComponent(q + (/segovia/i.test(q)?"":" Segovia")) + "&hl=es&gl=ES&ceid=ES:es";
+  return `<div class="arcbox gbox"><div><b>Buscar fuera de la app</b><span>En Google, solo en nuestros periódicos y webs (también años atrás), o en Google Noticias.</span></div><div class="gbtns"><a class="btn" href="${esc(g)}" target="_blank" rel="noopener">Google en nuestros medios</a><a class="btn ghost" href="${esc(gn)}" target="_blank" rel="noopener">Google Noticias</a></div></div>`;
+}
 /* ================= Archivo histórico (meses anteriores) ================= */
 const arc = { estado: "no", news: [], desde: "" }; // no | cargando | ok | error
 async function cargaArchivo(){
@@ -750,7 +797,7 @@ function viewBusqueda(news){
   const coincide = n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); };
   return `<div class="sect"><h2>Resultados</h2><span class="aux">${plural(res.length,"noticia","noticias")} en 21 días, sin filtros</span></div><div class="feed">` +
     (res.length ? res.map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados en los últimos 21 días</b>Prueba con otra palabra, el nombre de un pueblo o busca en el archivo.</div>`) +
-    bloqueArchivo(news, coincide, "con esa búsqueda") + `</div>`;
+    bloqueArchivo(news, coincide, "con esa búsqueda") + bloqueHemeroteca(words) + bloqueGoogle(st.q) + `</div>`;
 }
 
 function viewAgenda(news){
@@ -1069,6 +1116,8 @@ $("#app").addEventListener("click", e=>{
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);
   else if (act==="archivo"){ arc.estado = "no"; cargaArchivo(); }
+  else if (act==="hemeroteca"){ if (hem.estado!=="ok") { hem.estado="no"; cargaHemeroteca(); } }
+  else if (act==="hemeroteca-mas"){ cargaHemeroteca(true); }
 });
 
 // Al cambiar un filtro: se redibuja y, si estabas más abajo, la lista empieza justo bajo la barra de temas

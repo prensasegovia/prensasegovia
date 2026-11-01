@@ -7,7 +7,7 @@ on:
   workflow_dispatch: {}
   push:
     branches: [main]
-    paths-ignore: ["public/datos.json", "public/periodicos.json", "public/archivo/**", "datos/**", "diag/**", "scripts/descubrir.mjs", ".github/workflows/diagnostico.yml"]
+    paths-ignore: ["public/datos.json", "public/periodicos.json", "public/archivo/**", "public/hemeroteca/**", "datos/**", "diag/**", "scripts/descubrir.mjs", ".github/workflows/diagnostico.yml"]
 
 permissions:
   contents: write
@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "prensa-bot"
           git config user.email "prensa-bot@users.noreply.github.com"
-          git add public/datos.json public/periodicos.json public/archivo/ datos/
+          git add public/datos.json public/periodicos.json public/archivo/ public/hemeroteca/ datos/
           git diff --cached --quiet || git commit -m "Noticias actualizadas $(date -u +'%Y-%m-%d %H:%M') UTC"
           for i in 1 2 3; do git push && break; git pull --rebase -X theirs -q; sleep 3; done
 

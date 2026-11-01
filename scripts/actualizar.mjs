@@ -744,6 +744,9 @@ async function main() {
   const viaGoogle = {};
   for (const b of brutos) if (!b.directo) { const m = canonMedio(b.medio); if (!directos.has(m)) viaGoogle[m] = (viaGoogle[m] || 0) + 1; }
 
+  // Hemeroteca: TODO lo que publican nuestros medios (también lo que no pasa el filtro), para buscar en el pasado
+  try { await hemeroteca(brutos, ahora); } catch (e) { console.log("Hemeroteca: error", e.message); }
+
   // 3) Filtrar por fecha y agrupar duplicados (las de medios directos primero: traen mejor enlace y entradilla)
   const recientes = brutos.filter(b => !isNaN(b.fecha) && b.fecha >= limite && b.fecha <= new Date(ahora.getTime() + 36e5))
                           .sort((a, b) => (b.directo - a.directo) || (b.fecha - a.fecha));
@@ -994,6 +997,37 @@ async function main() {
 
 // Archivo histórico: todo lo que ha pasado el filtro, guardado por meses (public/archivo/AAAA-MM.json) para buscar en el pasado.
 // Los días de las últimas 3 semanas se copian tal cual están ahora (con las reglas actuales); los anteriores ya no se tocan.
+// Hemeroteca completa: titular, resumen corto, medio, fecha y enlace de todo lo leído, por meses (public/hemeroteca/AAAA-MM.json).
+// Solo suma: lo ya guardado no se borra. No guarda el texto completo de los artículos.
+async function hemeroteca(brutos, ahora) {
+  const DIR = new URL("../public/hemeroteca/", import.meta.url);
+  await mkdir(DIR, { recursive: true });
+  const porMes = new Map();
+  for (const b of brutos) {
+    if (!b.titulo || !b.url || isNaN(b.fecha) || b.fecha > new Date(ahora.getTime() + 36e5)) continue;
+    if (BASURA.test(norm(b.titulo))) continue;
+    const f = fechaMadrid(b.fecha), mes = f.slice(0, 7);
+    if (!porMes.has(mes)) porMes.set(mes, []);
+    const r = recorta(sinColas(limpia(b.texto || "")), 220);
+    const p = municipioDe(b.titulo + " " + r);
+    porMes.get(mes).push({ t: b.titulo, u: b.url, f: f + " " + horaMadrid(b.fecha), m: canonMedio(b.medio), ...(r && norm(r) !== norm(b.titulo) ? { r } : {}), ...(p && p !== "General" ? { p } : {}) });
+  }
+  let indice = { meses: [] };
+  try { indice = JSON.parse(await readFile(new URL("indice.json", DIR), "utf8")); } catch {}
+  for (const [mes, nuevas] of porMes) {
+    const fich = new URL(mes + ".json", DIR);
+    let arc = { mes, n: [] };
+    try { arc = JSON.parse(await readFile(fich, "utf8")); } catch {}
+    const urls = new Set(arc.n.map(x => x.u)), tits = new Set(arc.n.map(x => norm(x.t) + "|" + x.m));
+    for (const x of nuevas) { const k = norm(x.t) + "|" + x.m; if (urls.has(x.u) || tits.has(k)) continue; urls.add(x.u); tits.add(k); arc.n.push(x); }
+    arc.n.sort((a, b) => b.f.localeCompare(a.f));
+    await writeFile(fich, JSON.stringify(arc));
+    indice.meses = [...indice.meses.filter(x => x.mes !== mes), { mes, n: arc.n.length }].sort((a, b) => b.mes.localeCompare(a.mes));
+  }
+  indice.actualizado = `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`;
+  await writeFile(new URL("indice.json", DIR), JSON.stringify(indice));
+}
+
 async function archivar(dias, ahora) {
   const DIR = new URL("../public/archivo/", import.meta.url);
   await mkdir(DIR, { recursive: true });
