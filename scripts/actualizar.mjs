@@ -462,6 +462,8 @@ function relleno(n) {
   if (/simulacro|\bcurso\b|formacion|jornadas? (de formacion|tecnicas?|formativas?)|perfeccion|practicas|entrenamiento|maniobras|ejercicios? (de|practico)|nuevos? (camion|vehiculo|parque|autobomba)|adquiere|reciben? (formacion|un nuevo)/.test(tt) && solo(["emergencias", "politica", "autoridades", "medioambiente"])) return true;
   // Cementerios y Todos los Santos (cifras de enterramientos, flores, horarios): no interesan salvo robos o profanaciones
   if (/cementerio|difuntos|todos los santos|tanatorio|enterramientos|sepelios/.test(tt) && solo(["emergencias", "politica", "social"]) && !/accidente|incendio|robo|roban|profan|vandal|pintadas|destroz|agresion|protesta|polemica/.test(tt)) return true;
+  // Proyectos que suelen generar rechazo (biogás, macrogranjas, solares, canteras, vertederos, alta tensión): solo con conflicto, no los trámites
+  if (/biog|biomet|macrogranja|granja porcina|planta solar|fotovoltaic|parque (solar|eolico)|cantera|vertedero|alta tension|digestion anaerobia/.test(tt) && solo(["medioambiente", "politica", "autoridades"]) && !CONFLICTO.test(tt) && !/stop |crispa|tension|enfrent|movili|firmas|critic|preocupa|inquiet|malestar|olores|salida al problema|problema/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && c.includes("politica") && solo(["politica", "eventos"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
