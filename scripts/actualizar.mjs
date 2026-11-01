@@ -50,6 +50,7 @@ const FEEDS = [
   { nombre: "20minutos", urls: ["https://www.20minutos.es/rss/castilla-y-leon/"], soloSiMenciona: true },
   { nombre: "eldiario.es Castilla y León", urls: ["https://www.eldiario.es/rss/castilla-y-leon/"], soloSiMenciona: true },
   { nombre: "El Español Castilla y León", urls: ["https://www.elespanol.com/rss/castilla-y-leon/"], soloSiMenciona: true },
+  { nombre: "HoyCyL", urls: ["https://hoycyl.com/secciones/segovia/feed/", "https://hoycyl.com/feed/"], soloSiMenciona: true },
   // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
@@ -88,6 +89,7 @@ const INFO_FUENTE = {
   "Europa Press": ["Agencias y medios regionales", "https://www.europapress.es/castilla-y-leon/"],
   "Agronews Castilla y León": ["Sector agrario", "https://www.agronewscastillayleon.com"],
   "Diario de Ávila": ["Agencias y medios regionales", "https://www.diariodeavila.es"],
+  "HoyCyL": ["Agencias y medios regionales", "https://hoycyl.com/secciones/segovia/"],
   "Diputación de Segovia": ["Instituciones", "https://www.dipsegovia.es/noticias"],
   "Segovia Sur": ["Comarcales y locales", "https://www.segoviasur.com"],
   "okdiario": ["Agencias y medios regionales", "https://okdiario.com/noticias/segovia"],
