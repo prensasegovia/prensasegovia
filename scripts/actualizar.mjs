@@ -328,21 +328,23 @@ const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
 // IMPORTANTE (rojo): solo lo grave de verdad, y decidido por el titular
 const UTILES_GLOBAL = ["policial", "social", "medioambiente", "politica", "emergencias", "autoridades"];
-const ALTA = /ransomware|secuestro de datos|ataque informatico (a|al|contra)|hackean (la|el|los)|amenazas? de bomba|fabricar (una )?bomba|artefacto explosivo|bomba casera|ciberataques? (a|contra|desde)|yihadis|terroris|radicalizad|celula (yihadista|terrorista)|sabotaje|robo de cobre|cable de cobre|\bdron(es)? (sobre|en) (la )?(prision|carcel|centro penitenciario)|ciberataque|detenid|detien|detencion|arrestad|agresion|agredid|apunal|acuchill|reyerta|pelea multitudinaria|tiroteo|disparo|violencia de genero|violencia machista|asesin|homicid|mata a|muerte violenta|cadaver|robo con violencia|atraco|okupa|ocupacion ilegal|banda (latina|juvenil|organizada|criminal)|trinitarios|organizacion criminal|delito de odio|\boperacion (de la guardia civil|antidroga|policial)|desarticula|incautad|narcotrafic|manifestacion|concentracion (de|contra|en|frente|ante|convocada)|se concentrar|se manifestar|convoca(n|do|da)? (una |la )?(concentracion|manifestacion|huelga|protesta|movilizacion|tractorada|marcha)|huelga (indefinida|general)|tractorada|corte de (la )?(carretera|via|autovia)|cortan la|encierro (de|en) protesta|se encierran|desalojo|desahucio|disturbios|altercados|enfrentamiento|cargas policiales|pintadas|\bultras\b|ultraderech|neonazi|esvastica|fallec|muere|murio|muertos?\b|mortal|herido grave|heridos graves|incendio|desaparecid|rescat|evacuad|explosion|derrumbe|visita (del|de la) (ministr|president|rey|reina|vicepresident)|felipe vi|\bel rey\b|mitin|\bvertidos?\b|peces muertos|muerte de peces/;
+const ALTA = /(preso|interno|recluso)s? (lesiona|agrede|ataca|hiere)|funcionarios? (de prisiones )?(agredid|herid|lesionad)|ransomware|secuestro de datos|ataque informatico (a|al|contra)|hackean (la|el|los)|amenazas? de bomba|fabricar (una )?bomba|artefacto explosivo|bomba casera|ciberataques? (a|contra|desde)|yihadis|terroris|radicalizad|celula (yihadista|terrorista)|sabotaje|robo de cobre|cable de cobre|\bdron(es)? (sobre|en) (la )?(prision|carcel|centro penitenciario)|ciberataque|detenidos|\d+ detenid|detenid[oa]s? (tras|por) (agred|apunal|atrac|robo con|violen|trafic|amenaz|abus|agresion)|detencion de (una banda|varios)|agresion|agredid|apunal|acuchill|reyerta|pelea multitudinaria|tiroteo|disparo|violencia de genero|violencia machista|asesin|homicid|mata a|muerte violenta|cadaver|robo con violencia|atraco|okupa|ocupacion ilegal|banda (latina|juvenil|organizada|criminal)|trinitarios|organizacion criminal|delito de odio|\boperacion (de la guardia civil|antidroga|policial)|desarticula|incautad|narcotrafic|manifestacion|concentracion (de|contra|en|frente|ante|convocada)|se concentrar|se manifestar|convoca(n|do|da)? (una |la )?(concentracion|manifestacion|huelga|protesta|movilizacion|tractorada|marcha)|huelga (indefinida|general)|tractorada|corte de (la )?(carretera|via|autovia)|cortan la|encierro (de|en) protesta|se encierran|desalojo|desahucio|disturbios|altercados|enfrentamiento|cargas policiales|pintadas|\bultras\b|ultraderech|neonazi|esvastica|fallec|muere|murio|muertos?\b|mortal|herido grave|heridos graves|incendio|desaparecid|rescat|evacuad|explosion|derrumbe|visita (del|de la) (ministr|president|rey|reina|vicepresident)|felipe vi|\bel rey\b|mitin|\bvertidos?\b|peces muertos|muerte de peces/;
 // Actos de recuerdo con carga política (franquismo, memoria histórica, terrorismo, partidos): sí son importantes
 const ACTO_RECUERDO = /homenaje|exaltacion|marcha|monolito|cruz|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
 const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
 const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
-const SERVICIO = /fibra|cobertura|internet|telefonia|\bmovil\b|operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
-const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
+const SERVICIO = /rutas? escolar|transporte escolar|fibra|cobertura|internet|telefonia|\bmovil\b|operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
+const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso(?! de la covid)|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /alcalde(sa)? de (madrid|valladolid|salamanca|avila|burgos|leon|zamora|palencia|soria|barcelona|sevilla|valencia)|almeida|ayuso|ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
 const PREVENTIVO = /preve|prevision|peligro|riesgo|recomendaciones|recomienda|\boperacion (salida|especial|retorno)|regulacion del trafico|corte(s)? (de )?trafico|bando|aviso amarillo|alerta amarilla|campana de|dispositivo especial|desplazamientos|accesos al cementerio|ruta/;
 const SUCESO = /herid|fallec|muere|murio|muert|accidente|colision|choque|atropell|incendio (en|declarado|forestal en|de una|de un)|arde|rescat|desaparecid|evacu|derrumbe|explosion|calcinad|vuelco|salida de via/;
 const CONFLICTO_POL = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|polemica|critica|denuncia|enfrent|tension|dimi|censura|acusa|reprocha|bronco|crispa|abandona|expuls|imputad|querella|candidat|elecciones|electoral|29n|mitin|campana|protesta|exige|reclama|rechazo|pide la|tumba|bloque|veta|oposicion/;
+// En la capital solo siguen en rojo las visitas de cargos y los incidentes en la cárcel
+const altaEnCapital = (tt, cats) => (cats.includes("autoridades") && VISITA.test(tt) && CARGO.test(tt)) || /centro penitenciario|\bcarcel|\bprision|\bpresos?\b|funcionario de prisiones/.test(tt);
 function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Las webs de ayuntamientos se juzgan solo por el titular (sus textos son avisos y bandos)
   if (soloTitulo) texto = "";
@@ -355,7 +357,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
   // Actos públicos de recuerdo o repulsa (minutos de silencio, vigilias, concentraciones de repulsa): gente en la calle
-  if (!categorias.includes("social") && /minutos? de silencio|concentracion de (repulsa|condena)|vigilia|homenaje a (las )?victima|ofrenda floral|recuerda a .{0,40}con/.test(tt)) categorias.unshift("social");
+  if (!categorias.includes("social") && (!/minutos? de silencio/.test(tt) || /violencia|asesin|terror|atentado|machista|agresion|odio/.test(t) || POLITIZADO.test(t)) && /minutos? de silencio|concentracion de (repulsa|condena)|vigilia|homenaje a (las )?victima|ofrenda floral|recuerda a .{0,40}con/.test(tt)) categorias.unshift("social");
   // Servicios públicos con problemas (sanidad, educación, transporte): fuente habitual de protestas
   if (!categorias.includes("social") && SERVICIO.test(tt) && SERVICIO_MAL.test(tt)) categorias.unshift("social");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
@@ -380,7 +382,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (municipio === "Segovia" && categorias.length && categorias.every(c => c === "politica") && !CONFLICTO_POL.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|\boperacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
-  if (municipio === "Segovia" && relevancia === "alta" && !politizado) relevancia = "media";
+  if (municipio === "Segovia" && relevancia === "alta" && !politizado && !altaEnCapital(tt, categorias)) relevancia = "media";
   return { categorias, relevancia, porTexto: porTexto && !politizado, noAlta: NO_ALTA.test(tt) && !politizado, politizado };
 }
 
@@ -393,7 +395,7 @@ const AGENDA_TITULO = /convoca|parar|paro (el|del|de)|llamad[oa]s a|jornada de (
 function eventoDe(titulo, texto, publicada, categorias = []) {
   if (!categorias.some(c => ["social", "autoridades", "politica", "eventos"].includes(c))) return {};
   const tt = norm(titulo);
-  if (!AGENDA_TITULO.test(tt)) return {};
+  if (!AGENDA_TITULO.test(tt) || /suspend|desconvoc|cancela|aplaza|anula/.test(tt)) return {};
   const t = norm(titulo + " " + texto);
   const tOrig = titulo + " " + texto;
   const base = new Date(fechaMadrid(publicada) + "T12:00:00");
@@ -433,7 +435,7 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", tren: "tren", trene: "tren", maqui: "tren" };
 // Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
 const MISMA_PERSONA = [[/alcalde de madrid|martinez-almeida|\balmeida\b/, "almeida"], [/presidente de la junta|\bmanueco\b/, "manueco"], [/presidenta de (la comunidad de )?madrid|\bayuso\b/, "ayuso"],
   [/presidente del gobierno|pedro sanchez/, "psanchez"], [/lider del pp|\bfeijoo\b/, "feijoo"], [/lider de vox|\babascal\b/, "abascal"], [/subdelegad[oa] del gobierno/, "subdelegado"], [/delegad[oa] del gobierno en castilla/, "delegado"]];
@@ -447,9 +449,10 @@ const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre
 const soloAyto = medios => medios.every(m => /^(ayuntamiento|diputaci)/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
 const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
+const NACIONAL_TREN = t => /maquinistas|\bouigo\b|\biryo\b|\badif\b|\brenfe\b/.test(t) && !/segovia|guiomar/.test(t);
 const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
 // Relleno que no aporta a la unidad aunque toque un tema de interés
-const POL_CONFLICTO = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|\bpp\b|psoe|\bvox\b|podemos|\bsumar\b|izquierda unida|\biu\b|segovia en marcha|por segovia|ciudadanos|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
+const POL_CONFLICTO = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
 const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las )?mesas|mesas electorales|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
@@ -474,7 +477,11 @@ function relleno(n) {
   // Cementerios y Todos los Santos (cifras de enterramientos, flores, horarios): no interesan salvo robos o profanaciones
   if (/cementerio|difuntos|todos los santos|tanatorio|enterramientos|sepelios/.test(tt) && solo(["emergencias", "politica", "social"]) && !/accidente|incendio|robo|roban|profan|vandal|pintadas|destroz|agresion|protesta|polemica/.test(tt)) return true;
   // Proyectos que suelen generar rechazo (biogás, macrogranjas, solares, canteras, vertederos, alta tensión): solo con conflicto, no los trámites
-  if (/biog|biomet|macrogranja|granja porcina|planta solar|fotovoltaic|parque (solar|eolico)|cantera|vertedero|alta tension|digestion anaerobia/.test(tt) && solo(["medioambiente", "politica", "autoridades"]) && !CONFLICTO.test(tt) && !/stop |crispa|tension|enfrent|movili|firmas|critic|preocupa|inquiet|malestar|olores|salida al problema|problema/.test(tt + " " + norm(n.resumen || ""))) return true;
+  if (/biog|biomet|macrogranja|granja porcina|planta solar|fotovoltaic|parque (solar|eolico)|cantera|vertedero|alta tension|digestion anaerobia|biomasa|red de calor/.test(tt) && solo(["medioambiente", "politica", "autoridades"]) && !CONFLICTO.test(tt) && !/stop |crispa|tension|enfrent|movili|firmas|critic|preocupa|inquiet|malestar|olores|salida al problema|problema|dudas|recela|teme/.test(tt + " " + norm(n.resumen || ""))) return true;
+  // Recogidas de firmas por asuntos culturales (entradas de teatro, festivales): sin más conflicto, no interesan
+  if (/firmas|queja|protesta/.test(tt) && /teatro|entradas|muestra|festival|concierto|cine\b/.test(tt) && !/agresion|detenid|polemica politica|cierre|despid|huelga/.test(tt)) return true;
+  // Actos institucionales de apoyo a la Guardia Civil (Pilar, homenajes, placas): no son información policial
+  if (/guardia civil|benemerita/.test(tt) && /apoyo|carino|homenaje|patrona|\bpilar\b|placas?\b|condecora|medallas?|aniversario/.test(tt) && !/detenid|herid|agresion|operacion|desarticula|incaut|muere|fallec/.test(tt)) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && c.includes("politica") && solo(["politica", "eventos"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
@@ -487,7 +494,7 @@ function relleno(n) {
   if ((c.includes("emergencias") || c.includes("medioambiente")) && solo(["emergencias", "politica", "autoridades", "medioambiente"]) && PREVENTIVO_EMERG.test(tt) && !INCIDENTE.test(tt)) return true;
   return false;
 }
-const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) ? pueblo : m;
+const conPueblo = (m, pueblo) => pueblo && !CONCRETO(m) && m !== "Segovia" ? pueblo : m;
 const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
@@ -821,7 +828,7 @@ async function main() {
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
-    if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo))) municipio = "Segovia"; // sección local de un medio de Segovia
+    if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
@@ -901,7 +908,7 @@ async function main() {
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
-      if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo))) n.municipio = "Segovia";
+      if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo))) n.municipio = "Segovia";
       // Webs municipales de otro pueblo que se agruparon por error
       if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
@@ -910,7 +917,7 @@ async function main() {
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
       if (!interesa(n)) return false;
-      if (n.municipio === "Segovia" && n.relevancia === "alta") n.relevancia = "media";
+      if (n.municipio === "Segovia" && n.relevancia === "alta" && !altaEnCapital(norm(n.titulo), n.categorias)) n.relevancia = "media";
       return true;
     });
   }
