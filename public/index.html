@@ -417,6 +417,20 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .searching .aside{top:calc(var(--bar) + 16px)}
   .gcards{grid-template-columns:1fr 1fr}
 }
+@media (max-width:1023px){
+  .hero{padding:2px 14px 12px;border-radius:0 0 20px 20px}
+  .hero .day{font-size:clamp(22px,6.2vw,30px);margin:4px 0 3px}
+  .hero .sum{font-size:13.5px}
+  .hero .stats{margin-top:9px;gap:6px}
+  .stat{min-height:0;padding:7px 10px;flex-direction:row;align-items:center;justify-content:flex-start;gap:7px}
+  .stat .n{font-size:19px}
+  .stat .l{margin-top:0;font-size:12.5px}
+  .stat .l svg{display:none}
+  .partebtn{margin-top:8px;padding:8px 12px;font-size:14.5px;border-radius:12px}
+  .partebtn span{display:none}
+  .chips{padding-top:8px;padding-bottom:6px}
+  .uptodate{margin:10px 6px 2px;font-size:13.5px}
+}
 @media (max-width:1023px){ .stabs{padding:4px 12px;gap:6px} .stab{font-size:14px;padding:7px 12px} .shelp{margin:6px 16px 10px} .shint{margin:14px 16px 8px} .gcards{padding:0 12px} }
 /* hemeroteca */
 .hlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
@@ -776,7 +790,7 @@ function chipsBar(pool){
     h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
   return `<div class="chips" id="chips">${h}</div>`;
 }
-const avisoFiltros = () => { const a = filtrosActivos(); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Ver todo</button></div>` : ""; };
+const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital"); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Ver todo</button></div>` : ""; };
 
 /* ================= Vistas ================= */
 function viewNoticias(news){
@@ -813,7 +827,7 @@ function viewNoticias(news){
     h += nuevas.map(n=>card(n)).join("");
     h += `<div class="uptodate"><span>${I.check}Hasta aquí lo nuevo</span></div>`;
   } else {
-    h += `<div class="allread"><span class="ok">${I.check}</span><div><b>Estás al día</b><span>No hay nada nuevo desde tu última visita. Abajo tienes lo ya visto.</span></div></div>`;
+    h += `<div class="uptodate"><span>${I.check}Estás al día: nada nuevo</span></div>`;
   }
   h += porDias(vistas, nuevas.length ? " · ya visto" : "");
   return h + `</div><p class="foot">Se actualiza sola cada hora. <button type="button" data-act="medios">Medios y fuentes</button></p>`;
