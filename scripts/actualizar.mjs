@@ -455,6 +455,10 @@ function relleno(n) {
   if (/pasarela|desfile de moda|exposicion (de|sobre)|muestra de (arte|pintura|fotografia)|\bfosil|paleontolog|yacimiento|investigadores|estudio cientifico|un estudio (de|revela|confirma)|confirman? un cambio climatico/.test(tt) && !n.politizado && !/protesta|reclam|denunc|critic|rechaz|firmas|concentracion|manifest|polemica|expolio|robo|detenid/.test(tt)) return true;
   // Gestión ordinaria de la capital (ordenanzas, ZBE, ORA, aparcamientos, presupuestos, urbanismo) sin polémica: no es de la unidad
   if (n.municipio === "Segovia" && /ordenanza|\bzbe\b|bajas emisiones|\bora\b|aparcamiento|presupuesto|licencia|urbanis|\bpgou\b/.test(tt) && !/protesta|polemica|critic|rechaz|denunc|concentracion|manifest|firmas|recurso|tension|bronc|oposicion/.test(tt)) return true;
+  // Formación, simulacros y medios de emergencias (cursos de bomberos, simulacros, vehículos nuevos): no son sucesos
+  if (/simulacro|\bcurso\b|formacion|jornadas? (de formacion|tecnicas?|formativas?)|perfeccion|practicas|entrenamiento|maniobras|ejercicios? (de|practico)|nuevos? (camion|vehiculo|parque|autobomba)|adquiere|reciben? (formacion|un nuevo)/.test(tt) && solo(["emergencias", "politica", "autoridades", "medioambiente"])) return true;
+  // Cementerios y Todos los Santos (cifras de enterramientos, flores, horarios): no interesan salvo robos o profanaciones
+  if (/cementerio|difuntos|todos los santos|tanatorio|enterramientos|sepelios/.test(tt) && solo(["emergencias", "politica", "social"]) && !/accidente|incendio|robo|roban|profan|vandal|pintadas|destroz|agresion|protesta|polemica/.test(tt)) return true;
   // Webs de ayuntamientos: los plenos ordinarios no aportan (los extraordinarios sí: mociones, dimisiones...)
   if (soloAyto(n.medios || []) && c.includes("politica") && solo(["politica", "eventos"]) && !/mocion de censura|dimision|dimite|toma de posesion|cese/.test(tt + " " + norm(n.resumen || ""))) return true;
   // Capital: el tema tiene que estar en el titular (o confirmado en el texto completo), no en palabras sueltas del resumen
