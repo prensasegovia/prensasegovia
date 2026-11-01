@@ -932,24 +932,29 @@ async function main() {
     n.gratisBuscada = ahora.getTime(); n.gratisIntentos = (n.gratisIntentos || 0) + 1; gratisBusq++;
     const palabras = String(n.titulo).replace(/["'«»“”‘’:,.¿?¡!()]/g, " ").split(/\s+/).filter(w => w.length > 3 && !VACIAS.has(norm(w))).slice(0, 7);
     if (palabras.length < 3) continue;
-    const q = palabras.join(" ") + (/segovia/i.test(n.titulo) ? "" : " Segovia");
-    try {
-      const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia };
-      for (const it of items(await descarga(gnews(q)))) {
+    // Dos búsquedas: con las primeras palabras + Segovia (sin límite de fecha) y con más palabras (última semana)
+    const urlsG = [palabras.slice(0, 5).join(" ") + (/segovia/i.test(n.titulo) ? "" : " Segovia"), palabras.join(" ") + " when:7d"]
+      .map(q => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es&gl=ES&ceid=ES:es`);
+    const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia };
+    let hallada = false;
+    for (const uG of urlsG) { if (hallada) break; try {
+      for (const it of items(await descarga(uG))) {
+        if (Math.abs(new Date(fechaMadrid(it.fecha)) - new Date(dia)) > 5 * 864e5) continue; // de esos días, no de otros
         let titulo = it.titulo; const medio = (it.fuente || "").replace(/[.\s]+$/, "");
         if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
         const nombre = canonMedio(medio);
         if (!medio || nombre === "El Norte de Castilla" || esPago(it.url) || !MEDIOS_OK.test(norm(medio))) continue;
+        if (OTRA_PROVINCIA.test(norm(titulo)) && !/segovia/.test(norm(titulo))) continue; // la misma noticia, pero de otra provincia
         const otro = { tk: tokens(titulo), titulo, municipio: conPueblo(municipioDe(titulo), null), dia: fechaMadrid(it.fecha) };
         let comunes = 0; for (const w of yo.tk) if (otro.tk.has(w)) comunes++;
         if (!(mismaNoticia(yo, otro) || (parecido(yo.tk, otro.tk) >= 0.45 && comunes >= 3))) continue;
         juntaMedios(n.medios, [{ nombre, url: it.url }]);
         n.medios.sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
-        gratisHalladas++; delete n.gratisIntentos; n.gratisIntentos = 99; // encontrada: no se vuelve a buscar
+        gratisHalladas++; n.gratisIntentos = 99; hallada = true; // encontrada: no se vuelve a buscar
         break;
       }
     } catch {}
-    await new Promise(r => setTimeout(r, 900));
+    await new Promise(r => setTimeout(r, 900)); }
   }
   if (gratisBusq) console.log(`Versión gratuita: ${gratisHalladas} encontradas de ${gratisBusq} noticias de pago buscadas`);
   // 5c) Cada noticia en el día en que se publicó de verdad
