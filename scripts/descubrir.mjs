@@ -1,22 +1,14 @@
-// Diagnóstico (8ª ronda, b): ¿podemos usar los modelos de IA de GitHub gratis desde Actions?
+// Diagnóstico (9ª ronda): HoyCyL y otras fuentes que han salido en búsquedas
 import { writeFileSync } from "node:fs";
-const T = process.env.GITHUB_TOKEN;
+const UA = { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" };
+const C = ["https://hoycyl.com/feed/", "https://hoycyl.com/category/segovia/feed/", "https://hoycyl.com/segovia/feed/", "https://hoycyl.com/tag/segovia/feed/", "https://hoycyl.com/"];
 const out = {};
-const prueba = [
-  "Detenido un joven en Cuéllar por agredir a dos personas en las fiestas",
-  "El Nava se enreda en el último asalto",
-  "La planta de biometano enfrenta posturas y aviva la polémica en Cantalejo",
-  "Los jefes de dotación del servicio de bomberos perfeccionan sus técnicas",
-];
-const prompt = `Eres analista de la unidad de Información de la Guardia Civil en la provincia de Segovia. Para cada titular, responde SOLO un JSON array con objetos {"i":n,"interesa":true|false,"tema":"policial|movilizaciones|politica|medioambiente|emergencias|autoridades|eventos|ninguno","grave":true|false}. Interesa: sucesos, movilizaciones y conflictos sociales, extremismos, política y visitas de cargos, medio ambiente con conflicto, emergencias reales, grandes eventos. No interesa: deporte, cultura, trámites.\n` + prueba.map((t, i) => `${i}. ${t}`).join("\n");
-for (const [k, url] of Object.entries({ usuario: "https://models.github.ai/inference/chat/completions", org: "https://models.github.ai/orgs/prensasegovia/inference/chat/completions", azure: "https://models.inference.ai.azure.com/chat/completions" })) {
-  for (const model of ["openai/gpt-4.1-mini", "gpt-4o-mini"]) {
-    try {
-      const t0 = Date.now();
-      const r = await fetch(url, { method: "POST", headers: { Authorization: `Bearer ${T}`, "Content-Type": "application/json" }, redirect: "manual", body: JSON.stringify({ model, temperature: 0, messages: [{ role: "user", content: prompt }] }), signal: AbortSignal.timeout(60000) });
-      const txt = await r.text();
-      out[`${k} ${model}`] = { status: r.status, url: r.url, location: r.headers.get("location"), ctype: r.headers.get("content-type"), ms: Date.now() - t0, limites: Object.fromEntries([...r.headers].filter(([h]) => /ratelimit|retry|x-ms|request-id/i.test(h))), respuesta: txt.slice(0, 1500) };
-    } catch (e) { out[`${k} ${model}`] = { err: String(e.message) }; }
-  }
+for (const u of C) {
+  try { const r = await fetch(u, { headers: UA, redirect: "follow", signal: AbortSignal.timeout(15000) }); const t = await r.text();
+    const feed = /<(rss|feed)[\s>]/i.test(t.slice(0, 2000));
+    out[u] = { s: r.status, final: r.url, feed, items: feed ? (t.match(/<item[\s>]/gi) || []).length : 0, segovia: (t.match(/segovia/gi) || []).length,
+      titulos: feed ? [...t.matchAll(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/gi)].slice(1, 12).map(x => x[1].trim()) : [],
+      enlaces: feed ? [] : [...new Set([...t.matchAll(/href=["']([^"']*(feed|rss|segovia)[^"']*)["']/gi)].map(x => x[1]))].slice(0, 20) };
+  } catch (e) { out[u] = { err: String(e.message).slice(0, 60) }; }
 }
-writeFileSync("diag/ia.json", JSON.stringify(out, null, 1));
+writeFileSync("diag/feeds9.json", JSON.stringify(out, null, 1));

@@ -115,6 +115,7 @@ const BUSQUEDAS = [
   'Segovia "plataforma" vecinos OR vecinal OR "recogida de firmas"',
   'Segovia tractorada OR agricultores OR ganaderos protesta',
   'Segovia macrogranja OR biogás OR biometano OR fotovoltaica OR "planta solar" OR eólico',
+  '"Stop Biogás" OR "planta de biometano" OR "planta de biogás" Segovia',
   'Segovia embalse OR pantano OR presa OR vertido OR contaminación OR sequía',
   'Segovia cantera OR vertedero OR "impacto ambiental" OR tala OR lobo OR "incendio forestal"',
   'Segovia pleno OR alcalde OR moción OR concejales',
