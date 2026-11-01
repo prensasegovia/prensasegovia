@@ -918,6 +918,37 @@ async function main() {
   // 5b2) Enlaces de pago (también en lo ya guardado): marcados y al final, para que el primero se pueda leer entero
   for (const d of porDia.values()) for (const n of d.noticias)
     n.medios = n.medios.map(m => esPago(m.url) ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
+  // 5b3) Versión gratuita: las noticias que solo tienen enlace de pago se buscan en Google Noticias en otros medios.
+  // Si otro medio cuenta la misma historia, se añade como primer enlace (la de pago queda al final).
+  let gratisBusq = 0, gratisHalladas = 0;
+  const desdeGratis = fechaMadrid(new Date(ahora.getTime() - 4 * 864e5));
+  const soloPago = [...porDia.values()].filter(d => d.fecha >= desdeGratis).flatMap(d => d.noticias.map(n => ({ n, dia: d.fecha })))
+    .filter(({ n }) => n.medios.length && n.medios.every(m => m.pago) && (n.gratisIntentos || 0) < 4 && (!n.gratisBuscada || ahora.getTime() - n.gratisBuscada > 3 * 36e5))
+    .slice(0, 10);
+  for (const { n, dia } of soloPago) {
+    n.gratisBuscada = ahora.getTime(); n.gratisIntentos = (n.gratisIntentos || 0) + 1; gratisBusq++;
+    const palabras = String(n.titulo).replace(/["'«»“”‘’:,.¿?¡!()]/g, " ").split(/\s+/).filter(w => w.length > 3 && !VACIAS.has(norm(w))).slice(0, 7);
+    if (palabras.length < 3) continue;
+    const q = palabras.join(" ") + (/segovia/i.test(n.titulo) ? "" : " Segovia");
+    try {
+      const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia };
+      for (const it of items(await descarga(gnews(q)))) {
+        let titulo = it.titulo; const medio = (it.fuente || "").replace(/[.\s]+$/, "");
+        if (it.fuente && titulo.endsWith(" - " + it.fuente)) titulo = titulo.slice(0, -(it.fuente.length + 3));
+        const nombre = canonMedio(medio);
+        if (!medio || nombre === "El Norte de Castilla" || esPago(it.url) || !MEDIOS_OK.test(norm(medio))) continue;
+        const otro = { tk: tokens(titulo), titulo, municipio: conPueblo(municipioDe(titulo), null), dia: fechaMadrid(it.fecha) };
+        let comunes = 0; for (const w of yo.tk) if (otro.tk.has(w)) comunes++;
+        if (!(mismaNoticia(yo, otro) || (parecido(yo.tk, otro.tk) >= 0.45 && comunes >= 3))) continue;
+        juntaMedios(n.medios, [{ nombre, url: it.url }]);
+        n.medios.sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
+        gratisHalladas++; delete n.gratisIntentos; n.gratisIntentos = 99; // encontrada: no se vuelve a buscar
+        break;
+      }
+    } catch {}
+    await new Promise(r => setTimeout(r, 900));
+  }
+  if (gratisBusq) console.log(`Versión gratuita: ${gratisHalladas} encontradas de ${gratisBusq} noticias de pago buscadas`);
   // 5c) Cada noticia en el día en que se publicó de verdad
   for (const d of [...porDia.values()]) {
     for (const n of [...d.noticias]) {
@@ -967,7 +998,7 @@ async function archivar(dias, ahora) {
   const DIR = new URL("../public/archivo/", import.meta.url);
   await mkdir(DIR, { recursive: true });
   const ventana = fechaMadrid(new Date(ahora.getTime() - 21 * 864e5));
-  const limpiaN = ({ sinFoto, porTexto, pueblo_fuente, local, ...n }) => n;
+  const limpiaN = ({ sinFoto, porTexto, pueblo_fuente, local, gratisBuscada, gratisIntentos, ...n }) => n;
   const porMes = new Map();
   for (const d of dias) { const m = d.fecha.slice(0, 7); if (!porMes.has(m)) porMes.set(m, []); porMes.get(m).push(d); }
   // También los meses de la ventana aunque hoy no tengan días (para vaciar días que ya no tienen nada)
