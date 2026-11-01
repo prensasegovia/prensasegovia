@@ -166,6 +166,11 @@ const gnews = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q 
 /* Utilidades                                                          */
 /* ------------------------------------------------------------------ */
 const norm = s => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+// Letras con tilde y signos que algunas webs envían codificados (&oacute; &ntilde; &laquo;...)
+const ENT = { aacute:"á", eacute:"é", iacute:"í", oacute:"ó", uacute:"ú", Aacute:"Á", Eacute:"É", Iacute:"Í", Oacute:"Ó", Uacute:"Ú", ntilde:"ñ", Ntilde:"Ñ", uuml:"ü", Uuml:"Ü", iquest:"¿", iexcl:"¡", laquo:"«", raquo:"»",
+  ldquo:"“", rdquo:"”", lsquo:"‘", rsquo:"’", hellip:"…", mdash:"—", ndash:"–", euro:"€", ordf:"ª", ordm:"º", deg:"º", middot:"·", ccedil:"ç", agrave:"à", egrave:"è", ograve:"ò", nbsp:" ", quot:'"', apos:"'" };
+const desEnt = s => String(s ?? "").replace(/&amp;(?=[a-zA-Z]+;|#)/g, "&").replace(/&([a-zA-Z]+);/g, (m, k) => ENT[k] ?? m)
+  .replace(/&#x([0-9a-f]+);/gi, (_, n) => { try { return String.fromCodePoint(parseInt(n, 16)); } catch { return " "; } }).replace(/&#(\d+);/g, (_, n) => { try { return String.fromCodePoint(+n); } catch { return " "; } }).replace(/&amp;/g, "&");
 const limpia = html => String(html ?? "")
   .replace(/<!\[CDATA\[|\]\]>/g, "")
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;(?=#?\w+;)/g, "&")
@@ -173,6 +178,7 @@ const limpia = html => String(html ?? "")
   .replace(/<[^>]+>/g, " ")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
   .replace(/&#x([0-9a-f]+);/gi, (_, n) => { try { return String.fromCodePoint(parseInt(n, 16)); } catch { return " "; } }).replace(/&#(\d+);/g, (_, n) => { try { return String.fromCodePoint(+n); } catch { return " "; } }).replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+  .replace(/&([a-zA-Z]+);/g, (m, k) => ENT[k] ?? m)
   .replace(/\s+/g, " ").trim();
 const sinColas = s => String(s || "").split(/\s(?:M[aá]s informaci[oó]n|Leer m[aá]s|Sigue leyendo|La entrada .{0,200}? se public[oó] primero en)\b/i)[0].trim();
 const recorta = (s, n = 260) => s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n)) + "…";
@@ -663,6 +669,7 @@ async function periodicos(ahora) {
   }
   // Lugar de cada noticia con las reglas actuales (las de sección local sin sitio en el titular son de la capital)
   for (const n of porUrl.values()) {
+    n.titulo = desEnt(n.titulo); if (n.resumen) n.resumen = desEnt(n.resumen);
     let m = municipioDe(n.titulo + " " + (n.resumen || ""));
     if (m === "General" && !FUERA.test(norm(n.titulo)) && !/\/(castilla-leon|espana|mundo|internacional|nacional)\//.test(n.url)) m = "Segovia";
     n.municipio = m;
@@ -885,7 +892,8 @@ async function main() {
       if (pf.length === 1) n.pueblo_fuente = pf[0]; else delete n.pueblo_fuente;
       if (!n.analisis) { const m = n.medios.find(m => cache[m.url]); if (m) n.analisis = limpiaAnalisis(cache[m.url]); }
       if (!n.analisis) delete n.analisis;
-      if (n.resumen) n.resumen = sinColas(n.resumen);
+      if (n.resumen) n.resumen = sinColas(desEnt(n.resumen));
+      n.titulo = desEnt(n.titulo);
       // Lo leído del cuerpo se revalida con las reglas actuales sobre la frase guardada
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
