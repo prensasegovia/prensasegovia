@@ -259,7 +259,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .actions{display:flex;gap:10px;margin-top:16px}
 
 /* ---------- Avisos ---------- */
-.toast{position:fixed;left:50%;bottom:calc(82px + var(--safe-b));transform:translate(-50%,20px);opacity:0;z-index:35;background:var(--ink);color:var(--stone);padding:8px 8px 8px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:14.5px;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(82px + var(--safe-b));transform:translate(-50%,20px);opacity:0;z-index:45;max-width:calc(100vw - 32px);background:var(--ink);color:var(--stone);padding:8px 8px 8px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:14.5px;transition:all .25s;pointer-events:none;white-space:nowrap}
 .toast.solo{padding:10px 18px}
 .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .toast .btn{padding:8px 14px;font-size:13.5px;background:var(--new);min-height:36px}
@@ -348,6 +348,10 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .parte-acts{bottom:16px}
   .ag-date{top:calc(var(--bar) + 16px)}
 }
+@media (min-width:1024px) and (max-width:1199px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .aside{display:none!important}
+}
 @media (min-width:1500px){
   .shell{grid-template-columns:minmax(0,920px) 380px;gap:36px}
 }
@@ -384,7 +388,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .syncpill{display:flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:12px;background:rgba(255,255,255,.12);color:#fff;font-size:14.5px;white-space:nowrap;margin-right:4px}
   .syncpill svg{width:18px;height:18px;opacity:.9}
   .syncpill b{font-weight:700}
-  .syncpill.viejo{background:#B3261E}
+  .syncpill.stale{background:#B3261E}
 }
 @media (min-width:1024px){
   /* cabecera del día en una línea */
@@ -402,6 +406,12 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .mgroup{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));column-gap:10px}
   .mgroup > :not(.medio){grid-column:1/-1}
 }
+.toast.solo{white-space:normal;text-align:center;line-height:1.35}
+.newhead .sm{display:none}
+@media (max-width:400px){ .newhead .lg{display:none} .newhead .sm{display:inline} }
+.stat .l span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.chip:disabled{cursor:default}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pay-s{background:#4a3a12;color:#FFD98A} }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -447,7 +457,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .chips{padding-top:8px;padding-bottom:6px}
   .uptodate{margin:10px 6px 2px;font-size:13.5px}
 }
-@media (max-width:1023px){ .stabs{padding:4px 12px;gap:6px} .stab{font-size:14px;padding:7px 12px} .shelp{margin:6px 16px 10px} .shint{margin:14px 16px 8px} .gcards{padding:0 12px} }
+@media (max-width:1023px){ .stabs{padding:4px 12px;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none} .stabs::-webkit-scrollbar{display:none} .stab{flex:none} .stab{font-size:14px;padding:7px 12px} .shelp{margin:6px 16px 10px} .shint{margin:14px 16px 8px} .gcards{padding:0 12px} }
 /* hemeroteca */
 .hlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .hrow{display:flex;flex-direction:column;gap:3px;padding:11px 14px;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
@@ -529,7 +539,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <span class="h">Automático sigue el modo claro u oscuro del móvil.</span>
     </div>
     <div class="row" id="rowAvisos">
-      <label class="sw"><span><span class="t">Avisos de lo importante</span><span class="h" id="avisosH">Con la app abierta (aunque esté en otra pestaña), avisa cuando entre algo importante, una convocatoria nueva o una de tus palabras vigiladas.</span></span><input type="checkbox" id="fAvisos"></label>
+      <label class="sw"><span><span class="t">Avisos de lo importante</span><span class="h" id="avisosH">Solo mientras la app está abierta (también en otra pestaña): con el móvil bloqueado o la app cerrada no llegan. Avisa cuando entre algo importante, una convocatoria nueva o una de tus palabras vigiladas.</span></span><input type="checkbox" id="fAvisos"></label>
     </div>
     <div class="row">
       <label class="sw"><span><span class="t">Vista compacta</span><span class="h">Solo titulares, sin fotos ni resumen: caben muchas más noticias en pantalla.</span></span><input type="checkbox" id="fCompacta"></label>
@@ -784,7 +794,7 @@ function card(n, opts={}){
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
-    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${esc(cuando(n._dia, n.hora))}</span></div>
+    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${opts.pub?"Publicada ":""}${esc(cuando(n._dia, n.hora))}</span></div>
     ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
     <div class="cbody">${safeUrl(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
@@ -803,10 +813,10 @@ function chipsBar(pool){
   h += `<button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>`;
   h += `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
   for (const c of CATS){ const k = counts[c.k]||0;
-    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
+    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" ${!k && st.cat!==c.k?"disabled":""} type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
   return `<div class="chips" id="chips">${h}</div>`;
 }
-const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital"); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Ver todo</button></div>` : ""; };
+const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital" && !/días$/.test(x)); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Quitar filtros</button></div>` : ""; };
 
 /* ================= Vistas ================= */
 function viewNoticias(news){
@@ -818,14 +828,14 @@ function viewNoticias(news){
   const t = today();
   const alta = shown.filter(n=>n.relevancia==="alta");
   const pueblos = new Set(shown.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
-  const ag = agendaDe(news).ev;
+  const ag = (({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news));
   const sum = nuevas.length ? `<b>${plural(nuevas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
-      <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l">Importantes ${I.chev}</div></button>
-      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l">Agenda ${I.chev}</div></button>
-      <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l">Pueblos ${I.chev}</div></button>
+      <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l"><span>Importantes</span>${I.chev}</div></button>
+      <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l"><span>Agenda</span>${I.chev}</div></button>
+      <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevas.filter(n=>n.relevancia==="alta").slice(0,8);
@@ -837,9 +847,9 @@ function viewNoticias(news){
           <span class="when">${esc(cuando(n._dia,n.hora))}</span></a>`).join("") + `</div>`;
   }
   h += chipsBar(pool) + `<div class="feed">` + avisoFiltros();
-  if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Amplía el periodo en Filtros o activa más temas.<br><button class="btn ghost" data-act="limpiar" type="button">Ver todo</button></div></div>`;
+  if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Prueba otro tema, amplía el periodo en Filtros o pulsa «Quitar filtros».<br><button class="btn ghost" data-act="limpiar" type="button">Quitar filtros</button></div></div>`;
   if (nuevas.length){
-    h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button">Marcar todo como visto</button></div>`;
+    h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
     h += nuevas.map(n=>card(n)).join("");
     h += `<div class="uptodate"><span>${I.check}Hasta aquí lo nuevo</span></div>`;
   } else {
@@ -884,13 +894,13 @@ function viewBusqueda(news){
 function viewAgenda(news){
   const t = today();
   const { ev, sinFecha } = agendaDe(news);
-  let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Con día concreto</span></div>`;
+  let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Convocatorias y actos próximos</span></div>`;
   h += chipsBar((({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news,false))) + `<div class="feed">` + avisoFiltros();
   if (!ev.length && !sinFecha.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Aquí salen las concentraciones, manifestaciones, huelgas, tractoradas, mítines, visitas oficiales y fiestas que la prensa anuncia con fecha.</div></div>`;
   const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
   for (const d of Object.keys(by).sort()){
     const x = D(d);
-    h += `<div class="ag-day"><div class="ag-date ${d===t?"today":""}"><div class="d">${x.getDate()}</div><div class="m">${esc(x.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</div><div class="m">${esc(d===t?"hoy":x.toLocaleDateString("es-ES",{weekday:"short"}).replace(".",""))}</div></div><div>${by[d].map(n=>card(n,{noEv:true,hev:true})).join("")}</div></div>`;
+    h += `<div class="ag-day"><div class="ag-date ${d===t?"today":""}"><div class="d">${x.getDate()}</div><div class="m">${esc(x.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</div><div class="m">${esc(d===t?"hoy":x.toLocaleDateString("es-ES",{weekday:"short"}).replace(".",""))}</div></div><div>${by[d].map(n=>card(n,{noEv:true,hev:true,pub:true})).join("")}</div></div>`;
   }
   if (sinFecha.length){
     h += `<div class="dayhead"><h3>Anunciadas, fecha por confirmar</h3><span>${sinFecha.length}</span></div><p class="note" style="padding:0 4px">Convocatorias de los últimos 5 días en las que la noticia no da una fecha concreta.</p>`;
@@ -909,8 +919,8 @@ function viewPueblos(news){
     <div class="search">${I.search}<input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">${avisoFiltros()}`;
   if (!list.length && st.townQ){
     const otros = [...new Set(news.filter(n=>esPueblo(n.municipio) && norm(n.municipio).includes(norm(st.townQ))).map(n=>n.municipio))];
-    h += otros.length ? otros.map(k=>`<button class="town none" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span><span class="cnt">más antiguas</span><span class="chev">›</span></button>`).join("")
-      : `<div class="empty"><b>Sin noticias</b>No hay noticias de ese pueblo en los últimos 21 días.</div>`;
+    h += otros.length ? otros.map(k=>`<button class="town none" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span><span class="cnt">hace más de ${esc(st.rango)} días</span><span class="chev">›</span></button>`).join("")
+      : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés recientes de ese pueblo.<br><button class="btn ghost" data-act="buscapueblo" type="button">Buscar en todo lo publicado</button></div>`;
   } else if (!list.length) h += `<div class="empty"><b>Sin noticias de pueblos</b>En los últimos ${st.rango} días no hay noticias de interés de ningún pueblo.</div>`;
   h += list.map(([k,v])=>`<button class="town" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span>${v.a?`<span class="al">${plural(v.a,"importante","importantes")}</span>`:""}<span class="cnt">${v.n}</span><span class="chev">›</span></button>`).join("");
   return h + `</div>`;
@@ -928,9 +938,9 @@ function viewPueblo(news, name){
   const all = news.filter(n=>n.municipio===name).sort(porHora);
   const prox = all.filter(n=>n.fecha_evento && n.fecha_evento>=t);
   const alta = all.filter(n=>n.relevancia==="alta").length;
-  let h = `<section class="subhero"><h1>${esc(name)}</h1><p>${plural(all.length,"noticia","noticias")} en los últimos 21 días${alta?`, ${plural(alta,"importante","importantes")}`:""}.</p></section><div class="feed">`;
+  let h = `<section class="subhero"><h1>${esc(name)}</h1><p>${plural(all.length,"noticia","noticias")} recientes${alta?`, ${plural(alta,"importante","importantes")}`:""}.</p></section><div class="feed">`;
   if (prox.length) h += `<div class="dayhead"><h3>Próximas convocatorias</h3><span>${prox.length}</span></div>` + prox.map(n=>card(n,{hev:true})).join("");
-  h += all.length ? porDias(all.filter(n=>!prox.includes(n))) : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés de ${esc(name)} en los últimos 21 días.</div>`;
+  h += all.length ? porDias(all.filter(n=>!prox.includes(n))) : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés recientes de ${esc(name)}.<br><button class="btn ghost" data-act="buscapueblo" data-q="${esc(name)}" type="button">Buscar «${esc(name)}» en todo lo publicado</button></div>`;
   return h + bloqueArchivo(news, n=>n.municipio===name, "de " + name) + `</div>`;
 }
 function viewImportantes(news){
@@ -1060,7 +1070,7 @@ function syncLabel(){
   const dia = m[1]===today() ? "hoy" : m[1]===addDays(today(),-1) ? "ayer" : fmtCorto(m[1]).toLowerCase();
   const hace = min < 2 ? "ahora mismo" : min < 60 ? `hace ${min} min` : min < 1440 ? `hace ${Math.floor(min/60)} h` : "";
   tx.innerHTML = `<span class="sy-l">Actualizado </span>${dia}, ${m[2]}:${m[3]}${hace?` · ${hace}`:""}`;
-  const pl = $("#syncPill"); if (pl){ pl.classList.toggle("viejo", min > 150); pl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Actualizado <b>${dia} a las ${m[2]}:${m[3]}</b>${hace?` · ${hace}`:""}</span>`; }
+  const pl = $("#syncPill"); if (pl){ pl.classList.toggle("stale", min > 150); pl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Actualizado <b>${dia} a las ${m[2]}:${m[3]}</b>${hace?` · ${hace}`:""}</span>`; }
 }
 setInterval(syncLabel, 60000);
 
@@ -1077,7 +1087,7 @@ function render(keepScroll){
   if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
   else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
   const t = today();
-  const nAg = agendaDe(news).ev.length;
+  const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
   const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
   const nf = Object.keys(st.favs).length; const fb = $("#favBadge"); fb.hidden = !nf; fb.textContent = nf;
   if (keepScroll) window.scrollTo(0,y);
@@ -1116,28 +1126,39 @@ function observarVistos(){
 /* ================= Navegación ================= */
 let scrollPrevio = 0;
 function setView(v){
-  st.view = v; st.sub = null;
+  st.view = v; st.sub = null; st.pila = []; st.detalle = null;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
   render(); window.scrollTo({top:0});
 }
+let saltarPop = 0; // pasos atrás provocados por la propia app (no por el usuario)
+function atras(n=1){ if (n>0){ saltarPop++; history.go(-n); } }
 function abrirSub(sub){
   scrollPrevio = window.scrollY;
-  if (!$("#searchbar").hidden) toggleSearch(false, true);
-  const yaHabia = !!st.sub && history.state && history.state.sub;
+  if (!$("#searchbar").hidden && !esPC()) toggleSearch(false, true);
+  st.detalle = null;
+  if (st.sub){ st.pila = [...(st.pila||[]), st.sub]; }
   st.sub = sub; render(); window.scrollTo({top:0});
-  if (yaHabia) history.replaceState({sub:true}, ""); else history.pushState({sub:true}, "");
+  history.pushState({sub:true}, "");
 }
 function cerrarSub(desdeHistorial){
   if (!st.sub) return;
-  st.sub = null; render(); window.scrollTo({top:scrollPrevio});
-  if (!desdeHistorial && history.state && history.state.sub) history.back();
+  st.sub = (st.pila && st.pila.length) ? st.pila.pop() : null;
+  render(); window.scrollTo({top: st.sub ? 0 : scrollPrevio});
+  if (!desdeHistorial && history.state && history.state.sub) atras();
 }
-window.addEventListener("popstate", ()=>{ if (st.sub) cerrarSub(true); });
+// Cierra todas las pantallas encima (al ir a una pestaña)
+function cierraTodo(){ const n = (st.sub ? 1 : 0) + (st.pila ? st.pila.length : 0); st.sub = null; st.pila = []; if (n && history.state && history.state.sub) atras(n); }
+window.addEventListener("popstate", ()=>{
+  if (saltarPop){ saltarPop--; return; }
+  if ($("#sheetWrap").classList.contains("open")){ $("#sheetWrap").classList.remove("open"); render(true); return; }
+  if (!esPC() && !$("#searchbar").hidden){ toggleSearch(false, false, true); return; }
+  if (st.sub) cerrarSub(true);
+});
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{
   const buscando = !!st.q;
   if (!$("#searchbar").hidden || st.q) toggleSearch(false, true);
   if (!st.sub && st.view===t.dataset.view){ if (buscando) render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
-  if (st.sub && history.state && history.state.sub) history.back();
+  cierraTodo();
   setView(t.dataset.view);
 }));
 
@@ -1173,7 +1194,7 @@ $("#app").addEventListener("click", e=>{
   }
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
   if (!b){
-    if (card && esPC() && tarjetas.has(card.dataset.k)){ // ordenador: se amplía en el panel de la derecha
+    if (card && conPanel() && tarjetas.has(card.dataset.k)){ // ordenador: se amplía en el panel de la derecha
       marcarVisto([card.dataset.k]); card.classList.remove("unseen");
       st.detalle = st.detalle===card.dataset.k ? null : card.dataset.k;
       document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel"));
@@ -1188,7 +1209,7 @@ $("#app").addEventListener("click", e=>{
   if (b.dataset.cat !== undefined){ const k=b.dataset.cat; st.cat = (!k || st.cat===k) ? null : k; aplicaFiltro(); }
   else if (act==="filtros") openSheet();
   else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
-  else if (act==="limpiar"){ st.sinCapital=false; st.soloKw=false; st.cat=null; st.rango="3"; saveF(); aplicaFiltro(); }
+  else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="parte") abrirSub({t:"parte"});
@@ -1198,6 +1219,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);
+  else if (act==="buscapueblo"){ const q = b.dataset.q || st.townQ || ""; if (!q) return; st.ambito="todo"; store.set("ambito","todo"); if (esPC()){ cierraTodo(); st.view="noticias"; } else toggleSearch(true); $("#q").value=q; st.q=q; document.body.classList.add("searching"); render(); window.scrollTo({top:0}); }
   else if (act==="archivo"){ arc.estado = "no"; cargaArchivo(); }
   else if (act==="hemeroteca"){ if (hem.estado!=="ok") { hem.estado="no"; cargaHemeroteca(); } }
   else if (act==="hemeroteca-mas"){ cargaHemeroteca(true); }
@@ -1214,6 +1236,7 @@ function aplicaFiltro(){
 
 /* ================= Panel derecho (ordenador) ================= */
 const esPC = () => matchMedia("(min-width:1024px)").matches;
+const conPanel = () => matchMedia("(min-width:1200px)").matches;
 function panelDetalle(n){
   const medios = mediosDe(n);
   const libre = medios.find(m=>!m.pago) || medios[0];
@@ -1242,7 +1265,7 @@ function panelDetalle(n){
 }
 function renderAside(news){
   const el = $("#aside"); if (!el) return;
-  if (!esPC() || !st.loaded){ el.innerHTML = ""; return; }
+  if (!conPanel() || !st.loaded){ el.innerHTML = ""; return; }
   if (st.detalle && tarjetas.has(st.detalle)){ el.innerHTML = panelDetalle(tarjetas.get(st.detalle)); return; }
   const t = today();
   const base = news.filter(pasa);
@@ -1284,20 +1307,27 @@ document.querySelector(".side-extra").addEventListener("click", e=>{
   if (v==="filtros") openSheet(); else abrirSub({t:v});
 });
 function cerrarDetalle(){ st.detalle = null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); renderAside(allNews()); }
-let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (st.loaded) renderAside(allNews()); }, 150); });
+let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (!conPanel() && st.detalle){ st.detalle=null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); } if (st.loaded) renderAside(allNews()); }, 150); });
 // Atajo de teclado: "/" para buscar
 document.addEventListener("keydown", e=>{
-  if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName) && !$("#sheetWrap").classList.contains("open")){ e.preventDefault(); toggleSearch(true); }
+  if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName) && !$("#sheetWrap").classList.contains("open")){ e.preventDefault(); if (esPC()) $("#q").focus(); else toggleSearch(true); }
   else if (e.key==="Escape" && st.detalle && !$("#sheetWrap").classList.contains("open") && !/input|textarea/i.test(document.activeElement.tagName)) cerrarDetalle();
   else if (e.key==="Escape" && st.sub && !$("#sheetWrap").classList.contains("open") && !/input|textarea/i.test(document.activeElement.tagName)) cerrarSub();
 });
 
 /* Búsqueda */
-function toggleSearch(on, sinRender){
+function toggleSearch(on, sinRender, desdeHistorial){
   const bar = $("#searchbar"); const show = on ?? bar.hidden;
+  const estaba = !bar.hidden;
   bar.hidden = !show; document.body.classList.toggle("searching", show);
-  if (show){ if (st.sub && history.state && history.state.sub){ st.sub=null; history.back(); } if (st.view!=="noticias" || st.sub){ st.sub=null; setView("noticias"); } else appbar(); $("#q").focus(); }
-  else { st.q=""; $("#q").value=""; if (!sinRender) render(); }
+  if (show){
+    if (st.sub || st.view!=="noticias"){ cierraTodo(); st.detalle=null; st.view="noticias"; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view==="noticias")); render(); window.scrollTo({top:0}); } else appbar();
+    if (!esPC() && !estaba) history.pushState({search:true}, "");
+    $("#q").focus();
+  } else {
+    st.q=""; $("#q").value=""; if (!sinRender) render();
+    if (!esPC() && estaba && !desdeHistorial && history.state && history.state.search) atras();
+  }
 }
 let qT; $("#q").addEventListener("input", e=>{ clearTimeout(qT); qT=setTimeout(()=>{
   const v = e.target.value.trim();
@@ -1323,12 +1353,12 @@ function syncSheet(){
   $("#fCap").checked = st.sinCapital; $("#fCompacta").checked = st.compacta; $("#fAvisos").checked = st.avisos && "Notification" in window && Notification.permission==="granted"; $("#fKw").checked = st.soloKw;
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
 }
-function openSheet(){ syncSheet(); $("#sheetWrap").classList.add("open"); }
-function closeSheet(){ $("#sheetWrap").classList.remove("open"); render(true); }
+function openSheet(){ syncSheet(); if (!$("#sheetWrap").classList.contains("open")) history.pushState({sheet:true}, ""); $("#sheetWrap").classList.add("open"); }
+function closeSheet(){ if (!$("#sheetWrap").classList.contains("open")) return; $("#sheetWrap").classList.remove("open"); render(true); if (history.state && history.state.sheet) atras(); }
 $("#scrim").addEventListener("click", closeSheet);
 $("#fClose").addEventListener("click", closeSheet);
 $("#fX").addEventListener("click", closeSheet);
-$("#fMedios").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); abrirSub({t:"medios"}); });
+$("#fMedios").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) history.replaceState({sub:true}, ""); st.sub = {t:"medios"}; render(); window.scrollTo({top:0}); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap").classList.contains("open")) closeSheet(); });
 $("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
 $("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); render(true); });
@@ -1341,7 +1371,7 @@ $("#fAvisos").addEventListener("change", async e=>{
   if (!e.target.checked){ st.avisos=false; store.set("avisos", false); return; }
   if (!("Notification" in window)){ e.target.checked=false; aviso("Este navegador no permite avisos"); return; }
   const p = await Notification.requestPermission();
-  if (p!=="granted"){ e.target.checked=false; aviso("Avisos bloqueados: permítelos en el candado de la barra de direcciones"); return; }
+  if (p!=="granted"){ e.target.checked=false; aviso("Avisos bloqueados: actívalos en los ajustes de notificaciones del navegador o del móvil"); return; }
   st.avisos=true; store.set("avisos", true);
   store.set("avisadas", allNews().map(n=>n._key).slice(-1500)); // lo que ya hay no se avisa
   aviso("Avisos activados");
