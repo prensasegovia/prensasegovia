@@ -43,7 +43,8 @@ button{font:inherit;color:inherit}
 a{color:inherit}
 :focus-visible{outline:2.5px solid var(--new);outline-offset:2px;border-radius:8px}
 .shell{max-width:680px;margin:0 auto}
-[hidden]{display:none!important}
+[hidden]:not(#searchbar){display:none!important}
+.searchbar[hidden]{display:none}
 svg{flex:none}
 
 /* ---------- Barra superior ---------- */
@@ -385,6 +386,38 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .syncpill b{font-weight:700}
   .syncpill.viejo{background:#B3261E}
 }
+/* búsqueda: ámbitos */
+.stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
+.stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
+.stab .c{font-size:12.5px;color:var(--muted);font-weight:600}
+.stab[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+.stab[aria-pressed="true"] .c{color:#cfe3dc}
+.shelp{margin:6px 4px 12px;font-size:13.5px;color:var(--muted)}
+.shint{margin:16px 4px 8px;font-size:14px;color:var(--muted)}
+.linkbtn{border:0;background:none;color:var(--pine-2);font:inherit;font-weight:700;cursor:pointer;padding:0;text-decoration:underline}
+.gcards{display:grid;gap:10px}
+.gcard{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--surface);text-decoration:none;color:var(--ink)}
+.gcard b{font-size:16px;color:var(--pine-2)}
+.gcard span{font-size:14px;color:var(--muted)}
+.gcard:hover{border-color:var(--pine-2)}
+@media (min-width:1024px){
+  /* barra de búsqueda siempre visible arriba, en el centro */
+  .searchbar,.searchbar[hidden]{display:flex;align-items:center;position:fixed;top:0;left:calc(var(--side) + 24px);width:min(640px, calc(100vw - var(--side) - 540px));height:var(--bar);padding:0;background:none;z-index:31}
+  .searchbar .in{width:100%;max-width:none}
+  .searchbar input{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid transparent;padding-left:40px}
+  .searchbar input::placeholder{color:rgba(255,255,255,.75)}
+  .searchbar input:focus{background:#fff;color:#16201D;outline:none}
+  .searchbar input:focus::placeholder{color:#5E6A66}
+  .searchbar .in::before{content:"";position:absolute;left:13px;top:50%;width:16px;height:16px;transform:translateY(-50%);background:currentColor;opacity:.8;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center/contain no-repeat;color:#fff;pointer-events:none}
+  .searchbar .in:focus-within::before{color:#5E6A66}
+  .searchbar button{color:rgba(255,255,255,.8)}
+  .searchbar .in:focus-within button{color:#5E6A66}
+  #btnSearch{display:none}
+  .searching .chips{top:var(--bar)}
+  .searching .aside{top:calc(var(--bar) + 16px)}
+  .gcards{grid-template-columns:1fr 1fr}
+}
+@media (max-width:1023px){ .stabs{padding:4px 12px;gap:6px} .stab{font-size:14px;padding:7px 12px} .shelp{margin:6px 16px 10px} .shint{margin:14px 16px 8px} .gcards{padding:0 12px} }
 /* hemeroteca */
 .hlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .hrow{display:flex;flex-direction:column;gap:3px;padding:11px 14px;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
@@ -430,7 +463,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 </head>
 <body>
 <header class="appbar" id="appbar"></header>
-<div class="searchbar" id="searchbar" hidden><div class="in"><input id="q" type="text" placeholder="Buscar (pueblo, tema, colectivo, nombre…)" autocomplete="off" enterkeyhint="search"><button id="qClear" type="button" aria-label="Cerrar búsqueda">✕</button></div></div>
+<div class="searchbar" id="searchbar" hidden><div class="in"><input id="q" type="text" placeholder="Buscar noticias: pueblo, tema, colectivo, nombre…" autocomplete="off" enterkeyhint="search"><button id="qClear" type="button" aria-label="Cerrar búsqueda">✕</button></div></div>
 
 <div class="shell"><main id="app"></main><aside id="aside" class="aside" aria-label="Resumen"></aside></div>
 
@@ -564,7 +597,7 @@ const st = {
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
   tema: store.get("tema","auto"),
-  periodicos: [], periodico: "todos", viaGoogle: [], parteDesde: "24h", parteLinks: store.get("parteLinks", false),
+  periodicos: [], periodico: "todos", viaGoogle: [], parteDesde: "24h", ambito: store.get("ambito","interes"), parteLinks: store.get("parteLinks", false),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
   q:"", townQ:"",
   dias:[], fuentes:[], actualizado:"", loaded:false, error:false,
@@ -609,18 +642,19 @@ async function cargaHemeroteca(masMeses){
   } catch(e){ hem.estado = "error"; }
   render(true);
 }
+function resultadosHem(words){
+  const vistos = new Set();
+  return hem.items.filter(x=>words.every(w=>x._n.includes(w))).filter(x=>{ const k = norm(x.t); if (vistos.has(k)) return false; vistos.add(k); return true; });
+}
 function bloqueHemeroteca(words){
-  const intro = `<div class="dayhead arch"><h3>Hemeroteca: todo lo publicado</h3><span>todos nuestros medios</span></div>`;
-  if (hem.estado==="no") return `<div class="arcbox"><div><b>Buscar en todo lo publicado</b><span>Todas las noticias de nuestros medios, también las que la app no consideró de interés.</span></div><button class="btn" data-act="hemeroteca" type="button">Buscar en la hemeroteca</button></div>`;
-  if (hem.estado==="cargando") return intro + `<div class="empty small">Cargando la hemeroteca…</div>`;
+  if (hem.estado==="no" || hem.estado==="cargando") return `<div class="empty small">Cargando todo lo publicado…</div>`;
   if (hem.estado==="error") return `<div class="arcbox"><div><b>No se pudo cargar la hemeroteca</b><span>Puede que aún no tenga datos o que no haya conexión.</span></div><button class="btn" data-act="hemeroteca" type="button">Reintentar</button></div>`;
-  const res = hem.items.filter(x=>words.every(w=>x._n.includes(w)));
-  const vistos = new Set(); const unicos = res.filter(x=>{ const k = norm(x.t); if (vistos.has(k)) return false; vistos.add(k); return true; });
+  const unicos = resultadosHem(words);
   const mas = hem.meses.some(m=>!hem.cargados.includes(m));
-  let h = `<div class="dayhead arch"><h3>Hemeroteca${hem.desde?` (desde ${esc(mesLargo(hem.desde))})`:""}</h3><span>${plural(unicos.length,"noticia","noticias")}</span></div>`;
+  let h = `<div class="dayhead"><h3>${plural(unicos.length,"noticia","noticias")}${hem.desde?` desde ${esc(mesLargo(hem.desde))}`:""}</h3><span>todos nuestros medios</span></div>`;
   h += unicos.length ? `<div class="hlist">` + unicos.slice(0,150).map(x=>`<a class="hrow" href="${esc(safeUrl(x.u)||"#")}" target="_blank" rel="noopener"><b>${hl(x.t)}</b><span>${esc(x.m||"")} · ${esc(cuando(x.f.slice(0,10), x.f.slice(11,16)))}${x.p?` · ${esc(x.p)}`:""}</span>${x.r?`<em>${hl(x.r)}</em>`:""}</a>`).join("") + `</div>` + (unicos.length>150?`<div class="empty small">Se muestran las 150 más recientes. Afina la búsqueda con más palabras.</div>`:"")
-    : `<div class="empty small">Nada en la hemeroteca con esa búsqueda.</div>`;
-  if (mas) h += `<div class="arcbox"><div><b>¿Más atrás?</b><span>Cargar los meses anteriores de la hemeroteca.</span></div><button class="btn ghost" data-act="hemeroteca-mas" type="button">Cargar meses anteriores</button></div>`;
+    : `<div class="empty"><b>Nada publicado con esa búsqueda</b>Prueba con otras palabras o <button class="linkbtn" data-ambito="google" type="button">busca en Google</button>.</div>`;
+  if (mas) h += `<div class="arcbox"><div><b>¿Más atrás?</b><span>Cargar los meses anteriores.</span></div><button class="btn ghost" data-act="hemeroteca-mas" type="button">Cargar meses anteriores</button></div>`;
   return h;
 }
 // Búsqueda en Google limitada a nuestros medios (también busca años atrás)
@@ -628,7 +662,9 @@ const DOMINIOS = ["eladelantado.com","elnortedecastilla.es","eldiasegovia.es","s
 function bloqueGoogle(q){
   const g = "https://www.google.com/search?q=" + encodeURIComponent(q + " (" + DOMINIOS.map(d=>"site:"+d).join(" OR ") + ")");
   const gn = "https://news.google.com/search?q=" + encodeURIComponent(q + (/segovia/i.test(q)?"":" Segovia")) + "&hl=es&gl=ES&ceid=ES:es";
-  return `<div class="arcbox gbox"><div><b>Buscar fuera de la app</b><span>En Google, solo en nuestros periódicos y webs (también años atrás), o en Google Noticias.</span></div><div class="gbtns"><a class="btn" href="${esc(g)}" target="_blank" rel="noopener">Google en nuestros medios</a><a class="btn ghost" href="${esc(gn)}" target="_blank" rel="noopener">Google Noticias</a></div></div>`;
+  return `<div class="gcards">
+    <a class="gcard" href="${esc(g)}" target="_blank" rel="noopener"><b>En nuestros periódicos y webs ↗</b><span>Google, solo en El Adelantado, El Norte, El Día, SegoviaUdaz, esCuéllar, Europa Press, COPE… Busca también años atrás.</span></a>
+    <a class="gcard" href="${esc(gn)}" target="_blank" rel="noopener"><b>En Google Noticias ↗</b><span>Todos los medios de España, ordenado por noticias recientes.</span></a></div>`;
 }
 /* ================= Archivo histórico (meses anteriores) ================= */
 const arc = { estado: "no", news: [], desde: "" }; // no | cargando | ok | error
@@ -793,11 +829,26 @@ function porDias(list, extra=""){
 }
 function viewBusqueda(news){
   const words = norm(st.q).split(/\s+/).filter(Boolean);
-  const res = news.filter(n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); }).sort(porHora);
   const coincide = n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); };
-  return `<div class="sect"><h2>Resultados</h2><span class="aux">${plural(res.length,"noticia","noticias")} en 21 días, sin filtros</span></div><div class="feed">` +
-    (res.length ? res.map(n=>card(n)).join("") : `<div class="empty"><b>Sin resultados en los últimos 21 días</b>Prueba con otra palabra, el nombre de un pueblo o busca en el archivo.</div>`) +
-    bloqueArchivo(news, coincide, "con esa búsqueda") + bloqueHemeroteca(words) + bloqueGoogle(st.q) + `</div>`;
+  // Lo de interés incluye siempre el archivo (se carga solo, pesa poco)
+  if (arc.estado==="no") setTimeout(cargaArchivo, 0);
+  // "Todo lo publicado" se carga al elegirlo; en el ordenador, también de fondo para que se vea cuántas hay
+  if ((st.ambito==="todo" || esPC()) && hem.estado==="no") setTimeout(cargaHemeroteca, 0);
+  const interes = [...news.filter(coincide), ...(arc.estado==="ok" ? soloArchivo(news).filter(coincide) : [])].sort(porHora);
+  const hemRes = hem.estado==="ok" ? resultadosHem(words) : null;
+  const tab = (k, txt, n) => `<button class="stab" data-ambito="${k}" aria-pressed="${st.ambito===k}" type="button">${txt}${n!==null&&n!==undefined?`<span class="c">${n}</span>`:""}</button>`;
+  let h = `<div class="sect"><h2>Buscar «${esc(st.q)}»</h2></div>
+    <div class="stabs" role="tablist">${tab("interes","De interés", arc.estado==="cargando"?"…":interes.length)}${tab("todo","Todo lo publicado", hemRes?hemRes.length:null)}${tab("google","En Google")}</div>
+    <p class="shelp">${st.ambito==="interes" ? "Noticias que la app seleccionó para la unidad, desde que empezó a funcionar." : st.ambito==="todo" ? "Todo lo que han publicado nuestros medios, también lo que la app descartó (deportes, cultura, trámites…)." : "Para buscar fuera de la app: en nuestros periódicos y webs (también años atrás) o en Google Noticias."}</p><div class="feed">`;
+  if (st.ambito==="interes"){
+    h += interes.length ? porDias(interes) : `<div class="empty"><b>Nada de interés con «${esc(st.q)}»</b>Prueba en <button class="linkbtn" data-ambito="todo" type="button">Todo lo publicado</button> o <button class="linkbtn" data-ambito="google" type="button">En Google</button>.</div>`;
+    if (interes.length) h += `<div class="shint">¿No está lo que buscas? Mira en <button class="linkbtn" data-ambito="todo" type="button">Todo lo publicado</button> o <button class="linkbtn" data-ambito="google" type="button">En Google</button>.</div>`;
+  } else if (st.ambito==="todo"){
+    h += bloqueHemeroteca(words);
+  } else {
+    h += bloqueGoogle(st.q);
+  }
+  return h + `</div>`;
 }
 
 function viewAgenda(news){
@@ -1053,8 +1104,9 @@ function cerrarSub(desdeHistorial){
 }
 window.addEventListener("popstate", ()=>{ if (st.sub) cerrarSub(true); });
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{
-  if (!$("#searchbar").hidden) toggleSearch(false, true);
-  if (!st.sub && st.view===t.dataset.view){ window.scrollTo({top:0,behavior:"smooth"}); return; }
+  const buscando = !!st.q;
+  if (!$("#searchbar").hidden || st.q) toggleSearch(false, true);
+  if (!st.sub && st.view===t.dataset.view){ if (buscando) render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
   if (st.sub && history.state && history.state.sub) history.back();
   setView(t.dataset.view);
 }));
@@ -1077,6 +1129,7 @@ function aviso(txt){ const el=$("#aviso"); el.textContent=txt; el.classList.add(
 
 $("#app").addEventListener("change", e=>{ if (e.target.id==="parteLinks"){ st.parteLinks=e.target.checked; store.set("parteLinks",st.parteLinks); render(true); } });
 $("#app").addEventListener("click", e=>{
+  const am = e.target.closest("[data-ambito]"); if (am){ st.ambito = am.dataset.ambito; store.set("ambito", st.ambito); render(); window.scrollTo({top:0}); return; }
   const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }
   const a = e.target.closest("a");
   if (a){ const c = a.closest("[data-k]"); if (c) marcarVisto([c.dataset.k]); return; }
@@ -1216,9 +1269,14 @@ function toggleSearch(on, sinRender){
   if (show){ if (st.sub && history.state && history.state.sub){ st.sub=null; history.back(); } if (st.view!=="noticias" || st.sub){ st.sub=null; setView("noticias"); } else appbar(); $("#q").focus(); }
   else { st.q=""; $("#q").value=""; if (!sinRender) render(); }
 }
-let qT; $("#q").addEventListener("input", e=>{ clearTimeout(qT); qT=setTimeout(()=>{ st.q=e.target.value.trim(); render(); },180); });
+let qT; $("#q").addEventListener("input", e=>{ clearTimeout(qT); qT=setTimeout(()=>{
+  const v = e.target.value.trim();
+  if (v && (st.view!=="noticias" || st.sub)){ if (st.sub && history.state && history.state.sub){ st.sub=null; history.back(); } st.sub=null; st.view="noticias"; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view==="noticias")); }
+  document.body.classList.toggle("searching", !!v || !$("#searchbar").hidden);
+  st.q=v; render(); window.scrollTo({top:0});
+},200); });
 $("#q").addEventListener("keydown", e=>{ if (e.key==="Enter") e.target.blur(); if (e.key==="Escape") toggleSearch(false); });
-$("#qClear").addEventListener("click", ()=>toggleSearch(false));
+$("#qClear").addEventListener("click", ()=>{ toggleSearch(false); if (esPC()) $("#q").blur(); });
 
 /* Hoja de filtros */
 function aplicaTema(){
