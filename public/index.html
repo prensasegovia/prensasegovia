@@ -386,6 +386,22 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .syncpill b{font-weight:700}
   .syncpill.viejo{background:#B3261E}
 }
+@media (min-width:1024px){
+  /* cabecera del día en una línea */
+  .hero .day{white-space:nowrap;font-size:clamp(24px,2.1vw,32px)}
+  .hero .stats{grid-template-columns:repeat(3,minmax(84px,108px))}
+}
+@media (min-width:1024px) and (max-width:1499px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero .stats{grid-column:1;grid-row:auto;margin-top:12px;grid-template-columns:repeat(3,minmax(0,150px))}
+}
+@media (min-width:1024px){
+  /* pueblos y medios en columnas: se ve todo de un vistazo */
+  .towns{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));column-gap:10px}
+  .towns > :not(.town){grid-column:1/-1}
+  .mgroup{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));column-gap:10px}
+  .mgroup > :not(.medio){grid-column:1/-1}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
