@@ -427,6 +427,10 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
   fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe" };
+// Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
+const MISMA_PERSONA = [[/alcalde de madrid|martinez-almeida|\balmeida\b/, "almeida"], [/presidente de la junta|\bmanueco\b/, "manueco"], [/presidenta de (la comunidad de )?madrid|\bayuso\b/, "ayuso"],
+  [/presidente del gobierno|pedro sanchez/, "psanchez"], [/lider del pp|\bfeijoo\b/, "feijoo"], [/lider de vox|\babascal\b/, "abascal"], [/subdelegad[oa] del gobierno/, "subdelegado"], [/delegad[oa] del gobierno en castilla/, "delegado"]];
+const personas = s => { const t = norm(s); return MISMA_PERSONA.filter(([re]) => re.test(t)).map(([, k]) => k); };
 const tokens = s => new Set(norm(s).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter(w => w.length > 2 && !VACIAS.has(w)).map(w => SINONIMOS[w.slice(0, 5)] || SINONIMOS[w] || w.slice(0, 5)));
 // Si la noticia viene de un medio o ayuntamiento de un pueblo y no nombra otro, es de ese pueblo
 const ORGANIZACIONES = new Set(FEEDS.filter(f => f.tipo === "organizacion").map(f => f.nombre));
@@ -485,6 +489,11 @@ const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|retien|retenid
 // Si comparten el enlace de un artículo, son la misma noticia sin duda
 const comparteUrl = (a, b) => (a.medios || []).some(m => (b.medios || []).some(x => x.url === m.url));
 function mismaNoticia(a, b) {
+  // La misma persona de visita o en un acto el mismo día (o al siguiente): es la misma noticia aunque la nombren distinto
+  if (a.titulo && b.titulo && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 864e5) {
+    const pa = personas(a.titulo), pb = personas(b.titulo);
+    if (pa.some(x => pb.includes(x)) && VISITA.test(norm(a.titulo)) && VISITA.test(norm(b.titulo)) && !(CONCRETO(a.municipio) && CONCRETO(b.municipio) && a.municipio !== b.municipio)) return true;
+  }
   // Noticias de pueblos distintos nunca son la misma (p. ej. "Pleno extraordinario" en dos ayuntamientos)
   if (CONCRETO(a.municipio) && CONCRETO(b.municipio) && a.municipio !== b.municipio) return false;
   let comunes = 0; for (const w of a.tk) if (b.tk.has(w)) comunes++;
