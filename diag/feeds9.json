@@ -1,0 +1,80 @@
+{
+ "https://hoycyl.com/feed/": {
+  "s": 200,
+  "final": "https://hoycyl.com/feed/",
+  "feed": true,
+  "items": 10,
+  "segovia": 4,
+  "titulos": [
+   "HOY Castilla y León :: Noticias de Castilla y León",
+   "Óscar Puente descarta su dimisión como ministro pese a que la “presión” sea “muy grande”",
+   "Los defensores del Pueblo reclaman más vivienda pública y ayudas al alquiler para garantizar el acceso a un hogar “digno”",
+   "Elvira Mínguez: «Esto no se hace solo», al recibir la Espiga de Honor de la 71 Seminci",
+   "Tráfico prevé casi 700.000 desplazamientos en las carreteras de Castilla y León con motivo de la festividad de Todos los Santos",
+   "UGT y CCOO llaman a una «huelga a la ofensiva» por las mejoras salariales y una vivienda asequible",
+   "La reina Sofía recibirá la Medalla de la Usal, coincidiendo con la entrega del XXXV Premio de Poesía Iberoamericana",
+   "Cuéllar (Segovia) repite por tercer día consecutivo como la localidad más fría del país con -3,6 grados",
+   "Castilla y León contabiliza dos grandes accidentes ferroviarios en lo que va de siglo en los que perdieron la vida ocho personas",
+   "71 Seminci- David Martín de los Santos, director de ‘Un hombre en un puente’: «La vergüenza lleva a muchas personas a ocultar su fracaso»",
+   "Castilla y León se suma al dolor por el accidente de Urda y suspende la agenda pública por solidaridad"
+  ],
+  "enlaces": []
+ },
+ "https://hoycyl.com/category/segovia/feed/": {
+  "s": 200,
+  "final": "https://hoycyl.com/",
+  "feed": false,
+  "items": 0,
+  "segovia": 38,
+  "titulos": [],
+  "enlaces": [
+   "https://hoycyl.com/feed/",
+   "https://hoycyl.com/comments/feed/",
+   "https://hoycyl.com/el-alcazar-de-segovia-prueba-con-exito-las-nuevas-camaras-termicas-instaladas-en-las-buhardillas/60318/",
+   "https://hoycyl.com/25n-la-diputacion-de-segovia-propone-la-igualdad-como-unico-trato-frente-a-la-violencia-de-genero/82665/",
+   "https://hoycyl.com/secciones/segovia/",
+   "https://hoycyl.com/cuellar-segovia-repite-por-tercer-dia-consecutivo-como-la-localidad-mas-fria-del-pais-con-36-grados/87202/"
+  ]
+ },
+ "https://hoycyl.com/segovia/feed/": {
+  "s": 200,
+  "final": "https://hoycyl.com/segovia/feed/",
+  "feed": true,
+  "items": 0,
+  "segovia": 1,
+  "titulos": [],
+  "enlaces": []
+ },
+ "https://hoycyl.com/tag/segovia/feed/": {
+  "s": 200,
+  "final": "https://hoycyl.com/",
+  "feed": false,
+  "items": 0,
+  "segovia": 38,
+  "titulos": [],
+  "enlaces": [
+   "https://hoycyl.com/feed/",
+   "https://hoycyl.com/comments/feed/",
+   "https://hoycyl.com/el-alcazar-de-segovia-prueba-con-exito-las-nuevas-camaras-termicas-instaladas-en-las-buhardillas/60318/",
+   "https://hoycyl.com/25n-la-diputacion-de-segovia-propone-la-igualdad-como-unico-trato-frente-a-la-violencia-de-genero/82665/",
+   "https://hoycyl.com/secciones/segovia/",
+   "https://hoycyl.com/cuellar-segovia-repite-por-tercer-dia-consecutivo-como-la-localidad-mas-fria-del-pais-con-36-grados/87202/"
+  ]
+ },
+ "https://hoycyl.com/": {
+  "s": 200,
+  "final": "https://hoycyl.com/",
+  "feed": false,
+  "items": 0,
+  "segovia": 38,
+  "titulos": [],
+  "enlaces": [
+   "https://hoycyl.com/feed/",
+   "https://hoycyl.com/comments/feed/",
+   "https://hoycyl.com/el-alcazar-de-segovia-prueba-con-exito-las-nuevas-camaras-termicas-instaladas-en-las-buhardillas/60318/",
+   "https://hoycyl.com/25n-la-diputacion-de-segovia-propone-la-igualdad-como-unico-trato-frente-a-la-violencia-de-genero/82665/",
+   "https://hoycyl.com/secciones/segovia/",
+   "https://hoycyl.com/cuellar-segovia-repite-por-tercer-dia-consecutivo-como-la-localidad-mas-fria-del-pais-con-36-grados/87202/"
+  ]
+ }
+}
