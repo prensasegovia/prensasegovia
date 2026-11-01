@@ -1,26 +1,44 @@
 {
  "usuario openai/gpt-4.1-mini": {
   "status": 200,
-  "ms": 203,
+  "url": "https://models.github.ai/inference/chat/completions",
+  "location": null,
+  "ctype": "text/plain",
+  "ms": 247,
   "limites": {},
   "respuesta": "OK\r\n"
  },
- "usuario openai/gpt-4o-mini": {
+ "usuario gpt-4o-mini": {
   "status": 200,
-  "ms": 111,
+  "url": "https://models.github.ai/inference/chat/completions",
+  "location": null,
+  "ctype": "text/plain",
+  "ms": 166,
   "limites": {},
   "respuesta": "OK\r\n"
  },
  "org openai/gpt-4.1-mini": {
   "status": 200,
-  "ms": 115,
+  "url": "https://models.github.ai/orgs/prensasegovia/inference/chat/completions",
+  "location": null,
+  "ctype": "text/plain",
+  "ms": 165,
   "limites": {},
   "respuesta": "OK\r\n"
  },
- "org openai/gpt-4o-mini": {
+ "org gpt-4o-mini": {
   "status": 200,
-  "ms": 110,
+  "url": "https://models.github.ai/orgs/prensasegovia/inference/chat/completions",
+  "location": null,
+  "ctype": "text/plain",
+  "ms": 169,
   "limites": {},
   "respuesta": "OK\r\n"
+ },
+ "azure openai/gpt-4.1-mini": {
+  "err": "fetch failed"
+ },
+ "azure gpt-4o-mini": {
+  "err": "fetch failed"
  }
 }
