@@ -1,21 +1,22 @@
-// Diagnóstico (6b): cómo marca cada periódico sus artículos de pago
+// Diagnóstico (7ª ronda): por qué 3 webs WordPress devuelven HTTP 415
 import { writeFileSync } from "node:fs";
-const UA = { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" };
-const URLS = {"El D\u00eda de Segovia": ["https://www.eldiasegovia.es/noticia/z710c0d91-e74e-4879-af732caeaa5fc93b/202610/un-zamorano-gana-el-certamen-sobre-el-eclipse-miradas-cajaviva", "https://www.eldiasegovia.es/noticia/zba009ce6-564a-4dc1-a83e2d92c692949f/202610/una-periodista-rusa-que-vive-en-segovia-os-manipulan", "https://www.eldiasegovia.es/noticia/z8a730786-a2af-4675-bdb6cbe4be496fd2/202610/segovia-acoge-una-pasarela-de-moda-circular", "https://www.eldiasegovia.es/noticia/zbef0e08c-4eb9-4706-87f0c8f5266e685f/202610/hacienda-desbloquea-la-contratacion-de-la-piscina-cubierta", "https://www.eldiasegovia.es/noticia/z0cd1a38c-f021-4161-8a533c963e67047a/202610/el-pleno-municipal-rechaza-la-propuesta-para-hacer-el-ferial", "https://www.eldiasegovia.es/noticia/zd308f044-ee5d-429c-814cbd8ce43949d4/202610/aprobada-definitivamente-la-ordenanza-de-la-zbe-de-segovia", "https://www.eldiasegovia.es/noticia/z3c64d44b-5984-4642-93d5740db10f44f0/202610/un-familiar-de-miembros-del-mester-entre-los-desaparecidos", "https://www.eldiasegovia.es/noticia/z1f675e32-e326-4b86-9c10f5f70a38288a/202610/tres-contratos-para-la-cabalgata-de-reyes-suman-117-000-euros", "https://www.eldiasegovia.es/noticia/z82d5a075-b948-4796-850f51c6db3c7297/202610/cancelaciones-y-retrasos-en-guiomar-por-las-huelgas", "https://www.eldiasegovia.es/noticia/z5181878d-f8d0-4421-b7b2e1b43a2264ea/202610/somacyl-licita-la-depuracion-y-mejora-del-agua-en-ocho-pueblos", "https://www.eldiasegovia.es/noticia/z74786a67-d6f6-4394-aa429b2f11e1e5cf/202610/la-cara-mas-fea-de-la-muralla", "https://www.eldiasegovia.es/noticia/z8fb1b26e-e203-41e0-8b2c288615bb1992/202610/un-debut-literario-entre-el-amor-y-las-meigas"], "El Adelantado": ["https://eladelantado.com/provincia/2026/10/31/algunos-difuntos-ilustres-que-descansan-en-cementerios-segovianos/", "https://eladelantado.com/provincia/2026/10/31/las-necesidades-de-la-provincia-estan-cubiertas/", "https://eladelantado.com/segovia/2026/10/31/segovia-despide-el-tiempo-de-animas/", "https://eladelantado.com/segovia/2026/10/31/el-40-de-los-fallecidos-en-segovia-tienen-mas-de-90-anos/", "https://eladelantado.com/suplementos/2026/10/31/confort-energetico-2026/", "https://eladelantado.com/segovia/2026/10/31/el-festival-corea-de-arauxo-dedica-a-las-victimas-de-urda-su-concierto-de-esta-tarde/", "https://eladelantado.com/castilla-leon/2026/10/30/siete-condenados-por-el-cambiazo-de-ataudes-en-la-funeraria-el-salvador/", "https://eladelantado.com/castilla-leon/2026/10/30/las-cortes-regionales-debatiran-sobre-la-seguridad-en-las-calles-en-el-proximo-pleno/", "https://eladelantado.com/castilla-leon/2026/10/30/sube-en-18-dias-la-espera-media-para-ser-operado-hasta-los-119/", "https://eladelantado.com/provincia/2026/10/30/palazuelos-de-eresma-rinde-un-homenaje-a-olivia-garcia/", "https://eladelantado.com/provincia/2026/10/30/la-banda-de-musica-y-la-banda-de-la-escuela-de-musica-se-unen-por-santa-cecilia/", "https://eladelantado.com/provincia/2026/10/30/talleres-para-prevenir-el-deterioro-cognitivo-en-cantimpalos/"], "El Norte de Castilla": ["https://www.elnortedecastilla.es/segovia/ciclo-patrimonio-puntualmente-sale-cuellar-comarca-20261031193439-nt.html", "https://www.elnortedecastilla.es/segovia/buena-costumbre-perder-20261031103143-nt.html", "https://www.elnortedecastilla.es/segovia/palazuelos-eresma-torrecaballeros-recuerdan-emocion-pequena-olivia-20261031101809-nt.html", "https://www.elnortedecastilla.es/segovia/cuellar-aprueba-consenso-cambio-normas-frenar-plantas-20261031003257-nt.html", "https://www.elnortedecastilla.es/segovia/sociedades-registradas-censo-segoviano-permanecen-inactivas-20261031111514-nt.html", "https://www.elnortedecastilla.es/segovia/segovia-provincia-pais-empresas-crea-disuelve-20261031100333-nt.html", "https://www.elnortedecastilla.es/segovia/mujer-herida-empotrarse-coche-muro-angeles-san-20261030211600-nt.html", "https://www.elnortedecastilla.es/segovia/nueva-jornada-caos-incertidumbre-trenes-segovia-tras-20261030190841-nt.html", "https://www.elnortedecastilla.es/segovia/segovia-amplia-plazas-aparcamiento-facilitar-acceso-cementerio-20261030133420-nt.html", "https://www.elnortedecastilla.es/segovia/segovia-aprueba-definitivamente-ordenanza-bajas-emisiones-20261030133137-nt.html", "https://www.elnortedecastilla.es/segovia/francia-argentina-concentran-tres-diez-electores-segovianos-20261030080730-nt.html", "https://www.elnortedecastilla.es/segovia/segovia-suma-550-votantes-extranjero-2023-plena-20261030080703-nt.html"]};
-const MARCAS = { isAccessibleForFree: /isAccessibleForFree"?\s*:\s*"?(\w+)/i, content_tier: /content_tier["'][^>]*content=["']([^"']+)/i, premium: /premium|exclusivo para suscriptores|solo para suscriptores|contenido para suscriptores|hazte suscriptor|on\+|paywall|voc-paywall|ev-paywall|article-premium|suscriptores/gi, plus: /\bplus\b/gi };
+const URLS = ["https://ppsegovia.com/feed/", "https://www.lalosa.es/feed/", "https://navadelaasuncion.org/feed/"];
+const H = {
+  rss: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "application/rss+xml, application/xml, text/xml, */*", "Accept-Language": "es-ES,es;q=0.9" },
+  nav: { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" },
+  html: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "es-ES,es;q=0.9", "Accept-Encoding": "gzip, deflate, br" },
+  feedly: { "User-Agent": "Feedly/1.0 (+http://www.feedly.com/fetcher.html; like FeedFetcher-Google)" },
+  nada: {},
+};
 const out = {};
-for (const [medio, us] of Object.entries(URLS)) {
-  out[medio] = [];
-  for (const u of us) {
-    try {
-      const r = await fetch(u, { headers: UA, signal: AbortSignal.timeout(12000) }); const t = await r.text();
-      const ps = [...t.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => m[1].replace(/<[^>]+>/g, "")).filter(p => p.length > 60);
-      const free = (t.match(MARCAS.isAccessibleForFree) || [])[1] || "";
-      const tier = (t.match(MARCAS.content_tier) || [])[1] || "";
-      const prem = [...new Set((t.match(MARCAS.premium) || []).map(x => x.toLowerCase()))].slice(0, 8);
-      const ctx = (t.match(/.{0,80}(isAccessibleForFree|paywall|suscriptor).{0,80}/i) || [""])[0];
-      out[medio].push({ u, status: r.status, free, tier, prem, parrafos: ps.length, chars: ps.join(" ").length, ctx });
-    } catch (e) { out[medio].push({ u, err: String(e.message).slice(0, 60) }); }
+for (const base of URLS) {
+  out[base] = {};
+  for (const u of [base, base.replace(/\/feed\/$/, "/?feed=rss2"), base.replace(/\/feed\/$/, "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title")]) {
+    for (const [k, h] of Object.entries(H)) {
+      try { const r = await fetch(u, { headers: h, redirect: "follow", signal: AbortSignal.timeout(15000) }); const t = await r.text();
+        out[base][u.slice(base.length - 6) + " " + k] = { s: r.status, feed: /<(rss|feed)[\s>]/i.test(t.slice(0, 2000)), json: t.trim().startsWith("["), len: t.length, server: r.headers.get("server"), muestra: t.slice(0, 160) };
+      } catch (e) { out[base][u.slice(base.length - 6) + " " + k] = { err: String(e.message).slice(0, 60) }; }
+    }
   }
 }
-writeFileSync("diag/pago.json", JSON.stringify(out, null, 1));
+writeFileSync("diag/feeds7.json", JSON.stringify(out, null, 1));
