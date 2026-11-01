@@ -936,8 +936,8 @@ async function main() {
     const urlsG = [palabras.slice(0, 5).join(" ") + (/segovia/i.test(n.titulo) ? "" : " Segovia"), palabras.join(" ") + " when:7d"]
       .map(q => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es&gl=ES&ceid=ES:es`);
     const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia };
-    let hallada = false;
-    for (const uG of urlsG) { if (hallada) break; try {
+    const candidatas = [];
+    for (const uG of urlsG) { try {
       for (const it of items(await descarga(uG))) {
         if (Math.abs(new Date(fechaMadrid(it.fecha)) - new Date(dia)) > 5 * 864e5) continue; // de esos días, no de otros
         let titulo = it.titulo; const medio = (it.fuente || "").replace(/[.\s]+$/, "");
@@ -948,13 +948,18 @@ async function main() {
         const otro = { tk: tokens(titulo), titulo, municipio: conPueblo(municipioDe(titulo), null), dia: fechaMadrid(it.fecha) };
         let comunes = 0; for (const w of yo.tk) if (otro.tk.has(w)) comunes++;
         if (!(mismaNoticia(yo, otro) || (parecido(yo.tk, otro.tk) >= 0.45 && comunes >= 3))) continue;
-        juntaMedios(n.medios, [{ nombre, url: it.url }]);
-        n.medios.sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
-        gratisHalladas++; n.gratisIntentos = 99; hallada = true; // encontrada: no se vuelve a buscar
-        break;
+        // Mejor un medio de Segovia y un titular que hable de Segovia
+        const puntos = parecido(yo.tk, otro.tk) + (/segovia/.test(norm(titulo)) ? 0.5 : 0) + (/segovia|adelantado|cuellar|nordeste|tribuna/.test(norm(medio)) ? 0.5 : 0);
+        if (!candidatas.some(c => c.url === it.url)) candidatas.push({ nombre, url: it.url, puntos });
       }
     } catch {}
     await new Promise(r => setTimeout(r, 900)); }
+    if (candidatas.length) {
+      candidatas.sort((a, b) => b.puntos - a.puntos);
+      juntaMedios(n.medios, candidatas.slice(0, 2).map(({ nombre, url }) => ({ nombre, url })));
+      n.medios.sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0));
+      gratisHalladas++; n.gratisIntentos = 99; // encontrada: no se vuelve a buscar
+    }
   }
   if (gratisBusq) console.log(`Versión gratuita: ${gratisHalladas} encontradas de ${gratisBusq} noticias de pago buscadas`);
   // 5c) Cada noticia en el día en que se publicó de verdad
