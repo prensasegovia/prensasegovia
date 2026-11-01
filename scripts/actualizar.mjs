@@ -546,8 +546,11 @@ async function leeArticulo(url) {
     const og = (html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)/i) || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image/i) || [])[1];
     ultimaImg.set(url, limpiaImg(og));
     if (/"isAccessibleForFree"\s*:\s*"?(false|False)/.test(html) || /<meta[^>]+(name|property)=["'](article:)?content_tier["'][^>]+content=["'](locked|metered|premium)/i.test(html)) ultimaPago.set(url, true);
+    // 1º el texto que el propio periódico declara como cuerpo de la noticia (schema.org "articleBody"), si existe
+    const ab = [...html.matchAll(/"articleBody"\s*:\s*"((?:[^"\\]|\\.){200,})"/g)].map(m => { try { return JSON.parse('"' + m[1] + '"'); } catch { return ""; } }).sort((x, y) => y.length - x.length)[0];
+    if (ab && ab.length > 300) return limpia(ab).slice(0, 8000);
     const art = html.match(/<article[\s\S]*?<\/article>/i); if (art && art[0].length > 1500) html = art[0];
-    const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => limpia(m[1])).filter(p => p.length > 60 && !/cookies|suscri|newsletter|todos los derechos|publicidad|comparte|whatsapp|telegram/i.test(p));
+    const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(m => limpia(m[1])).filter(p => p.length > 60 && !/cookies|suscri|newsletter|todos los derechos|publicidad|comparte|whatsapp|telegram|iniciar sesi[oó]n|men[uú] buscador|aviso legal|pol[ií]tica de privacidad/i.test(p) && (p.match(/\b(Ávila|Burgos|León|Palencia|Salamanca|Soria|Valladolid|Zamora)\b/g) || []).length < 4);
     return ps.join(" ").slice(0, 8000);
   } catch { return ""; }
 }
@@ -561,7 +564,7 @@ const FUERTE = {
 };
 const CONVOCA_CUERPO = /convoca(n|do|da|dos|das)?\b|se concentrar(a|an)|se manifestar(a|an)|tendra lugar|visitara|mitin|huelga (el|los|indefinida)|tractorada|marcha (que|hasta)|partira|recorrera/;
 function analizaCuerpo(titulo, cuerpo, publicada) {
-  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 4 };
+  if (!cuerpo || cuerpo.length < 200) return { vacio: true, v: 5 };
   const t = norm(cuerpo.slice(0, 5000));
   const cats = [], pistas = [];
   for (const [k, re] of Object.entries(FUERTE)) {
@@ -588,7 +591,7 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   // Dónde ocurre: solo cuenta si Segovia o un pueblo aparecen en la entradilla (no una mención de pasada más abajo)
   let lugar = municipioDe(cuerpo.slice(0, 700));
   if (!(CONCRETO(lugar) || lugar === "Segovia")) lugar = "";
-  return { v: 4, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
+  return { v: 5, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
 function limpiaAnalisis(a) {
@@ -772,7 +775,7 @@ async function main() {
   let previoTmp = { dias: [] };
   try { previoTmp = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const conocidas = new Set((previoTmp.dias || []).flatMap(d => d.noticias.flatMap(n => n.medios.map(m => m.url))));
-  const analizada = u => cache[u] && cache[u].v === 4; // las de versiones anteriores se vuelven a leer
+  const analizada = u => cache[u] && cache[u].v === 5; // las de versiones anteriores se vuelven a leer
   const pendientes = grupos.filter(g => !g.medios.some(m => conocidas.has(m.url) || analizada(m.url)));
   let leidas = 0;
   const cola = pendientes.slice(0, 80);
