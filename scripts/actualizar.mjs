@@ -1005,6 +1005,7 @@ async function hemeroteca(brutos, ahora) {
   const porMes = new Map();
   for (const b of brutos) {
     if (!b.titulo || !b.url || isNaN(b.fecha) || b.fecha > new Date(ahora.getTime() + 36e5)) continue;
+    if (b.fecha < new Date(ahora.getTime() - 60 * 864e5)) continue; // la hemeroteca empieza ahora: lo muy antiguo que traen algunas webs no se guarda
     if (BASURA.test(norm(b.titulo))) continue;
     const f = fechaMadrid(b.fecha), mes = f.slice(0, 7);
     if (!porMes.has(mes)) porMes.set(mes, []);
