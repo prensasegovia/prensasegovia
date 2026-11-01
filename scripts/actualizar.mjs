@@ -433,9 +433,9 @@ const MENCIONA_SEGOVIA = new RegExp("segovia|" + MUNICIPIOS.filter(m => !AMBIGUO
 /* ------------------------------------------------------------------ */
 const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que se su sus por para con sin sobre tras ante entre como mas lo le les es son ha han segovia segoviano segoviana provincia".split(" "));
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
-const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "preso", recl: "preso", reclu: "preso", preso: "preso", presos: "preso",
+const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", presi: "carce", lesio: "herid", herid: "herid", heric: "herid", inter: "carce", recl: "carce", reclu: "carce",
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", tren: "tren", trene: "tren", maqui: "tren" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", tren: "tren", trene: "tren", maqui: "tren" };
 // Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
 const MISMA_PERSONA = [[/alcalde de madrid|martinez-almeida|\balmeida\b/, "almeida"], [/presidente de la junta|\bmanueco\b/, "manueco"], [/presidenta de (la comunidad de )?madrid|\bayuso\b/, "ayuso"],
   [/presidente del gobierno|pedro sanchez/, "psanchez"], [/lider del pp|\bfeijoo\b/, "feijoo"], [/lider de vox|\babascal\b/, "abascal"], [/subdelegad[oa] del gobierno/, "subdelegado"], [/delegad[oa] del gobierno en castilla/, "delegado"]];
@@ -502,6 +502,9 @@ const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|retien|retenid|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
 // Si comparten el enlace de un artículo, son la misma noticia sin duda
 const comparteUrl = (a, b) => (a.medios || []).some(m => (b.medios || []).some(x => x.url === m.url));
+// Nombres propios de un titular (en mayúscula y no al principio), sin lugares ni instituciones
+const NO_PROPIOS = new Set(["segovia", "junta", "diputacion", "ayuntamiento", "gobierno", "guardia", "civil", "policia", "nacional", "local", "congreso", "senado", "madrid", "castilla", "espana", "estado", "plataforma", "ciudadana", "sanidad", "educacion", "centro", "penitenciario", "partido", "popular", "socialista", "fiscalia", "audiencia", "provincial", "mester"]);
+const propios = s => new Set((s.match(/(?<=(?:^|\s)(?!(?:de|del|en|el|la|los|las|al|por|y|e|o|con|san|santa)\s)[a-záéíóúñü]+\s)[A-ZÁÉÍÓÚÑ][a-záéíóúñü]{4,}/g) || []).map(norm).filter(w => !NO_PROPIOS.has(w) && !MUNICIPIOS.some(m => norm(m).split(" ").includes(w))));
 function mismaNoticia(a, b) {
   // La misma persona de visita o en un acto el mismo día (o al siguiente): es la misma noticia aunque la nombren distinto
   if (a.titulo && b.titulo && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 864e5) {
@@ -519,6 +522,12 @@ function mismaNoticia(a, b) {
     let comun = 0; for (const w of a.tk) if (!pueblo.has(w) && b.tk.has(w)) comun++;
     if (comun >= 2) return true;
   }
+  // Mismo nombre propio poco común el mismo día (Olivia, Almeida, el Tejo...): misma noticia
+  if (dias === 0 && a.municipio === b.municipio && a.titulo && b.titulo) { const pa = propios(a.titulo), pb = propios(b.titulo); if ([...pa].some(x => pb.has(x))) return true; }
+  // Temas concretos (cárcel, candidaturas, huelga de autobuses, detenciones) en días seguidos: basta con menos palabras en común
+  const fuertes = [...a.tk].filter(w => b.tk.has(w));
+  if (dias === 0 && fuertes.includes("carce")) return true;
+  if (dias <= 1 && fuertes.length >= 2 && fuertes.some(w => ["candi", "autob", "deten"].includes(w))) return true;
   // Capital o provincia: mismo día y al menos 3 palabras clave en común
   if (!CONCRETO(a.municipio) && !CONCRETO(b.municipio) && dias === 0) {
     let comun = 0; for (const w of a.tk) if (b.tk.has(w)) comun++;
