@@ -1,0 +1,368 @@
+{
+ "https://ppsegovia.com/feed/": {
+  "/feed/ rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 60976,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title rss": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1667,
+   "server": "Apache",
+   "muestra": "[{\"id\":11878,\"date\":\"2026-10-26T16:15:56\",\"link\":\"https:\\/\\/ppsegovia.com\\/el-pp-de-segovia-presenta-en-la-junta-electoral-sus-candidaturas-al-congreso-y-al-sen"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nav": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1667,
+   "server": "Apache",
+   "muestra": "[{\"id\":11878,\"date\":\"2026-10-26T16:15:56\",\"link\":\"https:\\/\\/ppsegovia.com\\/el-pp-de-segovia-presenta-en-la-junta-electoral-sus-candidaturas-al-congreso-y-al-sen"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title html": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1667,
+   "server": "Apache",
+   "muestra": "[{\"id\":11878,\"date\":\"2026-10-26T16:15:56\",\"link\":\"https:\\/\\/ppsegovia.com\\/el-pp-de-segovia-presenta-en-la-junta-electoral-sus-candidaturas-al-congreso-y-al-sen"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title feedly": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1667,
+   "server": "Apache",
+   "muestra": "[{\"id\":11878,\"date\":\"2026-10-26T16:15:56\",\"link\":\"https:\\/\\/ppsegovia.com\\/el-pp-de-segovia-presenta-en-la-junta-electoral-sus-candidaturas-al-congreso-y-al-sen"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nada": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1667,
+   "server": "Apache",
+   "muestra": "[{\"id\":11878,\"date\":\"2026-10-26T16:15:56\",\"link\":\"https:\\/\\/ppsegovia.com\\/el-pp-de-segovia-presenta-en-la-junta-electoral-sus-candidaturas-al-congreso-y-al-sen"
+  }
+ },
+ "https://www.lalosa.es/feed/": {
+  "/feed/ rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 37331,
+   "server": "nginx",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title rss": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1075,
+   "server": "nginx",
+   "muestra": "[{\"id\":6430,\"date\":\"2026-10-20T10:10:28\",\"link\":\"https:\\/\\/www.lalosa.es\\/pleno-ordinario-20-de-octubre-de-2026\\/\",\"title\":{\"rendered\":\"Pleno Ordinario 20 de oc"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nav": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1075,
+   "server": "nginx",
+   "muestra": "[{\"id\":6430,\"date\":\"2026-10-20T10:10:28\",\"link\":\"https:\\/\\/www.lalosa.es\\/pleno-ordinario-20-de-octubre-de-2026\\/\",\"title\":{\"rendered\":\"Pleno Ordinario 20 de oc"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title html": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1075,
+   "server": "nginx",
+   "muestra": "[{\"id\":6430,\"date\":\"2026-10-20T10:10:28\",\"link\":\"https:\\/\\/www.lalosa.es\\/pleno-ordinario-20-de-octubre-de-2026\\/\",\"title\":{\"rendered\":\"Pleno Ordinario 20 de oc"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title feedly": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1075,
+   "server": "nginx",
+   "muestra": "[{\"id\":6430,\"date\":\"2026-10-20T10:10:28\",\"link\":\"https:\\/\\/www.lalosa.es\\/pleno-ordinario-20-de-octubre-de-2026\\/\",\"title\":{\"rendered\":\"Pleno Ordinario 20 de oc"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nada": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 1075,
+   "server": "nginx",
+   "muestra": "[{\"id\":6430,\"date\":\"2026-10-20T10:10:28\",\"link\":\"https:\\/\\/www.lalosa.es\\/pleno-ordinario-20-de-octubre-de-2026\\/\",\"title\":{\"rendered\":\"Pleno Ordinario 20 de oc"
+  }
+ },
+ "https://navadelaasuncion.org/feed/": {
+  "/feed/ rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/feed/ nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 rss": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nav": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 html": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 feedly": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/?feed=rss2 nada": {
+   "s": 200,
+   "feed": true,
+   "json": false,
+   "len": 42379,
+   "server": "Apache",
+   "muestra": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentA"
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title rss": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 880,
+   "server": "Apache",
+   "muestra": "[{\"id\":68997,\"date\":\"2026-10-19T14:01:51\",\"link\":\"https:\\/\\/navadelaasuncion.org\\/horarios-zbs-nava-de-la-asuncion\\/\",\"title\":{\"rendered\":\"Horarios ZBS Nava de "
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nav": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 880,
+   "server": "Apache",
+   "muestra": "[{\"id\":68997,\"date\":\"2026-10-19T14:01:51\",\"link\":\"https:\\/\\/navadelaasuncion.org\\/horarios-zbs-nava-de-la-asuncion\\/\",\"title\":{\"rendered\":\"Horarios ZBS Nava de "
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title html": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 880,
+   "server": "Apache",
+   "muestra": "[{\"id\":68997,\"date\":\"2026-10-19T14:01:51\",\"link\":\"https:\\/\\/navadelaasuncion.org\\/horarios-zbs-nava-de-la-asuncion\\/\",\"title\":{\"rendered\":\"Horarios ZBS Nava de "
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title feedly": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 880,
+   "server": "Apache",
+   "muestra": "[{\"id\":68997,\"date\":\"2026-10-19T14:01:51\",\"link\":\"https:\\/\\/navadelaasuncion.org\\/horarios-zbs-nava-de-la-asuncion\\/\",\"title\":{\"rendered\":\"Horarios ZBS Nava de "
+  },
+  "/wp-json/wp/v2/posts?per_page=5&_fields=id,date,link,title nada": {
+   "s": 200,
+   "feed": false,
+   "json": true,
+   "len": 880,
+   "server": "Apache",
+   "muestra": "[{\"id\":68997,\"date\":\"2026-10-19T14:01:51\",\"link\":\"https:\\/\\/navadelaasuncion.org\\/horarios-zbs-nava-de-la-asuncion\\/\",\"title\":{\"rendered\":\"Horarios ZBS Nava de "
+  }
+ }
+}
