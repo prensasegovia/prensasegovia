@@ -4,7 +4,7 @@
   "url": "https://models.github.ai/inference/chat/completions",
   "location": null,
   "ctype": "text/plain",
-  "ms": 247,
+  "ms": 259,
   "limites": {},
   "respuesta": "OK\r\n"
  },
@@ -13,7 +13,7 @@
   "url": "https://models.github.ai/inference/chat/completions",
   "location": null,
   "ctype": "text/plain",
-  "ms": 166,
+  "ms": 165,
   "limites": {},
   "respuesta": "OK\r\n"
  },
@@ -22,7 +22,7 @@
   "url": "https://models.github.ai/orgs/prensasegovia/inference/chat/completions",
   "location": null,
   "ctype": "text/plain",
-  "ms": 165,
+  "ms": 163,
   "limites": {},
   "respuesta": "OK\r\n"
  },
@@ -31,7 +31,7 @@
   "url": "https://models.github.ai/orgs/prensasegovia/inference/chat/completions",
   "location": null,
   "ctype": "text/plain",
-  "ms": 169,
+  "ms": 168,
   "limites": {},
   "respuesta": "OK\r\n"
  },
