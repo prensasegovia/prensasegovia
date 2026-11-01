@@ -2,7 +2,7 @@ name: Diagnóstico de medios
 on:
   workflow_dispatch:
   push:
-    paths: ["scripts/descubrir.mjs"]
+    paths: ["scripts/descubrir.mjs", ".github/workflows/diagnostico.yml"]
 permissions:
   contents: write
   models: read
@@ -14,6 +14,26 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: node scripts/descubrir.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Prueba con la acción oficial de GitHub para modelos de IA
+      - id: ia
+        continue-on-error: true
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4.1-mini
+          prompt: |
+            Clasifica para la unidad de Información de la Guardia Civil de Segovia. Responde solo JSON [{"i":n,"interesa":bool,"tema":"..."}].
+            0. Detenido un joven en Cuéllar por agredir a dos personas en las fiestas
+            1. El Nava se enreda en el último asalto
+            2. La planta de biometano enfrenta posturas y aviva la polémica en Cantalejo
+      - run: |
+          mkdir -p diag
+          cat > diag/ia_accion.txt <<'FIN'
+          ${{ steps.ia.outputs.response }}
+          FIN
+          echo "outcome=${{ steps.ia.outcome }}" >> diag/ia_accion.txt
+          curl -s -X POST https://models.github.ai/inference/chat/completions -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" -d '{"model":"openai/gpt-4.1-mini","messages":[{"role":"user","content":"Di hola"}]}' -w "\nHTTP %{http_code}\n" >> diag/ia_accion.txt 2>&1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
