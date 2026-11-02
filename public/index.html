@@ -1527,7 +1527,22 @@ render();
 load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
-document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible") poll(); });
+// Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
+const VERSION_APP = "prensa-segovia-v40";
+async function compruebaVersion(){
+  try {
+    const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
+    const v = (t.match(/CACHE = "([^"]+)"/)||[])[1];
+    if (v && v !== VERSION_APP && !sessionStorage.getItem("recarga-"+v) && !$("#sheetWrap").classList.contains("open")){
+      sessionStorage.setItem("recarga-"+v, "1");
+      const reg = await navigator.serviceWorker?.getRegistration().catch(()=>null); if (reg) await reg.update().catch(()=>{});
+      location.reload();
+    }
+  } catch(e){}
+}
+setTimeout(compruebaVersion, 4000);
+setInterval(compruebaVersion, 30*60*1000);
+document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible"){ poll(); compruebaVersion(); } });
 </script>
 </body>
 </html>
