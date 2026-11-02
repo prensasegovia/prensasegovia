@@ -524,6 +524,30 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .avcard .avb{gap:14px}
 #rowAvisos.resalta{animation:resalta 2s ease}
 @keyframes resalta{0%,60%{background:var(--pine-soft)}100%{background:transparent}}
+/* Avisos: todo en un mismo recuadro */
+.avbox{border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+.avbox.on{border-color:var(--pine-2)}
+.avbox .avhead{padding:12px 14px;align-items:flex-start}
+.avbox.on .avhead{background:var(--pine-soft)}
+.avbox .avhead input{margin-top:2px}
+.avbox .avico{width:34px;height:34px;border-radius:10px;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center;flex:none}
+.avbox.on .avico{background:var(--pine-2);color:#fff}
+.avbox .avico svg{width:19px;height:19px}
+.avbox .avtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.avbox .avok{display:inline-block;margin-left:6px;font-size:12px;font-weight:700;color:#fff;background:var(--pine-2);border-radius:999px;padding:1px 8px;vertical-align:2px}
+#pushOpc{margin:0;display:block}
+.avbox .avsec{display:flex;padding:12px 14px;border-top:1px solid var(--line);gap:12px}
+.avbox div.avsec{flex-direction:column;align-items:stretch;gap:8px}
+.avbox .avsec .t{font-size:15px;font-weight:600}
+.avbox .avsec .t2{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.avbox .avsec .seg{width:100%}
+.avbox .avsec .seg button{flex:1}
+.avbox #pushEstado{padding:0 14px 12px;margin:0}
+.avbox #pushEstado:empty{display:none}
+#rowAvisos{border-bottom:0}
+.avbox.on #avisosH{display:none}
+.avbox.on .avhead{align-items:center}
+.avbox.on .avhead input{margin-top:0}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -657,14 +681,18 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <span class="h">«Del móvil» sigue el tamaño de texto que tengas en los ajustes del teléfono.</span>
     </div>
     <div class="row" id="rowAvisos">
-      <label class="sw"><span><span class="t">Avisos en este móvil</span><span class="h" id="avisosH">Llegan aunque la app esté cerrada o el móvil bloqueado. Como mucho uno en cada actualización, con un resumen de lo nuevo.</span></span><input type="checkbox" id="fPush"></label>
-      <div id="pushOpc" hidden>
-        <span class="t2">¿De qué quieres que te avise?</span>
-        <div class="seg" id="segPushNivel"><button data-v="todas" type="button">Todas las noticias</button><button data-v="importantes" type="button">Solo importantes</button></div>
-        <label class="sw sm"><span><span class="t">Incluir Segovia capital</span></span><input type="checkbox" id="fPushCap"></label>
-        <label class="sw sm"><span><span class="t">También lo nuevo de Periódicos</span><span class="h">Todas las noticias de El Adelantado, El Norte y El Día, no solo las de interés.</span></span><input type="checkbox" id="fPushPer"></label>
+      <div class="avbox">
+        <label class="sw avhead"><span class="avico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg></span><span class="avtx"><span class="t">Avisos en este móvil <span class="avok" id="pushOk" hidden>✓ Activados</span></span><span class="h" id="avisosH">Llegan aunque la app esté cerrada o el móvil bloqueado. Como mucho uno en cada actualización, con un resumen de lo nuevo.</span></span><input type="checkbox" id="fPush"></label>
+        <div id="pushOpc" hidden>
+          <div class="avsec">
+            <span class="t2">¿De qué quieres que te avise?</span>
+            <div class="seg" id="segPushNivel"><button data-v="todas" type="button">Todas las de interés</button><button data-v="importantes" type="button">Solo importantes</button></div>
+          </div>
+          <label class="sw avsec"><span><span class="t">Incluir Segovia capital</span></span><input type="checkbox" id="fPushCap"></label>
+          <label class="sw avsec"><span><span class="t">Incluir lo nuevo de Periódicos</span><span class="h">Todo lo de El Adelantado, El Norte y El Día, no solo lo de interés. Son muchas más.</span></span><input type="checkbox" id="fPushPer"></label>
+        </div>
+        <div class="h" id="pushEstado"></div>
       </div>
-      <div class="h" id="pushEstado"></div>
     </div>
     <div class="row">
       <label class="sw"><span><span class="t">Vista compacta</span><span class="h">Solo titulares, sin fotos ni resumen: caben muchas más noticias en pantalla.</span></span><input type="checkbox" id="fCompacta"></label>
@@ -1563,11 +1591,11 @@ const b64aU8 = b => { const p = "=".repeat((4 - b.length % 4) % 4); const r = at
 const esIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
 const instalada = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 function pintaPush(msg, mal){
-  $("#fPush").checked = push.on; $("#pushOpc").hidden = !push.on;
+  $("#fPush").checked = push.on; $("#pushOpc").hidden = !push.on; $("#pushOk").hidden = !push.on; $(".avbox").classList.toggle("on", push.on);
   document.querySelectorAll("#segPushNivel button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===push.nivel));
   $("#fPushCap").checked = push.capital; $("#fPushPer").checked = push.periodicos;
   const e = $("#pushEstado"); e.classList.toggle("mal", !!mal);
-  e.textContent = msg ?? (esIOS() && !instalada() ? "En iPhone, primero añade la app a la pantalla de inicio (botón Compartir → «Añadir a pantalla de inicio») y ábrela desde allí." : push.on ? "Activados en este móvil." : "");
+  e.textContent = msg ?? (esIOS() && !instalada() ? "En iPhone, primero añade la app a la pantalla de inicio (botón Compartir → «Añadir a pantalla de inicio») y ábrela desde allí." : "");
 }
 async function confPush(){ if (pushConf) return pushConf; try { pushConf = await (await fetch("avisos.json?t="+Date.now(), {cache:"no-store"})).json(); } catch(e){ pushConf = {}; } return pushConf; }
 async function enviaAlta(sub){
@@ -1591,7 +1619,7 @@ async function activaPush(){
 }
 async function guardaPush(){ store.set("push", push); if (!push.on) return; const reg = await navigator.serviceWorker?.ready; const sub = await reg?.pushManager?.getSubscription(); if (sub) enviaAlta(sub); }
 $("#fPush").addEventListener("change", async e=>{
-  if (e.target.checked){ pintaPush("Activando…"); push.on = await activaPush(); store.set("push", push); pintaPush(push.on ? "Activados. El próximo aviso llegará con la siguiente actualización." : $("#pushEstado").textContent, !push.on); appbar(); }
+  if (e.target.checked){ pintaPush("Activando…"); push.on = await activaPush(); store.set("push", push); pintaPush(push.on ? "Te llegará un aviso de prueba en la próxima actualización." : $("#pushEstado").textContent, !push.on); appbar(); }
   else {
     push.on = false; store.set("push", push); pintaPush("Desactivados en este móvil."); appbar();
     try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); const c = await confPush();
@@ -1692,7 +1720,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v51";
+const VERSION_APP = "prensa-segovia-v52";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
