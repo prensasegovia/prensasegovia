@@ -480,6 +480,21 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .searchbar button{height:auto;min-height:36px}
 .stat .n{flex:none}
 .vacc{display:flex;gap:4px;margin-left:auto}
+/* ajuste: el selector solo ocupa lo que necesita; los botones de la derecha, más grandes */
+.vbar .seg{flex:0 1 auto}
+.vbar .seg button{flex:none;padding:0 14px}
+.vacc{flex:1 1 auto;justify-content:flex-end}
+.vbar .vfil:disabled{opacity:.45;cursor:default}
+@media (max-width:1023px){
+  .vacc .vfil{flex:1;width:auto;min-width:58px;max-width:110px;height:auto;min-height:44px;padding:4px 6px;font-size:12.5px;gap:3px}
+  .vacc .vfil svg{width:20px;height:20px}
+  .vbar .seg button{height:36px;font-size:14.5px}
+}
+@media (max-width:389px){ .vbar .seg button{padding:0 10px;font-size:14px} .vacc .vfil{min-width:50px} }
+@media (min-width:1024px){
+  .vbar{width:max-content;max-width:100%}
+  .vacc .vfil[data-act="leidoPer"]{display:flex;height:36px;padding:0 14px;font-size:14px}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -896,13 +911,13 @@ function chipsBar(pool){
   return barraVista(true) + `<div class="chips" id="chips">${h}</div>`;
 }
 // Fila de arriba: Con capital / Sin capital (las dos opciones a la vista) y botón de Filtros
-function barraVista(conFiltros){
+function barraVista(conFiltros, extra=""){
   const activos = st.rango!=="3" || st.soloKw;
   return `<div class="vbar"><div class="seg" role="group" aria-label="Segovia capital">
       <button type="button" data-act="capSet" data-v="0" aria-pressed="${!st.sinCapital}">Con capital</button>
       <button type="button" data-act="capSet" data-v="1" aria-pressed="${st.sinCapital}">Sin capital</button></div>
     ${conFiltros?`<div class="vacc">`:""}${conFiltros?`<button class="vfil vpar" data-act="parte" type="button" aria-label="Parte del día"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg><span class="vl">Parte</span></button>`:""}
-    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Filtros</span>${activos?`<span class="dot"></span>`:""}</button></div>`:""}</div>`;
+    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Filtros</span>${activos?`<span class="dot"></span>`:""}</button></div>`:""}${extra}</div>`;
 }
 const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital" && !/días$/.test(x)); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Quitar filtros</button></div>` : ""; };
 
@@ -1050,11 +1065,11 @@ function viewPeriodicos(){
   const bur = m => { const k = nue(m); return `<span class="badge pnb" data-pn="${esc(m)}" ${k?"":"hidden"}>${k}</span>`; };
   const nLista = list.filter(isNew).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
-    ${barraVista(false)}<div class="chips" id="chips">
+    ${barraVista(false, `<div class="vacc"><button class="vfil" data-act="leidoPer" type="button" ${nLista?"":"disabled"}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.5l4 4 7-8M10 15.5l1 1 9-10"/></svg><span class="vl">Marcar vistas</span></button></div>`)}<div class="chips" id="chips">
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
       ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span>${bur(m)}</button>`).join("")}
     </div><div class="feed">
-    <div class="newhead pnhead"><h3>${nLista?`Te quedan <span class="cnt" id="pnLeft">${nLista}</span> por ver`:`<span class="okp">✓ Lo has visto todo${st.periodico==="todos"?"":" en "+esc(st.periodico)}</span>`}</h3>${nLista?`<button class="linkbtn" data-act="leidoPer" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button>`:""}</div>`;
+    <div class="newhead pnhead"><h3>${nLista?`Te quedan <span class="cnt" id="pnLeft">${nLista}</span> por ver`:`<span class="okp">✓ Lo has visto todo${st.periodico==="todos"?"":" en "+esc(st.periodico)}</span>`}</h3></div>`;
   if (!st.periodicos.length) return h + `<div class="empty"><b>Cargando periódicos…</b>Las noticias aparecen en la próxima actualización.</div></div>`;
   if (!list.length) return h + `<div class="empty"><b>Sin noticias</b>No hay noticias con este filtro.</div></div>`;
   // Lo que queda por ver, siempre arriba; después lo ya visto, por días
@@ -1558,7 +1573,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v43";
+const VERSION_APP = "prensa-segovia-v44";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
