@@ -621,6 +621,11 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <div class="seg" id="segTema"><button data-v="auto" type="button">Automático</button><button data-v="light" type="button">Claro</button><button data-v="dark" type="button">Oscuro</button></div>
       <span class="h">Automático sigue el modo claro u oscuro del móvil.</span>
     </div>
+    <div class="row">
+      <span class="t">Tamaño de letra</span>
+      <div class="seg" id="segLetra"><button data-v="auto" type="button">Del móvil</button><button data-v="1" type="button">Normal</button><button data-v="1.15" type="button">Grande</button><button data-v="1.3" type="button">Muy grande</button></div>
+      <span class="h">«Del móvil» sigue el tamaño de texto que tengas en los ajustes del teléfono.</span>
+    </div>
     <div class="row" id="rowAvisos">
       <label class="sw"><span><span class="t">Avisos de lo importante</span><span class="h" id="avisosH">Solo mientras la app está abierta (también en otra pestaña): con el móvil bloqueado o la app cerrada no llegan. Avisa cuando entre algo importante, una convocatoria nueva o una de tus palabras vigiladas.</span></span><input type="checkbox" id="fAvisos"></label>
     </div>
@@ -719,7 +724,7 @@ const st = {
   avisos: store.get("avisos", false),
   kws: store.get("kws", ["Guardia Civil"]),
   soloKw: store.get("soloKw", false),
-  tema: store.get("tema","auto"),
+  tema: store.get("tema","auto"), letra: store.get("letra","auto"),
   periodicos: [], periodico: "todos", viaGoogle: [], parteDesde: "24h", ambito: store.get("ambito","interes"), parteLinks: store.get("parteLinks", false),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
   q:"", townQ:"",
@@ -1453,6 +1458,21 @@ $("#q").addEventListener("keydown", e=>{ if (e.key==="Enter") e.target.blur(); i
 $("#qClear").addEventListener("click", ()=>{ toggleSearch(false); if (esPC()) $("#q").blur(); });
 
 /* Hoja de filtros */
+/* Tamaño de letra: en el iPhone el tamaño de texto del sistema no llega a las webs, así que se lee aquí y se aplica */
+function escalaMovil(){
+  if (!/iPhone|iPad|iPod/.test(navigator.userAgent) && !(navigator.platform==="MacIntel" && navigator.maxTouchPoints>1)) return 1; // Android ya agranda la letra por su cuenta
+  const d = document.createElement("span"); d.style.cssText = "font:-apple-system-body;position:absolute;visibility:hidden"; d.textContent = "x"; if (!d.style.font) return 1; document.body.appendChild(d);
+  const px = parseFloat(getComputedStyle(d).fontSize) || 17; d.remove();
+  return Math.min(1.6, Math.max(0.9, px / 17)); // 17 px es el tamaño normal del iPhone
+}
+let letraBase = null;
+function aplicaLetra(){
+  const k = st.letra==="auto" ? escalaMovil() : (+st.letra || 1);
+  const reglas = []; for (const sh of document.styleSheets){ let rs; try { rs = sh.cssRules; } catch(e){ continue; } const walk = l => { for (const r of l){ if (r.cssRules) walk(r.cssRules); if (r.style && r.style.fontSize && /px/.test(r.style.fontSize)) reglas.push(r); } }; walk(rs); }
+  if (!letraBase) letraBase = new Map(reglas.map(r=>[r, r.style.fontSize]));
+  for (const [r, base] of letraBase) r.style.fontSize = Math.abs(k-1) < 0.02 ? base : base.replace(/(\d+(?:\.\d+)?)px/g, (m,n)=>(+n*k).toFixed(2)+"px");
+  document.documentElement.classList.toggle("letra-grande", k > 1.05);
+}
 function aplicaTema(){
   const r = document.documentElement;
   if (st.tema==="light"||st.tema==="dark") r.dataset.theme = st.tema; else delete r.dataset.theme;
@@ -1463,6 +1483,7 @@ aplicaTema();
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", aplicaTema);
 function syncSheet(){
   document.querySelectorAll("#segTema button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.tema));
+  document.querySelectorAll("#segLetra button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.letra));
   document.querySelectorAll("#segRango button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.rango));
   $("#fCap").checked = st.sinCapital; $("#fCompacta").checked = st.compacta; $("#fAvisos").checked = st.avisos && "Notification" in window && Notification.permission==="granted"; $("#fKw").checked = st.soloKw;
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
@@ -1474,6 +1495,7 @@ $("#fClose").addEventListener("click", closeSheet);
 $("#fX").addEventListener("click", closeSheet);
 $("#fMedios").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) history.replaceState({sub:true}, ""); st.sub = {t:"medios"}; render(); window.scrollTo({top:0}); });
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#sheetWrap").classList.contains("open")) closeSheet(); });
+$("#segLetra").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.letra=b.dataset.v; store.set("letra",st.letra); aplicaLetra(); syncSheet(); render(true); });
 $("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
 $("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); render(true); });
 $("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); render(true); });
@@ -1568,12 +1590,13 @@ async function poll(){
     } else syncLabel();
   }catch(e){}
 }
+aplicaLetra();
 render();
 load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v44";
+const VERSION_APP = "prensa-segovia-v45";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
@@ -1587,7 +1610,7 @@ async function compruebaVersion(){
 }
 setTimeout(compruebaVersion, 4000);
 setInterval(compruebaVersion, 30*60*1000);
-document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible"){ poll(); compruebaVersion(); } });
+document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="visible"){ poll(); compruebaVersion(); if (st.letra==="auto") aplicaLetra(); } });
 </script>
 </body>
 </html>
