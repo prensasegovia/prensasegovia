@@ -467,6 +467,19 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 }
 @media (min-width:1024px){ .vbar{margin:14px 0 0;max-width:300px} }
 @media (max-width:359px){ .vbar .vfil{width:46px} .vbar .seg button{font-size:13px;padding:0 6px} }
+/* letra grande (tamaño de texto del móvil o zoom): nada se corta ni se pisa */
+@media (max-width:1023px){ .tab .lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} }
+.vbar{flex-wrap:wrap}
+.vbar .seg{flex:1 1 auto}
+.newhead{flex-wrap:wrap;row-gap:4px}
+.newhead h3{white-space:nowrap}
+.sect{flex-wrap:wrap;row-gap:2px}
+.sect h2{white-space:nowrap}
+.uptodate span{white-space:normal;text-align:center}
+.uptodate{min-width:0}
+.searchbar button{height:auto;min-height:36px}
+.stat .n{flex:none}
+.vacc{display:flex;gap:4px;margin-left:auto}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -888,8 +901,8 @@ function barraVista(conFiltros){
   return `<div class="vbar"><div class="seg" role="group" aria-label="Segovia capital">
       <button type="button" data-act="capSet" data-v="0" aria-pressed="${!st.sinCapital}">Con capital</button>
       <button type="button" data-act="capSet" data-v="1" aria-pressed="${st.sinCapital}">Sin capital</button></div>
-    ${conFiltros?`<button class="vfil vpar" data-act="parte" type="button" aria-label="Parte del día"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg><span class="vl">Parte</span></button>`:""}
-    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Filtros</span>${activos?`<span class="dot"></span>`:""}</button>`:""}</div>`;
+    ${conFiltros?`<div class="vacc">`:""}${conFiltros?`<button class="vfil vpar" data-act="parte" type="button" aria-label="Parte del día"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg><span class="vl">Parte</span></button>`:""}
+    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Filtros</span>${activos?`<span class="dot"></span>`:""}</button></div>`:""}</div>`;
 }
 const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital" && !/días$/.test(x)); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Quitar filtros</button></div>` : ""; };
 
@@ -1545,7 +1558,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v42";
+const VERSION_APP = "prensa-segovia-v43";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
