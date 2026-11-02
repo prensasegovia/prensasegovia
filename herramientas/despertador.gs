@@ -3,7 +3,7 @@
  * Lanza la actualización de noticias en GitHub, porque el reloj automático
  * de GitHub se salta ejecuciones cuando tiene carga.
  *
- *   - De lunes a viernes, de 8:00 a 15:00 (hora de Madrid): cada 20 minutos.
+ *   - De lunes a viernes, de 8:00 a 15:00 (hora de Madrid): cada 10 minutos.
  *   - El resto del tiempo: cada hora.
  *
  * Instalación:
@@ -23,8 +23,8 @@ function lanzar() {
   const tramo = Math.floor(min / 10);                                 // 0..5 (bloques de 10 minutos)
   const laborable = dia >= 1 && dia <= 5;
   const horaPunta = laborable && hora >= 8 && hora < 15;
-  // Hora punta: tramos 0, 2 y 4 (≈ :00, :20, :40). Resto: solo el tramo 0 (≈ :00).
-  const toca = horaPunta ? tramo % 2 === 0 : tramo === 0;
+  // Hora punta: todos los tramos (cada 10 min). Resto: solo el tramo 0 (≈ :00).
+  const toca = horaPunta ? true : tramo === 0;
   if (!toca) return;
   // Que no se lance dos veces en el mismo tramo si el activador se adelanta o se repite
   const clave = Utilities.formatDate(ahora, 'Europe/Madrid', 'yyyyMMddHH') + '-' + tramo;
