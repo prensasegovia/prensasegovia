@@ -1197,10 +1197,10 @@ function appbar(){
   bar.innerHTML = `<div class="brand"><img src="brand.png" alt=""><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
     <div class="syncpill" id="syncPill" title="Las noticias se revisan cada hora"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
-    <button class="ibtn bellbtn ${push.on?"on":""}" id="btnBell" type="button" aria-label="${push.on?"Avisos activados":"Activar avisos"}" title="${push.on?"Avisos activados en este móvil":"Activar avisos en este móvil"}">${I.bell}${push.on || !avisosListos()?"":`<span class="bdot"></span>`}</button>
+    ${!push.on && avisosListos() ? `<button class="ibtn bellbtn" id="btnBell" type="button" aria-label="Activar avisos" title="Activar avisos en este móvil">${I.bell}<span class="bdot"></span></button>` : ""}
     <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar">${I.reload}</button>`;
   $("#btnSearch").onclick = () => toggleSearch();
-  $("#btnBell").onclick = () => abreAvisos(!push.on);
+  if ($("#btnBell")) $("#btnBell").onclick = () => abreAvisos(true);
   $("#btnReload").onclick = () => load(true);
   syncLabel();
 }
@@ -1692,7 +1692,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v50";
+const VERSION_APP = "prensa-segovia-v51";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
