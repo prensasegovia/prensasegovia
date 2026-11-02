@@ -495,6 +495,14 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .vbar{width:max-content;max-width:100%}
   .vacc .vfil[data-act="leidoPer"]{display:flex;height:36px;padding:0 14px;font-size:14px}
 }
+/* selector de capital ajustado al texto; más sitio para Parte y Filtros */
+@media (max-width:1023px){
+  .vbar .seg button{padding:0 11px;font-size:14px}
+  .vacc .vfil{max-width:none;min-height:46px}
+  .vacc .vfil svg{width:21px;height:21px}
+  .vacc .vfil .vl{font-size:13px}
+}
+@media (max-width:359px){ .vbar .seg button{padding:0 8px;font-size:13.5px} }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -1596,15 +1604,17 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v45";
+const VERSION_APP = "prensa-segovia-v46";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
     const v = (t.match(/CACHE = "([^"]+)"/)||[])[1];
-    if (v && v !== VERSION_APP && !sessionStorage.getItem("recarga-"+v) && !$("#sheetWrap").classList.contains("open")){
-      sessionStorage.setItem("recarga-"+v, "1");
+    // Se reintenta como mucho cada 2 minutos (por si el servidor aún da la página vieja) y se pide con ?v= para saltarse copias guardadas
+    const ult = +(localStorage.getItem("psg:recarga-"+v) || 0);
+    if (v && v !== VERSION_APP && Date.now() - ult > 120000 && !$("#sheetWrap").classList.contains("open")){
+      localStorage.setItem("psg:recarga-"+v, String(Date.now()));
       const reg = await navigator.serviceWorker?.getRegistration().catch(()=>null); if (reg) await reg.update().catch(()=>{});
-      location.reload();
+      location.replace(location.pathname + "?v=" + encodeURIComponent(v) + location.hash);
     }
   } catch(e){}
 }
