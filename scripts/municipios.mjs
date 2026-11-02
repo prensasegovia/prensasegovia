@@ -28,4 +28,4 @@ export const ALIAS = {
   "Prádena del Rincón": null, // es de Madrid: se ignora
 };
 // Barrios incorporados al municipio de Segovia (capital)
-export const BARRIOS_CAPITAL = ["Zamarramala","Revenga","Hontoria","Fuentemilanos","Madrona","Torredondo","Perogordo"];
+export const BARRIOS_CAPITAL = ["Zamarramala","Revenga","Hontoria","Fuentemilanos","Madrona","Torredondo","Perogordo","Nueva Segovia","El Palo","Mirasierra","La Albuera","El Peñascal","San Millán","Los Castillos","Valdevilla"];
