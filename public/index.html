@@ -11,8 +11,8 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <meta name="description" content="Noticias de Segovia y sus pueblos, actualizadas cada hora.">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="app-180.png">
+<link rel="icon" type="image/png" href="icono-96.png">
+<link rel="apple-touch-icon" href="icono-180.png">
 <title>Prensa Segovia</title>
 <script>try{var t=JSON.parse(localStorage.getItem("psg:tema"));if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1663,7 +1663,7 @@ async function avisar(list){
   if (!nuevas.length) return;
   const reg = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration().catch(()=>null) : null;
   const muestra = (titulo, body, url, tag) => {
-    const o = { body, icon:"icon-192.png", badge:"icon-192.png", tag, data:{url} };
+    const o = { body, icon:"icono-192.png", badge:"icono-96.png", tag, data:{url} };
     try { if (reg) reg.showNotification(titulo, o); else { const x=new Notification(titulo, o); x.onclick=()=>{ window.focus(); if(url) window.open(url,"_blank","noopener"); }; } } catch(e){}
   };
   const tipo = n => n.relevancia==="alta" ? "Importante" : (n.fecha_evento && n.fecha_evento>=t) ? `Agenda ${fmtCorto(n.fecha_evento)}` : "Palabra vigilada";
@@ -1734,7 +1734,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v53";
+const VERSION_APP = "prensa-segovia-v54";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
