@@ -34,10 +34,8 @@ const noticias = datos.dias.flatMap(d => d.noticias || []).filter(n => n.id && !
 const periodicos = (per.noticias || []).filter(n => n.url && !ya.has("p:" + n.url) && new Date(n.publicado || 0).getTime() > haceHoras(36));
 for (const n of datos.dias.flatMap(d => d.noticias || [])) if (n.id) ya.add("n:" + n.id);
 for (const n of per.noticias || []) if (n.url) ya.add("p:" + n.url);
-const guarda = () => writeFile(new URL(RUTA_AVISADAS, raiz), JSON.stringify({ claves: [...ya].slice(-4000) }));
-
-if (primeraVez) { await guarda(); console.log("Avisos: primera vez, se marca lo actual como ya avisado."); process.exit(0); }
-if (!noticias.length && !periodicos.length) { await guarda(); console.log("Avisos: nada nuevo."); process.exit(0); }
+let saludadosFin = null;
+const guarda = () => writeFile(new URL(RUTA_AVISADAS, raiz), JSON.stringify({ claves: [...ya].slice(-4000), saludados: saludadosFin ? [...saludadosFin] : (avisadas?.saludados || []) }));
 
 // Suscripciones guardadas en el Apps Script
 let subs = [];
@@ -45,11 +43,36 @@ try {
   const r = await fetch(conf.url + "?accion=lista&token=" + encodeURIComponent(token.trim()), { redirect: "follow" });
   const j = await r.json(); subs = Array.isArray(j.subs) ? j.subs : [];
 } catch (e) { console.log("Avisos: no se pudo leer la lista de suscritos:", e.message); await guarda(); process.exit(0); }
+console.log(`Avisos: ${subs.length} móviles apuntados`);
+
+// Bienvenida: al que acaba de activar los avisos le llega uno de prueba, así sabe que le funciona
+const appUrl0 = conf.app || "https://prensasegovia.github.io/prensasegovia/";
+const corto = e => e.slice(-24);
+const saludados = new Set(avisadas?.saludados || []);
+const caducadas0 = [];
+for (const sb of subs) {
+  if (saludados.has(corto(sb.endpoint))) continue;
+  const p = sb.prefs || {};
+  const que = (p.nivel === "importantes" ? "lo importante" : "todas las noticias de interés") + (p.capital === false ? ", sin Segovia capital" : "") + (p.periodicos ? " y lo nuevo de Periódicos" : "");
+  try {
+    await webpush.sendNotification({ endpoint: sb.endpoint, keys: sb.keys }, JSON.stringify({ title: "Prensa Segovia · Avisos activados ✓", body: `Te avisaremos aquí de ${que}. Puedes cambiarlo en Filtros y ajustes.`, url: appUrl0, tag: "prensa-segovia-hola" }), { TTL: 24 * 3600 });
+    saludados.add(corto(sb.endpoint));
+  } catch (e) { if (e.statusCode === 404 || e.statusCode === 410) caducadas0.push(sb.endpoint); else console.log("Avisos: fallo en la bienvenida:", e.statusCode || e.message); }
+}
+for (const k of [...saludados]) if (!subs.some(sb => corto(sb.endpoint) === k)) saludados.delete(k);
+console.log(`Avisos: ${[...saludados].length} con bienvenida enviada`);
+saludadosFin = saludados;
+
+if (primeraVez) { await guarda(); console.log("Avisos: primera vez, se marca lo actual como ya avisado."); process.exit(0); }
+if (!noticias.length && !periodicos.length) {
+  if (caducadas0.length) try { await fetch(conf.url, { method: "POST", body: JSON.stringify({ accion: "borrar", token: token.trim(), endpoints: caducadas0 }), headers: { "Content-Type": "text/plain" } }); } catch {}
+  await guarda(); console.log("Avisos: nada nuevo."); process.exit(0);
+}
 
 const appUrl = conf.app || "https://prensasegovia.github.io/prensasegovia/";
-const caducadas = [];
+const caducadas = [...caducadas0];
 let enviados = 0;
-for (const s of subs) {
+for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
   const p = s.prefs || {};
   // nivel: "todas" | "importantes" · capital: true/false · periodicos: true/false
   let mias = noticias.filter(n => (p.capital !== false || !esCapital(n)) && (p.nivel !== "importantes" || n.relevancia === "alta"));
