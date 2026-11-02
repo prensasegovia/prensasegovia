@@ -432,6 +432,24 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .chips{gap:6px;padding:8px 36px 10px 16px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
   .chip{height:34px;padding:0 12px;font-size:14px}
 }
+/* móvil compacto: Parte del día pasa a la fila de capital y filtros */
+.vpar{margin-left:auto}
+.vpar + .vfil{margin-left:0}
+@media (max-width:1023px){
+  .hero .partebtn{display:none}
+  .hero{padding-bottom:10px}
+  .hero .stats{margin-top:8px}
+  .stat{padding:6px 10px}
+  .vbar{padding:8px 12px 0;gap:4px}
+  .seg{padding:2px}
+  .seg button{height:30px;padding:0 11px;font-size:13.5px}
+  .vfil{height:34px;padding:0 8px;font-size:14px;gap:5px}
+  .chips{padding-top:6px;padding-bottom:6px}
+  .uptodate{margin:6px 6px 0}
+  .feed > .dayhead:first-child, .uptodate + .dayhead{padding-top:8px}
+  .newhead{padding-top:8px}
+}
+@media (max-width:379px){ .vfil .vl{display:none} .seg button{padding:0 9px;font-size:13px} }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -853,7 +871,8 @@ function barraVista(conFiltros){
   return `<div class="vbar"><div class="seg" role="group" aria-label="Segovia capital">
       <button type="button" data-act="capSet" data-v="0" aria-pressed="${!st.sinCapital}">Con capital</button>
       <button type="button" data-act="capSet" data-v="1" aria-pressed="${st.sinCapital}">Sin capital</button></div>
-    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${activos?`<span class="dot"></span>`:""}</button>`:""}</div>`;
+    ${conFiltros?`<button class="vfil vpar" data-act="parte" type="button" aria-label="Parte del día"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg><span class="vl">Parte</span></button>`:""}
+    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Filtros</span>${activos?`<span class="dot"></span>`:""}</button>`:""}</div>`;
 }
 const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital" && !/días$/.test(x)); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Quitar filtros</button></div>` : ""; };
 

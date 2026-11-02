@@ -517,6 +517,8 @@ function mismaNoticia(a, b) {
   if (CONCRETO(a.municipio) && CONCRETO(b.municipio) && a.municipio !== b.municipio) return false;
   let comunes = 0; for (const w of a.tk) if (b.tk.has(w)) comunes++;
   if (parecido(a.tk, b.tk) >= 0.55 && comunes >= 3) return true;
+  // Mismo incendio o intoxicación el mismo día, aunque un titular hable de desalojos y otro no
+  if (Math.abs(new Date(a.dia) - new Date(b.dia)) === 0 && a.tk.has("intox") && b.tk.has("intox") && a.tk.has("incen") && b.tk.has("incen")) return true;
   if (a.titulo && b.titulo && DESARROLLO.test(norm(a.titulo)) !== DESARROLLO.test(norm(b.titulo))) return false;
   const dias = Math.abs(new Date(a.dia) - new Date(b.dia)) / 864e5;
   if (CONCRETO(a.municipio) && a.municipio === b.municipio && dias <= 2) {
