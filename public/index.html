@@ -1197,7 +1197,7 @@ function appbar(){
   bar.innerHTML = `<div class="brand"><img src="brand.png" alt=""><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
     <div class="syncpill" id="syncPill" title="Las noticias se revisan cada hora"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
-    <button class="ibtn bellbtn ${push.on?"on":""}" id="btnBell" type="button" aria-label="${push.on?"Avisos activados":"Activar avisos"}" title="${push.on?"Avisos activados en este móvil":"Activar avisos en este móvil"}">${I.bell}${push.on?"":`<span class="bdot"></span>`}</button>
+    <button class="ibtn bellbtn ${push.on?"on":""}" id="btnBell" type="button" aria-label="${push.on?"Avisos activados":"Activar avisos"}" title="${push.on?"Avisos activados en este móvil":"Activar avisos en este móvil"}">${I.bell}${push.on || !avisosListos()?"":`<span class="bdot"></span>`}</button>
     <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar">${I.reload}</button>`;
   $("#btnSearch").onclick = () => toggleSearch();
   $("#btnBell").onclick = () => abreAvisos(!push.on);
@@ -1552,7 +1552,8 @@ function abreAvisos(activar){
   setTimeout(()=>row.scrollIntoView({block:"center", behavior:"smooth"}), 150);
   if (activar && !$("#fPush").checked){ $("#fPush").checked = true; $("#fPush").dispatchEvent(new Event("change")); }
 }
-const tarjetaAvisos = () => push.on || store.get("avisosNo", false) || !("serviceWorker" in navigator) ? "" :
+const avisosListos = () => !!(pushConf && pushConf.url && pushConf.publica);
+const tarjetaAvisos = () => push.on || !avisosListos() || store.get("avisosNo", false) || !("serviceWorker" in navigator) ? "" :
   `<div class="avcard"><span class="avic">${I.bell}</span><span class="avt"><b>Avisos en el móvil</b>Te llega un aviso con lo nuevo aunque tengas la app cerrada.</span>
    <span class="avb"><button class="btn" data-act="avisosSi" type="button">Activar</button><button class="linkbtn" data-act="avisosNo" type="button">Ahora no</button></span></div>`;
 /* Avisos al móvil (Web Push): se apunta este móvil en el Apps Script y GitHub envía los avisos tras cada actualización */
@@ -1575,7 +1576,7 @@ async function enviaAlta(sub){
 }
 async function activaPush(){
   const c = await confPush();
-  if (!c.url || !c.publica){ pintaPush("Los avisos aún no están activados en el servidor. Prueba más tarde.", true); return false; }
+  if (!c.url || !c.publica){ pintaPush("Los avisos todavía no están en marcha: falta un último paso de configuración. En cuanto esté, podrás activarlos aquí.", true); return false; }
   if (esIOS() && !instalada()){ pintaPush(undefined, true); return false; }
   if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){ pintaPush("Este navegador no admite avisos. En iPhone hace falta iOS 16.4 o posterior y abrir la app desde la pantalla de inicio.", true); return false; }
   const perm = await Notification.requestPermission();
@@ -1685,12 +1686,13 @@ async function poll(){
 aplicaLetra();
 const vistaHash = () => { const h = location.hash.slice(1); if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
 vistaHash(); addEventListener("hashchange", vistaHash);
+confPush().then(c=>{ if (c && c.url) render(true); });
 render();
 load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v48";
+const VERSION_APP = "prensa-segovia-v49";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
