@@ -398,8 +398,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .hero .stats{grid-template-columns:repeat(3,minmax(84px,108px))}
 }
 @media (min-width:1024px) and (max-width:1499px){
-  .hero{grid-template-columns:minmax(0,1fr)}
-  .hero .stats{grid-column:1;grid-row:auto;margin-top:12px;grid-template-columns:repeat(3,minmax(0,150px))}
+  .hero{padding:18px 22px;gap:4px 20px}
+  .hero .stats{grid-template-columns:repeat(3,minmax(74px,96px));gap:6px}
+  .hero .stat{padding:8px 10px;min-height:58px}
 }
 @media (min-width:1024px){
   /* pueblos y medios en columnas: se ve todo de un vistazo */
@@ -635,6 +636,18 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 @media (min-width:1024px){ .card{cursor:pointer} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} }
 @media (min-width:700px){ .hero,.subhero{border-radius:0 0 30px 30px} .urg{flex-basis:300px} .feed,.towns,.mgroup{padding:0 16px} }
+/* ordenador: todo alineado al mismo borde y la cabecera con las esquinas redondeadas */
+@media (min-width:1024px){
+  .feed,.towns,.mgroup{padding:0}
+  .hero,.subhero{border-radius:22px}
+  .avcard{margin:12px 0 4px}
+  .newhead{padding-left:2px;padding-right:2px}
+}
+@media (min-width:1024px) and (max-width:1499px){
+  .hero{grid-template-columns:minmax(200px,1fr) auto}
+  .hero .stats{grid-template-columns:repeat(3,minmax(92px,104px))}
+  .hero .stat .l{font-size:12.5px}
+}
 </style>
 </head>
 <body>
@@ -978,7 +991,8 @@ function chipsBar(pool){
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
   let h = `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
   for (const c of CATS){ const k = counts[c.k]||0;
-    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" ${!k && st.cat!==c.k?"disabled":""} type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
+    if (!k && st.cat!==c.k) continue;
+    h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
   return barraVista(true) + `<div class="chips" id="chips">${h}</div>`;
 }
 // Fila de arriba: Con capital / Sin capital (las dos opciones a la vista) y botón de Filtros
@@ -1720,7 +1734,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v52";
+const VERSION_APP = "prensa-segovia-v53";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
