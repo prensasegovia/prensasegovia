@@ -927,6 +927,25 @@ const isNew = n => !st.seen.has(n._key);
 function actualizaTitulo(news = allNews()){
   const nu = news.filter(n=>pasa(n) && enRango(n) && isNew(n)).length;
   document.title = nu ? `(${nu}) Prensa Segovia` : "Prensa Segovia";
+  faviconConNumero(nu);
+}
+// Icono de la pestaña con un globo rojo y el número de noticias nuevas (se ve aunque estés en otra pestaña)
+let favBase = null, favUlt = -1;
+function faviconConNumero(n){
+  if (n === favUlt) return; favUlt = n;
+  const lnk = document.getElementById("lnkFav"); if (!lnk) return;
+  const orig = "iconoa-96.png";
+  if (!n){ lnk.href = orig; return; }
+  const pinta = img => { try {
+    const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d");
+    x.drawImage(img, 0, 0, 64, 64);
+    const t = n > 99 ? "99+" : String(n), w = Math.max(30, 14 + t.length * 13);
+    x.fillStyle = "#D93025"; x.beginPath(); x.roundRect ? x.roundRect(64 - w, 0, w, 32, 16) : x.rect(64 - w, 0, w, 32); x.fill();
+    x.lineWidth = 3; x.strokeStyle = "#fff"; x.stroke();
+    x.fillStyle = "#fff"; x.font = "bold 24px system-ui, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(t, 64 - w / 2, 17);
+    lnk.href = c.toDataURL("image/png");
+  } catch(e){} };
+  if (favBase && favBase.complete) pinta(favBase); else { favBase = new Image(); favBase.onload = () => pinta(favBase); favBase.src = orig; }
 }
 function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c){ store.set("seen", [...st.seen].slice(-6000)); actualizaPer(); } }
 // Noticias de Periódicos sin ver: insignia de la pestaña, burbujas de cada periódico y «te quedan»
@@ -1725,7 +1744,7 @@ async function poll(){
     if (j.actualizado && j.actualizado !== st.actualizado) cargaPeriodicos();
     if (j.actualizado && j.actualizado !== st.actualizado){
       if (window.scrollY < 80 && !$("#sheetWrap").classList.contains("open") && !st.q && !st.sub) applyData(j);
-      else { st.pending = j; $("#toast").classList.add("show"); avisar(noticiasDe(j)); }
+      else { st.pending = j; $("#toast").classList.add("show"); const nn = noticiasDe(j); avisar(nn); actualizaTitulo(nn); }
     } else syncLabel();
   }catch(e){}
 }
@@ -1738,7 +1757,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v59";
+const VERSION_APP = "prensa-segovia-v60";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
