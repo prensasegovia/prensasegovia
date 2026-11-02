@@ -510,6 +510,20 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 #pushEstado{margin-top:6px}
 #pushEstado:empty{display:none}
 #pushEstado.mal{color:var(--alta)}
+.bellbtn{position:relative}
+.bellbtn .bdot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#FFB020;box-shadow:0 0 0 2px var(--pine)}
+.bellbtn.on svg{fill:currentColor}
+.avcard{display:flex;align-items:center;gap:12px;margin:10px 4px 2px;padding:12px 14px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;flex-wrap:wrap}
+.avcard .avic{width:38px;height:38px;border-radius:12px;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center;flex:none}
+.avcard .avic svg{width:21px;height:21px}
+.avcard .avt{flex:1 1 180px;font-size:14px;color:var(--muted);line-height:1.35}
+.avcard .avt b{display:block;color:var(--ink);font-size:15px}
+.avcard .avb{display:flex;align-items:center;gap:12px;margin-left:auto}
+.avcard .btn{margin:0;min-height:38px;padding:8px 18px;font-size:14.5px}
+.avcard{padding:10px 12px;gap:10px}
+.avcard .avb{gap:14px}
+#rowAvisos.resalta{animation:resalta 2s ease}
+@keyframes resalta{0%,60%{background:var(--pine-soft)}100%{background:transparent}}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -616,6 +630,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   <div class="side-extra">
     <button class="side-btn" data-side="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM9 3h6v3H9zM8 11h8M8 15h8M8 19h4"/></svg><span>Parte del día</span></button>
     <button class="side-btn" data-side="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Filtros y ajustes</span></button>
+    <button class="side-btn" data-side="avisos" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg><span>Avisos</span></button>
     <button class="side-btn" data-side="medios" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg><span>Medios y fuentes</span></button>
     <div class="side-foot" id="sideFoot"></div>
   </div>
@@ -694,6 +709,7 @@ const I = {
   clock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
   check:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>`,
   search:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>`,
+  bell:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg>`,
   reload:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>`,
   back:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>`,
   chev:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>`
@@ -976,7 +992,7 @@ function viewNoticias(news){
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${esc(cuando(n._dia,n.hora))}</span></a>`).join("") + `</div>`;
   }
-  h += chipsBar(pool) + `<div class="feed">` + avisoFiltros();
+  h += chipsBar(pool) + `<div class="feed">` + avisoFiltros() + tarjetaAvisos();
   if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Prueba otro tema, amplía el periodo en Filtros o pulsa «Quitar filtros».<br><button class="btn ghost" data-act="limpiar" type="button">Quitar filtros</button></div></div>`;
   if (nuevas.length){
     h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
@@ -1181,8 +1197,10 @@ function appbar(){
   bar.innerHTML = `<div class="brand"><img src="brand.png" alt=""><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
     <div class="syncpill" id="syncPill" title="Las noticias se revisan cada hora"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
+    <button class="ibtn bellbtn ${push.on?"on":""}" id="btnBell" type="button" aria-label="${push.on?"Avisos activados":"Activar avisos"}" title="${push.on?"Avisos activados en este móvil":"Activar avisos en este móvil"}">${I.bell}${push.on?"":`<span class="bdot"></span>`}</button>
     <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar">${I.reload}</button>`;
   $("#btnSearch").onclick = () => toggleSearch();
+  $("#btnBell").onclick = () => abreAvisos(!push.on);
   $("#btnReload").onclick = () => load(true);
   syncLabel();
 }
@@ -1348,6 +1366,8 @@ $("#app").addEventListener("click", e=>{
   else if (act==="capSet"){ const v = b.dataset.v==="1"; if (st.sinCapital!==v){ st.sinCapital=v; saveF(); aplicaFiltro(); } }
   else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
   else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
+  else if (act==="avisosSi"){ abreAvisos(true); }
+  else if (act==="avisosNo"){ store.set("avisosNo", true); render(true); aviso("Puedes activarlos cuando quieras con la campana de arriba"); }
   else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
@@ -1445,7 +1465,7 @@ $("#aside").addEventListener("click", e=>{
 document.querySelector(".side-extra").addEventListener("click", e=>{
   const b = e.target.closest("[data-side]"); if (!b) return;
   const v = b.dataset.side;
-  if (v==="filtros") openSheet(); else abrirSub({t:v});
+  if (v==="filtros") openSheet(); else if (v==="avisos") abreAvisos(!push.on); else abrirSub({t:v});
 });
 function cerrarDetalle(){ st.detalle = null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); renderAside(allNews()); }
 let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (!conPanel() && st.detalle){ st.detalle=null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); } if (st.loaded) renderAside(allNews()); }, 150); });
@@ -1525,6 +1545,16 @@ const aplicaCompacta = () => document.documentElement.classList.toggle("compacta
 aplicaCompacta();
 $("#fCompacta").addEventListener("change", e=>{ st.compacta=e.target.checked; store.set("compacta", st.compacta); aplicaCompacta(); });
 /* ================= Avisos ================= */
+// Abre Filtros y ajustes en el apartado de avisos; si se pide, activa directamente (el toque del usuario permite pedir el permiso)
+function abreAvisos(activar){
+  openSheet();
+  const row = $("#rowAvisos"); row.classList.add("resalta"); setTimeout(()=>row.classList.remove("resalta"), 2200);
+  setTimeout(()=>row.scrollIntoView({block:"center", behavior:"smooth"}), 150);
+  if (activar && !$("#fPush").checked){ $("#fPush").checked = true; $("#fPush").dispatchEvent(new Event("change")); }
+}
+const tarjetaAvisos = () => push.on || store.get("avisosNo", false) || !("serviceWorker" in navigator) ? "" :
+  `<div class="avcard"><span class="avic">${I.bell}</span><span class="avt"><b>Avisos en el móvil</b>Te llega un aviso con lo nuevo aunque tengas la app cerrada.</span>
+   <span class="avb"><button class="btn" data-act="avisosSi" type="button">Activar</button><button class="linkbtn" data-act="avisosNo" type="button">Ahora no</button></span></div>`;
 /* Avisos al móvil (Web Push): se apunta este móvil en el Apps Script y GitHub envía los avisos tras cada actualización */
 const push = Object.assign({ on:false, nivel:"todas", capital:true, periodicos:false }, store.get("push", {}));
 let pushConf = null;
@@ -1560,9 +1590,9 @@ async function activaPush(){
 }
 async function guardaPush(){ store.set("push", push); if (!push.on) return; const reg = await navigator.serviceWorker?.ready; const sub = await reg?.pushManager?.getSubscription(); if (sub) enviaAlta(sub); }
 $("#fPush").addEventListener("change", async e=>{
-  if (e.target.checked){ pintaPush("Activando…"); push.on = await activaPush(); store.set("push", push); pintaPush(push.on ? "Activados. El próximo aviso llegará con la siguiente actualización." : $("#pushEstado").textContent, !push.on); }
+  if (e.target.checked){ pintaPush("Activando…"); push.on = await activaPush(); store.set("push", push); pintaPush(push.on ? "Activados. El próximo aviso llegará con la siguiente actualización." : $("#pushEstado").textContent, !push.on); appbar(); }
   else {
-    push.on = false; store.set("push", push); pintaPush("Desactivados en este móvil.");
+    push.on = false; store.set("push", push); pintaPush("Desactivados en este móvil."); appbar();
     try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); const c = await confPush();
       if (sub){ if (c.url) fetch(c.url, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ accion:"baja", endpoint: sub.endpoint }) }); await sub.unsubscribe(); } } catch(e){}
   }
@@ -1660,7 +1690,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v47";
+const VERSION_APP = "prensa-segovia-v48";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
