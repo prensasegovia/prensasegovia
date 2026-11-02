@@ -15,3 +15,6 @@ Web que reúne cada día las noticias de los pueblos de la provincia de Segovia.
 - **Forzar una actualización:** pestaña *Actions* → *Actualizar noticias* → *Run workflow*.
 
 En la pestaña *Medios* de la web se ve qué fuentes se pudieron leer en la última actualización.
+
+## Avisos al móvil
+Los avisos (Web Push) se envían desde `scripts/avisos.mjs` tras cada actualización. Las suscripciones las guarda el Apps Script de `herramientas/avisos.gs`; la clave privada va en el secreto `AVISOS` del repositorio.
