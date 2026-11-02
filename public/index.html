@@ -985,7 +985,10 @@ function viewPeriodicos(){
     <div class="newhead pnhead"><h3>${nLista?`Te quedan <span class="cnt" id="pnLeft">${nLista}</span> por ver`:`<span class="okp">✓ Lo has visto todo${st.periodico==="todos"?"":" en "+esc(st.periodico)}</span>`}</h3>${nLista?`<button class="linkbtn" data-act="leidoPer" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button>`:""}</div>`;
   if (!st.periodicos.length) return h + `<div class="empty"><b>Cargando periódicos…</b>Las noticias aparecen en la próxima actualización.</div></div>`;
   if (!list.length) return h + `<div class="empty"><b>Sin noticias</b>No hay noticias con este filtro.</div></div>`;
-  return h + porDias(list) + `</div>`;
+  // Lo que queda por ver, siempre arriba; después lo ya visto, por días
+  const sinVer = list.filter(isNew).sort(porHora), vistas = list.filter(n=>!isNew(n));
+  if (sinVer.length) h += sinVer.map(n=>card(n)).join("") + `<div class="uptodate"><span>${I.check}Hasta aquí lo que te quedaba por ver</span></div>`;
+  return h + porDias(vistas, sinVer.length ? " · ya visto" : "") + `</div>`;
 }
 
 /* Parte del día: texto para pegar en WhatsApp o en un informe */
