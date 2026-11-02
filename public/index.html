@@ -133,6 +133,7 @@ svg{flex:none}
 .pill.lvl-alta{background:var(--alta-soft);color:var(--alta-ink)}
 .pill.lvl-media{background:var(--media-soft);color:var(--media)}
 .pill.ev{background:var(--alta);color:#fff;cursor:default}
+.pill.anul{background:var(--muted);color:#fff;cursor:default;text-decoration:none}
 .cat{color:var(--muted);display:inline-flex;align-items:center;gap:4px}
 .cat svg{width:14px;height:14px}
 .time{color:var(--muted);margin-left:auto;white-space:nowrap;font-weight:500}
@@ -230,6 +231,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .tab .ic{padding:3px 18px;display:flex;border-radius:999px;transition:background .15s}
 .tab[aria-selected="true"]{color:var(--pine-2)}
 .tab[aria-selected="true"] .ic{background:var(--pine-soft)}
+.tab .b.nb{background:var(--new)}
 .tab .b{position:absolute;top:2px;left:calc(50% + 10px);background:var(--alta);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;padding:0 5px;line-height:16px}
 
 /* ---------- Hoja de filtros ---------- */
@@ -412,6 +414,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .stat .l span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .chip:disabled{cursor:default}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pay-s{background:#4a3a12;color:#FFD98A} }
+.chip .pnb{margin-left:2px}
+.pnhead .okp{color:var(--muted);font-weight:600;font-size:14px}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -512,7 +516,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
     <button class="tab" role="tab" data-view="noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span><span class="lbl">Noticias</span></button>
     <button class="tab" role="tab" data-view="agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="lbl">Agenda</span><span class="b" id="agBadge" hidden></span></button>
     <button class="tab" role="tab" data-view="pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="lbl">Pueblos</span></button>
-    <button class="tab" role="tab" data-view="periodicos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h4M7 16h4M14 12h3v4h-3z"/></svg></span><span class="lbl">Periódicos</span></button>
+    <button class="tab" role="tab" data-view="periodicos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h4M7 16h4M14 12h3v4h-3z"/></svg></span><span class="lbl">Periódicos</span><span class="b nb" id="perBadge" hidden></span></button>
     <button class="tab" role="tab" data-view="guardadas" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span><span class="lbl">Guardadas</span><span class="b" id="favBadge" hidden style="background:var(--pine-2)"></span></button>
   </div>
   <div class="side-extra">
@@ -658,7 +662,9 @@ function procesa(n, fecha){
   const dia = ok ? iso(pub) : fecha;
   const hora = ok ? pub.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:TZ}) : n.hora;
   const cats = (Array.isArray(n.categorias)?n.categorias:[]).filter(c=>CAT[c]);
-  return {...n, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]};
+  // Convocatoria anulada por una noticia posterior: fuera de la agenda, con aviso en la tarjeta
+  const anulada = n.cancelada && (n.fecha_evento || n.convocatoria) ? { fecha_evento: undefined, hora_evento: undefined, convocatoria: undefined, _anulada: n.cancelada, _evAnulado: n.fecha_evento } : {};
+  return {...n, ...anulada, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]};
 }
 function allNews(){
   if (cacheNews) return cacheNews;
@@ -755,7 +761,16 @@ function actualizaTitulo(news = allNews()){
   const nu = news.filter(n=>pasa(n) && enRango(n) && isNew(n)).length;
   document.title = nu ? `(${nu}) Prensa Segovia` : "Prensa Segovia";
 }
-function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c) store.set("seen", [...st.seen].slice(-3000)); }
+function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c){ store.set("seen", [...st.seen].slice(-6000)); actualizaPer(); } }
+// Noticias de Periódicos sin ver: insignia de la pestaña, burbujas de cada periódico y «te quedan»
+function actualizaPer(){
+  const all = periodicosNews().filter(n=>!(st.sinCapital && isCapital(n)));
+  const b = document.getElementById("perBadge");
+  if (b){ const k = all.filter(isNew).length; b.hidden = !k; b.textContent = k > 99 ? "99+" : k; }
+  document.querySelectorAll("[data-pn]").forEach(el=>{ const m = el.dataset.pn; const k = all.filter(n=>(m==="todos"||n.medio===m) && isNew(n)).length; el.hidden = !k; el.textContent = k; });
+  const left = document.getElementById("pnLeft");
+  if (left){ const k = all.filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && isNew(n)).length; left.textContent = k; }
+}
 const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cat?CAT[st.cat].n.toLowerCase():""].filter(Boolean);
 
 const SIN_TILDE = { a:"[aáàä]", e:"[eéèë]", i:"[iíìï]", o:"[oóòö]", u:"[uúùü]", n:"[nñ]", c:"[cç]" };
@@ -785,7 +800,7 @@ function card(n, opts={}){
   tarjetas.set(n._key, n);
   const lvl = n.relevancia==="alta"?"alta":n.relevancia==="media"?"media":"baja";
   const cat = n._cats[0] ? `<span class="cat">${ICON(CAT[n._cats[0]].d)}${esc(CAT[n._cats[0]].n)}</span>` : "";
-  const ev = n.fecha_evento && !opts.noEv && n.fecha_evento>=today() ? `<span class="pill ev">${I.cal.replace('<svg','<svg width="12" height="12"')}${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
+  const ev = n._anulada ? `<span class="pill anul" title="${esc(n._anulada)}">Cancelado</span>` : n.fecha_evento && !opts.noEv && n.fecha_evento>=today() ? `<span class="pill ev">${I.cal.replace('<svg','<svg width="12" height="12"')}${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
   const medios = mediosDe(n);
   const abierto = st.abiertos.has(n._key);
   const visibles = abierto ? medios : medios.slice(0,2);
@@ -956,13 +971,18 @@ function periodicosNews(){
 function viewPeriodicos(){
   const all = periodicosNews();
   const list = all.filter(n=>st.periodico==="todos" || n.medio===st.periodico).filter(n=>!(st.sinCapital && isCapital(n)));
-  const cnt = m => all.filter(n=>(m==="todos"||n.medio===m) && !(st.sinCapital && isCapital(n))).length;
+  const de = m => all.filter(n=>(m==="todos"||n.medio===m) && !(st.sinCapital && isCapital(n)));
+  const cnt = m => de(m).length;
+  const nue = m => de(m).filter(isNew).length;
+  const bur = m => { const k = nue(m); return `<span class="badge pnb" data-pn="${esc(m)}" ${k?"":"hidden"}>${k}</span>`; };
+  const nLista = list.filter(isNew).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
     <div class="chips" id="chips">
       <button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>
-      <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span></button>
-      ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span></button>`).join("")}
-    </div><div class="feed">`;
+      <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
+      ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span>${bur(m)}</button>`).join("")}
+    </div><div class="feed">
+    <div class="newhead pnhead"><h3>${nLista?`Te quedan <span class="cnt" id="pnLeft">${nLista}</span> por ver`:`<span class="okp">✓ Lo has visto todo${st.periodico==="todos"?"":" en "+esc(st.periodico)}</span>`}</h3>${nLista?`<button class="linkbtn" data-act="leidoPer" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button>`:""}</div>`;
   if (!st.periodicos.length) return h + `<div class="empty"><b>Cargando periódicos…</b>Las noticias aparecen en la próxima actualización.</div></div>`;
   if (!list.length) return h + `<div class="empty"><b>Sin noticias</b>No hay noticias con este filtro.</div></div>`;
   return h + porDias(list) + `</div>`;
@@ -1088,7 +1108,7 @@ function render(keepScroll){
   else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
   const t = today();
   const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
-  const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg;
+  const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg; actualizaPer();
   const nf = Object.keys(st.favs).length; const fb = $("#favBadge"); fb.hidden = !nf; fb.textContent = nf;
   if (keepScroll) window.scrollTo(0,y);
   if (chipObs) chipObs.disconnect();
@@ -1210,6 +1230,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="filtros") openSheet();
   else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
   else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
+  else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="parte") abrirSub({t:"parte"});
@@ -1244,7 +1265,7 @@ function panelDetalle(n){
   const lugar = n.municipio && n.municipio!=="General" ? n.municipio : "Provincia";
   const fav = !!st.favs[n._key];
   const ext = extractoDe(n);
-  const ev = n.fecha_evento ? `<div class="dt-ev">${I.cal.replace('<svg','<svg width="16" height="16"')}<span><b>${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", a las "+esc(n.hora_evento):""}</b>${n.fecha_evento<today()?" (ya pasó)":""}</span></div>` : "";
+  const ev = n._anulada ? `<div class="dt-ev"><span><b>Cancelado.</b> ${esc(n._anulada)}</span></div>` : n.fecha_evento ? `<div class="dt-ev">${I.cal.replace('<svg','<svg width="16" height="16"')}<span><b>${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", a las "+esc(n.hora_evento):""}</b>${n.fecha_evento<today()?" (ya pasó)":""}</span></div>` : "";
   return `<div class="abox detalle ${n.relevancia==="alta"?"alta":""}">
     <div class="dt-top"><button class="dt-x" data-dt="cerrar" type="button" aria-label="Cerrar">×</button>
       <span class="dt-meta"><button class="pill" data-pueblo="${esc(lugar==="Provincia"?"":lugar)}" type="button" ${lugar==="Provincia"?"disabled":""}>${esc(lugar)}</button>${n.relevancia==="alta"?'<span class="pill lvl-alta">Importante</span>':""}<span class="time">${esc(cuando(n._dia, n.hora))}</span></span></div>
@@ -1421,12 +1442,16 @@ function applyData(j){
   if (!store.get("seen3", null)){ // primera vez: cuenta como nuevo lo de los últimos 2 días
     store.set("seen3", true); st.seen = new Set();
     marcarVisto(allNews().filter(n=>n._dia < addDays(today(),-2)).map(n=>n._key));
+    store.set("seenP", null);
+    if (st.periodicos.length){ store.set("seenP", true); const lim = Date.now() - 24*36e5; marcarVisto(periodicosNews().filter(n=>n._ts < lim).map(n=>n._key)); }
   }
   render();
   avisar(allNews());
 }
 async function cargaPeriodicos(){
-  try { const r = await fetch("periodicos.json?t="+Date.now(), {cache:"no-store"}); if (!r.ok) return; const j = await r.json(); st.periodicos = j.noticias || []; if (st.view==="periodicos" && !st.sub) render(true); } catch(e){}
+  try { const r = await fetch("periodicos.json?t="+Date.now(), {cache:"no-store"}); if (!r.ok) return; const j = await r.json(); st.periodicos = j.noticias || [];
+    if (!store.get("seenP", null)){ store.set("seenP", true); const lim = Date.now() - 24*36e5; marcarVisto(periodicosNews().filter(n=>n._ts < lim).map(n=>n._key)); }
+    actualizaPer(); if (st.view==="periodicos" && !st.sub) render(true); } catch(e){}
 }
 async function fetchJSON(){
   const r = await fetch("datos.json?t="+Date.now(), {cache:"no-store"});
