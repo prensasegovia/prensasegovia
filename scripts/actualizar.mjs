@@ -803,8 +803,12 @@ async function main() {
       if (!g.img && b.img) g.img = b.img;
       if (b.local) g.local = true;
       if (b.fecha < g.fecha) g.fecha = b.fecha;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+      if (!ORGANIZACIONES.has(b.medio) && (!g.fechaMedio || b.fecha < g.fechaMedio)) g.fechaMedio = b.fecha;
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, ...(ORGANIZACIONES.has(b.medio) ? {} : { fechaMedio: b.fecha }), medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
+  // La hora de la noticia es la del primer periódico que la da: la nota de un partido o sindicato
+  // no se muestra sola, así que no debe adelantar la hora (parecería que llegó tarde)
+  for (const g of grupos) if (g.fechaMedio) g.fecha = g.fechaMedio;
 
   // 3b) Leer el cuerpo de las noticias nuevas: lo interesante no siempre está en el titular
   let cache = {};
