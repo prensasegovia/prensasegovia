@@ -38,7 +38,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 html,body{margin:0;background:var(--stone);color:var(--ink)}
-body{font:400 16px/1.45 "Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;padding-bottom:calc(74px + var(--safe-b));overscroll-behavior-y:contain;min-height:calc(100vh + env(safe-area-inset-top, 0px));box-sizing:border-box}
+body{font:400 16px/1.45 "Archivo",system-ui,sans-serif;font-variation-settings:"wdth" 100;padding-bottom:calc(64px + var(--safe-b));overscroll-behavior-y:contain;min-height:calc(100vh + env(safe-area-inset-top, 0px));box-sizing:border-box}
 button{font:inherit;color:inherit}
 a{color:inherit}
 :focus-visible{outline:2.5px solid var(--new);outline-offset:2px;border-radius:8px}
@@ -85,7 +85,7 @@ svg{flex:none}
 @media (max-width:360px){.partebtn span{display:none}}
 .partebtn span{margin-left:auto;font-weight:500;font-size:12.5px;color:#5B6763}
 .parte{white-space:pre-wrap;font:14.5px/1.5 "Archivo",system-ui,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;word-break:break-word;color:var(--ink)}
-.parte-acts{display:flex;gap:10px;position:sticky;bottom:calc(76px + var(--safe-b));padding:8px 0}
+.parte-acts{display:flex;gap:10px;position:sticky;bottom:calc(64px + var(--safe-b));padding:8px 0}
 .parte-acts .btn{flex:1;box-shadow:0 2px 10px rgba(0,0,0,.15)}
 .parte-acts .btn.ghost{background:var(--surface)}
 .subhero{background:var(--pine);color:#fff;padding:2px 16px 16px;border-radius:0 0 24px 24px}
@@ -228,9 +228,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .foot button{border:0;background:none;color:var(--pine-2);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline}
 
 /* ---------- Barra inferior ---------- */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb, var(--surface) 92%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:5px 6px calc(5px + var(--safe-b))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb, var(--surface) 92%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:3px 6px max(4px, calc(var(--safe-b) - 14px))}
 .tabbar .in{max-width:680px;margin:0 auto;display:flex}
-.tab{flex:1;min-width:0;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;min-height:52px;justify-content:center}
+.tab{flex:1;min-width:0;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11.5px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;min-height:48px;justify-content:center}
 .tab svg{width:23px;height:23px}
 .tab .ic{padding:3px 18px;display:flex;border-radius:999px;transition:background .15s}
 .tab[aria-selected="true"]{color:var(--pine-2)}
@@ -265,7 +265,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .actions{display:flex;gap:10px;margin-top:16px}
 
 /* ---------- Avisos ---------- */
-.toast{position:fixed;left:50%;bottom:calc(82px + var(--safe-b));transform:translate(-50%,20px);opacity:0;z-index:45;max-width:calc(100vw - 32px);background:var(--ink);color:var(--stone);padding:8px 8px 8px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:14.5px;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:calc(70px + var(--safe-b));transform:translate(-50%,20px);opacity:0;z-index:45;max-width:calc(100vw - 32px);background:var(--ink);color:var(--stone);padding:8px 8px 8px 16px;border-radius:999px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:14.5px;transition:all .25s;pointer-events:none;white-space:nowrap}
 .toast.solo{padding:10px 18px}
 .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .toast .btn{padding:8px 14px;font-size:13.5px;background:var(--new);min-height:36px}
@@ -833,8 +833,17 @@ function procesa(n, fecha){
   const anulada = n.cancelada && (n.fecha_evento || n.convocatoria) ? { fecha_evento: undefined, hora_evento: undefined, convocatoria: undefined, _anulada: n.cancelada, _evAnulado: n.fecha_evento, ...(n.relevancia==="alta"?{relevancia:"media"}:{}) } : {};
   return {...n, ...anulada, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]};
 }
+// Fotos que no aportan: logotipos o imágenes genéricas de un medio, o la misma foto en noticias distintas
+const FOTO_GENERICA = /estaticos|opengraph_|\/default|logo|placeholder|og[-_]?default|no[-_]?image|sin[-_]?imagen/i;
+let fotosRepetidas = null;
+function fotoValida(u){
+  if (!safeUrl(u) || FOTO_GENERICA.test(u)) return false;
+  if (!fotosRepetidas){ const c = {}; for (const d of st.dias) for (const n of (d.noticias||[])) if (n.img) c[n.img] = (c[n.img]||0) + 1; fotosRepetidas = new Set(Object.keys(c).filter(k=>c[k]>1)); }
+  return !fotosRepetidas.has(u);
+}
 function allNews(){
   if (cacheNews) return cacheNews;
+  fotosRepetidas = null;
   const map = new Map();
   for (const d of st.dias) for (const n of (d.noticias||[])){ const x = procesa(n, d.fecha); if (!map.has(x._key)) map.set(x._key, x); }
   return (cacheNews = [...map.values()]);
@@ -999,7 +1008,7 @@ function card(n, opts={}){
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
     <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${opts.pub?"Publicada ":""}${esc(cuando(n._dia, n.hora))}</span></div>
     ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
-    <div class="cbody">${safeUrl(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
+    <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     <div class="bottom"><div class="srcs">${src}</div><div class="acts">
@@ -1474,7 +1483,7 @@ function panelDetalle(n){
   return `<div class="abox detalle ${n.relevancia==="alta"?"alta":""}">
     <div class="dt-top"><button class="dt-x" data-dt="cerrar" type="button" aria-label="Cerrar">×</button>
       <span class="dt-meta"><button class="pill" data-pueblo="${esc(lugar==="Provincia"?"":lugar)}" type="button" ${lugar==="Provincia"?"disabled":""}>${esc(lugar)}</button>${n.relevancia==="alta"?'<span class="pill lvl-alta">Importante</span>':""}<span class="time">${esc(cuando(n._dia, n.hora))}</span></span></div>
-    ${safeUrl(n.img)?`<img class="dt-img" src="${esc(n.img)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`:""}
+    ${fotoValida(n.img)?`<img class="dt-img" src="${esc(n.img)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`:""}
     <h3 class="dt-t">${hl(n.titulo)}</h3>
     ${cats?`<div class="dt-cats">${cats}</div>`:""}
     ${ev}
@@ -1757,7 +1766,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v63";
+const VERSION_APP = "prensa-segovia-v64";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
