@@ -450,6 +450,23 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .newhead{padding-top:8px}
 }
 @media (max-width:379px){ .vfil .vl{display:none} .seg button{padding:0 9px;font-size:13px} }
+/* fila de vista: una sola barra */
+.vbar{margin:10px 12px 0;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.04);gap:4px}
+.vbar .seg{flex:1;min-width:0;background:var(--stone);border:0;border-radius:12px;padding:3px;gap:3px}
+.vbar .seg button{flex:1;height:32px;padding:0 8px;border-radius:9px;font-size:14px;transition:background .15s,color .15s}
+.vbar .seg button[aria-pressed="true"]{background:var(--pine);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.vbar .vfil{margin:0;height:38px;padding:0 11px;border-radius:12px;background:var(--pine-soft);color:var(--pine-2);font-size:14px;font-weight:700;gap:6px}
+.vbar .vfil svg{width:17px;height:17px}
+.vbar .vfil.on{background:var(--new);color:#fff}
+.vbar .vfil.on .dot{background:#fff}
+.vbar .seg button{white-space:nowrap;min-width:max-content}
+@media (max-width:1023px){
+  .vbar .vfil{flex-direction:column;justify-content:center;gap:1px;height:40px;width:56px;padding:0;font-size:10.5px;font-weight:700;line-height:1}
+  .vbar .vfil .vl{display:block!important}
+  .vbar .vfil .dot{position:absolute;top:5px;right:9px;width:7px;height:7px}
+}
+@media (min-width:1024px){ .vbar{margin:14px 0 0;max-width:300px} }
+@media (max-width:359px){ .vbar .vfil{width:46px} .vbar .seg button{font-size:13px;padding:0 6px} }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -1528,7 +1545,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v40";
+const VERSION_APP = "prensa-segovia-v42";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
