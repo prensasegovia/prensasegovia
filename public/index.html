@@ -416,6 +416,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pay-s{background:#4a3a12;color:#FFD98A} }
 .chip .pnb{margin-left:2px}
 .pnhead .okp{color:var(--muted);font-weight:600;font-size:14px}
+.capchip .cd{width:8px;height:8px;border-radius:50%;background:var(--pine-2);flex:none}
+.capchip[aria-pressed="true"] .cd{background:transparent;border:1.5px solid currentColor;box-sizing:border-box}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -549,7 +551,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <label class="sw"><span><span class="t">Vista compacta</span><span class="h">Solo titulares, sin fotos ni resumen: caben muchas más noticias en pantalla.</span></span><input type="checkbox" id="fCompacta"></label>
     </div>
     <div class="row">
-      <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Se recuerda. También con el botón “Sin capital” de la barra de temas.</span></span><input type="checkbox" id="fCap"></label>
+      <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Se recuerda y vale para toda la app. También con el botón «Con capital / Sin capital» de arriba.</span></span><input type="checkbox" id="fCap"></label>
     </div>
     <div class="row" style="border-bottom:0">
       <span class="t">Palabras vigiladas</span>
@@ -771,6 +773,8 @@ function actualizaPer(){
   const left = document.getElementById("pnLeft");
   if (left){ const k = all.filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && isNew(n)).length; left.textContent = k; }
 }
+// Botón de la capital: dice el estado actual ("Con capital" / "Sin capital"); se cambia con un toque
+const chipCapital = () => `<button class="chip capchip" data-act="capital" aria-pressed="${st.sinCapital}" title="${st.sinCapital?"Toca para mostrar también Segovia capital":"Toca para ocultar Segovia capital"}" type="button"><span class="cd"></span>${st.sinCapital?"Sin capital":"Con capital"}</button>`;
 const filtrosActivos = () => [st.rango!=="3"?`${st.rango} días`:"", st.sinCapital?"sin capital":"", st.soloKw?"solo palabras vigiladas":"", st.cat?CAT[st.cat].n.toLowerCase():""].filter(Boolean);
 
 const SIN_TILDE = { a:"[aáàä]", e:"[eéèë]", i:"[iíìï]", o:"[oóòö]", u:"[uúùü]", n:"[nñ]", c:"[cç]" };
@@ -825,7 +829,7 @@ function chipsBar(pool){
   pool = pool.filter(n=>!(st.sinCapital && isCapital(n)) && !(st.soloKw && !kwHits(n)));
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
   let h = `<button class="chip filters" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${st.rango!=="3"||st.soloKw?`<span class="badge">●</span>`:""}</button>`;
-  h += `<button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>`;
+  h += `${chipCapital()}`;
   h += `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
   for (const c of CATS){ const k = counts[c.k]||0;
     h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" ${!k && st.cat!==c.k?"disabled":""} type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
@@ -978,7 +982,7 @@ function viewPeriodicos(){
   const nLista = list.filter(isNew).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
     <div class="chips" id="chips">
-      <button class="chip" data-act="capital" aria-pressed="${st.sinCapital}" type="button">${st.sinCapital?"Sin capital ✓":"Sin capital"}</button>
+      ${chipCapital()}
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
       ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span>${bur(m)}</button>`).join("")}
     </div><div class="feed">
