@@ -11,8 +11,8 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <meta name="description" content="Noticias de Segovia y sus pueblos, actualizadas cada 10 minutos en horario de trabajo.">
 <link rel="manifest" id="lnkManifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" id="lnkFav" href="iconoa-96.png">
-<link rel="apple-touch-icon" id="lnkApple" href="iconoa-180.png">
+<link rel="icon" type="image/png" id="lnkFav" href="iconoa-96.png?v=2">
+<link rel="apple-touch-icon" id="lnkApple" href="iconoa-180.png?v=2">
 <title>Prensa Segovia</title>
 <script>try{var t=JSON.parse(localStorage.getItem("psg:tema"));if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1259,7 +1259,7 @@ function appbar(){
     $("#btnBack").onclick = () => cerrarSub();
     return;
   }
-  bar.innerHTML = `<div class="brand"><img class="ico-movil" src="brand.png" alt=""><img class="logo" src="logo-aguila.png" alt="G.I.C. Segovia"><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
+  bar.innerHTML = `<div class="brand"><img class="ico-movil" src="brand.png" alt=""><img class="logo" src="logo-aguila.png?v=2" alt="G.I.C. Segovia"><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
     <div class="syncpill" id="syncPill" title="Las noticias se revisan cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
     ${!push.on && avisosListos() ? `<button class="ibtn bellbtn" id="btnBell" type="button" aria-label="Activar avisos" title="Activar avisos en este móvil">${I.bell}<span class="bdot"></span></button>` : ""}
@@ -1757,7 +1757,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v62";
+const VERSION_APP = "prensa-segovia-v63";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
