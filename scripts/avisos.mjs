@@ -5,7 +5,7 @@
 //  - el secreto AVISOS del repositorio: "clavePrivadaVAPID|token" (lo pone Josemi en GitHub)
 //  - public/avisos.json con { publica, url } (clave pública VAPID y dirección del Apps Script)
 // Si falta algo, no hace nada (la actualización de noticias sigue igual).
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, unlink } from "node:fs/promises";
 import webpush from "web-push";
 
 const raiz = new URL("../", import.meta.url);
@@ -44,6 +44,17 @@ try {
   const j = await r.json(); subs = Array.isArray(j.subs) ? j.subs : [];
 } catch (e) { console.log("Avisos: no se pudo leer la lista de suscritos:", e.message); await guarda(); process.exit(0); }
 console.log(`Avisos: ${subs.length} móviles apuntados`);
+
+// Aviso de prueba a todos (se pide dejando datos/aviso-prueba.json; se borra al enviarlo)
+try {
+  const prueba = JSON.parse(await readFile(new URL("datos/aviso-prueba.json", raiz), "utf8"));
+  let ok = 0;
+  for (const sb of subs) {
+    try { await webpush.sendNotification({ endpoint: sb.endpoint, keys: sb.keys }, JSON.stringify({ title: prueba.titulo || "Prensa Segovia · Prueba", body: prueba.texto || "Así se ven los avisos.", url: conf.app || "./", tag: "prensa-segovia-prueba" }), { TTL: 3600 }); ok++; } catch (e) { console.log("Avisos: fallo en la prueba:", e.statusCode || e.message); }
+  }
+  await unlink(new URL("datos/aviso-prueba.json", raiz));
+  console.log(`Avisos: prueba enviada a ${ok} de ${subs.length}`);
+} catch (e) { if (e.code !== "ENOENT") console.log("Avisos: prueba:", e.message); }
 
 // Bienvenida: al que acaba de activar los avisos le llega uno de prueba, así sabe que le funciona
 const appUrl0 = conf.app || "https://prensasegovia.github.io/prensasegovia/";
