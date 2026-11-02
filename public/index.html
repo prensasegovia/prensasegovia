@@ -1254,6 +1254,8 @@ function aplicaFiltro(){
   const ch0 = $("#chips"); const pegada = ch0 && ch0.classList.contains("stuck");
   render(true);
   const ch = $("#chips");
+  // Periódicos: al cambiar el filtro, se vuelve al principio de la lista, donde está lo que queda por ver
+  if (st.view==="periodicos" && !st.sub){ const ph = $(".pnhead"); if (ph){ const ch2 = $("#chips"); const pega = ch2 && getComputedStyle(ch2).position==="sticky" ? ch2.offsetHeight : 0; const y = ph.getBoundingClientRect().top + window.scrollY - $("#appbar").offsetHeight - pega - 8; if (window.scrollY > y) window.scrollTo({top:Math.max(0,y), behavior:"smooth"}); } return; }
   if (ch && pegada){ const sent = ch.previousElementSibling; const y = (sent ? sent.getBoundingClientRect().top : ch.getBoundingClientRect().top) + window.scrollY - $("#appbar").offsetHeight; window.scrollTo({top:Math.max(0,y)}); }
 }
 
