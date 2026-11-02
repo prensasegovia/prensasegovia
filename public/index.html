@@ -418,6 +418,20 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .pnhead .okp{color:var(--muted);font-weight:600;font-size:14px}
 .capchip .cd{width:8px;height:8px;border-radius:50%;background:var(--pine-2);flex:none}
 .capchip[aria-pressed="true"] .cd{background:transparent;border:1.5px solid currentColor;box-sizing:border-box}
+/* fila de vista: capital + filtros */
+.vbar{display:flex;align-items:center;gap:10px;padding:12px 16px 2px}
+.seg{display:flex;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--muted);padding:0 14px;height:32px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--pine);color:#fff}
+.vfil{margin-left:auto;display:flex;align-items:center;gap:6px;height:38px;padding:0 12px;border:0;background:none;font:inherit;font-size:14.5px;font-weight:600;color:var(--pine-2);cursor:pointer;position:relative}
+.vfil svg{width:18px;height:18px}
+.vfil .dot{width:8px;height:8px;border-radius:50%;background:var(--new)}
+.vfil.on{color:var(--new)}
+@media (min-width:1024px){ .vfil{display:none} .vbar{padding:14px 0 0} }
+@media (max-width:1023px){
+  .chips{gap:6px;padding:8px 36px 10px 16px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+  .chip{height:34px;padding:0 12px;font-size:14px}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -665,7 +679,7 @@ function procesa(n, fecha){
   const hora = ok ? pub.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:TZ}) : n.hora;
   const cats = (Array.isArray(n.categorias)?n.categorias:[]).filter(c=>CAT[c]);
   // Convocatoria anulada por una noticia posterior: fuera de la agenda, con aviso en la tarjeta
-  const anulada = n.cancelada && (n.fecha_evento || n.convocatoria) ? { fecha_evento: undefined, hora_evento: undefined, convocatoria: undefined, _anulada: n.cancelada, _evAnulado: n.fecha_evento } : {};
+  const anulada = n.cancelada && (n.fecha_evento || n.convocatoria) ? { fecha_evento: undefined, hora_evento: undefined, convocatoria: undefined, _anulada: n.cancelada, _evAnulado: n.fecha_evento, ...(n.relevancia==="alta"?{relevancia:"media"}:{}) } : {};
   return {...n, ...anulada, resumen, hora, _ts: ok ? pub.getTime() : new Date(`${dia}T${n.hora||"00:00"}:00`).getTime(), _key:key, _dia:dia, _cats: cats.length?cats:["politica"]};
 }
 function allNews(){
@@ -828,12 +842,18 @@ function card(n, opts={}){
 function chipsBar(pool){
   pool = pool.filter(n=>!(st.sinCapital && isCapital(n)) && !(st.soloKw && !kwHits(n)));
   const counts = {}; for (const n of pool) for (const c of n._cats) counts[c]=(counts[c]||0)+1;
-  let h = `<button class="chip filters" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${st.rango!=="3"||st.soloKw?`<span class="badge">●</span>`:""}</button>`;
-  h += `${chipCapital()}`;
-  h += `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
+  let h = `<button class="chip" data-cat="" aria-pressed="${!st.cat}" type="button">Todo<span class="c">${pool.length}</span></button>`;
   for (const c of CATS){ const k = counts[c.k]||0;
     h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" ${!k && st.cat!==c.k?"disabled":""} type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
-  return `<div class="chips" id="chips">${h}</div>`;
+  return barraVista(true) + `<div class="chips" id="chips">${h}</div>`;
+}
+// Fila de arriba: Con capital / Sin capital (las dos opciones a la vista) y botón de Filtros
+function barraVista(conFiltros){
+  const activos = st.rango!=="3" || st.soloKw;
+  return `<div class="vbar"><div class="seg" role="group" aria-label="Segovia capital">
+      <button type="button" data-act="capSet" data-v="0" aria-pressed="${!st.sinCapital}">Con capital</button>
+      <button type="button" data-act="capSet" data-v="1" aria-pressed="${st.sinCapital}">Sin capital</button></div>
+    ${conFiltros?`<button class="vfil ${activos?"on":""}" data-act="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtros${activos?`<span class="dot"></span>`:""}</button>`:""}</div>`;
 }
 const avisoFiltros = () => { const a = filtrosActivos().filter(x=>x!=="sin capital" && !/días$/.test(x)); return a.length ? `<div class="filtrado"><span>Filtrando: <b>${a.join(", ")}</b></span><button class="linkbtn" data-act="limpiar" type="button">Quitar filtros</button></div>` : ""; };
 
@@ -981,8 +1001,7 @@ function viewPeriodicos(){
   const bur = m => { const k = nue(m); return `<span class="badge pnb" data-pn="${esc(m)}" ${k?"":"hidden"}>${k}</span>`; };
   const nLista = list.filter(isNew).length;
   let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo, sin deportes ni opinión</span></div>
-    <div class="chips" id="chips">
-      ${chipCapital()}
+    ${barraVista(false)}<div class="chips" id="chips">
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
       ${PERIODICOS.map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span>${bur(m)}</button>`).join("")}
     </div><div class="feed">
@@ -1235,6 +1254,7 @@ $("#app").addEventListener("click", e=>{
   if (b.dataset.per){ st.periodico = b.dataset.per; aplicaFiltro(); return; }
   if (b.dataset.cat !== undefined){ const k=b.dataset.cat; st.cat = (!k || st.cat===k) ? null : k; aplicaFiltro(); }
   else if (act==="filtros") openSheet();
+  else if (act==="capSet"){ const v = b.dataset.v==="1"; if (st.sinCapital!==v){ st.sinCapital=v; saveF(); aplicaFiltro(); } }
   else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
   else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
   else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }

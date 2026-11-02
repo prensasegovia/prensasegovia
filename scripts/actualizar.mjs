@@ -449,6 +449,8 @@ const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre
 const soloAyto = medios => medios.every(m => /^(ayuntamiento|diputaci)/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
 const FUERA = /\ben (avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
+// Otras ciudades de España: si salen en titular o resumen, la noticia no se supone de Segovia aunque la publique un medio local
+const OTRA_CIUDAD = /\b(malaga|sevilla|barcelona|valencia|bilbao|zaragoza|murcia|alicante|cordoba|granada|cadiz|huelva|almeria|asturias|oviedo|gijon|santander|coruna|vigo|pontevedra|canarias|tenerife|mallorca|ibiza|pamplona|logrono|san sebastian|vitoria|badajoz|caceres|albacete|cuenca|ciudad real|jaen|tarragona|girona|lleida|castellon)\b|\bel palo\b|mirasierra/;
 const NACIONAL_TREN = t => /maquinistas|\bouigo\b|\biryo\b|\badif\b|\brenfe\b/.test(t) && !/segovia|guiomar/.test(t);
 const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
 // Relleno que no aporta a la unidad aunque toque un tema de interés
@@ -837,7 +839,7 @@ async function main() {
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
-    if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo))) municipio = "Segovia"; // sección local de un medio de Segovia
+    if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo)) && !(OTRA_CIUDAD.test(norm(g.titulo + " " + resumen)) && !MENCIONA_SEGOVIA.test(norm(g.titulo + " " + resumen)))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
     return {
@@ -917,7 +919,7 @@ async function main() {
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
-      if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo))) n.municipio = "Segovia";
+      if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo)) && !(OTRA_CIUDAD.test(norm(n.titulo + " " + (n.resumen || ""))) && !MENCIONA_SEGOVIA.test(norm(n.titulo + " " + (n.resumen || ""))))) n.municipio = "Segovia";
       // Webs municipales de otro pueblo que se agruparon por error
       if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio);
