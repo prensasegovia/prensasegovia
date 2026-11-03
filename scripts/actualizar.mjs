@@ -54,6 +54,7 @@ const FEEDS = [
   // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
+  { nombre: "Salvemos la Saleta", urls: ["https://salvemoslasaleta.blogspot.com/feeds/posts/default?alt=rss"], pueblo: "Santa María la Real de Nieva" },
   { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", soloSiMenciona: true },
@@ -99,6 +100,7 @@ const INFO_FUENTE = {
   "El Español Castilla y León": ["Agencias y medios regionales", "https://www.elespanol.com/castilla-y-leon/"],
   "PP de Segovia": ["Partidos y sindicatos", "https://ppsegovia.com"],
   "PSOE de Segovia": ["Partidos y sindicatos", "https://www.psoesegovia.es"],
+  "Salvemos la Saleta": ["Plataformas vecinales", "https://salvemoslasaleta.blogspot.com"],
   "PP de Castilla y León": ["Partidos y sindicatos", "https://www.ppcyl.es"],
   "STECyL": ["Partidos y sindicatos", "https://stecyl.net"],
   "UGT Castilla y León": ["Partidos y sindicatos", "https://ugtcyl.es/web/"],
@@ -395,7 +397,9 @@ const AGENDA_TITULO = /convoca|parar|paro (el|del|de)|llamad[oa]s a|jornada de (
 function eventoDe(titulo, texto, publicada, categorias = []) {
   if (!categorias.some(c => ["social", "autoridades", "politica", "eventos"].includes(c))) return {};
   const tt = norm(titulo);
-  if (!AGENDA_TITULO.test(tt) || /suspend|desconvoc|cancela|aplaza|anula/.test(tt)) return {};
+  // Convocatoria contada en el texto aunque el titular no la nombre ("ha convocado una concentración el próximo domingo...")
+  const enTexto = /(ha|han|hemos) convocado (una|un) (concentracion|manifestacion|protesta|movilizacion|tractorada|cacerolada|marcha|huelga|recogida de firmas)|convoca(n)? (una|un) (concentracion|manifestacion|protesta|movilizacion|tractorada|cacerolada|marcha)/.test(norm(texto));
+  if ((!AGENDA_TITULO.test(tt) && !enTexto) || /suspend|desconvoc|cancela|aplaza|anula/.test(tt)) return {};
   const t = norm(titulo + " " + texto);
   const tOrig = titulo + " " + texto;
   const base = new Date(fechaMadrid(publicada) + "T12:00:00");
@@ -417,7 +421,7 @@ function eventoDe(titulo, texto, publicada, categorias = []) {
   } else if (/\b(hoy|esta tarde|esta noche|este mediodia)\b/.test(tt)) f = new Date(base);
   else if (/\bmanana\b/.test(tt) && !/esta manana/.test(tt)) { f = new Date(base); f.setDate(f.getDate() + 1); }
   // Solo es convocatoria si el titular anuncia algo que va a pasar (no crónicas de lo ya ocurrido)
-  const convocatoria = /convoca|llama(n)? a|llamad[oa]s a|parar(a|an)? |pararan|jornada de (huelga|lucha|protesta)|pleno (extraordinario|ordinario)|anuncia|se concentrar(a|an)|se manifestar(a|an)|movilizar(a|an)|protestar(a|an)|secundar|visitara|participara|celebrara|preparan|proxim[oa]|mitin|tractorada|huelga (el|del|los|indefinida|general)|paros (el|los|del)|recogida de firmas/.test(tt);
+  const convocatoria = enTexto || /convoca|llama(n)? a|llamad[oa]s a|parar(a|an)? |pararan|jornada de (huelga|lucha|protesta)|pleno (extraordinario|ordinario)|anuncia|se concentrar(a|an)|se manifestar(a|an)|movilizar(a|an)|protestar(a|an)|secundar|visitara|participara|celebrara|preparan|proxim[oa]|mitin|tractorada|huelga (el|del|los|indefinida|general)|paros (el|los|del)|recogida de firmas/.test(tt);
   if (!f) return convocatoria && !pasada ? { convocatoria: true } : {};
   const h = t.match(/a las (\d{1,2})(?:[:.,](\d{2}))?\s*(?:h|horas)?/) || t.match(/\b(\d{1,2})[:.](\d{2})\s*(?:h|horas)\b/);
   const out = { fecha_evento: f.toISOString().slice(0, 10) };
