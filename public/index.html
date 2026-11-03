@@ -739,7 +739,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.ancho #app .feed.parte-wrap > *{grid-column:1}
   body.ancho #app .feed.parte-wrap > .parte{grid-column:2;grid-row:1 / span 6;margin:0;max-width:1100px}
   body.ancho .parte-acts{position:static;order:0;padding:0;background:none}
-  body.ancho .parte-acts .btn{flex:1!important;min-width:0}
+  body.ancho .parte-acts{flex-direction:column}
+  body.ancho .parte-acts .btn{flex:none!important;width:100%}
   /* Medios: rejilla a todo el ancho */
   body.ancho .mgroup{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
   /* Agenda: tarjetas más anchas para que el día no quede medio vacío */
@@ -776,6 +777,51 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.ancho .tabbar:not(:hover):not(:focus-within) .tab .b{left:auto!important;right:6px!important;top:2px!important;width:auto}
   /* hoja de ajustes en ordenador: por encima del menú y algo más estrecha */
   .sheet{width:420px}
+}
+/* ===== repaso de diseño ===== */
+.card .top{flex-wrap:nowrap}
+.card .top .cat{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .top .time{flex:none;margin-left:auto}
+.card .top .pill{max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.more{white-space:nowrap;flex:none}
+.hacto{display:inline-flex;align-items:center;gap:4px;color:var(--alta);font-weight:700}
+.hacto svg{width:13px;height:13px}
+.hsin{color:var(--muted);font-style:italic}
+.pubd{font-size:12.5px;color:var(--muted);margin-top:6px}
+.dot.cero{background:#D9A400}
+.pista{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:1023px){
+  .pista{-webkit-line-clamp:2}
+  .urg{padding:10px 14px;min-height:0}
+  .stat .l svg{display:inline-block;width:14px;height:14px;opacity:.8}
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .chip[aria-pressed="true"] .c{color:#0E1412;opacity:.7} }
+:root[data-theme="dark"] .chip[aria-pressed="true"] .c{color:#0E1412;opacity:.7}
+@media (min-width:1024px){
+  /* Parte del día a la vista en la barra superior */
+  .ibtn.partebar{display:inline-flex!important;width:auto;padding:0 14px;gap:8px;font-weight:700;font-size:14px}
+  /* la X del buscador solo con texto */
+  #q:placeholder-shown ~ #qClear{visibility:hidden}
+  /* periodo a mano en la barra de filtros */
+  .fper{display:flex;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:2px;flex:none}
+  .fper button{border:0;background:none;font:inherit;font-size:13.5px;font-weight:600;color:var(--muted);height:32px;padding:0 11px;border-radius:999px;cursor:pointer}
+  .fper button[aria-pressed="true"]{background:var(--pine);color:#fff}
+  /* agenda sin huecos: columnas de día que se reparten como un periódico */
+  body.ancho #app .feed.agfeed{display:block!important;column-width:380px;column-gap:18px}
+  body.ancho .agfeed .ag-day{break-inside:avoid;margin:0 0 18px;display:flex}
+  body.ancho .agfeed > :not(.ag-day){column-span:all}
+}
+.fper{display:none}
+@media (min-width:1024px){ .fper{display:flex} }
+@media (min-width:1024px){
+  .searchbar,.searchbar[hidden],body.ancho .searchbar,body.ancho .searchbar[hidden]{left:260px!important;width:min(560px, calc(100vw - 800px))!important}
+  body.ancho .card .pubd{order:3}
+}
+@media (max-width:1023px){
+  .rail .urg{flex-direction:column;gap:2px;padding:10px 14px!important;min-height:0!important;border-radius:16px}
+  .rail .urg h3{font-size:16px;-webkit-line-clamp:2}
+  .rail .urg .when{display:none}
+  .rail .urg .where{font-size:13px}
 }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
@@ -938,9 +984,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
     <div class="row">
       <label class="sw"><span><span class="t">Vista compacta</span><span class="h">Solo titulares, sin fotos ni resumen: caben muchas más noticias en pantalla.</span></span><input type="checkbox" id="fCompacta"></label>
     </div>
-    <div class="row">
-      <label class="sw"><span><span class="t">Ocultar Segovia capital</span><span class="h">Se recuerda y vale para toda la app. También con el botón «Con capital / Sin capital» de arriba.</span></span><input type="checkbox" id="fCap"></label>
-    </div>
+
     <div class="row" style="border-bottom:0">
       <span class="t">Palabras vigiladas</span>
       <div class="kwin"><input id="kwIn" placeholder="Turégano, biogás, okupa…" enterkeyhint="done"><button class="btn" id="kwAdd" type="button">Añadir</button></div>
@@ -1094,7 +1138,7 @@ async function cargaHemeroteca(masMeses){
     if (!hem.meses.length){ const ind = await (await fetch("hemeroteca/indice.json?t="+Date.now(), {cache:"no-store"})).json(); hem.meses = (ind.meses||[]).map(m=>m.mes).sort().reverse(); }
     const faltan = hem.meses.filter(m=>!hem.cargados.includes(m)).slice(0, masMeses ? 3 : 3);
     const arcs = await Promise.all(faltan.map(m=>fetch(`hemeroteca/${m}.json`).then(r=>r.ok?r.json():null).catch(()=>null)));
-    for (const a of arcs) if (a){ hem.items.push(...(a.n||[]).map(x=>({...x, _n: norm([x.t,x.r,x.m,x.p].join(" "))}))); }
+    for (const a of arcs) if (a){ hem.items.push(...(a.n||[]).map(x=>({...x, _n: norm([x.t,x.r,x.p].join(" "))}))); }
     hem.cargados.push(...faltan);
     hem.desde = [...hem.cargados].sort()[0] || "";
     hem.estado = "ok";
@@ -1238,17 +1282,17 @@ function card(n, opts={}){
   const ev = n._anulada ? `<span class="pill anul" title="${esc(n._anulada)}">Cancelado</span>` : n.fecha_evento && !opts.noEv && n.fecha_evento>=today() ? `<span class="pill ev">${I.cal.replace('<svg','<svg width="12" height="12"')}${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
   const medios = mediosDe(n);
   const abierto = st.abiertos.has(n._key);
-  const maxV = esPC() ? 1 : 2;
+  const maxV = 1;
   const visibles = abierto ? medios : medios.slice(0,maxV);
   const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
     + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-maxV} ${medios.length-maxV===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
-    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${opts.pub?"Publicada ":""}${esc(cuando(n._dia, n.hora))}</span></div>
-    ${opts.hev && n.hora_evento ? `<div class="hev">${I.clock}A las ${esc(n.hora_evento)}</div>` : ""}
+    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
     <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
+    ${opts.pub?`<div class="pubd">Publicada ${esc(cuando(n._dia, n.hora))}</div>`:""}
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     <div class="bottom"><div class="srcs">${src}</div><div class="acts">
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>
@@ -1275,7 +1319,8 @@ function chipsBar(pool){
   for (const c of CATS){ const k = counts[c.k]||0;
     if (!k && st.cat!==c.k) continue;
     h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
-  return `<div class="fbar">${barraVista(true)}<div class="chips" id="chips">${h}</div></div>`;
+  const fper = `<div class="fper" role="group" aria-label="Periodo">${["3","7","21"].map(v=>`<button type="button" data-act="rangoSet" data-v="${v}" aria-pressed="${st.rango===v}">${v} días</button>`).join("")}</div>`;
+  return `<div class="fbar">${barraVista(true)}${fper}<div class="chips" id="chips">${h}</div></div>`;
 }
 // Fila de arriba: Con capital / Sin capital (las dos opciones a la vista) y botón de Filtros
 function barraVista(conFiltros, extra=""){
@@ -1293,13 +1338,14 @@ function viewNoticias(news){
   if (st.q) return viewBusqueda(news);
   const pool = news.filter(n=>enRango(n));
   const shown = pool.filter(pasa);
-  const nuevas = shown.filter(isNew).sort(porHora);
-  const vistas = shown.filter(n=>!isNew(n));
+  const enNuevo = n => isNew(n) || (st.sesionNuevas && st.sesionNuevas.has(n._key));
+  const nuevasTodas = shown.filter(enNuevo).sort(porHora);
+  const vistas = shown.filter(n=>!enNuevo(n));
   const t = today();
   const alta = shown.filter(n=>n.relevancia==="alta");
   const pueblos = new Set(shown.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
   const ag = (({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news));
-  const sum = nuevas.length ? `<b>${plural(nuevas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
+  const sum = nuevasTodas.length ? `<b>${plural(nuevasTodas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
@@ -1308,24 +1354,26 @@ function viewNoticias(news){
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
-  const urg = nuevas.filter(n=>n.relevancia==="alta").slice(0,8);
+  const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
+  // Lo que ya sale arriba en rojo no se repite en la lista
+  const nuevas = nuevasTodas.filter(n=>!urg.includes(n));
   if (urg.length){
     h += `<div class="sect"><h2>Importante y nuevo</h2></div><div class="rail">` +
-      urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}" target="_blank" rel="noopener"`:""}>
+      urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}" target="_blank" rel="noopener"`:""} title="${esc((mediosDe(n)[0]||{}).nombre||"")}">
           <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio && n.municipio!=="General"?n.municipio:(CAT[n._cats[0]]?.n||""))}</span>
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${esc(cuando(n._dia,n.hora))}</span></a>`).join("") + `</div>`;
   }
-  h += chipsBar(pool) + `<div class="feed">` + avisoFiltros() + tarjetaAvisos();
+  h += chipsBar(pool) + `<div class="feed">` + avisoFiltros();
   if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Prueba otro tema, amplía el periodo en Filtros o pulsa «Quitar filtros».<br><button class="btn ghost" data-act="limpiar" type="button">Quitar filtros</button></div></div>`;
-  if (nuevas.length){
-    h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
-    h += nuevas.map(n=>card(n)).join("");
+  if (nuevas.length || urg.length){
+    h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevasTodas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
+    h += nuevas.slice(0,3).map(n=>card(n)).join("") + tarjetaAvisos() + nuevas.slice(3).map(n=>card(n)).join("");
     h += `<div class="uptodate"><span>${I.check}Hasta aquí lo nuevo</span></div>`;
   } else {
     h += `<div class="uptodate"><span>${I.check}Estás al día: nada nuevo</span></div>`;
   }
-  h += porDias(vistas, nuevas.length ? " · ya visto" : "");
+  h += porDias(vistas, nuevasTodas.length ? " · ya visto" : "");
   return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button></p>`;
 }
 function porDias(list, extra="", opts={}){
@@ -1339,7 +1387,7 @@ function porDias(list, extra="", opts={}){
 }
 function viewBusqueda(news){
   const words = norm(st.q).split(/\s+/).filter(Boolean);
-  const coincide = n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase,(n.medios||[]).map(m=>m.nombre).join(" ")].join(" ")); return words.every(w=>t.includes(w)); };
+  const coincide = n=>{ const t = norm([n.titulo,n.resumen,n.municipio,n.analisis?.extracto,n.analisis?.evento?.frase].join(" ")); return words.every(w=>t.includes(w)); };
   // Lo de interés incluye siempre el archivo (se carga solo, pesa poco)
   if (arc.estado==="no") setTimeout(cargaArchivo, 0);
   // "Todo lo publicado" se carga al elegirlo; en el ordenador, también de fondo para que se vea cuántas hay
@@ -1399,7 +1447,7 @@ function viewPueblos(news){
 function viewGuardadas(){
   const list = Object.values(st.favs).sort((a,b)=>b.t-a.t).map(f=>({...f.n, _key:f.n._key}));
   let h = `<div class="sect"><h2>Guardadas</h2><span class="aux">${plural(list.length,"noticia","noticias")}</span></div><div class="feed">`;
-  if (!list.length) return h + `<div class="empty"><b>Aún no has guardado nada</b>Pulsa el marcador de cualquier noticia para tenerla aquí a mano. Se guardan en este móvil aunque la noticia ya no salga en el listado.</div></div>`;
+  if (!list.length) return h + `<div class="empty"><b>Aún no has guardado nada</b>Pulsa el marcador de cualquier noticia para tenerla aquí a mano. Se guardan en este dispositivo aunque la noticia ya no salga en el listado.</div></div>`;
   return h + list.map(n=>card(n)).join("") + `</div>`;
 }
 
@@ -1408,7 +1456,7 @@ function viewPueblo(news, name){
   const all = news.filter(n=>n.municipio===name).sort(porHora);
   const prox = all.filter(n=>n.fecha_evento && n.fecha_evento>=t);
   const alta = all.filter(n=>n.relevancia==="alta").length;
-  let h = `<section class="subhero"><h1>${esc(name)}</h1><p>${plural(all.length,"noticia","noticias")} recientes${alta?`, ${plural(alta,"importante","importantes")}`:""}.</p></section><div class="feed">`;
+  let h = `<section class="subhero"><h1>${esc(name)}</h1><p>${plural(all.length,"noticia reciente","noticias recientes")}${alta?`, ${plural(alta,"importante","importantes")}`:""}.</p></section><div class="feed">`;
   if (prox.length) h += `<div class="dayhead"><h3>Próximas convocatorias</h3><span>${prox.length}</span></div>` + prox.map(n=>card(n,{hev:true})).join("");
   h += all.length ? porDias(all.filter(n=>!prox.includes(n))) : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés recientes de ${esc(name)}.<br><button class="btn ghost" data-act="buscapueblo" data-q="${esc(name)}" type="button">Buscar «${esc(name)}» en todo lo publicado</button></div>`;
   return h + bloqueArchivo(news, n=>n.municipio===name, "de " + name) + `</div>`;
@@ -1439,7 +1487,7 @@ function chipsDias(){
   const dias = perDias(); if (dias.length < 2) return "";
   const cnt = d => periodicosNews().filter(n=>!(st.sinCapital && isCapital(n)) && (st.periodico==="todos"||n.medio===st.periodico) && (d==="todos"||n._dia===d)).length;
   const cur = st.perDia || "todos";
-  return `<div class="chips dias" id="chipsDias">${["todos",...dias].map(d=>`<button class="chip" data-dia="${d}" aria-pressed="${cur===d}" type="button">${d==="todos"?esc(rangoPer()):esc(nomDiaCorto(d))}<span class="c">${cnt(d)}</span></button>`).join("")}</div>`;
+  return `<div class="chips dias" id="chipsDias">${["todos",...dias].map(d=>`<button class="chip" data-dia="${d}" aria-pressed="${cur===d}" type="button">${d==="todos"?"7 días":esc(nomDiaCorto(d))}<span class="c">${cnt(d)}</span></button>`).join("")}</div>`;
 }
 // Ordenador: periódico y día en desplegables dentro de la barra (sin columna derecha)
 function selectsPeriodicos(){
@@ -1450,7 +1498,7 @@ function selectsPeriodicos(){
   const pers = ["todos", ...perTodos().filter(perVisible)];
   const dias = ["todos", ...perDias()];
   return `<label class="psel"><span>Periódico</span><select id="selPer">${pers.map(m=>op(m, m==="todos"?"Todos":m, all.filter(n=>delDia(n) && (m==="todos"||n.medio===m)), st.periodico)).join("")}</select></label>
-    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Últimos "+rangoPer():nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
+    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Últimos 7 días":nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
     <button class="vfil pel" data-act="perElegir" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Elegir</span></button>`;
 }
 function viewPeriodicos(){
@@ -1513,12 +1561,12 @@ function textoParte(news){
 }
 function viewParte(news){
   const { x, n } = textoParte(news);
-  return `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto, con los filtros que tengas puestos.</p></section>
+  return `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto. ${filtrosActivos().length?`Con estos filtros: <b>${esc(filtrosActivos().join(", "))}</b>.`:"Sin filtros: incluye todo."}</p></section>
   <div class="feed parte-wrap" style="padding-top:12px">
     <div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div>
     <label class="sw" style="margin:12px 4px 0"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
     <div class="parte" id="parteTxt">${esc(x)}</div>
-    <div class="parte-acts"><button class="btn ghost" data-act="parteCopiar" type="button">Copiar</button><button class="btn" data-act="parteEnviar" type="button">Enviar…</button></div>
+    <div class="parte-acts"><button class="btn ghost" data-act="parteCopiar" type="button">Copiar</button><button class="btn" data-act="parteEnviar" type="button"><span class="solo-movil">Enviar…</span><span class="solo-pc">Abrir en WhatsApp</span></button></div>
     <p class="note" style="padding:0 4px">${plural(n,"noticia","noticias")} en el parte. Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p>
   </div>`;
 }
@@ -1535,13 +1583,13 @@ function viewMedios(){
     if (g==="Ayuntamientos"){
       const aOk = l.filter(f=>f.ok).length, aN = l.reduce((t,f)=>t+(f.noticias||0),0);
       h += `<p class="note" style="padding:0 4px">Webs municipales con noticias activas. ${aOk} de ${l.length} responden · ${aN} avisos leídos. Solo pasan los que son de interés (no bandos, plenos ordinarios ni trámites).</p><div class="aytos">` +
-        l.map(f=>`<a class="ayto" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
+        l.map(f=>`<a class="ayto" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${!f.ok?"ko":f.noticias?"":"cero"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
     } else if (g==="Google Noticias"){
       const f = l[0];
       h += `<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>Búsquedas en Google Noticias</b><span>${f.busquedas||""} búsquedas por temas y por los 208 municipios · ${f.noticias||0} resultados en la última revisión</span></div></div>`;
       if (st.viaGoogle.length) h += `<p class="note" style="padding:0 4px">Medios que llegan por esta vía: ${st.viaGoogle.map(([m,n])=>`${esc(m)} (${n})`).join(", ")}.</p>`;
     } else {
-      h += l.map(f=>`<a class="medio" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${f.noticias} noticias leídas en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
+      h += l.map(f=>`<a class="medio" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${plural(f.noticias,"noticia leída","noticias leídas")} en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
     }
     h += `</div>`;
   }
@@ -1562,10 +1610,12 @@ function appbar(){
   bar.innerHTML = `<div class="brand"><img class="ico-movil" src="brand.png" alt=""><img class="logo" src="logo-aguila.png?v=2" alt="G.I.C. Segovia"><div><div class="t">Prensa Segovia</div><small id="syncTxt"></small></div></div>
     <div class="syncpill" id="syncPill" title="Las noticias se revisan cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto"></div>
     <button class="ibtn" id="btnSearch" type="button" aria-label="Buscar" aria-pressed="${!$("#searchbar").hidden}">${I.search}</button>
-    ${!push.on && avisosListos() ? `<button class="ibtn bellbtn" id="btnBell" type="button" aria-label="Activar avisos" title="Activar avisos en este móvil">${I.bell}<span class="bdot"></span></button>` : ""}
+    ${!push.on && avisosListos() ? `<button class="ibtn bellbtn" id="btnBell" type="button" aria-label="Activar avisos" title="Activar avisos en este móvil">${I.bell}${store.get("avisosNo",false)?"":`<span class="bdot"></span>`}</button>` : ""}
+    ${esPC()?`<button class="ibtn partebar" id="btnParte" type="button" aria-label="Parte del día"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día</button>`:""}
     <button class="ibtn" id="btnReload" type="button" aria-label="Actualizar">${I.reload}</button>`;
   $("#btnSearch").onclick = () => toggleSearch();
   if ($("#btnBell")) $("#btnBell").onclick = () => abreAvisos(true);
+  if ($("#btnParte")) $("#btnParte").onclick = () => abrirSub({t:"parte"});
   $("#btnReload").onclick = () => load(true);
   syncLabel();
 }
@@ -1737,16 +1787,17 @@ $("#app").addEventListener("click", e=>{
   else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
   else if (act==="avisosSi"){ abreAvisos(true); }
   else if (act==="avisosNo"){ store.set("avisosNo", true); render(true); aviso("Puedes activarlos cuando quieras con la campana de arriba"); }
+  else if (act==="rangoSet"){ st.rango = b.dataset.v; saveF(); aplicaFiltro(); }
   else if (act==="perVerTodo"){ st.periodico="todos"; st.perDia="todos"; render(true); actualizaPer(); }
   else if (act==="perElegir"){ st.perPanel = !st.perPanel; render(true); }
   else if (act==="perListo"){ st.perPanel = false; render(true); actualizaPer(); }
   else if (act==="perTodos"){ store.set("perSel", null); render(true); actualizaPer(); }
   else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }
-  else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); render(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); st.sesionNuevas = new Set(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="parte") abrirSub({t:"parte"});
   else if (act==="parteCopiar"){ const x = $("#parteTxt").textContent; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
-  else if (act==="parteEnviar"){ const x = $("#parteTxt").textContent; if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
+  else if (act==="parteEnviar"){ const x = $("#parteTxt").textContent; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
@@ -1916,7 +1967,7 @@ function syncSheet(){
   document.querySelectorAll("#segTema button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.tema));
   document.querySelectorAll("#segLetra button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.letra));
   document.querySelectorAll("#segRango button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===st.rango));
-  $("#fCap").checked = st.sinCapital; $("#fCompacta").checked = st.compacta; pintaPush(); $("#fKw").checked = st.soloKw;
+  $("#fCompacta").checked = st.compacta; pintaPush(); $("#fKw").checked = st.soloKw;
   $("#kws").innerHTML = st.kws.map((k,i)=>`<span class="kw">${esc(k)}<button data-i="${i}" type="button" aria-label="Quitar ${esc(k)}">×</button></span>`).join("") || `<span class="h">Las palabras que añadas se resaltan en las noticias.</span>`;
 }
 function openSheet(){ syncSheet(); if (!$("#sheetWrap").classList.contains("open")) history.pushState({sheet:true}, ""); $("#sheetWrap").classList.add("open"); }
@@ -1941,7 +1992,7 @@ document.addEventListener("change", e=>{ const c = e.target.closest("[data-perm]
 $("#segLetra").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.letra=b.dataset.v; store.set("letra",st.letra); aplicaLetra(); syncSheet(); render(true); });
 $("#segTema").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.tema=b.dataset.v; store.set("tema",st.tema); aplicaTema(); syncSheet(); });
 $("#segRango").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; st.rango=b.dataset.v; syncSheet(); render(true); });
-$("#fCap").addEventListener("change", e=>{ st.sinCapital=e.target.checked; saveF(); render(true); });
+
 const aplicaCompacta = () => document.documentElement.classList.toggle("compacta", !!st.compacta);
 aplicaCompacta();
 $("#fCompacta").addEventListener("change", e=>{ st.compacta=e.target.checked; store.set("compacta", st.compacta); aplicaCompacta(); });
@@ -2045,6 +2096,8 @@ function applyData(j){
   st.viaGoogle = j.via_google || [];
   st.actualizado = j.actualizado || "";
   st.loaded = true; st.error = false; cacheNews = null;
+  // Instantánea de lo no visto al cargar: se queda en "Nuevo para ti" durante la visita
+  { const ya = st.sesionNuevas || new Set(); for (const n of allNews()) if (isNew(n)) ya.add(n._key); st.sesionNuevas = ya; }
   // Las guardadas se refrescan con la versión más reciente (más medios, mejor resumen)
   for (const n of allNews()) if (st.favs[n._key]){ const { _ts, ...g } = n; st.favs[n._key].n = g; }
   store.set("favs", st.favs);
@@ -2096,7 +2149,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v75";
+const VERSION_APP = "prensa-segovia-v76";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
