@@ -696,6 +696,58 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.ancho .card .cbody p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0}
   body.ancho .card .bottom{margin-top:auto!important;padding-top:10px}
 }
+/* ===== Ordenador: un solo modelo en todas las secciones ===== */
+@media (min-width:1024px){
+  body.ancho .aside{display:none!important}
+  body.ancho .shell{grid-template-columns:minmax(0,1fr)!important;justify-content:stretch;padding:0 24px}
+  body.ancho .tabbar{transition:width .18s ease .12s, box-shadow .18s ease .12s}
+  body.ancho .tabbar:focus-within{width:236px;box-shadow:6px 0 24px rgba(0,0,0,.12)}
+  body.ancho .tabbar:focus-within .tab .lbl, body.ancho .tabbar:focus-within .side-btn span, body.ancho .tabbar:focus-within .side-foot{display:revert!important}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab .b{width:max-content;min-width:18px;white-space:nowrap;text-align:center;top:-2px;right:-6px}
+  /* cabeceras iguales */
+  .subhero{background:none;color:var(--ink);padding:20px 2px 6px;margin:0;border-radius:0}
+  .subhero h1{font-size:26px;color:var(--ink)}
+  .subhero p{color:var(--muted)}
+  .sect h2{font-size:24px}
+  /* tarjetas: cabecera en una línea, pie en una línea, sin "En la noticia" */
+  .card .top{flex-wrap:nowrap}
+  .card .top .cat{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .card .top .time{flex:none;margin-left:auto}
+  body.ancho .card .pista{display:none}
+  body.ancho .card .srcs{flex-wrap:nowrap;overflow:hidden;min-width:0}
+  body.ancho .card .src{min-width:0;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  body.ancho .card .bottom{flex-wrap:nowrap}
+  /* barra de filtros: una línea, capital con el mismo estilo que los temas */
+  body.ancho .fbar #chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);padding-right:30px}
+  body.ancho .fbar .vbar{background:none;border:0;box-shadow:none;padding:0;width:auto}
+  body.ancho .fbar .vbar .seg{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:2px}
+  body.ancho .fbar .vbar .seg button{border-radius:999px;height:32px;font-size:14px}
+  /* importante y nuevo: si es una sola, en una franja */
+  body.ancho .rail:has(.urg:only-child) .urg{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:0;padding:12px 16px}
+  body.ancho .rail:has(.urg:only-child) .urg h3{flex:1}
+  /* agenda: cada día con sus convocatorias en mosaico */
+  body.ancho .agfeed{display:block!important}
+  body.ancho .ag-day>div:last-child{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+  body.ancho .ag-day .card{margin:0}
+  /* pueblos */
+  .towns{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))!important}
+  .town .name{min-width:0}
+  .town .al{white-space:nowrap}
+  /* textos largos: alineados a la izquierda con ancho cómodo */
+  body.ancho .parte-wrap, body.ancho .mgroup{max-width:900px}
+  .parte-acts{position:static;order:-1}
+}
+.parte-acts{background:linear-gradient(transparent,var(--stone) 35%);padding:22px 0 10px}
+@media (min-width:1500px){ body.ancho #app .feed{grid-template-columns:repeat(auto-fill,minmax(370px,1fr))} }
+/* modo oscuro: lo seleccionado se distingue */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .chip[aria-pressed="true"], :root:not([data-theme="light"]) .vbar .seg button[aria-pressed="true"]{background:var(--pine-2);border-color:var(--pine-2);color:#0E1412} }
+:root[data-theme="dark"] .chip[aria-pressed="true"], :root[data-theme="dark"] .vbar .seg button[aria-pressed="true"]{background:var(--pine-2);border-color:var(--pine-2);color:#0E1412}
+@media (min-width:1024px){
+  .ag-day .card .top .cat{display:none}
+  .card .top .pill{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;border-radius:999px}
+  .parte-acts{display:flex;justify-content:flex-start;gap:10px}
+  .parte-acts .btn{flex:none!important;min-width:140px;padding:10px 24px}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -805,17 +857,17 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 
 <nav class="tabbar" aria-label="Secciones">
   <div class="in" role="tablist">
-    <button class="tab" role="tab" data-view="noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span><span class="lbl">Noticias</span></button>
-    <button class="tab" role="tab" data-view="agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="lbl">Agenda</span><span class="b" id="agBadge" hidden></span></button>
-    <button class="tab" role="tab" data-view="pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="lbl">Pueblos</span></button>
-    <button class="tab" role="tab" data-view="periodicos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h4M7 16h4M14 12h3v4h-3z"/></svg></span><span class="lbl">Periódicos</span><span class="b nb" id="perBadge" hidden></span></button>
-    <button class="tab" role="tab" data-view="guardadas" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span><span class="lbl">Guardadas</span><span class="b" id="favBadge" hidden style="background:var(--pine-2)"></span></button>
+    <button class="tab" role="tab" data-view="noticias" title="Noticias" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/></svg></span><span class="lbl">Noticias</span></button>
+    <button class="tab" role="tab" data-view="agenda" title="Agenda" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="lbl">Agenda</span><span class="b" id="agBadge" hidden></span></button>
+    <button class="tab" role="tab" data-view="pueblos" title="Pueblos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="lbl">Pueblos</span></button>
+    <button class="tab" role="tab" data-view="periodicos" title="Periódicos" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h4M7 16h4M14 12h3v4h-3z"/></svg></span><span class="lbl">Periódicos</span><span class="b nb" id="perBadge" hidden></span></button>
+    <button class="tab" role="tab" data-view="guardadas" title="Guardadas" aria-selected="false"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg></span><span class="lbl">Guardadas</span><span class="b" id="favBadge" hidden style="background:var(--pine-2)"></span></button>
   </div>
   <div class="side-extra">
-    <button class="side-btn" data-side="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM9 3h6v3H9zM8 11h8M8 15h8M8 19h4"/></svg><span>Parte del día</span></button>
-    <button class="side-btn" data-side="filtros" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Filtros y ajustes</span></button>
-    <button class="side-btn" data-side="avisos" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg><span>Avisos</span></button>
-    <button class="side-btn" data-side="medios" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg><span>Medios y fuentes</span></button>
+    <button class="side-btn" data-side="parte" type="button" title="Parte del día" aria-label="Parte del día"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM9 3h6v3H9zM8 11h8M8 15h8M8 19h4"/></svg><span>Parte del día</span></button>
+    <button class="side-btn" data-side="filtros" type="button" title="Filtros y ajustes" aria-label="Filtros y ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Filtros y ajustes</span></button>
+    <button class="side-btn" data-side="avisos" type="button" title="Avisos" aria-label="Avisos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg><span>Avisos</span></button>
+    <button class="side-btn" data-side="medios" type="button" title="Medios y fuentes" aria-label="Medios y fuentes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg><span>Medios y fuentes</span></button>
     <div class="side-foot" id="sideFoot"></div>
   </div>
 </nav>
@@ -1157,9 +1209,10 @@ function card(n, opts={}){
   const ev = n._anulada ? `<span class="pill anul" title="${esc(n._anulada)}">Cancelado</span>` : n.fecha_evento && !opts.noEv && n.fecha_evento>=today() ? `<span class="pill ev">${I.cal.replace('<svg','<svg width="12" height="12"')}${esc(fmtCorto(n.fecha_evento))}${n.hora_evento?", "+esc(n.hora_evento):""}</span>` : "";
   const medios = mediosDe(n);
   const abierto = st.abiertos.has(n._key);
-  const visibles = abierto ? medios : medios.slice(0,2);
+  const maxV = esPC() ? 1 : 2;
+  const visibles = abierto ? medios : medios.slice(0,maxV);
   const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
-    + (medios.length>2 ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-2} ${medios.length-2===1?"medio":"medios"}`}</button>` : "");
+    + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-maxV} ${medios.length-maxV===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
@@ -1228,7 +1281,7 @@ function viewNoticias(news){
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevas.filter(n=>n.relevancia==="alta").slice(0,8);
   if (urg.length){
-    h += `<div class="sect"><h2>Importante y nuevo</h2><span class="aux">${urg.length}</span></div><div class="rail">` +
+    h += `<div class="sect"><h2>Importante y nuevo</h2></div><div class="rail">` +
       urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}" target="_blank" rel="noopener"`:""}>
           <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio && n.municipio!=="General"?n.municipio:(CAT[n._cats[0]]?.n||""))}</span>
           <h3>${esc(n.titulo)}</h3>
@@ -1283,7 +1336,7 @@ function viewAgenda(news){
   const t = today();
   const { ev, sinFecha } = agendaDe(news);
   let h = `<div class="sect"><h2>Agenda</h2><span class="aux">Convocatorias y actos próximos</span></div>`;
-  h += chipsBar((({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news,false))) + `<div class="feed">` + avisoFiltros();
+  h += chipsBar((({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news,false))) + `<div class="feed agfeed">` + avisoFiltros();
   if (!ev.length && !sinFecha.length) return h + `<div class="empty"><b>No hay convocatorias próximas</b>Aquí salen las concentraciones, manifestaciones, huelgas, tractoradas, mítines, visitas oficiales y fiestas que la prensa anuncia con fecha.</div></div>`;
   const by = {}; for (const n of ev) (by[n.fecha_evento] ||= []).push(n);
   for (const d of Object.keys(by).sort()){
@@ -1368,7 +1421,7 @@ function selectsPeriodicos(){
   const pers = ["todos", ...perTodos().filter(perVisible)];
   const dias = ["todos", ...perDias()];
   return `<label class="psel"><span>Periódico</span><select id="selPer">${pers.map(m=>op(m, m==="todos"?"Todos":m, all.filter(n=>delDia(n) && (m==="todos"||n.medio===m)), st.periodico)).join("")}</select></label>
-    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Todos ("+rangoPer()+")":nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
+    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Últimos "+rangoPer():nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
     <button class="vfil pel" data-act="perElegir" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Elegir</span></button>`;
 }
 function viewPeriodicos(){
@@ -1429,7 +1482,7 @@ function textoParte(news){
 function viewParte(news){
   const { x, n } = textoParte(news);
   return `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto, con los filtros que tengas puestos.</p></section>
-  <div class="feed" style="padding-top:12px">
+  <div class="feed parte-wrap" style="padding-top:12px">
     <div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div>
     <label class="sw" style="margin:12px 4px 0"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
     <div class="parte" id="parteTxt">${esc(x)}</div>
@@ -1513,7 +1566,7 @@ let chipObs;
 function render(keepScroll){
   document.body.classList.toggle("v-periodicos", st.view==="periodicos" && !st.sub);
   // Ordenador: en Noticias y Periódicos el menú se recoge y las noticias ocupan todo el ancho en mosaico
-  document.body.classList.toggle("ancho", (st.view==="periodicos" || st.view==="noticias") && !st.sub && !st.q);
+  document.body.classList.toggle("ancho", esPC());
   appbar();
   const app = $("#app"); const y = window.scrollY; const chipsX = $("#chips")?.scrollLeft || 0;
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
@@ -1685,7 +1738,7 @@ function aplicaFiltro(){
 
 /* ================= Panel derecho (ordenador) ================= */
 const esPC = () => matchMedia("(min-width:1024px)").matches;
-const conPanel = () => matchMedia("(min-width:1200px)").matches && !document.body.classList.contains("ancho");
+const conPanel = () => false; // en ordenador la tarjeta abre la noticia directamente (sin panel lateral)
 function panelDetalle(n){
   const medios = mediosDe(n);
   const libre = medios.find(m=>!m.pago) || medios[0];
@@ -1772,7 +1825,7 @@ document.querySelector(".side-extra").addEventListener("click", e=>{
   if (v==="filtros") openSheet(); else if (v==="avisos") abreAvisos(!push.on); else abrirSub({t:v});
 });
 function cerrarDetalle(){ st.detalle = null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); renderAside(allNews()); }
-let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ if (!conPanel() && st.detalle){ st.detalle=null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); } if (st.loaded) renderAside(allNews()); }, 150); });
+let rT; addEventListener("resize", ()=>{ clearTimeout(rT); rT=setTimeout(()=>{ document.body.classList.toggle("ancho", esPC()); if (!conPanel() && st.detalle){ st.detalle=null; document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel")); } if (st.loaded) renderAside(allNews()); }, 150); });
 // Atajo de teclado: "/" para buscar
 document.addEventListener("keydown", e=>{
   if (e.key==="/" && !/input|textarea/i.test(document.activeElement.tagName) && !$("#sheetWrap").classList.contains("open")){ e.preventDefault(); if (esPC()) $("#q").focus(); else toggleSearch(true); }
@@ -2011,7 +2064,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v72";
+const VERSION_APP = "prensa-segovia-v73";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

@@ -182,7 +182,7 @@ const limpia = html => String(html ?? "")
   .replace(/&#x([0-9a-f]+);/gi, (_, n) => { try { return String.fromCodePoint(parseInt(n, 16)); } catch { return " "; } }).replace(/&#(\d+);/g, (_, n) => { try { return String.fromCodePoint(+n); } catch { return " "; } }).replace(/&lt;/g, "<").replace(/&gt;/g, ">")
   .replace(/&([a-zA-Z]+);/g, (m, k) => ENT[k] ?? m)
   .replace(/\s+/g, " ").trim();
-const sinColas = s => String(s || "").split(/\s(?:M[aá]s informaci[oó]n|Leer m[aá]s|Sigue leyendo|La entrada .{0,200}? se public[oó] primero en)\b/i)[0].trim();
+const sinColas = s => String(s || "").replace(/\bVersion:\s*\d[\d.]*\s+StartHTML?:?\S*\s+EndHTML?:?\S*\s*/gi, "").replace(/\bVersion:\S*\s+Start\S*\s+End\S*\s*/gi, "").split(/\s(?:M[aá]s informaci[oó]n|Leer m[aá]s|Sigue leyendo|La entrada .{0,200}? se public[oó] primero en)\b/i)[0].trim();
 const recorta = (s, n = 260) => s.length <= n ? s : s.slice(0, s.lastIndexOf(" ", n)) + "…";
 const hash = s => createHash("sha1").update(s).digest("hex").slice(0, 12);
 const fechaMadrid = d => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
