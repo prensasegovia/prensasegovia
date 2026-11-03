@@ -323,6 +323,8 @@ const PATRONES = {
   deportes: /futbol|gimnastica segoviana|baloncesto|balonmano|atletismo|carrera popular|maraton|ciclismo|\bliga\b|campeonato|club deportivo|tenis|padel|deportista|jornada \d/,
 };
 // Deportes y cultura no interesan salvo que haya un suceso
+// Deporte que sí es noticia para la unidad: incidentes, violencia, protestas
+const LIO_DEPORTIVO = /detenid|detencion|agresion|agredid|agrede|pelea|reyerta|tangana|trifulca|bronca|herid|incidentes|altercad|violencia|violent|insult|racis|xenofob|homofob|amenaz|denuncia|sancion|expulsad|protesta|firmas|concentracion|manifestacion|huelga|polemica|boicot|ultras\b|aficionados radicales|lanzamiento de objetos|bengala|policia|guardia civil|mossos|apuñal|apunal|arbitro agredido|suspendido por/;
 const DEPORTE = /colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\b(?! de)|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|\bliga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 // Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
@@ -353,8 +355,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   const t = norm(titulo + " " + texto);
   const tt = norm(titulo);
   const UTILES = ["policial", "social", "medioambiente", "politica", "emergencias", "autoridades"];
-  if (DEPORTE.test(tt) && !/detenid|agresion|pelea|reyerta|herid|incidentes|violencia|protesta|firmas|concentracion|manifestacion|huelga|polemica|boicot|ultras\b/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
-  if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (DEPORTE.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
@@ -691,7 +693,9 @@ async function periodicos(ahora) {
     for (const url of p.urls) {
       try {
         for (const it of items(await descarga(url))) {
-          if (NO_PERIODICO.test(it.url) || DEPORTE.test(norm(it.titulo)) || BASURA.test(norm(it.titulo))) continue;
+          // Deportes fuera, salvo que haya lío (peleas, agresiones, insultos, detenidos...)
+          const esDeporte = /\/(deportes?)\//.test(it.url) || DEPORTE.test(norm(it.titulo));
+          if ((esDeporte && !LIO_DEPORTIVO.test(norm(it.titulo + " " + it.texto))) || (NO_PERIODICO.test(it.url) && !esDeporte) || BASURA.test(norm(it.titulo))) continue;
           if (porUrl.has(it.url)) { const e = porUrl.get(it.url); if (!e.img && it.img) e.img = it.img; continue; }
           if (p.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           // Sin fecha en el RSS: cuenta como recién publicada solo si el periódico ya se leía antes (si no, serían cientos de golpe)
