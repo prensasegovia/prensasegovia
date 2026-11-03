@@ -612,18 +612,18 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 }
 /* Periódicos en ordenador: menú recogido (se abre al pasar el ratón) y noticias en mosaico */
 @media (min-width:1024px){
-  body.v-periodicos{--side:72px}
-  body.v-periodicos .tabbar{transition:width .18s ease, box-shadow .18s ease;overflow-x:hidden;z-index:35}
-  body.v-periodicos .tabbar:not(:hover) .tab .lbl, body.v-periodicos .tabbar:not(:hover) .side-btn span, body.v-periodicos .tabbar:not(:hover) .side-foot{display:none!important}
-  body.v-periodicos .tabbar:not(:hover) .tab{justify-content:center;padding:0}
-  body.v-periodicos .tabbar:not(:hover) .side-btn{justify-content:center;padding:0}
-  body.v-periodicos .tabbar:not(:hover) .tab .b{position:absolute;top:1px;right:1px;margin:0;font-size:10px;padding:0 4px;line-height:15px;box-shadow:0 0 0 2px var(--surface)}
-  body.v-periodicos .tabbar:not(:hover) .tab{position:relative}
-  body.v-periodicos .tabbar:hover{width:236px;box-shadow:6px 0 24px rgba(0,0,0,.12)}
-  body.v-periodicos .shell{grid-template-columns:minmax(0,1fr) 300px;justify-content:stretch;padding:0 24px;gap:24px}
-  body.v-periodicos .searchbar,body.v-periodicos .searchbar[hidden]{left:260px;width:min(640px, calc(100vw - 236px - 540px))}
-  body.v-periodicos #app .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
-  body.v-periodicos #app .feed > :not(.card){grid-column:1/-1}
+  body.ancho{--side:72px}
+  body.ancho .tabbar{transition:width .18s ease, box-shadow .18s ease;overflow-x:hidden;z-index:35}
+  body.ancho .tabbar:not(:hover) .tab .lbl, body.ancho .tabbar:not(:hover) .side-btn span, body.ancho .tabbar:not(:hover) .side-foot{display:none!important}
+  body.ancho .tabbar:not(:hover) .tab{justify-content:center;padding:0}
+  body.ancho .tabbar:not(:hover) .side-btn{justify-content:center;padding:0}
+  body.ancho .tabbar:not(:hover) .tab .b{position:absolute;top:1px;right:1px;margin:0;font-size:10px;padding:0 4px;line-height:15px;box-shadow:0 0 0 2px var(--surface)}
+  body.ancho .tabbar:not(:hover) .tab{position:relative}
+  body.ancho .tabbar:hover{width:236px;box-shadow:6px 0 24px rgba(0,0,0,.12)}
+  body.ancho .shell{grid-template-columns:minmax(0,1fr) 300px;justify-content:stretch;padding:0 24px;gap:24px}
+  body.ancho .searchbar,body.ancho .searchbar[hidden]{left:260px;width:min(640px, calc(100vw - 236px - 540px))}
+  body.ancho #app .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+  body.ancho #app .feed > :not(.card){grid-column:1/-1}
   body.v-periodicos .card.per{margin:0;height:100%;display:flex;flex-direction:column;padding:12px 14px 14px 16px}
   body.v-periodicos .card.per .cbody{display:flex;flex-direction:column}
   body.v-periodicos .card.per .thumb{float:none;order:-1;width:calc(100% + 30px);height:150px;margin:-12px -14px 10px -16px;border-radius:14px 14px 0 0;max-width:none}
@@ -653,6 +653,35 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 }
 .chips.dias{padding-top:0}
 .chips.dias .chip{height:32px;font-size:13.5px}
+/* Noticias en ordenador: a todo el ancho y en mosaico */
+@media (min-width:1024px){
+  body.ancho .shell{grid-template-columns:minmax(0,1fr)!important;justify-content:stretch}
+  body.ancho .aside{display:none!important}
+  body.ancho #app .feed{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+  body.ancho .card:not(.per){margin:0;height:100%;display:flex;flex-direction:column;padding:14px 16px 12px 18px}
+  body.ancho .card:not(.per) .cbody{display:contents}
+  body.ancho .card:not(.per) .thumb{float:none;order:-1;width:calc(100% + 34px);height:170px;margin:-14px -16px 12px -18px;border-radius:16px 16px 0 0;max-width:none}
+  body.ancho .card:not(.per) .top{order:0}
+  body.ancho .card:not(.per) .hev{order:1}
+  body.ancho .card:not(.per) h4{order:2;font-size:17px;line-height:1.3;margin:6px 0 0}
+  body.ancho .card:not(.per) p{order:3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0}
+  body.ancho .card:not(.per) .pista{order:4}
+  body.ancho .card:not(.per) .bottom{order:5;margin-top:auto;padding-top:10px}
+  body.ancho .hero{max-width:none}
+  body.ancho .rail{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+}
+.fbar{display:contents}
+@media (min-width:1024px){
+  body.ancho .fbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:var(--bar);z-index:20;background:var(--stone);padding:10px 0 8px;margin-top:6px}
+  body.ancho .fbar .vbar{margin:0;flex:none}
+  body.ancho .fbar #chips{position:static;padding:0;flex:1 1 400px;min-width:0;box-shadow:none;background:none}
+  body.ancho #app .feed{align-items:start}
+  body.ancho .card:not(.per){height:auto}
+  body.ancho .card.per{height:auto}
+  body.ancho .card:not(.per) .bottom{margin-top:0}
+  body.ancho .card .pista{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  body.ancho .avcard{margin:6px 0 0}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -1150,7 +1179,7 @@ function chipsBar(pool){
   for (const c of CATS){ const k = counts[c.k]||0;
     if (!k && st.cat!==c.k) continue;
     h += `<button class="chip ${k?"":"zero"}" data-cat="${c.k}" aria-pressed="${st.cat===c.k}" type="button">${ICON(c.d)}${esc(c.n)}<span class="c">${k}</span></button>`; }
-  return barraVista(true) + `<div class="chips" id="chips">${h}</div>`;
+  return `<div class="fbar">${barraVista(true)}<div class="chips" id="chips">${h}</div></div>`;
 }
 // Fila de arriba: Con capital / Sin capital (las dos opciones a la vista) y botón de Filtros
 function barraVista(conFiltros, extra=""){
@@ -1466,6 +1495,8 @@ setInterval(syncLabel, 60000);
 let chipObs;
 function render(keepScroll){
   document.body.classList.toggle("v-periodicos", st.view==="periodicos" && !st.sub);
+  // Ordenador: en Noticias y Periódicos el menú se recoge y las noticias ocupan todo el ancho en mosaico
+  document.body.classList.toggle("ancho", (st.view==="periodicos" || st.view==="noticias") && !st.sub && !st.q);
   appbar();
   const app = $("#app"); const y = window.scrollY; const chipsX = $("#chips")?.scrollLeft || 0;
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
@@ -1637,7 +1668,7 @@ function aplicaFiltro(){
 
 /* ================= Panel derecho (ordenador) ================= */
 const esPC = () => matchMedia("(min-width:1024px)").matches;
-const conPanel = () => matchMedia("(min-width:1200px)").matches;
+const conPanel = () => matchMedia("(min-width:1200px)").matches && !document.body.classList.contains("ancho");
 function panelDetalle(n){
   const medios = mediosDe(n);
   const libre = medios.find(m=>!m.pago) || medios[0];
@@ -1963,7 +1994,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v70";
+const VERSION_APP = "prensa-segovia-v71";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
