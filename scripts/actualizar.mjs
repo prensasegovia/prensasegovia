@@ -563,8 +563,8 @@ function juntaMedios(destino, origen) {
 // Páginas automáticas o de relleno que no son noticias
 // Artículos de opinión, cartas y blogs: no son noticias
 const OPINION = /\/(opinion|opiniones|tribuna|blogs?|cartas?-al-director|cartas-de-los-lectores|columnistas?|firmas)\//;
-const BASURA = /resultados (de las )?elecciones (generales|municipales|autonomicas|europeas)( de)? \d{4}|^(resultados (de las )?elecciones|resultados electorales|el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
-const NO_ESPANA = /mexico|argentina|colombia|chile|peru|venezuela|tlaxcala|puebla|uruguay|ecuador|bolivia|paraguay|guatemala|honduras|panama|costa rica|cuba|dominicana|miami/;
+const BASURA = /\bocotal\b|nicaragua|managua|esteli\b|somoto|jalapa|jinotega|madriz|quilali|dipilto|mozonte|el jicaro|wiwili|resultados (de las )?elecciones (generales|municipales|autonomicas|europeas)( de)? \d{4}|^(resultados (de las )?elecciones|resultados electorales|el tiempo en|calidad del aire|prevision (del tiempo|meteorologica)|horoscopo|loteria|resultados? (de la )?(loteria|bonoloto|primitiva|euromillones)|esquelas?|farmacias de guardia|cartelera)/;
+const NO_ESPANA = /nicaragua|managua|stereo|\bla prensa\b|el nuevo diario|100% noticias|la jornada|el salvador|mexico|argentina|colombia|chile|peru|venezuela|tlaxcala|puebla|uruguay|ecuador|bolivia|paraguay|guatemala|honduras|panama|costa rica|cuba|dominicana|miami/;
 function parecido(a, b) {
   let comun = 0; for (const w of a) if (b.has(w)) comun++;
   return comun / Math.min(a.size, b.size || 1);
