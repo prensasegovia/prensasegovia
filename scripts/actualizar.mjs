@@ -667,6 +667,16 @@ const PERIODICOS = [
   { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/"] },
   { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia"] },
   { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/RSS/DSGlocal.xml", "http://www.eldiasegovia.es/rss/DSGProvincia.xml"] },
+  { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss.xml"] },
+  { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"] },
+  { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"] },
+  { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia.xml"] },
+  { nombre: "Acueducto2", urls: ["https://www.acueducto2.com/feed/"] },
+  { nombre: "SegoviaUdaz", urls: ["https://segoviaudaz.es/feed/"] },
+  { nombre: "esCuéllar", urls: ["https://escuellar.es/feed/"] },
+  { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/noticias?format=feed&type=rss"] },
+  { nombre: "COPE Segovia", urls: ["https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml"] },
+  { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"] },
 ];
 const SALIDA_PERIODICOS = new URL("../public/periodicos.json", import.meta.url);
 const NO_PERIODICO = /\/(deportes?|opinion|opiniones|tribuna|blogs?|cartas?-al-director|esquelas|obituarios|horoscopo)\//;
