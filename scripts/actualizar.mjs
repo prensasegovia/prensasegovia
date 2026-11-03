@@ -685,7 +685,7 @@ async function periodicos(ahora) {
   try { previo = JSON.parse(await readFile(SALIDA_PERIODICOS, "utf8")); } catch {}
   const porUrl = new Map((previo.noticias || []).map(n => [n.url, n]));
   const estado = [], diag = [];
-  const yaLeidos = new Set((previo.noticias || []).filter(n => n.medio !== "Tribuna de Segovia").map(n => n.medio));
+  const yaLeidos = new Set([...(previo.leidos || []), ...(previo.noticias || []).map(n => n.medio)]);
   for (const p of PERIODICOS) {
     let n = 0, ok = false;
     for (const url of p.urls) {
@@ -723,8 +723,8 @@ async function periodicos(ahora) {
   const limite = ahora.getTime() - 4 * 864e5;
   const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
     .sort((a, b) => b.publicado.localeCompare(a.publicado));
-  await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, noticias }));
-  const cuenta = {}; for (const x of diag) { const k = x.replace(/T.*$/, ""); cuenta[k] = (cuenta[k] || 0) + 1; }
+  await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, leidos: estado.filter(e => e.ok).map(e => e.medio), noticias }));
+  const cuenta = {}; for (const x of diag) { const k = x.replace(/T\d\d:.*$/, ""); cuenta[k] = (cuenta[k] || 0) + 1; }
   console.log("Periódicos descartados por fecha:", JSON.stringify(cuenta).slice(0, 1500));
   console.log("Periódicos:", estado.map(e => `${e.medio} ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${noticias.length} en total`);
 }
