@@ -579,6 +579,7 @@ const ultimaImg = new Map(); // foto principal (og:image) de cada artículo leí
 // El Norte de Castilla marca todos sus artículos como no gratuitos (muro con unas pocas lecturas gratis al mes)
 const DE_PAGO = /elnortedecastilla\.es/;
 const esPago = u => DE_PAGO.test(u) || ultimaPago.get(u) === true;
+const ultimaFecha = new Map(); // fecha de publicación que declara el propio artículo
 const ultimaPago = new Map(); // artículos que el propio medio marca como de pago (schema.org isAccessibleForFree=false)
 async function leeArticulo(url) {
   try {
@@ -587,6 +588,8 @@ async function leeArticulo(url) {
     let html = (await r.text()).slice(0, 600000);
     const og = (html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)/i) || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image/i) || [])[1];
     ultimaImg.set(url, limpiaImg(og));
+    const fp = (html.match(/<meta[^>]+(?:property|name|itemprop)=["'](?:article:published_time|datePublished|date|pubdate|DC\.date\.issued)["'][^>]+content=["']([^"']+)/i) || html.match(/"datePublished"\s*:\s*"([^"]+)"/) || html.match(/<time[^>]+datetime=["']([^"']+)/i) || [])[1];
+    if (fp && !isNaN(new Date(fp))) ultimaFecha.set(url, new Date(fp));
     if (/"isAccessibleForFree"\s*:\s*"?(false|False)/.test(html) || /<meta[^>]+(name|property)=["'](article:)?content_tier["'][^>]+content=["'](locked|metered|premium)/i.test(html)) ultimaPago.set(url, true);
     // 1º el texto que el propio periódico declara como cuerpo de la noticia (schema.org "articleBody"), si existe
     const ab = [...html.matchAll(/"articleBody"\s*:\s*"((?:[^"\\]|\\.){200,})"/g)].map(m => { try { return JSON.parse('"' + m[1] + '"'); } catch { return ""; } }).sort((x, y) => y.length - x.length)[0];
@@ -686,7 +689,8 @@ async function periodicos(ahora) {
   let previo = { noticias: [] };
   try { previo = JSON.parse(await readFile(SALIDA_PERIODICOS, "utf8")); } catch {}
   const porUrl = new Map((previo.noticias || []).map(n => [n.url, n]));
-  const estado = [], diag = [];
+  const estado = [], diag = []; let sinFechaLeidas = 0;
+  const viejas = new Set(previo.viejas || []); // artículos sin fecha en el RSS que resultaron antiguos: no se vuelven a abrir
   const yaLeidos = new Set([...(previo.leidos || []), ...(previo.noticias || []).map(n => n.medio)]);
   for (const p of PERIODICOS) {
     let n = 0, ok = false;
@@ -699,7 +703,16 @@ async function periodicos(ahora) {
           if (porUrl.has(it.url)) { const e = porUrl.get(it.url); if (!e.img && it.img) e.img = it.img; continue; }
           if (p.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           // Sin fecha en el RSS: cuenta como recién publicada solo si el periódico ya se leía antes (si no, serían cientos de golpe)
-          if (it.sinFecha && !yaLeidos.has(p.nombre)) { diag.push(`${p.nombre}: sin fecha (primera lectura)`); continue; }
+          if (viejas.has(it.url)) continue;
+          if (it.sinFecha) {
+            // Sin fecha en el RSS: se abre el artículo para sacar la fecha de publicación real (pocas por pasada)
+            if (sinFechaLeidas >= 25) continue;
+            sinFechaLeidas++; await leeArticulo(it.url);
+            const f = ultimaFecha.get(it.url);
+            if (f && f.getTime() < ahora.getTime() - 4 * 864e5) { viejas.add(it.url); continue; }
+            if (f) { it.fecha = f; if (!it.img && ultimaImg.get(it.url)) it.img = ultimaImg.get(it.url); }
+            else if (!yaLeidos.has(p.nombre)) { diag.push(`${p.nombre}: sin fecha`); continue; }
+          }
           if (isNaN(it.fecha)) { diag.push(`${p.nombre}: sin fecha`); continue; }
           if (it.fecha.getTime() < ahora.getTime() - 4 * 864e5 || it.fecha.getTime() > ahora.getTime() + 36e5) { diag.push(`${p.nombre}: fecha ${it.fecha.toISOString()}`); continue; }
           const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
@@ -727,7 +740,7 @@ async function periodicos(ahora) {
   const limite = ahora.getTime() - 4 * 864e5;
   const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
     .sort((a, b) => b.publicado.localeCompare(a.publicado));
-  await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, leidos: estado.filter(e => e.ok).map(e => e.medio), noticias }));
+  await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, leidos: estado.filter(e => e.ok).map(e => e.medio), viejas: [...viejas].slice(-800), noticias }));
   const cuenta = {}; for (const x of diag) { const k = x.replace(/T\d\d:.*$/, ""); cuenta[k] = (cuenta[k] || 0) + 1; }
   console.log("Periódicos descartados por fecha:", JSON.stringify(cuenta).slice(0, 1500));
   console.log("Periódicos:", estado.map(e => `${e.medio} ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${noticias.length} en total`);
