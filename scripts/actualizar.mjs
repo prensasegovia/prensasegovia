@@ -709,12 +709,12 @@ async function periodicos(ahora) {
             if (sinFechaLeidas >= 25) continue;
             sinFechaLeidas++; await leeArticulo(it.url);
             const f = ultimaFecha.get(it.url);
-            if (f && f.getTime() < ahora.getTime() - 4 * 864e5) { viejas.add(it.url); continue; }
+            if (f && f.getTime() < ahora.getTime() - 7 * 864e5) { viejas.add(it.url); continue; }
             if (f) { it.fecha = f; if (!it.img && ultimaImg.get(it.url)) it.img = ultimaImg.get(it.url); }
             else if (!yaLeidos.has(p.nombre)) { diag.push(`${p.nombre}: sin fecha`); continue; }
           }
           if (isNaN(it.fecha)) { diag.push(`${p.nombre}: sin fecha`); continue; }
-          if (it.fecha.getTime() < ahora.getTime() - 4 * 864e5 || it.fecha.getTime() > ahora.getTime() + 36e5) { diag.push(`${p.nombre}: fecha ${it.fecha.toISOString()}`); continue; }
+          if (it.fecha.getTime() < ahora.getTime() - 7 * 864e5 || it.fecha.getTime() > ahora.getTime() + 36e5) { diag.push(`${p.nombre}: fecha ${it.fecha.toISOString()}`); continue; }
           const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
           porUrl.set(it.url, { medio: p.nombre, ...(it.img ? { img: it.img } : {}), titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
           n++;
@@ -736,8 +736,8 @@ async function periodicos(ahora) {
   await Promise.all(sinFoto.map(async n => { await leeArticulo(n.url); const im = ultimaImg.get(n.url); if (im) n.img = im; else n.sinFoto = true; }));
   for (const n of porUrl.values()) if (esPago(n.url)) n.pago = true;
 
-  // Se guardan los últimos 4 días
-  const limite = ahora.getTime() - 4 * 864e5;
+  // Se guardan los últimos 7 días
+  const limite = ahora.getTime() - 7 * 864e5;
   const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
     .sort((a, b) => b.publicado.localeCompare(a.publicado));
   await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, leidos: estado.filter(e => e.ok).map(e => e.medio), viejas: [...viejas].slice(-800), noticias }));
