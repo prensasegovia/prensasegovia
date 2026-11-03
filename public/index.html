@@ -589,6 +589,26 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   #chips [data-per], #chips .elegir{height:32px;padding:0 11px;font-size:13.5px}
   #chips{gap:6px}
 }
+/* Periódicos en ordenador con columna derecha */
+.aperbox .aper{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;font:inherit;color:var(--ink);padding:7px 8px;margin:0 -8px;width:calc(100% + 16px);border-radius:10px;cursor:pointer;text-align:left;font-size:14.5px}
+.aperbox .aper:hover{background:var(--pine-soft)}
+.aperbox .aper.on{background:var(--pine);color:#fff}
+.aperbox .aper .an{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.aperbox .aper .ac{color:var(--muted);font-size:13px;font-weight:600;min-width:22px;text-align:right}
+.aperbox .aper.on .ac{color:var(--pine-ink)}
+.aperbox .aper .badge{background:var(--new);color:#fff;font-size:11.5px;font-weight:700;border-radius:999px;padding:0 7px;line-height:18px}
+.aperbox .aperh{margin:8px 0 2px;font-size:13px;color:var(--muted)}
+.aperbox .aperh button{border:0;background:none;color:var(--pine-2);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.perfil{display:flex;align-items:center;gap:10px;margin:6px 2px 2px;font-size:14px;color:var(--muted)}
+.perfil b{color:var(--ink)}
+@media (min-width:1200px){
+  body.v-periodicos #chips{display:none}
+  body.v-periodicos .pertit{display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:20px 2px 4px}
+  body.v-periodicos .pertit .aux{margin-left:auto}
+  body.v-periodicos .vbar{margin-top:8px}
+  body.v-periodicos .perpanel{margin-top:12px}
+  body.v-periodicos .pnhead{padding-top:12px}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -1247,12 +1267,12 @@ function viewPeriodicos(){
   const nue = m => de(m).filter(isNew).length;
   const bur = m => { const k = nue(m); return `<span class="badge pnb" data-pn="${esc(m)}" ${k?"":"hidden"}>${k}</span>`; };
   const nLista = list.filter(isNew).length;
-  let h = `<div class="sect"><h2>Periódicos</h2><span class="aux">Todo lo que publican · deporte solo si hay incidentes</span></div>
+  let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Todo lo que publican · deporte solo si hay incidentes</span></div>
     ${barraVista(false, `<div class="vacc"><button class="vfil" data-act="leidoPer" type="button" ${nLista?"":"disabled"}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.5l4 4 7-8M10 15.5l1 1 9-10"/></svg><span class="vl">Marcar vistas</span></button></div>`)}<div class="chips" id="chips">
       <button class="chip elegir" data-act="perElegir" type="button" aria-expanded="${!!st.perPanel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Elegir${perSel()?` <span class="c">${perSel().length}/${perTodos().length}</span>`:""}</button>
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
       ${perTodos().filter(perVisible).map(m=>`<button class="chip" data-per="${esc(m)}" aria-pressed="${st.periodico===m}" type="button">${esc(m)}<span class="c">${cnt(m)}</span>${bur(m)}</button>`).join("")}
-    </div>${st.perPanel ? panelPeriodicos() : ""}<div class="feed">
+    </div>${st.perPanel ? panelPeriodicos() : ""}<div class="feed">${st.periodico!=="todos"?`<div class="perfil">Viendo solo <b>${esc(st.periodico)}</b> <button class="linkbtn" data-per="todos" type="button">Ver todos</button></div>`:""}
     <div class="newhead pnhead"><h3>${nLista?`Te quedan <span class="cnt" id="pnLeft">${nLista}</span> por ver`:`<span class="okp">✓ Lo has visto todo${st.periodico==="todos"?"":" en "+esc(st.periodico)}</span>`}</h3></div>`;
   if (!st.periodicos.length) return h + `<div class="empty"><b>Cargando periódicos…</b>Las noticias aparecen en la próxima actualización.</div></div>`;
   if (!list.length) return h + `<div class="empty"><b>Sin noticias</b>No hay noticias con este filtro.</div></div>`;
@@ -1379,6 +1399,7 @@ setInterval(syncLabel, 60000);
 
 let chipObs;
 function render(keepScroll){
+  document.body.classList.toggle("v-periodicos", st.view==="periodicos" && !st.sub);
   appbar();
   const app = $("#app"); const y = window.scrollY; const chipsX = $("#chips")?.scrollLeft || 0;
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
@@ -1575,10 +1596,20 @@ function panelDetalle(n){
     <div class="dt-hint">Pulsa otra noticia para verla aquí, o Esc para cerrar.</div>
   </div>`;
 }
+// Ordenador, sección Periódicos: la columna derecha es la lista de periódicos (filtro), con lo que te queda por ver de cada uno
+function asidePeriodicos(){
+  const all = periodicosNews().filter(n=>!(st.sinCapital && isCapital(n)));
+  const fila = (m, nom) => { const l = all.filter(n=>m==="todos"||n.medio===m), k = l.filter(isNew).length;
+    return `<button class="aper ${st.periodico===m?"on":""}" data-per="${esc(m)}" type="button"><span class="an">${esc(nom)}</span>${k?`<span class="badge pnb" data-pn="${esc(m)}">${k}</span>`:`<span class="badge pnb" data-pn="${esc(m)}" hidden></span>`}<span class="ac">${l.length}</span></button>`; };
+  return `<div class="abox aperbox"><h3>Periódicos <button data-act="perElegir" type="button">${st.perPanel?"Cerrar":"Elegir"}</button></h3>
+    ${fila("todos","Todos")}${perTodos().filter(perVisible).map(m=>fila(m,m)).join("")}
+    ${perSel()?`<p class="aperh">Ves ${perSel().length} de ${perTodos().length}. <button data-act="perTodos" type="button">Ver todos</button></p>`:""}</div>`;
+}
 function renderAside(news){
   const el = $("#aside"); if (!el) return;
   if (!conPanel() || !st.loaded){ el.innerHTML = ""; return; }
   if (st.detalle && tarjetas.has(st.detalle)){ el.innerHTML = panelDetalle(tarjetas.get(st.detalle)); return; }
+  if (st.view==="periodicos" && !st.sub){ el.innerHTML = asidePeriodicos(); return; }
   const t = today();
   const base = news.filter(pasa);
   const ag = agendaDe(news).ev.slice(0,7);
@@ -1608,6 +1639,9 @@ $("#aside").addEventListener("click", e=>{
   }
   const a = e.target.closest("a[data-k]"); if (a){ marcarVisto([a.dataset.k]); return; }
   const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.per){ st.periodico = b.dataset.per; render(true); window.scrollTo({top:0, behavior:"smooth"}); return; }
+  if (b.dataset.act==="perElegir"){ st.perPanel = !st.perPanel; render(true); window.scrollTo({top:0, behavior:"smooth"}); return; }
+  if (b.dataset.act==="perTodos"){ store.set("perSel", null); render(true); actualizaPer(); return; }
   if (b.dataset.pueblo) abrirSub({t:"pueblo", name:b.dataset.pueblo});
   else if (b.dataset.act==="agenda") setView("agenda");
   else if (b.dataset.act==="pueblos") setView("pueblos");
@@ -1854,7 +1888,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v67";
+const VERSION_APP = "prensa-segovia-v68";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
