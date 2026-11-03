@@ -614,11 +614,11 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 @media (min-width:1024px){
   body.ancho{--side:72px}
   body.ancho .tabbar{transition:width .18s ease, box-shadow .18s ease;overflow-x:hidden;z-index:35}
-  body.ancho .tabbar:not(:hover) .tab .lbl, body.ancho .tabbar:not(:hover) .side-btn span, body.ancho .tabbar:not(:hover) .side-foot{display:none!important}
-  body.ancho .tabbar:not(:hover) .tab{justify-content:center;padding:0}
-  body.ancho .tabbar:not(:hover) .side-btn{justify-content:center;padding:0}
-  body.ancho .tabbar:not(:hover) .tab .b{position:absolute;top:1px;right:1px;margin:0;font-size:10px;padding:0 4px;line-height:15px;box-shadow:0 0 0 2px var(--surface)}
-  body.ancho .tabbar:not(:hover) .tab{position:relative}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab .lbl, body.ancho .tabbar:not(:hover):not(:focus-within) .side-btn span, body.ancho .tabbar:not(:hover):not(:focus-within) .side-foot{display:none!important}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab{justify-content:center;padding:0}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .side-btn{justify-content:center;padding:0}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab .b{position:absolute;top:1px;right:1px;margin:0;font-size:10px;padding:0 4px;line-height:15px;box-shadow:0 0 0 2px var(--surface)}
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab{position:relative}
   body.ancho .tabbar:hover{width:236px;box-shadow:6px 0 24px rgba(0,0,0,.12)}
   body.ancho .shell{grid-template-columns:minmax(0,1fr) 300px;justify-content:stretch;padding:0 24px;gap:24px}
   body.ancho .searchbar,body.ancho .searchbar[hidden]{left:260px;width:min(640px, calc(100vw - 236px - 540px))}
@@ -767,6 +767,16 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.ancho .ag-day .ag-date .m{font-size:14px;text-transform:capitalize}
   body.ancho .ag-day>div:last-child{display:flex!important;flex-direction:column;gap:10px}
 }
+.solo-pc{display:none}
+@media (min-width:1024px){
+  .solo-pc{display:inline} .solo-movil{display:none}
+  /* ajustes que solo tienen sentido en el móvil */
+  #rowAvisos{display:none!important}
+  /* menú recogido: contador pegado al icono */
+  body.ancho .tabbar:not(:hover):not(:focus-within) .tab .b{left:auto!important;right:6px!important;top:2px!important;width:auto}
+  /* hoja de ajustes en ordenador: por encima del menú y algo más estrecha */
+  .sheet{width:420px}
+}
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
 .stab{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:600;font-size:15px;padding:9px 16px;border-radius:999px;cursor:pointer}
@@ -904,12 +914,12 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
     <div class="row">
       <span class="t">Aspecto</span>
       <div class="seg" id="segTema"><button data-v="auto" type="button">Automático</button><button data-v="light" type="button">Claro</button><button data-v="dark" type="button">Oscuro</button></div>
-      <span class="h">Automático sigue el modo claro u oscuro del móvil.</span>
+      <span class="h"><span class="solo-movil">Automático sigue el modo claro u oscuro del móvil.</span><span class="solo-pc">Automático sigue el modo claro u oscuro del ordenador.</span></span>
     </div>
     <div class="row">
       <span class="t">Tamaño de letra</span>
-      <div class="seg" id="segLetra"><button data-v="auto" type="button">Del móvil</button><button data-v="1" type="button">Normal</button><button data-v="1.15" type="button">Grande</button><button data-v="1.3" type="button">Muy grande</button></div>
-      <span class="h">«Del móvil» sigue el tamaño de texto que tengas en los ajustes del teléfono.</span>
+      <div class="seg" id="segLetra"><button data-v="auto" type="button"><span class="solo-movil">Del móvil</span><span class="solo-pc">Automático</span></button><button data-v="1" type="button">Normal</button><button data-v="1.15" type="button">Grande</button><button data-v="1.3" type="button">Muy grande</button></div>
+      <span class="h"><span class="solo-movil">«Del móvil» sigue el tamaño de texto que tengas en los ajustes del teléfono.</span><span class="solo-pc">En el ordenador también puedes agrandar todo con Ctrl y + (Cmd y + en Mac).</span></span>
     </div>
     <div class="row" id="rowAvisos">
       <div class="avbox">
@@ -1667,7 +1677,7 @@ window.addEventListener("popstate", ()=>{
   if (!esPC() && !$("#searchbar").hidden){ toggleSearch(false, false, true); return; }
   if (st.sub) cerrarSub(true);
 });
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click", ()=>{ if (esPC()) t.blur();
   const buscando = !!st.q;
   if (!$("#searchbar").hidden || st.q) toggleSearch(false, true);
   if (!st.sub && st.view===t.dataset.view){ if (buscando) render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
@@ -1842,7 +1852,7 @@ $("#aside").addEventListener("click", e=>{
   else if (b.dataset.act==="imp") abrirSub({t:"imp"});
 });
 document.querySelector(".side-extra").addEventListener("click", e=>{
-  const b = e.target.closest("[data-side]"); if (!b) return;
+  const b = e.target.closest("[data-side]"); if (!b) return; b.blur();
   const v = b.dataset.side;
   if (v==="filtros") openSheet(); else if (v==="avisos") abreAvisos(!push.on); else abrirSub({t:v});
 });
@@ -2086,7 +2096,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v74";
+const VERSION_APP = "prensa-segovia-v75";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
