@@ -640,7 +640,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.v-periodicos .vacc{flex:1 1 auto;justify-content:flex-start;gap:8px;align-items:center}
   body.v-periodicos .vacc .vfil[data-act="leidoPer"]{margin-left:auto}
   .psel{display:flex;align-items:center;gap:8px;height:38px;padding:0 4px 0 12px;border-radius:12px;background:var(--stone);font-size:13.5px;color:var(--muted);font-weight:600}
-  .psel select{font:inherit;font-size:14px;font-weight:700;color:var(--ink);border:0;background:transparent;height:36px;padding:0 6px;cursor:pointer;max-width:300px}
+  .psel select{font:inherit;font-size:14px;font-weight:700;color:var(--ink);border:0;background:transparent;height:36px;padding:0 6px;cursor:pointer;max-width:250px;text-overflow:ellipsis}
+  body.v-periodicos .vbar{flex-wrap:nowrap}
+  body.v-periodicos .vacc{flex-wrap:wrap}
   .psel select:focus-visible{outline:2px solid var(--pine-2);border-radius:8px}
   body.v-periodicos .vacc .pel{display:flex!important;flex-direction:row;height:38px;width:auto;min-width:0;padding:0 12px;font-size:14px;gap:6px;background:var(--stone);color:var(--ink)}
   body.v-periodicos .vacc .pel .vl{display:inline!important;font-size:14px}
@@ -681,6 +683,18 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.ancho .card:not(.per) .bottom{margin-top:0}
   body.ancho .card .pista{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   body.ancho .avcard{margin:6px 0 0}
+}
+/* Ordenador: sin la publicidad de los avisos del móvil */
+@media (min-width:1024px){ .avcard, #btnBell, .side-btn[data-side="avisos"]{display:none!important} }
+/* Ordenador: todas las tarjetas iguales (foto pequeña a la derecha), filas de la misma altura */
+@media (min-width:1024px){
+  body.ancho #app .feed{align-items:stretch}
+  body.ancho .card, body.ancho .card.per{height:100%;margin:0}
+  body.ancho .card .cbody{display:block!important;order:2}
+  body.ancho .card .thumb, body.v-periodicos .card.per .thumb{float:right!important;order:0;width:104px!important;height:78px!important;margin:2px 0 6px 12px!important;border-radius:10px!important;max-width:none}
+  body.ancho .card .cbody h4{margin:4px 0 0}
+  body.ancho .card .cbody p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0}
+  body.ancho .card .bottom{margin-top:auto!important;padding-top:10px}
 }
 /* búsqueda: ámbitos */
 .stabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px 4px}
@@ -814,7 +828,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
     <div class="row">
       <span class="t">Periodo</span>
       <div class="seg" id="segRango"><button data-v="3" type="button">3 días</button><button data-v="7" type="button">7 días</button><button data-v="21" type="button">21 días</button></div>
-      <span class="h">Al volver a abrir la app vuelve a 3 días.</span>
+      <span class="h">Vale para Noticias, Agenda y Pueblos. Al volver a abrir la app vuelve a 3 días. Periódicos siempre guarda los últimos 7 días.</span>
     </div>
     <div class="row">
       <span class="t">Aspecto</span>
@@ -1335,12 +1349,15 @@ function periodicosNews(){
 // Día elegido en Periódicos ("todos" o AAAA-MM-DD) y la lista de días con noticias
 const perDias = () => [...new Set(periodicosNews().map(n=>n._dia))].sort().reverse();
 const perPasa = n => !(st.sinCapital && isCapital(n)) && (!st.perDia || st.perDia==="todos" || n._dia===st.perDia);
-const nomDia = d => { const t = today(); if (d===t) return "Hoy"; if (d===addDays(t,-1)) return "Ayer"; const f = new Date(d+"T12:00:00"); return f.toLocaleDateString("es-ES",{weekday:"short", day:"numeric"}).replace(".","").replace(/^\w/, c=>c.toUpperCase()); };
+const fechaCorta = d => new Date(d+"T12:00:00").toLocaleDateString("es-ES",{weekday:"short", day:"numeric", month:"short"}).replace(/\./g,"");
+const nomDia = d => { const t = today(); const f = fechaCorta(d); if (d===t) return "Hoy, " + f; if (d===addDays(t,-1)) return "Ayer, " + f; return f.replace(/^\p{L}/u, c=>c.toUpperCase()); };
+const nomDiaCorto = d => { const t = today(); if (d===t) return "Hoy"; if (d===addDays(t,-1)) return "Ayer"; return fechaCorta(d).replace(/ [a-z]+$/,"").replace(/^\p{L}/u, c=>c.toUpperCase()); };
+const rangoPer = () => { const d = perDias(); if (!d.length) return ""; const a = d[d.length-1], b = d[0]; const f = x => new Date(x+"T12:00:00").toLocaleDateString("es-ES",{day:"numeric", month:"short"}).replace(".",""); return `${d.length} ${d.length===1?"día":"días"}: ${f(a)} – ${f(b)}`; };
 function chipsDias(){
   const dias = perDias(); if (dias.length < 2) return "";
   const cnt = d => periodicosNews().filter(n=>!(st.sinCapital && isCapital(n)) && (st.periodico==="todos"||n.medio===st.periodico) && (d==="todos"||n._dia===d)).length;
   const cur = st.perDia || "todos";
-  return `<div class="chips dias" id="chipsDias">${["todos",...dias].map(d=>`<button class="chip" data-dia="${d}" aria-pressed="${cur===d}" type="button">${d==="todos"?"Todos los días":esc(nomDia(d))}<span class="c">${cnt(d)}</span></button>`).join("")}</div>`;
+  return `<div class="chips dias" id="chipsDias">${["todos",...dias].map(d=>`<button class="chip" data-dia="${d}" aria-pressed="${cur===d}" type="button">${d==="todos"?esc(rangoPer()):esc(nomDiaCorto(d))}<span class="c">${cnt(d)}</span></button>`).join("")}</div>`;
 }
 // Ordenador: periódico y día en desplegables dentro de la barra (sin columna derecha)
 function selectsPeriodicos(){
@@ -1351,7 +1368,7 @@ function selectsPeriodicos(){
   const pers = ["todos", ...perTodos().filter(perVisible)];
   const dias = ["todos", ...perDias()];
   return `<label class="psel"><span>Periódico</span><select id="selPer">${pers.map(m=>op(m, m==="todos"?"Todos":m, all.filter(n=>delDia(n) && (m==="todos"||n.medio===m)), st.periodico)).join("")}</select></label>
-    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Todos los días":nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
+    <label class="psel"><span>Día</span><select id="selDia">${dias.map(d=>op(d, d==="todos"?"Todos ("+rangoPer()+")":nomDia(d), all.filter(n=>delPer(n) && (d==="todos"||n._dia===d)), st.perDia||"todos")).join("")}</select></label>
     <button class="vfil pel" data-act="perElegir" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span class="vl">Elegir</span></button>`;
 }
 function viewPeriodicos(){
@@ -1362,7 +1379,7 @@ function viewPeriodicos(){
   const nue = m => de(m).filter(isNew).length;
   const bur = m => { const k = nue(m); return `<span class="badge pnb" data-pn="${esc(m)}" ${k?"":"hidden"}>${k}</span>`; };
   const nLista = list.filter(isNew).length;
-  let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Todo lo que publican · deporte solo si hay incidentes</span></div>
+  let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Todo lo que publican en los últimos 7 días · deporte solo si hay incidentes</span></div>
     ${barraVista(false, `<div class="vacc">${esPC()?selectsPeriodicos():""}<button class="vfil" data-act="leidoPer" type="button" ${nLista?"":"disabled"}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.5l4 4 7-8M10 15.5l1 1 9-10"/></svg><span class="vl">Marcar vistas</span></button></div>`)}<div class="chips" id="chips">
       <button class="chip elegir" data-act="perElegir" type="button" aria-expanded="${!!st.perPanel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Elegir${perSel()?` <span class="c">${perSel().length}/${perTodos().length}</span>`:""}</button>
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
@@ -1994,7 +2011,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v71";
+const VERSION_APP = "prensa-segovia-v72";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
