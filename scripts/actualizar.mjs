@@ -258,7 +258,7 @@ function items(xml) {
       img: imagenDe(it),
       titulo: limpia(txt(it.title)),
       url: String(link ?? "").trim(),
-      fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()),
+      fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()), sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
       sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
       texto: limpia(txt(it.description) || txt(it.summary) || txt(it["content:encoded"]) || txt(it.content)),
       cuerpo: limpia(txt(it["content:encoded"]) || txt(it.content) || ""),
@@ -667,7 +667,7 @@ const PERIODICOS = [
   { nombre: "El Adelantado", urls: ["https://www.eladelantado.com/feed/"] },
   { nombre: "El Norte de Castilla", urls: ["https://www.elnortedecastilla.es/rss/2.0/?section=segovia"] },
   { nombre: "El Día de Segovia", urls: ["http://www.eldiasegovia.es/RSS/DSGlocal.xml", "http://www.eldiasegovia.es/rss/DSGProvincia.xml"] },
-  { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss.xml"] },
+  { nombre: "Tribuna de Segovia", urls: ["https://www.tribunasegovia.com/rss.xml"], soloSiMenciona: true },
   { nombre: "Segovia Directo", urls: ["https://segoviadirecto.com/coverrss"] },
   { nombre: "Segovia 24/7", urls: ["http://segovia247.es/coverrss"] },
   { nombre: "Diario de Castilla y León", urls: ["https://www.diariodecastillayleon.es/rss/segovia.xml"] },
@@ -684,7 +684,8 @@ async function periodicos(ahora) {
   let previo = { noticias: [] };
   try { previo = JSON.parse(await readFile(SALIDA_PERIODICOS, "utf8")); } catch {}
   const porUrl = new Map((previo.noticias || []).map(n => [n.url, n]));
-  const estado = [];
+  const estado = [], diag = [];
+  const yaLeidos = new Set((previo.noticias || []).filter(n => n.medio !== "Tribuna de Segovia").map(n => n.medio));
   for (const p of PERIODICOS) {
     let n = 0, ok = false;
     for (const url of p.urls) {
@@ -692,6 +693,11 @@ async function periodicos(ahora) {
         for (const it of items(await descarga(url))) {
           if (NO_PERIODICO.test(it.url) || DEPORTE.test(norm(it.titulo)) || BASURA.test(norm(it.titulo))) continue;
           if (porUrl.has(it.url)) { const e = porUrl.get(it.url); if (!e.img && it.img) e.img = it.img; continue; }
+          if (p.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
+          // Sin fecha en el RSS: cuenta como recién publicada solo si el periódico ya se leía antes (si no, serían cientos de golpe)
+          if (it.sinFecha && !yaLeidos.has(p.nombre)) { diag.push(`${p.nombre}: sin fecha (primera lectura)`); continue; }
+          if (isNaN(it.fecha)) { diag.push(`${p.nombre}: sin fecha`); continue; }
+          if (it.fecha.getTime() < ahora.getTime() - 4 * 864e5 || it.fecha.getTime() > ahora.getTime() + 36e5) { diag.push(`${p.nombre}: fecha ${it.fecha.toISOString()}`); continue; }
           const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
           porUrl.set(it.url, { medio: p.nombre, ...(it.img ? { img: it.img } : {}), titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
           n++;
@@ -718,6 +724,8 @@ async function periodicos(ahora) {
   const noticias = [...porUrl.values()].filter(n => new Date(n.publicado).getTime() >= limite && new Date(n.publicado).getTime() <= ahora.getTime() + 36e5)
     .sort((a, b) => b.publicado.localeCompare(a.publicado));
   await writeFile(SALIDA_PERIODICOS, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, estado, noticias }));
+  const cuenta = {}; for (const x of diag) { const k = x.replace(/T.*$/, ""); cuenta[k] = (cuenta[k] || 0) + 1; }
+  console.log("Periódicos descartados por fecha:", JSON.stringify(cuenta).slice(0, 1500));
   console.log("Periódicos:", estado.map(e => `${e.medio} ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${noticias.length} en total`);
 }
 
