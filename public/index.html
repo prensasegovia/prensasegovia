@@ -930,6 +930,30 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   .hero .stats{grid-template-columns:repeat(3,minmax(92px,104px))}
   .hero .stat .l{font-size:12.5px}
 }
+
+/* ===== repaso 5-nov: menos señales y nada cortado ===== */
+.pista{padding-bottom:0;border-bottom:7px solid var(--pine-soft)}
+.card.unseen{border-color:var(--line)}
+.newhead h3 .cnt{background:none;color:var(--muted);font-weight:600;font-size:inherit;padding:0}
+.newhead h3 .cnt::before{content:"· "}
+.hacto{color:var(--ink)}
+.tab .b:not(.nb){background:var(--pine-2)}
+@media (max-width:1023px){
+  .card .top{flex-wrap:wrap;row-gap:3px}
+  .card .top .pill{max-width:none}
+  .card .top .time,.card .top .hacto,.card .top .hsin{order:2}
+  .card .top .cat{order:3}
+  .ag-day .card .top .cat{display:none}
+  .card .top .pill[data-pueblo]{position:relative}
+  .card .top .pill[data-pueblo]::after{content:"";position:absolute;inset:-8px -4px}
+  html.letra-grande .tabbar .tab .lbl{letter-spacing:-.4px;font-size:.92em}
+  html.letra-grande .hero .stat{flex-direction:column;align-items:flex-start;gap:0;padding-top:6px;padding-bottom:6px}
+  html.letra-grande .hero .stat .n{line-height:1.05}
+  html.letra-grande .hero .stat .l{font-size:.9em}
+  html.letra-grande .hero .stat .l svg{display:none}
+  body.v-periodicos .pertit{display:block}
+  body.v-periodicos .pertit .aux{display:block;text-align:left;margin-top:2px}
+}
 </style>
 </head>
 <body>
@@ -1099,6 +1123,7 @@ const saveF = () => { store.set("sinCapital2",st.sinCapital); store.set("kws",st
 let cacheNews = null;
 // Titulares escritos todo en MAYÚSCULAS: a minúsculas normales (manteniendo siglas cortas y nombres propios conocidos)
 function sinGritos(t){
+  t = String(t).replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}\u{20E3}]/gu, "").replace(/\s{2,}/g, " ").trim();
   const letras = (t.match(/\p{L}/gu) || []); if (letras.length < 12) return t;
   const may = letras.filter(c => c === c.toUpperCase() && c !== c.toLowerCase()).length;
   const ini = letras.slice(0, 40), mayIni = ini.filter(c => c === c.toUpperCase() && c !== c.toLowerCase()).length;
@@ -1249,7 +1274,7 @@ function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.
 // Noticias de Periódicos sin ver: insignia de la pestaña, burbujas de cada periódico y «te quedan»
 function actualizaPer(){
   const b = document.getElementById("perBadge"); if (!b) return;
-  const ult = store.get("perUltima", null) ?? (Date.now() - 12*36e5);
+  const ult = store.get("perUltima", null) ?? Date.now();
   const hay = st.view!=="periodicos" && periodicosNews().some(n=>!perFueraCap(n) && n._lleg > ult);
   b.hidden = !hay; b.textContent = ""; b.classList.add("solopunto");
 }
@@ -1483,7 +1508,7 @@ const perVisible = m => { const s = perSel(); return !s || s.includes(m); };
 // Periódicos funciona como un quiosco: sin contadores de «por leer». Solo se marca con un punto
 // lo que ha llegado desde la visita anterior, y se señala lo que ya está en Noticias (de interés).
 let perCorte = null, ocultoDesde = 0;
-const fijaCortePer = () => { perCorte = store.get("perUltima", null) ?? (Date.now() - 12*36e5); };
+const fijaCortePer = () => { perCorte = store.get("perUltima", null) ?? Date.now(); };
 const llegoPer = n => perCorte !== null && n._lleg > perCorte;
 // Sin capital en Periódicos: fuera la capital y lo que no es de la provincia (otras provincias, Junta en general...)
 const perFueraCap = n => st.sinCapital && (isCapital(n) || !n.municipio || n.municipio==="General");
@@ -1496,7 +1521,7 @@ function indiceInteres(){
 }
 function periodicosNews(){
   const idx = indiceInteres();
-  return st.periodicos.filter(n=>perVisible(n.medio)).map(n=>{ const d = new Date(n.publicado); return { ...n, _lleg:new Date(n.llegada||n.publicado).getTime(), _int:idx.get(n.url)||null, _key:"p:"+n.url, _ts:d.getTime(), _dia:iso(d), hora:d.toLocaleTimeString("es-ES",{timeZone:TZ,hour:"2-digit",minute:"2-digit",hour12:false}), _cats:[], relevancia:"baja", medios:[{nombre:n.medio,url:n.url,...(n.pago?{pago:true}:{})}] }; });
+  return st.periodicos.filter(n=>perVisible(n.medio)).map(n=>{ const d = new Date(n.publicado); return { ...n, titulo:sinGritos(n.titulo||""), _lleg:new Date(n.llegada||n.publicado).getTime(), _int:idx.get(n.url)||null, _key:"p:"+n.url, _ts:d.getTime(), _dia:iso(d), hora:d.toLocaleTimeString("es-ES",{timeZone:TZ,hour:"2-digit",minute:"2-digit",hour12:false}), _cats:[], relevancia:"baja", medios:[{nombre:n.medio,url:n.url,...(n.pago?{pago:true}:{})}] }; });
 }
 // Día elegido en Periódicos ("todos" o AAAA-MM-DD) y la lista de días con noticias
 const perDias = () => [...new Set(periodicosNews().map(n=>n._dia))].sort().reverse();
@@ -1532,7 +1557,7 @@ function viewPeriodicos(){
   const bur = () => "";
   store.set("perUltima", Date.now()); // la próxima visita marcará lo llegado desde ahora
   const llegadas = list.some(llegoPer);
-  let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Todo lo que publican en los últimos 7 días · deporte solo si hay incidentes</span></div>
+  let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Últimos 7 días · sin deporte salvo incidentes</span></div>
     ${barraVista(false, `<div class="vacc">${esPC()?selectsPeriodicos():""}</div>`)}<div class="chips" id="chips">
       <button class="chip elegir" data-act="perElegir" type="button" aria-expanded="${!!st.perPanel}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Elegir${perSel()?` <span class="c">${perSel().length}/${perTodos().length}</span>`:""}</button>
       <button class="chip" data-per="todos" aria-pressed="${st.periodico==="todos"}" type="button">Todos<span class="c">${cnt("todos")}</span>${bur("todos")}</button>
@@ -1586,7 +1611,7 @@ function viewParte(news){
   <div class="feed parte-wrap" style="padding-top:12px">
     <div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div>
     <label class="sw" style="margin:12px 4px 0"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
-    <div class="parte" id="parteTxt">${esc(x)}</div>
+    <textarea id="parteRaw" hidden>${esc(x)}</textarea><div class="parte" id="parteTxt">${esc(x).replace(/\*([^*\n]+)\*/g,"<b>$1</b>").replace(/(^|\n)_([^_\n]+)_/g,"$1<i>$2</i>")}</div>
     <div class="parte-acts"><button class="btn ghost" data-act="parteCopiar" type="button">Copiar</button><button class="btn" data-act="parteEnviar" type="button"><span class="solo-movil">Enviar…</span><span class="solo-pc">Abrir en WhatsApp</span></button></div>
     <p class="note" style="padding:0 4px">${plural(n,"noticia","noticias")} en el parte. Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p>
   </div>`;
@@ -1817,8 +1842,8 @@ $("#app").addEventListener("click", e=>{
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); st.sesionNuevas = new Set(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="parte") abrirSub({t:"parte"});
-  else if (act==="parteCopiar"){ const x = $("#parteTxt").textContent; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
-  else if (act==="parteEnviar"){ const x = $("#parteTxt").textContent; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
+  else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
+  else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
@@ -2170,7 +2195,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v77";
+const VERSION_APP = "prensa-segovia-v78";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
