@@ -716,7 +716,7 @@ async function periodicos(ahora) {
           if (isNaN(it.fecha)) { diag.push(`${p.nombre}: sin fecha`); continue; }
           if (it.fecha.getTime() < ahora.getTime() - 7 * 864e5 || it.fecha.getTime() > ahora.getTime() + 36e5) { diag.push(`${p.nombre}: fecha ${it.fecha.toISOString()}`); continue; }
           const texto = it.texto.replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "").trim();
-          porUrl.set(it.url, { medio: p.nombre, ...(it.img ? { img: it.img } : {}), titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
+          porUrl.set(it.url, { medio: p.nombre, ...(it.img ? { img: it.img } : {}), titulo: it.titulo, resumen: recorta(texto && norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: (isNaN(it.fecha) ? ahora : it.fecha).toISOString(), llegada: ahora.toISOString(), municipio: municipioDe(it.titulo + " " + texto) });
           n++;
         }
         ok = true;

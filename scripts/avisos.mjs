@@ -87,7 +87,7 @@ for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
   const p = s.prefs || {};
   // nivel: "todas" | "importantes" · capital: true/false · periodicos: true/false
   let mias = noticias.filter(n => (p.capital !== false || !esCapital(n)) && (p.nivel !== "importantes" || n.relevancia === "alta"));
-  const perMias = p.periodicos ? periodicos.filter(n => p.capital !== false || !esCapital(n)) : [];
+  const perMias = p.periodicos ? periodicos.filter(n => p.capital !== false || (!esCapital(n) && n.municipio && n.municipio !== "General")) : [];
   if (p.nivel === "ninguna") mias = [];
   if (!mias.length && !perMias.length) continue;
   const alta = mias.filter(n => n.relevancia === "alta");
