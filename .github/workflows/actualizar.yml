@@ -2,7 +2,7 @@ name: Actualizar noticias
 
 on:
   schedule:
-    # Cada hora (minuto 17 para evitar la congestión de las horas en punto)
+    # Respaldo cada 20 min (el despertador de Apps Script es el que manda)
     - cron: "7,27,47 * * * *"
   workflow_dispatch: {}
   push:
@@ -21,6 +21,7 @@ concurrency:
 jobs:
   actualizar:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -60,10 +61,17 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
         continue-on-error: true
+        with:
+          timeout: 300000
 
       # GitHub Pages a veces falla de forma pasajera: se reintenta una vez
       - if: steps.deploy.outcome == 'failure'
         run: sleep 45
 
+      # Si GitHub Pages sigue atascado, no se marca como fallo (no llega correo):
+      # las noticias ya están guardadas y la siguiente pasada las publica.
       - if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
+        continue-on-error: true
+        with:
+          timeout: 300000
