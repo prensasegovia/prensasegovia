@@ -580,8 +580,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .card.per .thumb{width:76px;height:76px;border-radius:10px;margin:2px 0 4px 12px}
 .card.per.llego .ptop .ndot{display:inline-block}
 .card.per.llego{border-color:color-mix(in srgb,var(--new) 45%,var(--line))}
-.card.per .ptag{display:inline-block;font-size:12px;font-weight:700;color:var(--brand);background:color-mix(in srgb,var(--brand) 11%,transparent);border-radius:6px;padding:2px 7px;margin:0 0 5px}
-.card.per .ptag.alta{color:#b42318;background:color-mix(in srgb,#d92d20 12%,transparent)}
+.card.per .ptag{display:inline-block;align-self:flex-start;font-size:12px;font-weight:700;color:var(--pine-2);background:var(--pine-soft);border-radius:6px;padding:2px 8px;margin:0 0 6px}
+.card.per .ptag.alta{color:var(--alta-ink);background:var(--alta-soft)}
 .pernota{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);padding:8px 4px 0}
 .pernota:empty{display:none}
 .pernota span{display:inline-flex;align-items:center;gap:7px}
@@ -952,6 +952,10 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   html.letra-grande .hero .stat .l{font-size:.9em}
   html.letra-grande .hero .stat .l svg{display:none}
   body.v-periodicos .pertit{display:block}
+  body.v-periodicos .vbar{width:auto;max-width:none}
+  body.v-periodicos .vbar .vacc:empty{display:none}
+  body.v-periodicos .vbar .seg{flex:1}
+  body.v-periodicos .vbar .seg button{flex:1}
   body.v-periodicos .pertit .aux{display:block;text-align:left;margin-top:2px}
 }
 </style>
@@ -2199,7 +2203,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v79";
+const VERSION_APP = "prensa-segovia-v80";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

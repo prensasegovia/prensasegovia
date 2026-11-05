@@ -463,7 +463,7 @@ const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.te
 const POL_CONFLICTO = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
 // Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
 const NACIONAL_FIG = /ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
-const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
+const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 function relleno(n) {
@@ -897,6 +897,7 @@ async function main() {
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = NACIONAL_FIG.test(norm(g.titulo)) ? "Provincia" : a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
+    if (CONCRETO(municipio) && NACIONAL_FIG.test(norm(g.titulo)) && municipioDe(g.titulo) === "General") municipio = "Provincia";
     if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo)) && !(OTRA_CIUDAD.test(norm(g.titulo + " " + resumen)) && !MENCIONA_SEGOVIA.test(norm(g.titulo + " " + resumen)))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
@@ -978,6 +979,7 @@ async function main() {
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? "Provincia" : n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
+      if (CONCRETO(n.municipio) && NACIONAL_FIG.test(norm(n.titulo)) && municipioDe(n.titulo) === "General") n.municipio = "Provincia";
       if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo)) && !(OTRA_CIUDAD.test(norm(n.titulo + " " + (n.resumen || ""))) && !MENCIONA_SEGOVIA.test(norm(n.titulo + " " + (n.resumen || ""))))) n.municipio = "Segovia";
       // Enlaces de otro pueblo que se juntaron por error (se ve en la dirección: «...-en-el-espinar/»):
       // se separan y la próxima pasada los recoge como noticia propia
