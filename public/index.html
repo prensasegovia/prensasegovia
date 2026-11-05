@@ -958,6 +958,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   body.v-periodicos .vbar .seg button{flex:1}
   body.v-periodicos .pertit .aux{display:block;text-align:left;margin-top:2px}
 }
+.avnota{font-size:13px;color:var(--muted);margin:2px 0 0}
 </style>
 </head>
 <body>
@@ -1011,7 +1012,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
             <span class="t2">¿De qué quieres que te avise?</span>
             <div class="seg" id="segPushNivel"><button data-v="todas" type="button">Todas las de interés</button><button data-v="importantes" type="button">Solo importantes</button></div>
           </div>
-          <label class="sw avsec"><span><span class="t">Incluir Segovia capital</span></span><input type="checkbox" id="fPushCap"></label>
+          <p class="avsec avnota" id="fPushCapTxt"></p>
           <label class="sw avsec"><span><span class="t">Incluir lo nuevo de Periódicos</span><span class="h">Todo lo de El Adelantado, El Norte y El Día, no solo lo de interés. Son muchas más.</span></span><input type="checkbox" id="fPushPer"></label>
         </div>
         <div class="h" id="pushEstado"></div>
@@ -1836,8 +1837,8 @@ $("#app").addEventListener("click", e=>{
   if (b.dataset.dia){ st.perDia = b.dataset.dia; aplicaFiltro(); return; }
   if (b.dataset.cat !== undefined){ const k=b.dataset.cat; st.cat = (!k || st.cat===k) ? null : k; aplicaFiltro(); }
   else if (act==="filtros") openSheet();
-  else if (act==="capSet"){ const v = b.dataset.v==="1"; if (st.sinCapital!==v){ st.sinCapital=v; saveF(); aplicaFiltro(); } }
-  else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); }
+  else if (act==="capSet"){ const v = b.dataset.v==="1"; if (st.sinCapital!==v){ st.sinCapital=v; saveF(); aplicaFiltro(); sincronizaCapPush(); } }
+  else if (act==="capital"){ st.sinCapital=!st.sinCapital; saveF(); aplicaFiltro(); sincronizaCapPush(); }
   else if (act==="limpiar"){ st.soloKw=false; st.cat=null; saveF(); aplicaFiltro(); }
   else if (act==="avisosSi"){ abreAvisos(true); }
   else if (act==="avisosNo"){ store.set("avisosNo", true); render(true); aviso("Puedes activarlos cuando quieras con la campana de arriba"); }
@@ -2071,7 +2072,7 @@ const instalada = () => matchMedia("(display-mode: standalone)").matches || navi
 function pintaPush(msg, mal){
   $("#fPush").checked = push.on; $("#pushOpc").hidden = !push.on; $("#pushOk").hidden = !push.on; $(".avbox").classList.toggle("on", push.on);
   document.querySelectorAll("#segPushNivel button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v===push.nivel));
-  $("#fPushCap").checked = push.capital; $("#fPushPer").checked = push.periodicos;
+  $("#fPushCapTxt").textContent = st.sinCapital ? "Sin Segovia capital: como tienes puesto en la app." : "Con Segovia capital: como tienes puesto en la app."; $("#fPushPer").checked = push.periodicos;
   const e = $("#pushEstado"); e.classList.toggle("mal", !!mal);
   e.textContent = msg ?? (esIOS() && !instalada() ? "En iPhone, primero añade la app a la pantalla de inicio (botón Compartir → «Añadir a pantalla de inicio») y ábrela desde allí." : "");
 }
@@ -2105,7 +2106,9 @@ $("#fPush").addEventListener("change", async e=>{
   }
 });
 $("#segPushNivel").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; push.nivel=b.dataset.v; pintaPush(); guardaPush(); });
-$("#fPushCap").addEventListener("change", e=>{ push.capital=e.target.checked; guardaPush(); });
+// Los avisos usan el mismo «Con capital / Sin capital» que la app
+function sincronizaCapPush(){ const cap = !st.sinCapital; if (push.capital !== cap){ push.capital = cap; guardaPush(); } if ($("#fPushCapTxt")) pintaPush(); }
+sincronizaCapPush();
 $("#fPushPer").addEventListener("change", e=>{ push.periodicos=e.target.checked; guardaPush(); });
 // Si el móvil renovó la suscripción por su cuenta, se vuelve a apuntar
 (async ()=>{ if (!push.on || !("serviceWorker" in navigator)) return; try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) enviaAlta(sub); else { push.on=false; store.set("push", push); } } catch(e){} })();
@@ -2203,7 +2206,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v80";
+const VERSION_APP = "prensa-segovia-v81";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
