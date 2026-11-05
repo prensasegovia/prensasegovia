@@ -100,15 +100,14 @@ for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
   if (mias.length) {
     const alta = mias.filter(n => n.relevancia === "alta"), resto = mias.length - alta.length;
     const lineas = [...alta, ...mias.filter(n => n.relevancia !== "alta")].map(n => `${n.relevancia === "alta" ? "⚠ " : ""}${lugar(n)} — ${n.titulo}`);
-    const titulo = alta.length ? `⚠ ${alta.length === 1 ? "Importante" : alta.length + " importantes"}${resto ? ` y ${resto} de interés` : ""}`
-      : `${mias.length} ${mias.length === 1 ? "noticia de interés" : "noticias de interés"}`;
+    const titulo = `De interés · ${mias.length} ${mias.length === 1 ? "nueva" : "nuevas"}${alta.length ? ` (${alta.length === 1 ? "1 importante" : alta.length + " importantes"})` : ""}`;
     envios.push({ title: titulo, body: lineas.slice(0, 3).join("\n") + (lineas.length > 3 ? `\n…y ${lineas.length - 3} más` : ""),
       url: appUrl + "#noticias", tag: "ps-interes", renotify: true, urgency: alta.length ? "high" : "normal" });
   }
   if (perMias.length) {
     const medios = [...new Set(perMias.map(n => n.medio))];
     const lineas = perMias.map(n => medios.length === 1 ? n.titulo : `${n.medio}: ${n.titulo}`);
-    envios.push({ title: `📰 Periódicos · ${perMias.length} ${perMias.length === 1 ? "nueva" : "nuevas"}${medios.length === 1 ? " en " + medios[0] : ""}`,
+    envios.push({ title: `Periódicos · ${perMias.length} ${perMias.length === 1 ? "nueva" : "nuevas"}${medios.length === 1 ? " en " + medios[0] : ""}`,
       body: lineas.slice(0, 3).join("\n") + (lineas.length > 3 ? `\n…y ${lineas.length - 3} más` : ""),
       url: appUrl + "#periodicos", tag: "ps-periodicos", renotify: false, urgency: "low" });
   }
