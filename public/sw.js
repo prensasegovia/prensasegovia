@@ -1,5 +1,5 @@
 // Prensa Segovia: siempre intenta la red primero; si no hay cobertura, abre con lo último guardado.
-const CACHE = "prensa-segovia-v82";
+const CACHE = "prensa-segovia-v83";
 self.addEventListener("install", e => { self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil((async () => { for (const k of await caches.keys()) if (k !== CACHE) await caches.delete(k); await self.clients.claim(); })()); });
 self.addEventListener("fetch", e => {
@@ -22,7 +22,7 @@ self.addEventListener("fetch", e => {
 self.addEventListener("push", e => {
   let d = {}; try { d = e.data ? e.data.json() : {}; } catch { d = { body: e.data && e.data.text() }; }
   e.waitUntil(self.registration.showNotification(d.title || "Prensa Segovia", {
-    body: d.body || "Hay noticias nuevas", tag: d.tag || "prensa-segovia", renotify: true,
+    body: d.body || "Hay noticias nuevas", tag: d.tag || "prensa-segovia", renotify: d.renotify !== false,
     icon: d.icon || "iconoa-192.png", badge: "iconoa-96.png", data: { url: d.url || "./" }
   }));
 });

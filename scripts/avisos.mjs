@@ -92,22 +92,34 @@ for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
   const perMias = p.periodicos ? periodicos.filter(n => quiere(n) && (p.capital !== false || (!esCapital(n) && n.municipio && n.municipio !== "General"))) : [];
   if (p.nivel === "ninguna") mias = [];
   if (!mias.length && !perMias.length) continue;
-  const alta = mias.filter(n => n.relevancia === "alta");
-  const orden = [...alta, ...mias.filter(n => n.relevancia !== "alta")];
-  const lineas = [...orden.map(n => `${lugar(n)} — ${n.titulo}`), ...perMias.map(n => `${n.medio}: ${n.titulo}`)];
-  const total = lineas.length;
-  const titulo = alta.length ? `⚠ ${alta.length === 1 ? "Importante" : alta.length + " importantes"}${total > alta.length ? ` y ${total - alta.length} más` : ""}`
-    : mias.length ? `${mias.length} ${mias.length === 1 ? "noticia nueva" : "noticias nuevas"}${perMias.length ? ` · ${perMias.length} en periódicos` : ""}`
-    : `${perMias.length} ${perMias.length === 1 ? "nueva en periódicos" : "nuevas en periódicos"}`;
-  const cuerpo = lineas.slice(0, 3).join("\n") + (total > 3 ? `\n…y ${total - 3} más` : "");
-  const vista = mias.length ? "noticias" : "periodicos";
-  if (process.env.AVISOS_VER) console.log("—", s.endpoint.slice(-12), "|", titulo, "|", cuerpo.replace(/\n/g, " / "));
-  try {
-    await webpush.sendNotification({ endpoint: s.endpoint, keys: s.keys }, JSON.stringify({ title: "Prensa Segovia · " + titulo, body: cuerpo, url: appUrl + "#" + vista, tag: "prensa-segovia" }), { TTL: 6 * 3600, urgency: alta.length ? "high" : "normal" });
-    enviados++;
-  } catch (e) {
-    if (e.statusCode === 404 || e.statusCode === 410) caducadas.push(s.endpoint);
-    else console.log("Avisos: fallo al enviar:", e.statusCode || e.message);
+  // Dos avisos distintos, para que se vea de un vistazo qué es cada cosa:
+  //  · «De interés»: lo que ha pasado el filtro del servicio (Noticias). Suena siempre.
+  //  · «Periódicos»: lo que publican los periódicos marcados. Se va sustituyendo en vez de acumularse.
+  const envios = [];
+  if (mias.length) {
+    const alta = mias.filter(n => n.relevancia === "alta"), resto = mias.length - alta.length;
+    const lineas = [...alta, ...mias.filter(n => n.relevancia !== "alta")].map(n => `${n.relevancia === "alta" ? "⚠ " : ""}${lugar(n)} — ${n.titulo}`);
+    const titulo = alta.length ? `⚠ ${alta.length === 1 ? "Importante" : alta.length + " importantes"}${resto ? ` y ${resto} de interés` : ""}`
+      : `${mias.length} ${mias.length === 1 ? "noticia de interés" : "noticias de interés"}`;
+    envios.push({ title: titulo, body: lineas.slice(0, 3).join("\n") + (lineas.length > 3 ? `\n…y ${lineas.length - 3} más` : ""),
+      url: appUrl + "#noticias", tag: "ps-interes", renotify: true, urgency: alta.length ? "high" : "normal" });
+  }
+  if (perMias.length) {
+    const medios = [...new Set(perMias.map(n => n.medio))];
+    const lineas = perMias.map(n => medios.length === 1 ? n.titulo : `${n.medio}: ${n.titulo}`);
+    envios.push({ title: `📰 Periódicos · ${perMias.length} ${perMias.length === 1 ? "nueva" : "nuevas"}${medios.length === 1 ? " en " + medios[0] : ""}`,
+      body: lineas.slice(0, 3).join("\n") + (lineas.length > 3 ? `\n…y ${lineas.length - 3} más` : ""),
+      url: appUrl + "#periodicos", tag: "ps-periodicos", renotify: false, urgency: "low" });
+  }
+  for (const m of envios) {
+    if (process.env.AVISOS_VER) console.log("—", s.endpoint.slice(-12), "|", m.title, "|", m.body.replace(/\n/g, " / "));
+    try {
+      await webpush.sendNotification({ endpoint: s.endpoint, keys: s.keys }, JSON.stringify({ title: m.title, body: m.body, url: m.url, tag: m.tag, renotify: m.renotify }), { TTL: 6 * 3600, urgency: m.urgency });
+      enviados++;
+    } catch (e) {
+      if (e.statusCode === 404 || e.statusCode === 410) { caducadas.push(s.endpoint); break; }
+      else console.log("Avisos: fallo al enviar:", e.statusCode || e.message);
+    }
   }
 }
 if (caducadas.length) {
