@@ -461,13 +461,16 @@ const NACIONAL_TREN = t => /maquinistas|\bouigo\b|\biryo\b|\badif\b|\brenfe\b/.t
 const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) ? "General" : municipio;
 // Relleno que no aporta a la unidad aunque toque un tema de interés
 const POL_CONFLICTO = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
-const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las )?mesas|mesas electorales|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
+// Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
+const NACIONAL_FIG = /ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
+const ESTADISTICA_ELECTORAL = /votantes|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
-  if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)) return true;
+  if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)
+    && !(CONCRETO(n.municipio) && tt.includes(" en " + norm(n.municipio)))) return true; // en campaña: actos de partidos en un pueblo sí
   const solo = ks => c.length && c.every(k => ks.includes(k));
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
@@ -497,7 +500,7 @@ function relleno(n) {
   // 1) Gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
   if (n.municipio === "Segovia" && solo(["politica", "eventos"]) && !POL_CONFLICTO.test(tt)) return true;
   // 3) Estadísticas y trámites electorales (sí quedan candidaturas, mítines y visitas)
-  if (ESTADISTICA_ELECTORAL.test(tt) && !/candidat|mitin|visita|campana|lista/.test(tt) && solo(["politica", "social", "autoridades"])) return true;
+  if (ESTADISTICA_ELECTORAL.test(tt) && !/candidat|mitin|visita|campana|\blistas? (electoral|del|de la|de los)/.test(tt) && solo(["politica", "social", "autoridades"])) return true;
   // 2) Avisos preventivos de tráfico y emergencias (sí quedan los sucesos reales)
   if ((c.includes("emergencias") || c.includes("medioambiente")) && solo(["emergencias", "politica", "autoridades", "medioambiente"]) && PREVENTIVO_EMERG.test(tt) && !INCIDENTE.test(tt)) return true;
   return false;
@@ -892,7 +895,7 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
-    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = NACIONAL_FIG.test(norm(g.titulo)) ? "Provincia" : a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
     if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo)) && !(OTRA_CIUDAD.test(norm(g.titulo + " " + resumen)) && !MENCIONA_SEGOVIA.test(norm(g.titulo + " " + resumen)))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio);
@@ -972,7 +975,7 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
-      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? "Provincia" : n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo)) && !(OTRA_CIUDAD.test(norm(n.titulo + " " + (n.resumen || ""))) && !MENCIONA_SEGOVIA.test(norm(n.titulo + " " + (n.resumen || ""))))) n.municipio = "Segovia";

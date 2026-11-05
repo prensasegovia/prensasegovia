@@ -1509,7 +1509,8 @@ const perVisible = m => { const s = perSel(); return !s || s.includes(m); };
 // lo que ha llegado desde la visita anterior, y se señala lo que ya está en Noticias (de interés).
 let perCorte = null, ocultoDesde = 0;
 const fijaCortePer = () => { perCorte = store.get("perUltima", null) ?? Date.now(); };
-const llegoPer = n => perCorte !== null && n._lleg > perCorte;
+const llegoPer = n => perCorte !== null && n._lleg > perCorte && !st.seen.has(n._key); // abierta: sin punto
+let enPer = false; // dentro de Periódicos en esta visita
 // Sin capital en Periódicos: fuera la capital y lo que no es de la provincia (otras provincias, Junta en general...)
 const perFueraCap = n => st.sinCapital && (isCapital(n) || !n.municipio || n.municipio==="General");
 let idxInt = null, idxIntBase = null;
@@ -1555,7 +1556,9 @@ function viewPeriodicos(){
   const de = m => all.filter(n=>(m==="todos"||n.medio===m) && perPasa(n));
   const cnt = m => de(m).length;
   const bur = () => "";
-  store.set("perUltima", Date.now()); // la próxima visita marcará lo llegado desde ahora
+  // Cada entrada en Periódicos es una visita: el punto marca lo llegado desde la anterior
+  if (!enPer){ fijaCortePer(); enPer = true; }
+  store.set("perUltima", Date.now());
   const llegadas = list.some(llegoPer);
   let h = `<div class="sect pertit"><h2>Periódicos</h2><span class="aux">Últimos 7 días · sin deporte salvo incidentes</span></div>
     ${barraVista(false, `<div class="vacc">${esPC()?selectsPeriodicos():""}</div>`)}<div class="chips" id="chips">
@@ -1692,6 +1695,7 @@ setInterval(syncLabel, 60000);
 
 let chipObs;
 function render(keepScroll){
+  if (st.view !== "periodicos" || st.sub) enPer = false;
   document.body.classList.toggle("v-periodicos", st.view==="periodicos" && !st.sub);
   // Ordenador: en Noticias y Periódicos el menú se recoge y las noticias ocupan todo el ancho en mosaico
   document.body.classList.toggle("ancho", esPC());
@@ -1802,7 +1806,7 @@ $("#app").addEventListener("click", e=>{
   const am = e.target.closest("[data-ambito]"); if (am){ st.ambito = am.dataset.ambito; store.set("ambito", st.ambito); render(); window.scrollTo({top:0}); return; }
   const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }
   const a = e.target.closest("a");
-  if (a){ const c = a.closest("[data-k]"); if (c) marcarVisto([c.dataset.k]); return; }
+  if (a){ const c = a.closest("[data-k]"); if (c){ marcarVisto([c.dataset.k]); c.classList.remove("llego"); } return; }
   const card = e.target.closest(".card");
   const b = e.target.closest("button");
   if (b && card){
@@ -1814,13 +1818,13 @@ $("#app").addEventListener("click", e=>{
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
   if (!b){
     if (card && conPanel() && tarjetas.has(card.dataset.k)){ // ordenador: se amplía en el panel de la derecha
-      marcarVisto([card.dataset.k]); card.classList.remove("unseen");
+      marcarVisto([card.dataset.k]); card.classList.remove("unseen", "llego");
       st.detalle = st.detalle===card.dataset.k ? null : card.dataset.k;
       document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel"));
       if (st.detalle) card.classList.add("sel");
       renderAside(allNews()); $("#aside").scrollTop = 0; return;
     }
-    if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen"); window.open(card.dataset.href, "_blank", "noopener"); }
+    if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen", "llego"); window.open(card.dataset.href, "_blank", "noopener"); }
     return;
   }
   const act = b.dataset.act;
@@ -2195,7 +2199,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v78";
+const VERSION_APP = "prensa-segovia-v79";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
