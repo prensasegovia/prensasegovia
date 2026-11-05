@@ -64,7 +64,7 @@ const caducadas0 = [];
 for (const sb of subs) {
   if (saludados.has(corto(sb.endpoint))) continue;
   const p = sb.prefs || {};
-  const que = (p.nivel === "importantes" ? "lo importante" : "todas las noticias de interés") + (p.capital === false ? ", sin Segovia capital" : "") + (p.periodicos ? " y lo nuevo de Periódicos" : "");
+  const que = (p.nivel === "importantes" ? "lo importante" : "todas las noticias de interés") + (p.capital === false ? ", sin Segovia capital" : "") + (Array.isArray(p.periodicos) ? (p.periodicos.length ? " y lo nuevo de " + (p.periodicos.length === 1 ? p.periodicos[0] : p.periodicos.length + " periódicos") : "") : p.periodicos ? " y lo nuevo de Periódicos" : "");
   try {
     await webpush.sendNotification({ endpoint: sb.endpoint, keys: sb.keys }, JSON.stringify({ title: "Prensa Segovia · Avisos activados ✓", body: `Te avisaremos aquí de ${que}. Puedes cambiarlo en Filtros y ajustes.`, url: appUrl0, tag: "prensa-segovia-hola" }), { TTL: 24 * 3600 });
     saludados.add(corto(sb.endpoint));
@@ -87,7 +87,9 @@ for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
   const p = s.prefs || {};
   // nivel: "todas" | "importantes" · capital: true/false · periodicos: true/false
   let mias = noticias.filter(n => (p.capital !== false || !esCapital(n)) && (p.nivel !== "importantes" || n.relevancia === "alta"));
-  const perMias = p.periodicos ? periodicos.filter(n => p.capital !== false || (!esCapital(n) && n.municipio && n.municipio !== "General")) : [];
+  // periodicos: lista de medios marcados (o true = todos, como era antes)
+  const quiere = n => p.periodicos === true || (Array.isArray(p.periodicos) && p.periodicos.includes(n.medio));
+  const perMias = p.periodicos ? periodicos.filter(n => quiere(n) && (p.capital !== false || (!esCapital(n) && n.municipio && n.municipio !== "General"))) : [];
   if (p.nivel === "ninguna") mias = [];
   if (!mias.length && !perMias.length) continue;
   const alta = mias.filter(n => n.relevancia === "alta");

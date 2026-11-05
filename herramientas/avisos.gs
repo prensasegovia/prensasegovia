@@ -32,7 +32,7 @@ function doPost(e) {
       subs = subs.filter(s => s.endpoint !== d.sub.endpoint);
       const prefs = d.prefs || {};
       subs.push({ endpoint: String(d.sub.endpoint), keys: { p256dh: String(d.sub.keys.p256dh), auth: String(d.sub.keys.auth) },
-        prefs: { nivel: ['todas', 'importantes', 'ninguna'].indexOf(prefs.nivel) >= 0 ? prefs.nivel : 'todas', capital: prefs.capital !== false, periodicos: !!prefs.periodicos },
+        prefs: { nivel: ['todas', 'importantes', 'ninguna'].indexOf(prefs.nivel) >= 0 ? prefs.nivel : 'todas', capital: prefs.capital !== false, periodicos: Array.isArray(prefs.periodicos) ? prefs.periodicos.filter(x => typeof x === 'string').slice(0, 30).map(x => x.slice(0, 60)) : !!prefs.periodicos },
         alta: new Date().toISOString() });
       if (subs.length > 200) subs = subs.slice(-200);
     } else if (d.accion === 'baja' && d.endpoint) {
