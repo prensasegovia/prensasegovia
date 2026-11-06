@@ -53,7 +53,7 @@ try {
   const prueba = JSON.parse(await readFile(new URL("datos/aviso-prueba.json", raiz), "utf8"));
   let ok = 0;
   // Puede ser un aviso o una lista de avisos ({titulo, texto, tag, vista})
-  for (const pr of (Array.isArray(prueba) ? prueba : [prueba])) for (const sb of subs) {
+  for (const pr of (Array.isArray(prueba) ? prueba : [prueba])) for (const sb of subs.filter(x => !pr.solo || String(x.endpoint).endsWith(pr.solo))) {
     try { await webpush.sendNotification({ endpoint: sb.endpoint, keys: sb.keys }, JSON.stringify({ title: pr.titulo || "Prensa Segovia · Prueba", body: pr.texto || "Así se ven los avisos.", url: (conf.app || "./") + (pr.vista ? "#" + pr.vista : ""), tag: pr.tag || "prensa-segovia-prueba" }), { TTL: 3600 }); ok++; } catch (e) { console.log("Avisos: fallo en la prueba:", e.statusCode || e.message); }
   }
   await unlink(new URL("datos/aviso-prueba.json", raiz));
