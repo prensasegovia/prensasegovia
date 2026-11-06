@@ -2079,6 +2079,9 @@ const push = Object.assign({ on:false, nivel:"todas", capital:true, periodicos:f
 let pushConf = null;
 const b64aU8 = b => { const p = "=".repeat((4 - b.length % 4) % 4); const r = atob((b + p).replace(/-/g,"+").replace(/_/g,"/")); return Uint8Array.from(r, c=>c.charCodeAt(0)); };
 const esIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const esAndroid = () => /Android/i.test(navigator.userAgent);
+// Navegadores metidos dentro de otras apps (WhatsApp, Instagram, Facebook, Telegram, Gmail...): no admiten avisos
+const enOtraApp = () => /FBAN|FBAV|Instagram|Line\/|WhatsApp|Telegram|GSA\/|; wv\)/i.test(navigator.userAgent);
 const instalada = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 function pintaPush(msg, mal){
   $("#fPush").checked = push.on; $("#pushOpc").hidden = !push.on; $("#pushOk").hidden = !push.on; $(".avbox").classList.toggle("on", push.on);
@@ -2092,20 +2095,34 @@ async function enviaAlta(sub){
   const c = await confPush(); if (!c.url) return false;
   try { await fetch(c.url, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ accion:"alta", sub: sub.toJSON(), prefs:{ nivel:push.nivel, capital:push.capital, periodicos: Array.isArray(push.periodicos) && push.periodicos.length ? push.periodicos : false } }) }); return true; } catch(e){ return false; }
 }
+const mismaClave = (sub, pub) => { try { const k = sub.options && sub.options.applicationServerKey; if (!k) return true;
+  const a = new Uint8Array(k), b = b64aU8(pub); return a.length === b.length && a.every((x,i)=>x===b[i]); } catch(e){ return true; } };
 async function activaPush(){
   const c = await confPush();
   if (!c.url || !c.publica){ pintaPush("Los avisos todavía no están en marcha: falta un último paso de configuración. En cuanto esté, podrás activarlos aquí.", true); return false; }
   if (esIOS() && !instalada()){ pintaPush(undefined, true); return false; }
-  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){ pintaPush("Este navegador no admite avisos. En iPhone hace falta iOS 16.4 o posterior y abrir la app desde la pantalla de inicio.", true); return false; }
-  const perm = await Notification.requestPermission();
-  if (perm !== "granted"){ pintaPush("Has bloqueado los avisos. Actívalos en los ajustes de notificaciones del móvil para esta app.", true); return false; }
+  if (enOtraApp() || !("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){
+    pintaPush(esAndroid() ? "Estás dentro de otra app (WhatsApp, Instagram…) o en un navegador que no admite avisos. Abre la web en Chrome: menú ⋮ → «Abrir en Chrome» (o copia el enlace en Chrome) y actívalos allí."
+      : esIOS() ? "Este navegador no admite avisos. En iPhone hace falta iOS 16.4 o posterior y abrir la app desde la pantalla de inicio (no desde WhatsApp)."
+      : "Este navegador no admite avisos. Prueba con Chrome, Edge o Safari.", true); return false; }
+  let perm = Notification.permission;
+  if (perm === "default") perm = await Notification.requestPermission();
+  if (perm !== "granted"){ pintaPush(esAndroid() ? "Los avisos están bloqueados para esta web. En Chrome: toca el candado (o ⋮ → Información del sitio) → Permisos → Notificaciones → Permitir. Si la tienes instalada: mantén pulsado el icono → Información de la app → Notificaciones."
+      : "Has bloqueado los avisos. Actívalos en los ajustes de notificaciones del móvil para esta app.", true); return false; }
   try {
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
+    // Si el móvil guardaba una suscripción hecha con otra clave, Google rechazaría los avisos: se renueva
+    if (sub && !mismaClave(sub, c.publica)){ try { await sub.unsubscribe(); } catch(e){} sub = null; }
     if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: b64aU8(c.publica) });
     if (!(await enviaAlta(sub))) throw new Error("sin conexión");
     return true;
-  } catch(e){ pintaPush("No se han podido activar: " + (e.message || e), true); return false; }
+  } catch(e){
+    const m = String(e && (e.name + " " + e.message) || e);
+    pintaPush(/AbortError|push service|registration failed/i.test(m)
+      ? "El móvil no ha podido conectar con el servicio de avisos de Google. Comprueba que Chrome está actualizado y que tienes los Servicios de Google Play; si usas ahorro de batería o datos, desactívalo un momento y vuelve a probar."
+      : "No se han podido activar: " + (e.message || e), true);
+    console.warn("push", e); return false; }
 }
 async function guardaPush(){ store.set("push", push); if (!push.on) return; const reg = await navigator.serviceWorker?.ready; const sub = await reg?.pushManager?.getSubscription(); if (sub) enviaAlta(sub); }
 $("#fPush").addEventListener("change", async e=>{
@@ -2134,7 +2151,7 @@ $("#pushPerLista").addEventListener("click", e=>{ const b=e.target.closest("[dat
   const m=b.dataset.m, l=Array.isArray(push.periodicos)?push.periodicos:[]; push.periodicos = l.includes(m) ? l.filter(x=>x!==m) : [...l, m];
   pintaPushPer(); guardaPush(); });
 // Si el móvil renovó la suscripción por su cuenta, se vuelve a apuntar
-(async ()=>{ if (!push.on || !("serviceWorker" in navigator)) return; try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) enviaAlta(sub); else { push.on=false; store.set("push", push); } } catch(e){} })();
+(async ()=>{ if (!push.on || !("serviceWorker" in navigator)) return; try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); const c = await confPush(); if (sub && c.publica && !mismaClave(sub, c.publica) && Notification.permission==="granted"){ await activaPush(); return; } if (sub) enviaAlta(sub); else { push.on=false; store.set("push", push); } } catch(e){} })();
 // Los avisos antiguos (solo con la app abierta) se sustituyen por estos
 st.avisos = false;
 function noticiasDe(j){
@@ -2233,7 +2250,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v85";
+const VERSION_APP = "prensa-segovia-v86";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

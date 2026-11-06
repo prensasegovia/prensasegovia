@@ -43,7 +43,10 @@ try {
   const r = await fetch(conf.url + "?accion=lista&token=" + encodeURIComponent(token.trim()), { redirect: "follow" });
   const j = await r.json(); subs = Array.isArray(j.subs) ? j.subs : [];
 } catch (e) { console.log("Avisos: no se pudo leer la lista de suscritos:", e.message); await guarda(); process.exit(0); }
-console.log(`Avisos: ${subs.length} móviles apuntados`);
+const tipo = e => /web\.push\.apple\.com/.test(e) ? "iPhone" : /fcm\.googleapis|android\.googleapis/.test(e) ? "Android/Chrome" : /mozilla/.test(e) ? "Firefox" : /notify\.windows/.test(e) ? "Edge" : "otro";
+const porTipo = {}; for (const sb of subs) porTipo[tipo(sb.endpoint)] = (porTipo[tipo(sb.endpoint)] || 0) + 1;
+console.log(`Avisos: ${subs.length} móviles apuntados (${Object.entries(porTipo).map(([k, v]) => v + " " + k).join(", ")})`);
+for (const sb of subs) console.log(`  · ${tipo(sb.endpoint)} …${String(sb.endpoint).slice(-8)} · prefs ${JSON.stringify(sb.prefs || {})}`);
 
 // Aviso de prueba a todos (se pide dejando datos/aviso-prueba.json; se borra al enviarlo)
 try {
@@ -120,7 +123,7 @@ for (const s of subs.filter(x => !caducadas0.includes(x.endpoint))) {
       enviados++;
     } catch (e) {
       if (e.statusCode === 404 || e.statusCode === 410) { caducadas.push(s.endpoint); break; }
-      else console.log("Avisos: fallo al enviar:", e.statusCode || e.message);
+      else console.log("Avisos: fallo al enviar a", tipo(s.endpoint), ":", e.statusCode || e.message, String(e.body || "").slice(0, 200));
     }
   }
 }
