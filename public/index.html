@@ -2176,6 +2176,10 @@ function applyData(j){
   st.viaGoogle = j.via_google || [];
   st.actualizado = j.actualizado || "";
   st.loaded = true; st.error = false; cacheNews = null;
+  // Enlace de prueba ?nuevas=5: vuelve a marcar como nuevas las N últimas (para ver cómo se ven)
+  { const k = parseInt(new URLSearchParams(location.search).get("nuevas")||"", 10);
+    if (k > 0 && k <= 50){ allNews().slice().sort(porHora).slice(0, k).forEach(n=>{ st.seen.delete(n._key); st.sesionNuevas && st.sesionNuevas.delete(n._key); });
+      try{ history.replaceState(null, "", location.pathname + location.hash); }catch(e){} } }
   // Instantánea de lo no visto al cargar: se queda en "Nuevo para ti" durante la visita
   { const ya = st.sesionNuevas || new Set(); for (const n of allNews()) if (isNew(n)) ya.add(n._key); st.sesionNuevas = ya; }
   // Las guardadas se refrescan con la versión más reciente (más medios, mejor resumen)
@@ -2229,7 +2233,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v84";
+const VERSION_APP = "prensa-segovia-v85";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
