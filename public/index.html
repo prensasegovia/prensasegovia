@@ -965,6 +965,9 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .avper .chips{display:flex;flex-wrap:wrap;gap:6px;background:none;padding:0;margin:0;overflow:visible;-webkit-mask-image:none;mask-image:none;position:static}
 .avper .chips::before,.avper .chips::after{display:none}
 .avper .chip{min-height:36px}
+.card.nueva{box-shadow:0 0 0 2px var(--new);border-color:transparent;background:color-mix(in srgb,var(--new) 4%,var(--surface,#fff))}
+.nvtag{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--new);border-radius:5px;padding:2px 6px;line-height:1.4}
+.card .top{flex-wrap:wrap;row-gap:3px}
 </style>
 </head>
 <body>
@@ -1330,8 +1333,10 @@ function card(n, opts={}){
     + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-maxV} ${medios.length-maxV===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
-  return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
-    <div class="top"><span class="ndot" aria-label="Nueva"></span>${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
+  // «Nueva» se mantiene toda la visita (aunque ya haya pasado por pantalla); a la siguiente visita ya no
+  const nueva = isNew(n) || (st.sesionNuevas && st.sesionNuevas.has(n._key));
+  return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${nueva?"nueva":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
+    <div class="top">${nueva?`<span class="nvtag">Nueva</span>`:""}${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
     <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${opts.pub?`<div class="pubd">Publicada ${esc(cuando(n._dia, n.hora))}</div>`:""}
@@ -2224,7 +2229,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v83";
+const VERSION_APP = "prensa-segovia-v84";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
