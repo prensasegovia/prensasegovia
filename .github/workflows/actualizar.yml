@@ -26,7 +26,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # Siempre lo último de main (no la versión de cuando se puso en cola): si otra pasada acaba de
+      # avisar, esta lo sabe y no repite avisos
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
@@ -39,7 +43,10 @@ jobs:
         run: node scripts/actualizar.mjs
 
       - name: Avisos al móvil
-        run: node scripts/avisos.mjs
+        run: |
+          # Lista de avisos ya enviados: la más reciente del repositorio, por si otra pasada avisó mientras tanto
+          git fetch -q origin main && git checkout origin/main -- datos/avisadas.json 2>/dev/null || true
+          node scripts/avisos.mjs
         continue-on-error: true
         env:
           AVISOS: ${{ secrets.AVISOS }}

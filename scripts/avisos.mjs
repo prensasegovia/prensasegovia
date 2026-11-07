@@ -30,12 +30,14 @@ const lugar = n => n.municipio && n.municipio !== "General" ? n.municipio : "Pro
 const haceHoras = h => Date.now() - h * 36e5;
 
 // Lo nuevo desde la última vez (solo de las últimas 36 h, para no avisar de cosas viejas que reaparecen)
-const noticias = datos.dias.flatMap(d => d.noticias || []).filter(n => n.id && !ya.has("n:" + n.id) && new Date(n.publicado || 0).getTime() > haceHoras(36));
+// Una noticia ya avisada no se repite aunque se rehaga con otro id: también se recuerdan sus enlaces
+const yaAvisada = n => ya.has("n:" + n.id) || (n.medios || []).some(m => m.url && ya.has("u:" + m.url));
+const noticias = datos.dias.flatMap(d => d.noticias || []).filter(n => n.id && !yaAvisada(n) && new Date(n.publicado || 0).getTime() > haceHoras(36));
 const periodicos = (per.noticias || []).filter(n => n.url && !ya.has("p:" + n.url) && new Date(n.publicado || 0).getTime() > haceHoras(36));
-for (const n of datos.dias.flatMap(d => d.noticias || [])) if (n.id) ya.add("n:" + n.id);
+for (const n of datos.dias.flatMap(d => d.noticias || [])) { if (n.id) ya.add("n:" + n.id); for (const m of n.medios || []) if (m.url) ya.add("u:" + m.url); }
 for (const n of per.noticias || []) if (n.url) ya.add("p:" + n.url);
 let saludadosFin = null;
-const guarda = () => writeFile(new URL(RUTA_AVISADAS, raiz), JSON.stringify({ claves: [...ya].slice(-4000), saludados: saludadosFin ? [...saludadosFin] : (avisadas?.saludados || []) }));
+const guarda = () => writeFile(new URL(RUTA_AVISADAS, raiz), JSON.stringify({ claves: [...ya].slice(-8000), saludados: saludadosFin ? [...saludadosFin] : (avisadas?.saludados || []) }));
 
 // Suscripciones guardadas en el Apps Script
 let subs = [];
