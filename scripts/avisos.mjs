@@ -81,6 +81,12 @@ console.log(`Avisos: ${[...saludados].length} con bienvenida enviada`);
 saludadosFin = saludados;
 
 if (primeraVez) { await guarda(); console.log("Avisos: primera vez, se marca lo actual como ya avisado."); process.exit(0); }
+// De noche (23:00–7:00, hora de Madrid) no se avisa: lo nuevo se guarda sin marcar y sale todo junto en la primera pasada desde las 7
+const horaMadrid = Number(new Intl.DateTimeFormat("es-ES", { timeZone: "Europe/Madrid", hour: "numeric", hourCycle: "h23" }).format(new Date()));
+if ((horaMadrid >= 23 || horaMadrid < 7) && (noticias.length || periodicos.length)) {
+  await writeFile(new URL(RUTA_AVISADAS, raiz), JSON.stringify({ claves: avisadas?.claves || [], saludados: [...saludados] }));
+  console.log(`Avisos: de noche (${horaMadrid} h); ${noticias.length} noticias y ${periodicos.length} de periódicos esperan a las 7.`); process.exit(0);
+}
 if (!noticias.length && !periodicos.length) {
   if (caducadas0.length) try { await fetch(conf.url, { method: "POST", body: JSON.stringify({ accion: "borrar", token: token.trim(), endpoints: caducadas0 }), headers: { "Content-Type": "text/plain" } }); } catch {}
   await guarda(); console.log("Avisos: nada nuevo."); process.exit(0);
