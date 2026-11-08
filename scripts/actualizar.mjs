@@ -327,7 +327,7 @@ const PATRONES = {
 const LIO_DEPORTIVO = /detenid|detencion|agresion|agredid|agrede|pelea|reyerta|tangana|trifulca|bronca|herid|incidentes|altercad|violencia|violent|insult|racis|xenofob|homofob|amenaz|denuncia|sancion|expulsad|protesta|firmas|concentracion|manifestacion|huelga|polemica|boicot|ultras\b|aficionados radicales|lanzamiento de objetos|bengala|policia|guardia civil|mossos|apuñal|apunal|arbitro agredido|suspendido por/;
 const DEPORTE = /colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\b(?! de)|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|\bliga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 // Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
-const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|rave|fiesta ilegal/;
+const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|\brave\b|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
 const EVENTO_NO = /halloween|pasaje del terror|taller|concurso|disfraces|infantil|gastronom|jornadas|exposicion|mercado|cuentacuentos|ruta |visitas? guiada|charla|conferencia|presentacion|libro|cabalgata|contrato|feria de (ganado|artesania|muestras)|solidari/;
 // IMPORTANTE (rojo): solo lo grave de verdad, y decidido por el titular
@@ -351,6 +351,13 @@ const SUCESO = /herid|fallec|muere|murio|muert|accidente|colision|choque|atropel
 const CONFLICTO_POL = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|polemica|critica|denuncia|enfrent|tension|dimi|censura|acusa|reprocha|bronco|crispa|abandona|expuls|imputad|querella|candidat|elecciones|electoral|29n|mitin|campana|protesta|exige|reclama|rechazo|pide la|tumba|bloque|veta|oposicion/;
 // En la capital solo siguen en rojo las visitas de cargos y los incidentes en la cárcel
 const altaEnCapital = (tt, cats) => (cats.includes("autoridades") && VISITA.test(tt) && CARGO.test(tt)) || /centro penitenciario|\bcarcel|\bprision|\bpresos?\b|funcionario de prisiones/.test(tt);
+// En el texto (no en el titular), estas palabras solas no hacen que una noticia sea de un tema
+const DEBIL_TEXTO = /^(operacion\w*|consejer\w*|concejal\w*|alcald\w*|diputad\w*|procurador\w*|senador\w*|gobierno|junta|pleno|subdelegad\w*|delegad\w*|president\w*|partido|policia|trafico|inmigra\w*)$/;
+function fuerteEnTexto(k, t) {
+  const re = new RegExp(PATRONES[k].source, "g"); let m;
+  while ((m = re.exec(t))) { if (!DEBIL_TEXTO.test(m[0].trim())) return true; if (m[0] === "") re.lastIndex++; }
+  return false;
+}
 function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Las webs de ayuntamientos se juzgan solo por el titular (sus textos son avisos y bandos)
   if (soloTitulo) texto = "";
@@ -359,6 +366,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   const UTILES = ["policial", "social", "medioambiente", "politica", "emergencias", "autoridades"];
   if (DEPORTE.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (/\b(aviso|alerta)s? (amarill|naranja|roj)/.test(tt) && (!/segovia/.test(tt) || !/naranja|roj/.test(tt))) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
@@ -369,7 +377,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   const porTexto = !categorias.length;
-  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && PATRONES[k].test(t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
+  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && fuerteEnTexto(k, t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
@@ -466,7 +474,7 @@ const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.te
 const POL_CONFLICTO = /junta electoral|manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
 // Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
 const UN_PUEBLO = /\b(un|una|del?) (pueblo|localidad|municipio|aldea|pedania)\b|localidad segoviana|pueblo segoviano/;
-const NACIONAL_FIG = /ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
+const NACIONAL_FIG = /^el gobierno\b|interministerial|ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
 const ESTADISTICA_ELECTORAL = /votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
@@ -906,7 +914,7 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
-    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia") municipio = NACIONAL_FIG.test(norm(g.titulo)) ? "Provincia" : a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? "Provincia" : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
@@ -989,7 +997,7 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
-      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia") nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? "Provincia" : n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? "Provincia" : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
