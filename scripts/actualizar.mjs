@@ -367,6 +367,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (DEPORTE.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (/^fs |\bf\.?s\.? |futbol sala|\bcd |\bud |\bcf |\bc\.d\.|club deportivo|segunda (division|rfef)|tercera (division|rfef)|regional preferente/.test(tt) && !LIO_DEPORTIVO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (/\b(aviso|alerta)s? (amarill|naranja|roj)/.test(tt) && (!/segovia/.test(tt) || !/naranja|roj/.test(tt))) return { categorias: [], relevancia: "baja", descartar: true };
+  // Selección y futbolistas: deporte aunque el titular no lo diga claro («vuelve a la Selección»)
+  if ((/\bseleccion\b|seleccionador/.test(tt) || /\b(jugador|futbolista|delantero|centrocampista|portero|seleccionador)\b/.test(tt)) && /jugador|futbol|seleccionador|partido|liga|gol|equipo|club/.test(t) && !LIO_DEPORTIVO.test(t)) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
