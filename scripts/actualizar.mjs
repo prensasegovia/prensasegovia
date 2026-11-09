@@ -475,6 +475,8 @@ const POL_CONFLICTO = /junta electoral|manipul|propaganda|desinform|injerencia|\
 // Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
 const UN_PUEBLO = /\b(un|una|del?) (pueblo|localidad|municipio|aldea|pedania)\b|localidad segoviana|pueblo segoviano/;
 const NACIONAL_FIG = /^el gobierno\b|interministerial|ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
+// Política nacional: entra como «Provincia» solo si el titular o el resumen tocan Segovia; si no, fuera (para eso están los Periódicos)
+const nacionalLugar = (titulo, resumen) => /segovia|segovian|mazarias|san rafael|guiomar/.test(norm(titulo + " " + (resumen || ""))) ? "Provincia" : "General";
 const ESTADISTICA_ELECTORAL = /votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
@@ -914,11 +916,11 @@ async function main() {
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
-    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? "Provincia" : a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
-    if (CONCRETO(municipio) && NACIONAL_FIG.test(norm(g.titulo)) && municipioDe(g.titulo) === "General") municipio = "Provincia";
+    if (CONCRETO(municipio) && NACIONAL_FIG.test(norm(g.titulo)) && municipioDe(g.titulo) === "General") municipio = nacionalLugar(g.titulo, resumen);
     if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !NACIONAL_TREN(norm(g.titulo)) && !(OTRA_CIUDAD.test(norm(g.titulo + " " + resumen)) && !MENCIONA_SEGOVIA.test(norm(g.titulo + " " + resumen)))) municipio = "Segovia"; // sección local de un medio de Segovia
     const { categorias, relevancia, porTexto } = conCuerpo(clasifica(g.titulo, resumen, municipio, soloAyto(g.medios) || soloOrganizacion(g.medios)), a, municipio, g.titulo);
     const evento = eventoConCuerpo(g.titulo, resumen, g.fecha, categorias, a);
@@ -997,11 +999,11 @@ async function main() {
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
-      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? "Provincia" : n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
-      if (CONCRETO(n.municipio) && NACIONAL_FIG.test(norm(n.titulo)) && municipioDe(n.titulo) === "General") n.municipio = "Provincia";
+      if (CONCRETO(n.municipio) && NACIONAL_FIG.test(norm(n.titulo)) && municipioDe(n.titulo) === "General") n.municipio = nacionalLugar(n.titulo, n.resumen);
       if (n.municipio === "General" && n.local && !FUERA.test(norm(n.titulo)) && !NACIONAL_TREN(norm(n.titulo)) && !(OTRA_CIUDAD.test(norm(n.titulo + " " + (n.resumen || ""))) && !MENCIONA_SEGOVIA.test(norm(n.titulo + " " + (n.resumen || ""))))) n.municipio = "Segovia";
       // Enlaces de otro pueblo que se juntaron por error (se ve en la dirección: «...-en-el-espinar/»):
       // se separan y la próxima pasada los recoge como noticia propia
