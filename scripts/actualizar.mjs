@@ -539,6 +539,7 @@ const propios = s => new Set((s.match(/(?<=(?:^|\s)(?!(?:de|del|en|el|la|los|las
 // Municipios para reconocerlos en las direcciones de las noticias (en minúsculas y sin tildes)
 const MUNI_SLUG = [].concat(MUNICIPIOS).join("|").split("|").map(m => m.trim()).filter(m => m && norm(m).length >= 4)
   .map(m => [ALIAS[m] || m, (AMBIGUOS.has(m) ? "en " : "") + norm(m).replace(/[^a-z0-9]+/g, " ").trim()]).concat(Object.entries(ALIAS).map(([k, v]) => [v, norm(k).replace(/[^a-z0-9]+/g, " ").trim()]));
+const DIRIGENTES = /\b(buxade|abascal|feijoo|manueco|almeida|montserrat|tellado|gamarra|ayuso|puente|pedro sanchez|yolanda diaz|belarra|irene montero|pollan|carriedo|tudanca|igea)\b/;
 const SUCESO_TK = new Set(["accid", "herid", "incen", "atrop", "falle", "muert", "colis", "alcan", "choqu", "vuelc", "sinie", "rescu"]);
 function mismaNoticia(a, b) {
   // La misma persona de visita o en un acto el mismo día (o al siguiente): es la misma noticia aunque la nombren distinto
@@ -564,6 +565,8 @@ function mismaNoticia(a, b) {
   }
   // Mismo nombre propio poco común el mismo día (Olivia, Almeida, el Tejo...): misma noticia
   if (dias === 0 && a.municipio === b.municipio && a.titulo && b.titulo) { const pa = propios(a.titulo), pb = propios(b.titulo); if ([...pa].some(x => pb.has(x))) return true; }
+  // El mismo dirigente en el mismo sitio, ese día o el siguiente (mítines y visitas de campaña, nombre al principio del titular)
+  if (dias <= 1 && a.municipio === b.municipio && a.titulo && b.titulo) { const da = norm(a.titulo).match(DIRIGENTES), db = norm(b.titulo).match(DIRIGENTES); if (da && db && da[0] === db[0]) return true; }
   // Temas concretos (cárcel, candidaturas, huelga de autobuses, detenciones) en días seguidos: basta con menos palabras en común
   const fuertes = [...a.tk].filter(w => b.tk.has(w));
   if (dias === 0 && fuertes.includes("carce")) return true;
