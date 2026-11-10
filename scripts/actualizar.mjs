@@ -325,7 +325,7 @@ const PATRONES = {
 // Deportes y cultura no interesan salvo que haya un suceso
 // Deporte que sí es noticia para la unidad: incidentes, violencia, protestas
 const LIO_DEPORTIVO = /detenid|detencion|agresion|agredid|agrede|pelea|reyerta|tangana|trifulca|bronca|herid|incidentes|altercad|violencia|violent|insult|racis|xenofob|homofob|amenaz|denuncia|sancion|expulsad|protesta|firmas|concentracion|manifestacion|huelga|polemica|boicot|ultras\b|aficionados radicales|lanzamiento de objetos|bengala|policia|guardia civil|mossos|apuñal|apunal|arbitro agredido|suspendido por/;
-const DEPORTE = /convocad\w* (por|con) (espana|la seleccion)|seleccion (espanola|absoluta|nacional)|colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\b(?! de)|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|\bliga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
+const DEPORTE = /gala del deporte|premios? (al|del) deporte|convocad\w* (por|con) (espana|la seleccion)|seleccion (espanola|absoluta|nacional)|colista|triunfo copero|\bcopero\b|\bel nava\b(?! de)|\bal nava\b(?! de)|entrenador|fichaj|\bjugador(es|as)?\b|goleador|(primera|segunda|tercera) (division|rfef|federacion)|division de honor|\bliga asobal|playoff|eliminatoria|copa del rey|\bsegosala\b|\bnava\b (se|cae|gana|vence|pierde|suma|empata)|unami|naturpellet|balonmano nava|cochinillo segoviano|bigmat|\bc\.?d\.? |\bcf\b|\bud\b |gimnastica segoviana|\bsegoviana\b|segosala|futbol|baloncesto|balonmano|voleibol|atletismo|ciclismo|\bliga\b|jornada \d|derbi|\bgol(es)?\b|victoria|derrota|empate|clasificacion|campeonato|torneo|seminci|exposicion|libro|novela|teatro|cine\b|museo/;
 // Solo eventos que mueven mucha gente y pueden necesitar dispositivo de seguridad
 const EVENTO = /fiestas (patronales|de |en honor|del )|fiesta patronal|encierros?|toros|capea|novillada|concentracion motera|motoristas|festival|macroconcierto|concierto multitudinario|romeria|carrera popular|marcha (popular|reivindicativa)|botellon|partido de alto riesgo|multitudinari|miles de (personas|visitantes|asistentes)|macrofiesta|\brave\b|fiesta ilegal/;
 // Ocio y planes sin interés para la unidad
@@ -337,7 +337,8 @@ const ALTA = /embist\w* (al|a un|a una|contra|el|la)? ?(coche|vehiculo|patrulla|
 const ACTO_RECUERDO = /homenaje|exaltacion|marcha|monolito|cruz|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
 const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
-const NO_ALTA = /homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
+const OBITUARIO = /(muere|fallece|fallecimiento|adios a).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)/;
+const NO_ALTA = /(muere|fallece|fallecimiento|adios a)(?!.*(accidente|atropell|incendio|choque|colision|ahog|asesin|herid|agresion|violencia)).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)|homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
 
 const SERVICIO = /rutas? escolar|transporte escolar|fibra|cobertura|internet|telefonia|\bmovil\b|operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
 const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso(?! de la covid)|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
@@ -393,6 +394,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // - estadísticas electorales (votantes en el extranjero, censo, sorteo de mesas)
   if (/votantes|electores|censo electoral|\bcera\b|sorteo de (las )?mesas/.test(tt) && !categorias.some(c => ["policial", "social", "autoridades"].includes(c))) return { categorias: [], relevancia: "baja", descartar: true };
   // - avisos preventivos de tráfico y emergencias: solo cuentan los sucesos reales
+  if (OBITUARIO.test(tt) && !/accidente|atropell|incendio|choque|colision|ahog|herid|apunal|disparo|asesin|agresion|violencia/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (categorias.every(c => c === "emergencias") && PREVENTIVO.test(tt) && !SUCESO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (SIN_INTERES.test(tt) && !SUCESO.test(tt) && !/protesta|concentracion|manifestacion|denuncia|contra (el|la|los) (proyecto|planta|cierre)/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // - gestión municipal de la capital sin conflicto (contratos, ordenanzas, urbanismo...)
@@ -469,7 +471,7 @@ const PUEBLO_DE_FUENTE = new Map(FEEDS.filter(f => f.pueblo).map(f => [f.nombre,
 const soloOrganizacion = medios => medios.every(m => ORGANIZACIONES.has(m.nombre));
 const soloAyto = medios => medios.every(m => /^(ayuntamiento|diputaci)/i.test(m.nombre));
 // Noticias de otras provincias que se cuelan (accidentes en Ávila, pueblos de Valladolid cercanos...)
-const FUERA = /\ben (cataluna|galicia|andalucia|pais vasco|euskadi|navarra|aragon|asturias|cantabria|extremadura|murcia|valencia|baleares|canarias|la rioja|castilla-la mancha|avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
+const FUERA = /\b(inundacion\w*|incendio|temporal|riadas?|borrasca|danas?|crecidas?) (de|en) (avila|valladolid|madrid|burgos|soria|zamora|salamanca|leon|palencia|guadalajara|toledo|caceres)\b|\bcandidat\w* (de [a-z]+ )?por (avila|valladolid|madrid|burgos|soria|zamora|salamanca|leon|palencia|guadalajara|toledo|caceres)\b|\ben (cataluna|galicia|andalucia|pais vasco|euskadi|navarra|aragon|asturias|cantabria|extremadura|murcia|valencia|baleares|canarias|la rioja|castilla-la mancha|avila|valladolid|madrid|soria|burgos|toledo|guadalajara|leon|salamanca|zamora|palencia)\b|\bva-\d|\bav-\d|campaspero|\biscar\b|penafiel|portillo|arevalo|navas del marques|cantalapiedra|olmedo/;
 // Otras ciudades de España: si salen en titular o resumen, la noticia no se supone de Segovia aunque la publique un medio local
 const OTRA_CIUDAD = /\b(malaga|sevilla|barcelona|valencia|bilbao|zaragoza|murcia|alicante|cordoba|granada|cadiz|huelva|almeria|asturias|oviedo|gijon|coruna|vigo|pontevedra|canarias|tenerife|mallorca|ibiza|pamplona|logrono|san sebastian|vitoria|badajoz|caceres|albacete|ciudad real|jaen|tarragona|girona|lleida|castellon)\b/;
 const NACIONAL_TREN = t => /maquinistas|\bouigo\b|\biryo\b|\badif\b|\brenfe\b/.test(t) && !/segovia|guiomar/.test(t);
@@ -477,9 +479,10 @@ const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.te
 // Relleno que no aporta a la unidad aunque toque un tema de interés
 const POL_CONFLICTO = /junta electoral|manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
 // Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
-const UN_PUEBLO = /\b(un|una|del?) (pueblo|localidad|municipio|aldea|pedania)\b|localidad segoviana|pueblo segoviano/;
+const UN_PUEBLO = /\b(un|una|del?|el) (pueblo|localidad|municipio|aldea|pedania)\b|localidad segoviana|pueblo segoviano/;
 const NACIONAL_FIG = /^el gobierno\b|interministerial|ministr[oa]s?\b|\bsanchez\b|feijoo|\bgobierno central\b|consejo de ministros|moncloa|congreso de los diputados|oscar puente|\babascal\b|\bvox\b nacional/;
 // Política nacional: entra como «Provincia» solo si el titular o el resumen tocan Segovia; si no, fuera (para eso están los Periódicos)
+const ELECTORAL_PROV = /\b(diputados|senadores|escanos|encuesta|sondeo|candidaturas|reparto de)\b/;
 const nacionalLugar = (titulo, resumen) => /segovia|segovian|mazarias|san rafael|guiomar/.test(norm(titulo + " " + (resumen || ""))) ? "Provincia" : "General";
 const ESTADISTICA_ELECTORAL = /votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
@@ -539,6 +542,7 @@ const propios = s => new Set((s.match(/(?<=(?:^|\s)(?!(?:de|del|en|el|la|los|las
 // Municipios para reconocerlos en las direcciones de las noticias (en minúsculas y sin tildes)
 const MUNI_SLUG = [].concat(MUNICIPIOS).join("|").split("|").map(m => m.trim()).filter(m => m && norm(m).length >= 4)
   .map(m => [ALIAS[m] || m, (AMBIGUOS.has(m) ? "en " : "") + norm(m).replace(/[^a-z0-9]+/g, " ").trim()]).concat(Object.entries(ALIAS).map(([k, v]) => [v, norm(k).replace(/[^a-z0-9]+/g, " ").trim()]));
+const TEMA_TK = ["marih", "cocai", "hachi", "droga", "estup", "incen", "accid", "atrop", "robo", "hurto", "deten", "agres", "apuña", "apuna", "muert", "falle", "intox", "okupa", "okupa", "estaf", "biog"];
 const DIRIGENTES = /\b(buxade|abascal|feijoo|manueco|almeida|montserrat|tellado|gamarra|ayuso|puente|pedro sanchez|yolanda diaz|belarra|irene montero|pollan|carriedo|tudanca|igea)\b/;
 const SUCESO_TK = new Set(["accid", "herid", "incen", "atrop", "falle", "muert", "colis", "alcan", "choqu", "vuelc", "sinie", "rescu"]);
 function mismaNoticia(a, b) {
@@ -562,6 +566,7 @@ function mismaNoticia(a, b) {
     const pueblo = tokens(a.municipio);
     let comun = 0; for (const w of a.tk) if (!pueblo.has(w) && b.tk.has(w)) comun++;
     if (comun >= 2) return true;
+    if (dias === 0 && [...a.tk].some(w => b.tk.has(w) && TEMA_TK.some(t => w.startsWith(t)))) return true;
   }
   // Mismo nombre propio poco común el mismo día (Olivia, Almeida, el Tejo...): misma noticia
   if (dias === 0 && a.municipio === b.municipio && a.titulo && b.titulo) { const pa = propios(a.titulo), pb = propios(b.titulo); if ([...pa].some(x => pb.has(x))) return true; }
@@ -922,7 +927,8 @@ async function main() {
     const resumen = g.texto ? recorta(sinColas(g.texto)) : "";
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
-    if (a?.pueblo && (municipio === "General" || municipio === "Provincia")) municipio = a.pueblo;
+    if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
+    else if (municipio === "General" && ELECTORAL_PROV.test(norm(g.titulo))) municipio = nacionalLugar(g.titulo, resumen);
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
@@ -1005,7 +1011,8 @@ async function main() {
       // Lo leído del cuerpo se revalida con las reglas actuales sobre la frase guardada
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
-      if (n.analisis?.pueblo && (nuevo === "General" || nuevo === "Provincia")) nuevo = n.analisis.pueblo;
+      if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
+      else if (nuevo === "General" && ELECTORAL_PROV.test(norm(n.titulo))) nuevo = nacionalLugar(n.titulo, n.resumen);
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
       n.municipio = nuevo;
