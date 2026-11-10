@@ -15,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: actualizar
+  group: actualizar-v2  # (v2: una pasada quedó colgada en GitHub el 9-nov y bloqueaba el turno)
   cancel-in-progress: false
 
 jobs:
