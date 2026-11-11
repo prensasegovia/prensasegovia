@@ -344,7 +344,7 @@ const SERVICIO = /rutas? escolar|transporte escolar|fibra|cobertura|internet|tel
 const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso(?! de la covid)|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
 const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugur|presid(e|io|ira)|asist(e|io|ira)|acompan|se reun|reunion con|mitin|acto |participa|estara en|llega a|en su paso por/;
 const CARGO = /alcalde(sa)? de (madrid|valladolid|salamanca|avila|burgos|leon|zamora|palencia|soria|barcelona|sevilla|valencia)|almeida|ayuso|ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
-const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
+const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos (denuncian|protestan|se oponen|reclaman|rechazan|se movilizan|critican|alertan|exigen|recogen firmas|se concentran|estallan|en pie de guerra)|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
 // Actividades y gestión sin interés para el servicio, aunque usen palabras como «moviliza» o «reivindica»
 const SIN_INTERES = /bonific\w* (de )?(los )?peajes|basuraleza|(retirada|recogida|retirar|recoger) (de )?(residuos|basura)|jornada de limpieza|limpieza (de|del) (arroyo|rio|ribera)|pueblos mas bonitos|real academia|nuevo curso academico|reivindica (el )?patrimonio|reivindica el valor|inaugura el curso|jornadas abiertas|ciclo de (conferencias|charlas)|concurso de (microrrelatos|relatos|cuentos|dibujo|pintura|fotografia|carteles|redaccion|poesia)|carcel[- ]centro de creacion|centro de creacion|plantacion de arboles|nuevas? (encinas|arboles|pinos)|conferencias sobre|cursos gratuitos/;
 const PREVENTIVO = /trafico (lento|denso|intenso)|retenciones|circulacion (lenta|densa)|circuitos escenicos|espectaculo|teatro|cuentacuentos|abiert[oa]s? al trafico|preve|prevision|peligro|riesgo|recomendaciones|recomienda|\boperacion (salida|especial|retorno)|regulacion del trafico|corte(s)? (de )?trafico|bando|aviso amarillo|alerta amarilla|campana de|dispositivo especial|desplazamientos|accesos al cementerio|ruta/;
@@ -380,7 +380,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
   const porTexto = !categorias.length;
-  if (!categorias.length) categorias = UTILES.filter(k => k !== "medioambiente" && fuerteEnTexto(k, t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
+  if (!categorias.length && !OCIO_TIT.test(tt)) categorias = UTILES.filter(k => k !== "medioambiente" && fuerteEnTexto(k, t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (EVENTO.test(tt) && !EVENTO_NO.test(tt)) categorias.push("eventos");
   categorias = categorias.slice(0, 3);
@@ -690,7 +690,7 @@ function limpiaAnalisis(a) {
 }
 // Titulares de ocio, cultura, turismo o formación: aunque el texto mencione algo (una exposición contra la violencia,
 // patrimonio...), no son noticias de interés
-const OCIO_TIT = /agenda (de ocio|cultural|del fin de semana|de actividades)|fin de semana|que hacer|\bocio\b|cursos? (gratuito|de formacion|online)|\btalleres\b|jornadas? (abiertas|gastronomica)|feria (de|del) turismo|\bintur\b|\bfitur\b|gastronomi|concierto|exposicion|festival|teatro|ruta (turistica|gastronomica)|programacion|actividades (para|de) (ninos|mayores|verano|navidad)/;
+const OCIO_TIT = /cine ?club|club de lectura|cinefor|tertulia|coloquio|encuentros? (mensual|literari)|picoteo|merienda|chocolatada|\bcata\b|degustacion|agenda (de ocio|cultural|del fin de semana|de actividades)|fin de semana|que hacer|\bocio\b|cursos? (gratuito|de formacion|online)|\btalleres\b|jornadas? (abiertas|gastronomica)|feria (de|del) turismo|\bintur\b|\bfitur\b|gastronomi|concierto|exposicion|festival|teatro|ruta (turistica|gastronomica)|programacion|actividades (para|de) (ninos|mayores|verano|navidad)/;
 function conCuerpo(c, a, municipio, titulo = "") {
   if (c.descartar || !a?.cats?.length) return c;
   const soloTexto = !c.categorias.length; // el titular no traía ningún tema de interés
