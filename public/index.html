@@ -1370,7 +1370,7 @@ function card(n, opts={}){
   // «Nueva» se mantiene toda la visita (aunque ya haya pasado por pantalla); a la siguiente visita ya no
   const nueva = isNew(n) || (st.sesionNuevas && st.sesionNuevas.has(n._key));
   return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${nueva?"nueva":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
-    <div class="top">${nueva?`<span class="nvtag">Nueva</span>`:""}${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
+    <div class="top">${nueva?`<span class="nvtag">Nueva</span>`:""}${n.resuelta?`<span class="nvtag" style="background:var(--pine-2)">${esc(n.resuelta)}</span>`:""}${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
     <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${opts.pub?`<div class="pubd">Publicada ${esc(cuando(n._dia, n.hora))}</div>`:""}
@@ -2365,7 +2365,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v90";
+const VERSION_APP = "prensa-segovia-v91";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

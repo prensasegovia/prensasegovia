@@ -338,7 +338,7 @@ const ACTO_RECUERDO = /homenaje|exaltacion|marcha|monolito|cruz|recuerda a|en (e
 const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
 const OBITUARIO = /(muere|fallece|fallecimiento|adios a).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)/;
-const NO_ALTA = /(muere|fallece|fallecimiento|adios a)(?!.*(accidente|atropell|incendio|choque|colision|ahog|asesin|herid|agresion|violencia)).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)|homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari/;
+const NO_ALTA = /(muere|fallece|fallecimiento|adios a)(?!.*(accidente|atropell|incendio|choque|colision|ahog|asesin|herid|agresion|violencia)).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)|homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|aniversari|^«[^»]+»$/;
 
 const SERVICIO = /rutas? escolar|transporte escolar|fibra|cobertura|internet|telefonia|\bmovil\b|operad[oa]s?\b|quirurgic|cirugia|intervenciones|sanidad|sanitari|hospital|centro de salud|consultorio|medic[oa]s?\b|urgencias|pediatr|ambulancia|colegio|escuela|instituto|aulas?\b|profesor|docente|transporte|autobus|\btren(es)?\b|cercanias|renfe|\bave\b|estacion|carretera|servicio postal|correos|cajero|banco|farmacia|residencia/;
 const SERVICIO_MAL = /siguen sin|sigue sin|sin (fibra|cobertura|internet|servicio)|agravio|falta de|sin medico|sin pediatra|deficit|colapso(?! de la covid)|cierre|cierra|recorte|suprim|lista[s]? de espera|espera media|saturad|caos|retrasos|cancelacion|cancelad|denuncia|reclama|exige|quejas|abandono|olvido|indignac|precari|desmantel/;
@@ -346,7 +346,7 @@ const VISITA = /visita|visito|visitan|visitara|recorre|recorrio|recorrera|inaugu
 const CARGO = /alcalde(sa)? de (madrid|valladolid|salamanca|avila|burgos|leon|zamora|palencia|soria|barcelona|sevilla|valencia)|almeida|ayuso|ministr|president|vicepresident|consejer|delegad|subdelegad|secretari[oa] (de estado|general)|director general|procurador|senador|diputad|candidat|cabeza de lista|lider|portavoz nacional|el rey|la reina|felipe vi|princesa|manueco|abascal|feijoo|sanchez|yolanda diaz|alcalde de segovia/;
 const CONFLICTO = /rechaz|oposicion|se oponen|en contra|contra (la|el|los|las)|alegaciones|plataforma|vecinos (denuncian|protestan|se oponen|reclaman|rechazan|se movilizan|critican|alertan|exigen|recogen firmas|se concentran|estallan|en pie de guerra)|protesta|moratoria|frenar|paraliz|suspende|denuncia|polemica|recurso|tribunal|concentracion|manifestacion/;
 // Actividades y gestión sin interés para el servicio, aunque usen palabras como «moviliza» o «reivindica»
-const SIN_INTERES = /bonific\w* (de )?(los )?peajes|basuraleza|(retirada|recogida|retirar|recoger) (de )?(residuos|basura)|jornada de limpieza|limpieza (de|del) (arroyo|rio|ribera)|pueblos mas bonitos|real academia|nuevo curso academico|reivindica (el )?patrimonio|reivindica el valor|inaugura el curso|jornadas abiertas|ciclo de (conferencias|charlas)|reparto de sal|metodologia bim|sector de la construccion|construccion en segovia|eficiencia energetica|sal para (el )?hielo|fundentes|naturalistas|censo de (otono|buitre|aves)|anillamiento|concurso de (microrrelatos|relatos|cuentos|dibujo|pintura|fotografia|carteles|redaccion|poesia)|carcel[- ]centro de creacion|centro de creacion|plantacion de arboles|nuevas? (encinas|arboles|pinos)|conferencias sobre|cursos gratuitos/;
+const SIN_INTERES = /bonific\w* (de )?(los )?peajes|basuraleza|(retirada|recogida|retirar|recoger) (de )?(residuos|basura)|jornada de limpieza|limpieza (de|del) (arroyo|rio|ribera)|pueblos mas bonitos|real academia|nuevo curso academico|reivindica (el )?patrimonio|reivindica el valor|inaugura el curso|jornadas abiertas|ciclo de (conferencias|charlas)|reparto de sal|metodologia bim|sector de la construccion|construccion en segovia|eficiencia energetica|sal para (el )?hielo|fundentes|naturalistas|censo de (otono|buitre|aves)|anillamiento|concurso de (microrrelatos|relatos|cuentos|dibujo|pintura|fotografia|carteles|redaccion|poesia)|carcel[- ]centro de creacion|centro de creacion|plantacion de arboles|nuevas? (encinas|arboles|pinos)|conferencias sobre|cursos gratuitos|embalses?\b.{0,40}\b(retroced|se situan|por debajo|por encima|niveles? de|reservas|al \d+ ?%|media de)|falta de lluvias|(acaba|alivia|pone fin) (con )?(la )?(sequia|falta de lluvia)|diocesis\b.{0,30}alquila|tareas pendientes de/;
 const PREVENTIVO = /trafico (lento|denso|intenso)|retenciones|circulacion (lenta|densa)|circuitos escenicos|espectaculo|teatro|cuentacuentos|abiert[oa]s? al trafico|preve|prevision|peligro|riesgo|recomendaciones|recomienda|\boperacion (salida|especial|retorno)|regulacion del trafico|corte(s)? (de )?trafico|bando|aviso amarillo|alerta amarilla|campana de|dispositivo especial|desplazamientos|accesos al cementerio|ruta/;
 const SUCESO = /herid|fallec|muere|murio|muert|accidente|colision|choque|atropell|incendio (en|declarado|forestal en|de una|de un)|arde|rescat|desaparecid|evacu|derrumbe|explosion|calcinad|vuelco|salida de via/;
 const CONFLICTO_POL = /manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|polemica|critica|denuncia|enfrent|tension|dimi|censura|acusa|reprocha|bronco|crispa|abandona|expuls|imputad|querella|candidat|elecciones|electoral|29n|mitin|campana|protesta|exige|reclama|rechazo|pide la|tumba|bloque|veta|oposicion/;
@@ -663,7 +663,7 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   let extracto = "";
   if (cats.length) {
     const re = new RegExp(cats.map(k => FUERTE[k].source).join("|"));
-    extracto = frases.find(f => re.test(norm(f)) && !norm(titulo).includes(norm(f).slice(0, 40))) || "";
+    extracto = frases.find(f => f.length <= 350 && !FRASE_BASURA.test(f) && re.test(norm(f)) && !norm(titulo).includes(norm(f).slice(0, 40))) || "";
   }
   // Convocatoria con fecha en el cuerpo
   let evento = null;
@@ -681,11 +681,16 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
   return { v: 5, cats, extracto: extracto ? recorta(extracto, 240) : "", evento, pueblo: CONCRETO(muni) ? muni : "", lugar: lugar !== "General" ? lugar : "" };
 }
 // Lo que se guarda con la noticia (sin campos vacíos)
+// Restos de menú o de código de la web que a veces se cuelan en el texto (no se enseñan como extracto)
+// Titular de ámbito regional o nacional: el pueblo que salga en el texto no lo convierte en noticia de ese pueblo
+const REGIONAL_TIT = /\b(en|de) (castilla y leon|cyl|espana|toda la comunidad)\s*$|\ben (castilla y leon|cyl|espana)\b(?!.{0,40}segovia)/;
+const TK_GENERICO = new Set(["segov", "casti", "leon", "provi", "guard", "civil", "junta", "ayunt", "notic"]);
+const FRASE_BASURA = /[{}\[\]]|":|\buk-|[UÚuú]ltimas [Nn]oticias|[Hh]emeroteca|[Ss]uscr[ií]bete|Inicio Opini[oó]n/;
 function limpiaAnalisis(a) {
   if (!a || a.vacio) return null;
   const o = {};
   if (a.cats?.length) o.cats = a.cats;
-  if (a.extracto) o.extracto = a.extracto;
+  if (a.extracto && !FRASE_BASURA.test(a.extracto)) o.extracto = a.extracto;
   if (a.evento) o.evento = a.evento;
   if (a.pueblo) o.pueblo = a.pueblo;
   if (a.lugar) o.lugar = a.lugar;
@@ -932,7 +937,7 @@ async function main() {
     const resumen = g.texto ? recorta(sinColas(g.texto)) : "";
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
-    if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
+    if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && !REGIONAL_TIT.test(norm(g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
     else if (municipio === "General" && ELECTORAL_PROV.test(norm(g.titulo))) municipio = nacionalLugar(g.titulo, resumen);
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
@@ -1014,6 +1019,7 @@ async function main() {
       if (n.resumen) n.resumen = sinColas(desEnt(n.resumen));
       n.titulo = desEnt(n.titulo);
       // Lo leído del cuerpo se revalida con las reglas actuales sobre la frase guardada
+      if (n.analisis?.extracto && FRASE_BASURA.test(n.analisis.extracto)) delete n.analisis.extracto;
       if (n.analisis?.cats && n.analisis.extracto) { const ne = norm(n.analisis.extracto); n.analisis.cats = n.analisis.cats.filter(k => new RegExp(FUERTE[k].source).test(ne)); if (!n.analisis.cats.length) delete n.analisis.cats; }
       // Noticia internacional (Ucrania, Gaza…) sin Segovia: no hereda pueblo y se sueltan enlaces que no son de ese tema
       if (INTERNACIONAL.test(norm(n.titulo)) && !MENCIONA_SEGOVIA.test(norm(n.titulo))) {
@@ -1023,7 +1029,7 @@ async function main() {
         if (q.length && q.length < n.medios.length) { n.medios.filter(m => !delTema(m)).forEach(m => separados.add(m.url)); n.medios = q; }
       }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
-      if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
+      if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && !REGIONAL_TIT.test(norm(n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
       else if (nuevo === "General" && ELECTORAL_PROV.test(norm(n.titulo))) nuevo = nacionalLugar(n.titulo, n.resumen);
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
@@ -1042,10 +1048,24 @@ async function main() {
         const quedan = n.medios.filter(m => !ajeno(m));
         if (quedan.length && quedan.length < n.medios.length) { n.medios.filter(ajeno).forEach(m => separados.add(m.url)); n.medios = quedan; }
       }
+      // Enlaces cuya dirección no comparte ni una palabra con el titular del grupo (ni dos con los demás enlaces):
+      // se juntaron por error (p. ej. «borrasca-bruna…» dentro de la huelga) y se separan
+      if (n.medios.length > 1) {
+        const tkS = m => { const u = decodeURIComponent(String(m.url)); if (/news\.google|\/rss\/articles\//.test(u)) return null;
+          return [...tokens(u.replace(/^https?:\/\/[^/]+/, "").replace(/[-_/.]+/g, " ").replace(/\b(\d{5,}\w*|nt|html?|art|noticias?|z[0-9a-f]{6,})\b/g, " "))].filter(x => !TK_GENERICO.has(x)); };
+        const T = new Set([...tokens(n.titulo)].filter(x => !TK_GENERICO.has(x)));
+        const sl = n.medios.map(tkS);
+        const suelto = i => { const S = sl[i]; if (!S || S.length < 3) return false; if (S.some(x => T.has(x))) return false;
+          return !sl.some((o, j) => j !== i && o && o.some(x => T.has(x)) && o.filter(x => S.includes(x)).length >= 2); };
+        const fuera = n.medios.filter((_, i) => suelto(i));
+        if (fuera.length && fuera.length < n.medios.length) { fuera.forEach(m => separados.add(m.url)); n.medios = n.medios.filter(m => !fuera.includes(m)); }
+      }
       // Webs municipales de otro pueblo que se agruparon por error
       if (CONCRETO(n.municipio)) { const m2 = n.medios.filter(m => !/^Ayuntamiento de /.test(m.nombre) || m.nombre === "Ayuntamiento de " + n.municipio); if (m2.length) n.medios = m2; }
       const c = conCuerpo(clasifica(n.titulo, n.resumen || "", n.municipio, soloAyto(n.medios) || soloOrganizacion(n.medios)), n.analisis, n.municipio, n.titulo);
       n.categorias = c.categorias; n.relevancia = c.relevancia;
+      // Desaparecida ya localizada (lo dice otro medio del grupo): deja de ser Importante y se marca
+      if (/desaparecid|\bbusca/.test(norm(n.titulo)) && n.medios.some(m => /locali[zc]|hallad|encontrad|aparecid|aparece/.test(norm(decodeURIComponent(String(m.url)))))) { n.resuelta = "Localizada"; if (n.relevancia === "alta") n.relevancia = "media"; } else delete n.resuelta;
       if (c.porTexto) n.porTexto = true; else delete n.porTexto;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
