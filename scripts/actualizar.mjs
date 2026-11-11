@@ -684,6 +684,7 @@ function analizaCuerpo(titulo, cuerpo, publicada) {
 // Restos de menú o de código de la web que a veces se cuelan en el texto (no se enseñan como extracto)
 // Titular de ámbito regional o nacional: el pueblo que salga en el texto no lo convierte en noticia de ese pueblo
 const REGIONAL_TIT = /\b(en|de) (castilla y leon|cyl|espana|toda la comunidad)\s*$|\ben (castilla y leon|cyl|espana)\b(?!.{0,40}segovia)/;
+const regionalTit = t => REGIONAL_TIT.test(norm(t)) && !MENCIONA_SEGOVIA.test(norm(t));
 const TK_GENERICO = new Set(["segov", "casti", "leon", "provi", "guard", "civil", "junta", "ayunt", "notic"]);
 const FRASE_BASURA = /[{}\[\]]|":|\buk-|[UÚuú]ltimas [Nn]oticias|[Hh]emeroteca|[Ss]uscr[ií]bete|Inicio Opini[oó]n/;
 function limpiaAnalisis(a) {
@@ -937,9 +938,9 @@ async function main() {
     const resumen = g.texto ? recorta(sinColas(g.texto)) : "";
     const a = limpiaAnalisis(g.analisis);
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
-    if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && !REGIONAL_TIT.test(norm(g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
+    if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && !regionalTit((g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
     else if (municipio === "General" && ELECTORAL_PROV.test(norm(g.titulo))) municipio = nacionalLugar(g.titulo, resumen);
-    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo)) && !REGIONAL_TIT.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo)) && !regionalTit((g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
@@ -1029,9 +1030,9 @@ async function main() {
         if (q.length && q.length < n.medios.length) { n.medios.filter(m => !delTema(m)).forEach(m => separados.add(m.url)); n.medios = q; }
       }
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
-      if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && !REGIONAL_TIT.test(norm(n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
+      if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && !regionalTit((n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
       else if (nuevo === "General" && ELECTORAL_PROV.test(norm(n.titulo))) nuevo = nacionalLugar(n.titulo, n.resumen);
-      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo)) && !REGIONAL_TIT.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo)) && !regionalTit((n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
