@@ -939,7 +939,7 @@ async function main() {
     let municipio = conPueblo(municipioDe(g.titulo + " " + resumen), g.pueblo);
     if (a?.pueblo && !ELECTORAL_PROV.test(norm(g.titulo)) && !REGIONAL_TIT.test(norm(g.titulo)) && (municipio === "General" || municipio === "Provincia" || (municipio === "Segovia" && UN_PUEBLO.test(norm(g.titulo))))) municipio = a.pueblo;
     else if (municipio === "General" && ELECTORAL_PROV.test(norm(g.titulo))) municipio = nacionalLugar(g.titulo, resumen);
-    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
+    else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo)) && !REGIONAL_TIT.test(norm(g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
     municipio = fueraDeProvincia(g.titulo, municipio);
@@ -1031,7 +1031,7 @@ async function main() {
       let nuevo = conPueblo(municipioDe(n.titulo + " " + (n.resumen || "")), n.pueblo_fuente);
       if (n.analisis?.pueblo && !ELECTORAL_PROV.test(norm(n.titulo)) && !REGIONAL_TIT.test(norm(n.titulo)) && (nuevo === "General" || nuevo === "Provincia" || (nuevo === "Segovia" && UN_PUEBLO.test(norm(n.titulo))))) nuevo = n.analisis.pueblo;
       else if (nuevo === "General" && ELECTORAL_PROV.test(norm(n.titulo))) nuevo = nacionalLugar(n.titulo, n.resumen);
-      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
+      else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo)) && !REGIONAL_TIT.test(norm(n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
