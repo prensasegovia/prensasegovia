@@ -545,7 +545,10 @@ const MUNI_SLUG = [].concat(MUNICIPIOS).join("|").split("|").map(m => m.trim()).
 const TEMA_TK = ["marih", "cocai", "hachi", "droga", "estup", "incen", "accid", "atrop", "robo", "hurto", "deten", "agres", "apuña", "apuna", "muert", "falle", "intox", "okupa", "okupa", "estaf", "biog"];
 const DIRIGENTES = /\b(buxade|abascal|feijoo|manueco|almeida|montserrat|tellado|gamarra|ayuso|puente|pedro sanchez|yolanda diaz|belarra|irene montero|pollan|carriedo|tudanca|igea)\b/;
 const SUCESO_TK = new Set(["accid", "herid", "incen", "atrop", "falle", "muert", "colis", "alcan", "choqu", "vuelc", "sinie", "rescu"]);
+// Nombre de la operación policial («operación 'Pastañuelos'»): la misma operación es la misma noticia aunque nombre pueblos distintos
+const opDe = s => { const m = norm(String(s || "")).match(/\b(?:operacion|investigacion)\s+['‘’"«]?([a-z][a-z0-9]{3,})/); return m && !/^(policial|antidroga|conjunta|abierta|contra|para|que|del|de|en|la|el|por|sobre)$/.test(m[1]) ? m[1] : null; };
 function mismaNoticia(a, b) {
+  if (a.op && a.op === b.op && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 3 * 864e5) return true;
   // La misma persona de visita o en un acto el mismo día (o al siguiente): es la misma noticia aunque la nombren distinto
   if (a.titulo && b.titulo && Math.abs(new Date(a.dia) - new Date(b.dia)) <= 864e5) {
     const pa = personas(a.titulo), pb = personas(b.titulo);
@@ -695,7 +698,7 @@ function conCuerpo(c, a, municipio, titulo = "") {
   if (c.descartar || !a?.cats?.length) return c;
   const soloTexto = !c.categorias.length; // el titular no traía ningún tema de interés
   if (soloTexto && OCIO_TIT.test(norm(titulo))) return c;
-  const categorias = [...new Set([...c.categorias, ...a.cats])].slice(0, 3);
+  const categorias = soloTexto ? [...new Set(a.cats)].slice(0, 3) : c.categorias; // con tema en el titular, manda el titular
   let relevancia = c.relevancia === "baja" ? "media" : c.relevancia;
   // El cuerpo solo sube a importante si la frase clave es grave, no es un acto de recuerdo y el titular ya era de interés
   if (!soloTexto && !c.noAlta && a.extracto && ALTA.test(norm(a.extracto)) && !NO_ALTA.test(norm(a.extracto))) relevancia = "alta";
@@ -705,6 +708,7 @@ function conCuerpo(c, a, municipio, titulo = "") {
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);
   if (e.fecha_evento || !a?.evento) return e;
+  if (!EVENTO.test(norm(String(titulo || "") + " " + String(resumen || ""))) && !/convoca|concentra|manifesta|huelga|protesta|acto|mitin|visita|reunion|pleno|asamblea|jornada|marcha/.test(norm(String(titulo || "") + " " + String(resumen || "")))) return e;
   return { fecha_evento: a.evento.fecha_evento, ...(a.evento.hora_evento ? { hora_evento: a.evento.hora_evento } : {}), convocatoria: true };
 }
 
@@ -879,7 +883,7 @@ async function main() {
   for (const b of recientes) {
     const tk = tokens(b.titulo);
     if (tk.size < 2) continue;
-    const yo = { tk, titulo: b.titulo, municipio: conPueblo(municipioDe(b.titulo + " " + b.texto), b.pueblo), dia: fechaMadrid(b.fecha) };
+    const yo = { tk, titulo: b.titulo, municipio: conPueblo(municipioDe(b.titulo + " " + b.texto), b.pueblo), dia: fechaMadrid(b.fecha), op: opDe(b.titulo + " " + b.texto) };
     const g = grupos.find(g => mismaNoticia(g, yo));
     if (g) {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
@@ -966,10 +970,10 @@ async function main() {
   let previo = { dias: [] };
   try { previo = JSON.parse(await readFile(SALIDA, "utf8")); } catch {}
   const porDia = new Map((previo.dias || []).map(d => [d.fecha, { ...d, noticias: [...(d.noticias || [])] }]));
-  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha })));
+  const existentes = [...porDia.values()].flatMap(d => d.noticias.map(n => ({ n, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha, op: opDe(n.titulo + " " + (n.resumen || "")) })));
   let añadidas = 0;
   for (const n of nuevas) {
-    const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: n._dia };
+    const yo = { tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: n._dia, op: opDe(n.titulo + " " + (n.resumen || "")) };
     const ya = existentes.find(e => e.n.id === n.id || comparteUrl(e.n, n) || mismaNoticia(e, yo));
     if (ya) { // añade enlaces de otros medios a la que ya estaba
       if (n.publicado && (!ya.n.publicado || n.publicado < ya.n.publicado)) { ya.n.publicado = n.publicado; ya.n.hora = n.hora; }
@@ -1047,7 +1051,7 @@ async function main() {
   const desde = fechaMadrid(new Date(ahora.getTime() - 4 * 864e5));
   const NIVEL = { alta: 0, media: 1, baja: 2 };
   const recientesH = [...porDia.values()].filter(d => d.fecha >= desde).sort((a, b) => a.fecha.localeCompare(b.fecha))
-    .flatMap(d => d.noticias.map(n => ({ n, d, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha })));
+    .flatMap(d => d.noticias.map(n => ({ n, d, tk: tokens(n.titulo), titulo: n.titulo, municipio: n.municipio, dia: d.fecha, op: opDe(n.titulo + " " + (n.resumen || "")) })));
   const borrar = new Set();
   for (let i = 0; i < recientesH.length; i++) {
     const a = recientesH[i]; if (borrar.has(a.n)) continue;
