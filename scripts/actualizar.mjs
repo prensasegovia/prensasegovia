@@ -486,7 +486,7 @@ const ELECTORAL_PROV = /\b(diputados|senadores|escanos|encuesta|sondeo|candidatu
 const nacionalLugar = (titulo, resumen) => /segovia|segovian|mazarias|san rafael|guiomar/.test(norm(titulo + " " + (resumen || ""))) ? "Provincia" : "General";
 const ESTADISTICA_ELECTORAL = /votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
-const INCIDENTE = /accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
+const INCIDENTE = /colapso|rotura de (la )?presa|riesgo de (rotura|desbordamiento)|desembalse de emergencia|accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
   if (CONCRETO(n.municipio) && c.includes("politica") && tt.includes(" en " + norm(n.municipio)) && /\b(psoe|pp|vox|iu|podemos|sumar|upl|socialistas|populares|candidat\w*|diputad[oa]s?|senador\w*|mitin)\b/.test(tt)) return false; // campaña: actos de partidos en un pueblo
