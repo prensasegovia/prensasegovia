@@ -708,7 +708,7 @@ function conCuerpo(c, a, municipio, titulo = "") {
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);
   if (e.fecha_evento || !a?.evento) return e;
-  if (!EVENTO.test(norm(String(titulo || "") + " " + String(resumen || ""))) && !/convoca|concentra|manifesta|huelga|protesta|acto|mitin|visita|reunion|pleno|asamblea|jornada|marcha/.test(norm(String(titulo || "") + " " + String(resumen || "")))) return e;
+  if (!EVENTO.test(norm(String(titulo || "") + " " + String(resumen || ""))) && !/convoca|concentra|manifesta|huelga|protesta|acto|mitin|visita|reunion|pleno|asamblea|jornada|marcha|servicios minimos|paro|cierre/.test(norm(String(titulo || "") + " " + String(resumen || "")))) return e;
   return { fecha_evento: a.evento.fecha_evento, ...(a.evento.hora_evento ? { hora_evento: a.evento.hora_evento } : {}), convocatoria: true };
 }
 
