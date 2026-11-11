@@ -968,6 +968,32 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .card.nueva{box-shadow:0 0 0 2px var(--new);border-color:transparent;background:color-mix(in srgb,var(--new) 4%,var(--surface,#fff))}
 .nvtag{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--new);border-radius:5px;padding:2px 6px;line-height:1.4}
 .card .top{flex-wrap:wrap;row-gap:3px}
+/* Guía rápida (primera visita) */
+#guia{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,16,.55)}
+#guia.open{display:flex}
+#guia .gbox{background:var(--surface);color:var(--ink);border-radius:22px;width:100%;max-width:440px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden}
+#guia .gtop{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0 20px}
+#guia .gpaso{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+#guia .gx{border:0;background:none;color:var(--muted);font:inherit;font-size:14.5px;padding:8px;cursor:pointer}
+#guia .gcuerpo{padding:6px 20px 8px;overflow:auto}
+#guia h2{margin:4px 0 6px;font-size:23px;font-variation-settings:"wdth" 72;font-weight:800;line-height:1.15}
+#guia p{margin:0 0 10px;font-size:15px;line-height:1.45}
+#guia ul{list-style:none;margin:6px 0 4px;padding:0;display:grid;gap:9px}
+#guia li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;line-height:1.4}
+#guia li .gi{flex:none;width:30px;height:30px;border-radius:9px;background:var(--pine-soft);color:var(--pine-2);display:grid;place-items:center}
+#guia li .gi svg{width:17px;height:17px}
+#guia li .gi + span b{display:block;font-size:15px}
+#guia .gnum{flex:none;width:26px;height:26px;border-radius:50%;background:var(--pine);color:#fff;font-weight:800;font-size:13.5px;display:grid;place-items:center}
+#guia .gnota{font-size:13.5px;color:var(--muted);background:var(--stone);border-radius:12px;padding:10px 12px;margin:10px 0 4px}
+#guia .gok{color:var(--pine-2);font-weight:700}
+#guia .gpie{display:flex;align-items:center;gap:10px;padding:12px 20px calc(16px + var(--safe-b,0px));border-top:1px solid var(--line)}
+#guia .gpuntos{display:flex;gap:6px;flex:1}
+#guia .gpuntos i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+#guia .gpuntos i.on{background:var(--pine-2);width:20px;border-radius:5px}
+#guia .gbtn{border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;background:var(--pine);color:#fff}
+#guia .gbtn.sec{background:var(--stone);color:var(--ink)}
+#guia .ginst{width:100%;margin:8px 0 2px}
+.guiabtn{display:block;width:100%;margin-top:10px}
 </style>
 </head>
 <body>
@@ -1041,8 +1067,15 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
       <button class="btn ghost" id="fMedios" type="button" style="flex:1">Medios</button>
       <button class="btn" id="fClose" type="button" style="flex:1">Ver noticias</button>
     </div>
+    <button class="btn ghost guiabtn" id="fGuia" type="button">Guía rápida y cómo instalarla en el móvil</button>
   </section>
 </div>
+
+<div id="guia" role="dialog" aria-modal="true" aria-labelledby="guiaTit"><div class="gbox">
+  <div class="gtop"><span class="gpaso" id="guiaPaso"></span><button class="gx" id="guiaX" type="button">Saltar</button></div>
+  <div class="gcuerpo" id="guiaCuerpo"></div>
+  <div class="gpie"><div class="gpuntos" id="guiaPuntos"></div><button class="gbtn sec" id="guiaAtras" type="button">Atrás</button><button class="gbtn" id="guiaSig" type="button">Siguiente</button></div>
+</div></div>
 
 <div class="toast solo" id="aviso" role="status"></div>
 <div class="toast" id="toast" role="status"><span>Hay noticias nuevas</span><button class="btn" id="toastBtn" type="button">Ver</button></div>
@@ -2244,6 +2277,78 @@ async function poll(){
     } else syncLabel();
   }catch(e){}
 }
+
+/* ================= Guía rápida ================= */
+const ic = d => `<span class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg></span>`;
+let instalarEv = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); instalarEv = e; if ($("#guia").classList.contains("open")) pintaGuia(); });
+addEventListener("appinstalled", () => { instalarEv = null; if ($("#guia").classList.contains("open")) pintaGuia(); });
+const esPCg = () => !esIOS() && !esAndroid();
+function pasoInstalar(){
+  if (instalada()) return `<h2 id="guiaTit">Ya la tienes como app</h2><p><span class="gok">✓ Estás usando la app instalada.</span> Se abre desde su icono, a pantalla completa y se actualiza sola.</p><div class="gnota">Consejo: activa los <b>avisos</b> en Filtros y ajustes para que te llegue lo importante aunque tengas la app cerrada.</div>`;
+  let h = `<h2 id="guiaTit">Guárdala en el móvil como una app</h2><p>No hace falta tienda de aplicaciones: se añade a la pantalla de inicio con su icono, se abre a pantalla completa y, además, así puedes recibir <b>avisos</b>.</p>`;
+  if (enOtraApp()) return h + `<div class="gnota">Ahora la estás viendo dentro de otra app (WhatsApp, Telegram…). Primero ábrela en el navegador: toca <b>⋮</b> o <b>···</b> y elige <b>«Abrir en el navegador»</b> (en iPhone, <b>«Abrir en Safari»</b>). Después sigue estos pasos.</div>`;
+  if (esIOS()) return h + `<ul>
+    <li><span class="gnum">1</span><span>Ábrela en <b>Safari</b></span></li>
+    <li><span class="gnum">2</span><span>Toca el botón <b>Compartir</b> <span style="white-space:nowrap">(el cuadrado con la flecha ↑)</span>, abajo en el centro o arriba a la derecha</span></li>
+    <li><span class="gnum">3</span><span>Baja y elige <b>«Añadir a pantalla de inicio»</b>. Si no aparece, toca «Editar acciones» al final de la lista</span></li>
+    <li><span class="gnum">4</span><span>Pulsa <b>«Añadir»</b> y ábrela siempre desde el icono nuevo</span></li></ul>
+    <div class="gnota">En iPhone los avisos solo funcionan desde la app añadida a la pantalla de inicio.</div>`;
+  if (esAndroid()) return h + (instalarEv ? `<button class="gbtn ginst" id="guiaInst" type="button">Instalar ahora</button><div class="gnota">Si no te sale, hazlo a mano: en Chrome toca <b>⋮</b> (arriba a la derecha) → <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</div>` : `<ul>
+    <li><span class="gnum">1</span><span>Ábrela en <b>Chrome</b></span></li>
+    <li><span class="gnum">2</span><span>Toca <b>⋮</b>, arriba a la derecha</span></li>
+    <li><span class="gnum">3</span><span>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b> y confirma</span></li>
+    <li><span class="gnum">4</span><span>Ábrela desde el icono nuevo de tu pantalla de inicio</span></li></ul>`);
+  return h + (instalarEv ? `<button class="gbtn ginst" id="guiaInst" type="button">Instalar en este ordenador</button>` : `<p>En el ordenador puedes usarla así, en el navegador. Para tenerla como programa: en Chrome o Edge, pulsa el icono de instalar de la barra de direcciones (una pantalla con una flecha).</p>`) +
+    `<div class="gnota"><b>Para el móvil:</b> abre esta misma dirección en el teléfono (prensasegovia.github.io/prensasegovia) y en iPhone usa Compartir → «Añadir a pantalla de inicio»; en Android, ⋮ → «Instalar aplicación».</div>`;
+}
+const PASOS = [
+  () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio, ya filtrada: aquí arriba solo sale lo que interesa al servicio de los pueblos y de la provincia.</p>
+    <ul><li>${ic("M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z")}<span><b>Qué entra</b>Sucesos, movilizaciones, política, visitas de autoridades, medio ambiente, emergencias y fiestas.</span></li>
+    <li>${ic("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z")}<span><b>Siempre al día</b>Se actualiza sola a lo largo del día. Lo que llega nuevo se marca en azul.</span></li>
+    <li>${ic("M12 3l9 16H3zM12 10v4M12 17h.01")}<span><b>Importante</b>Lo más relevante sale arriba, en rojo.</span></li></ul>`,
+  () => `<h2 id="guiaTit">Las secciones</h2><p>Abajo (o a la izquierda en el ordenador):</p>
+    <ul><li>${ic("M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2zM8 9h7M8 13h7M8 17h4")}<span><b>Noticias</b>Lo de interés, agrupado: si varios periódicos cuentan lo mismo sale una sola vez con todos los enlaces.</span></li>
+    <li>${ic("M3 10h18M8 3v4M16 3v4M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z")}<span><b>Agenda</b>Concentraciones, huelgas, mítines, visitas y fiestas con fecha.</span></li>
+    <li>${ic("M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z")}<span><b>Pueblos</b>Las noticias de cada pueblo.</span></li>
+    <li>${ic("M3 4h18v16H3zM7 8h10M7 12h4M7 16h4M14 12h3v4h-3z")}<span><b>Periódicos</b>Todo lo que publica cada medio, sin filtrar, como un quiosco.</span></li>
+    <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>`,
+  () => `<h2 id="guiaTit">Ajústala a tu gusto</h2><p>En <b>Filtros y ajustes</b>:</p>
+    <ul><li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>Con o sin capital</b>Muestra u oculta las noticias de Segovia capital.</span></li>
+    <li>${ic("M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16zM10 21h4")}<span><b>Avisos</b>Te llega una notificación con lo nuevo de interés (todo o solo lo importante) y, si quieres, de los periódicos que elijas. De 23 a 7 no molesta.</span></li>
+    <li>${ic("M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-5-5")}<span><b>Palabras vigiladas</b>Apunta nombres o temas y se resaltan cuando salgan.</span></li>
+    <li>${ic("M4 6h16M7 12h10M10 18h4")}<span><b>Periodo, letra y aspecto</b>3, 7 o 21 días; letra más grande; modo oscuro; vista compacta.</span></li>
+    <li>${ic("M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM8 11h8M8 15h8")}<span><b>Parte del día</b>Un resumen listo para copiar o mandar por WhatsApp.</span></li></ul>`,
+  pasoInstalar
+];
+let guiaI = 0;
+function pintaGuia(){
+  const n = PASOS.length;
+  $("#guiaCuerpo").innerHTML = PASOS[guiaI]();
+  $("#guiaPaso").textContent = `Guía rápida · ${guiaI+1} de ${n}`;
+  $("#guiaPuntos").innerHTML = PASOS.map((_,i)=>`<i class="${i===guiaI?"on":""}"></i>`).join("");
+  $("#guiaAtras").hidden = guiaI === 0;
+  $("#guiaSig").textContent = guiaI === n-1 ? "Empezar" : "Siguiente";
+  $("#guiaX").hidden = guiaI === n-1;
+  $("#guiaCuerpo").scrollTop = 0;
+  const bi = $("#guiaInst"); if (bi) bi.onclick = async () => { if (!instalarEv) return; instalarEv.prompt(); try { await instalarEv.userChoice; } catch(e){} instalarEv = null; pintaGuia(); };
+}
+function abreGuia(paso=0){ guiaI = paso; pintaGuia(); $("#guia").classList.add("open"); setTimeout(()=>$("#guiaSig").focus(), 50); }
+function cierraGuia(){ $("#guia").classList.remove("open"); store.set("guiaVista", 1); }
+$("#guiaSig").addEventListener("click", ()=>{ if (guiaI < PASOS.length-1){ guiaI++; pintaGuia(); } else cierraGuia(); });
+$("#guiaAtras").addEventListener("click", ()=>{ if (guiaI > 0){ guiaI--; pintaGuia(); } });
+$("#guiaX").addEventListener("click", cierraGuia);
+$("#guia").addEventListener("click", e=>{ if (e.target.id === "guia") cierraGuia(); });
+addEventListener("keydown", e=>{ if (!$("#guia").classList.contains("open")) return; if (e.key==="Escape") cierraGuia(); else if (e.key==="ArrowRight") $("#guiaSig").click(); else if (e.key==="ArrowLeft") $("#guiaAtras").click(); });
+$("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) atras(); abreGuia(); });
+// Primera visita: solo a quien no ha usado la app antes (quien ya la usaba tiene algo guardado)
+(() => {
+  if (store.get("guiaVista", 0)) return;
+  let antes = false; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k && k.startsWith("psg:") && !/^psg:(recarga-|tema$)/.test(k)) { antes = true; break; } } } catch(e){}
+  if (antes || /[?&]noguia\b/.test(location.search)) { store.set("guiaVista", 1); return; }
+  setTimeout(()=>abreGuia(instalada() ? 0 : 0), 600);
+})();
+if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
 const vistaHash = () => { const h = location.hash.slice(1); if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
 vistaHash(); addEventListener("hashchange", vistaHash);
@@ -2253,14 +2358,14 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v87";
+const VERSION_APP = "prensa-segovia-v88";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
     const v = (t.match(/CACHE = "([^"]+)"/)||[])[1];
     // Se reintenta como mucho cada 2 minutos (por si el servidor aún da la página vieja) y se pide con ?v= para saltarse copias guardadas
     const ult = +(localStorage.getItem("psg:recarga-"+v) || 0);
-    if (v && v !== VERSION_APP && Date.now() - ult > 120000 && !$("#sheetWrap").classList.contains("open")){
+    if (v && v !== VERSION_APP && Date.now() - ult > 120000 && !$("#sheetWrap").classList.contains("open") && !$("#guia").classList.contains("open")){
       localStorage.setItem("psg:recarga-"+v, String(Date.now()));
       const reg = await navigator.serviceWorker?.getRegistration().catch(()=>null); if (reg) await reg.update().catch(()=>{});
       location.replace(location.pathname + "?v=" + encodeURIComponent(v) + location.hash);
