@@ -974,7 +974,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 #guia .gbox{background:var(--surface);color:var(--ink);border-radius:22px;width:100%;max-width:440px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden}
 #guia .gtop{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0 20px}
 #guia .gpaso{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
-#guia .gx{border:0;background:none;color:var(--muted);font:inherit;font-size:14.5px;padding:8px;cursor:pointer}
+#guia .gx{border:0;background:none;color:var(--muted);font:inherit;font-size:14.5px;padding:12px 10px;min-height:44px;cursor:pointer}
+#guia .gcuerpo.mas{box-shadow:inset 0 -14px 12px -12px rgba(0,0,0,.25)}
 #guia .gcuerpo{padding:6px 20px 8px;overflow:auto}
 #guia h2{margin:4px 0 6px;font-size:23px;font-variation-settings:"wdth" 72;font-weight:800;line-height:1.15}
 #guia p{margin:0 0 10px;font-size:15px;line-height:1.45}
@@ -1426,7 +1427,7 @@ function viewNoticias(news){
   const alta = shown.filter(n=>n.relevancia==="alta");
   const pueblos = new Set(shown.filter(n=>esPueblo(n.municipio)).map(n=>n.municipio));
   const ag = (({ev,sinFecha})=>[...ev,...sinFecha])(agendaDe(news));
-  const sum = nuevasTodas.length ? `<b>${plural(nuevasTodas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
+  const sum = st.primera && !nuevasTodas.length && shown.length ? `<b>${plural(shown.length,"noticia de interés","noticias de interés")}</b> en los últimos ${st.rango} días.` : nuevasTodas.length ? `<b>${plural(nuevasTodas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
     <div class="stats">
@@ -2240,7 +2241,7 @@ function applyData(j){
   store.set("favs", st.favs);
   if (!store.get("seen3", null)){ // primera vez: cuenta como nuevo lo de los últimos 2 días
     store.set("seen3", true); st.seen = new Set();
-    marcarVisto(allNews().filter(n=>n._dia < addDays(today(),-2)).map(n=>n._key));
+    marcarVisto(allNews().map(n=>n._key)); st.sesionNuevas = new Set(); st.primera = true; // la primera vez nada es «nuevo»
     store.set("seenP", null);
     if (st.periodicos.length){ store.set("seenP", true); const lim = Date.now() - 24*36e5; marcarVisto(periodicosNews().filter(n=>n._ts < lim).map(n=>n._key)); }
   }
@@ -2285,26 +2286,26 @@ addEventListener("beforeinstallprompt", e => { e.preventDefault(); instalarEv = 
 addEventListener("appinstalled", () => { instalarEv = null; if ($("#guia").classList.contains("open")) pintaGuia(); });
 const esPCg = () => !esIOS() && !esAndroid();
 function pasoInstalar(){
-  if (instalada()) return `<h2 id="guiaTit">Ya la tienes como app</h2><p><span class="gok">✓ Estás usando la app instalada.</span> Se abre desde su icono, a pantalla completa y se actualiza sola.</p><div class="gnota">Consejo: activa los <b>avisos</b> en Filtros y ajustes para que te llegue lo importante aunque tengas la app cerrada.</div>`;
+  if (instalada()) return `<h2 id="guiaTit">Ya la tienes como app</h2><p><span class="gok">✓ Estás usando la app instalada.</span> Se abre desde su icono, a pantalla completa y se actualiza sola.</p>` + (push.on ? `<p class="gok">✓ Los avisos están activados.</p>` : `<div class="gnota">Ahora es el momento de activar los <b>avisos</b>: te llegará lo nuevo de interés aunque tengas la app cerrada.</div>` + (avisosListos() ? `<button class="gbtn ginst" id="guiaAvisos" type="button">Activar avisos</button>` : ""));
   let h = `<h2 id="guiaTit">Guárdala en el móvil como una app</h2><p>No hace falta tienda de aplicaciones: se añade a la pantalla de inicio con su icono, se abre a pantalla completa y, además, así puedes recibir <b>avisos</b>.</p>`;
-  if (enOtraApp()) return h + `<div class="gnota">Ahora la estás viendo dentro de otra app (WhatsApp, Telegram…). Primero ábrela en el navegador: toca <b>⋮</b> o <b>···</b> y elige <b>«Abrir en el navegador»</b> (en iPhone, <b>«Abrir en Safari»</b>). Después sigue estos pasos.</div>`;
+  if (enOtraApp()) return h + `<div class="gnota">Ahora la estás viendo dentro de otra app (WhatsApp, Telegram…). Primero ábrela en el navegador: toca <b>⋮</b> o <b>···</b> y elige <b>«Abrir en el navegador»</b> (en iPhone, <b>«Abrir en Safari»</b>). Al abrirla en el navegador te volverá a salir esta guía con los pasos.</div>`;
   if (esIOS()) return h + `<ul>
-    <li><span class="gnum">1</span><span>Ábrela en <b>Safari</b></span></li>
-    <li><span class="gnum">2</span><span>Toca el botón <b>Compartir</b> <span style="white-space:nowrap">(el cuadrado con la flecha ↑)</span>, abajo en el centro o arriba a la derecha</span></li>
+    <li><span class="gnum">1</span><span>Ábrela en <b>Safari</b>. Si la abriste desde WhatsApp, toca primero la brújula o «Abrir en Safari»</span></li>
+    <li><span class="gnum">2</span><span>Toca <b>···</b> (abajo a la derecha) y luego <b>Compartir</b>. En iPhones con otra versión, el botón Compartir <span style="white-space:nowrap">(cuadrado con flecha ↑)</span> está directamente abajo</span></li>
     <li><span class="gnum">3</span><span>Baja y elige <b>«Añadir a pantalla de inicio»</b>. Si no aparece, toca «Editar acciones» al final de la lista</span></li>
-    <li><span class="gnum">4</span><span>Pulsa <b>«Añadir»</b> y ábrela siempre desde el icono nuevo</span></li></ul>
+    <li><span class="gnum">4</span><span>Deja activado <b>«Abrir como app web»</b> si te sale, pulsa <b>«Añadir»</b> y ábrela siempre desde el icono nuevo</span></li></ul>
     <div class="gnota">En iPhone los avisos solo funcionan desde la app añadida a la pantalla de inicio.</div>`;
-  if (esAndroid()) return h + (instalarEv ? `<button class="gbtn ginst" id="guiaInst" type="button">Instalar ahora</button><div class="gnota">Si no te sale, hazlo a mano: en Chrome toca <b>⋮</b> (arriba a la derecha) → <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</div>` : `<ul>
+  if (esAndroid()) return h + (instalarEv ? `<button class="gbtn ginst" id="guiaInst" type="button">Instalar ahora</button><div class="gnota">Si no te sale, hazlo a mano: en Chrome toca <b>⋮</b> (arriba a la derecha) y busca la opción que empieza por <b>«Instalar…»</b> o <b>«Añadir a pantalla de inicio»</b>. Si te pregunta, elige <b>Instalar</b>, no «Crear acceso directo».</div>` : `<ul>
     <li><span class="gnum">1</span><span>Ábrela en <b>Chrome</b></span></li>
     <li><span class="gnum">2</span><span>Toca <b>⋮</b>, arriba a la derecha</span></li>
-    <li><span class="gnum">3</span><span>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b> y confirma</span></li>
+    <li><span class="gnum">3</span><span>Busca la opción que empieza por <b>«Instalar…»</b> o <b>«Añadir a pantalla de inicio»</b>. Si te pregunta, elige <b>Instalar</b>, no «Crear acceso directo»</span></li>
     <li><span class="gnum">4</span><span>Ábrela desde el icono nuevo de tu pantalla de inicio</span></li></ul>`);
   // Ordenador: sin pasos; se explica cuando la abra en el móvil
   return `<h2 id="guiaTit">Tenla también en el móvil</h2><p>En el teléfono se puede guardar como una app: con su icono en la pantalla de inicio, a pantalla completa y con <b>avisos</b> de lo nuevo.</p>
     <div class="gnota">Abre en el móvil <b>prensasegovia.github.io/prensasegovia</b> (o el enlace que te pasaron) y allí te explicará cómo guardarla, paso a paso para iPhone o Android.</div>`;
 }
 const PASOS = [
-  () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio, ya filtrada: aquí arriba solo sale lo que interesa al servicio de los pueblos y de la provincia.</p>
+  () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio. En <b>Noticias</b> solo sale lo que interesa al servicio, sobre todo en los pueblos.</p>
     <ul><li>${ic("M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z")}<span><b>Qué entra</b>Sucesos, movilizaciones, política, visitas de autoridades, medio ambiente, emergencias y fiestas.</span></li>
     <li>${ic("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z")}<span><b>Siempre al día</b>Se actualiza sola a lo largo del día. Lo que llega nuevo se marca en azul.</span></li>
     <li>${ic("M12 3l9 16H3zM12 10v4M12 17h.01")}<span><b>Importante</b>Lo más relevante sale arriba, en rojo.</span></li></ul>`,
@@ -2314,12 +2315,12 @@ const PASOS = [
     <li>${ic("M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z")}<span><b>Pueblos</b>Las noticias de cada pueblo.</span></li>
     <li>${ic("M3 4h18v16H3zM7 8h10M7 12h4M7 16h4M14 12h3v4h-3z")}<span><b>Periódicos</b>Todo lo que publica cada medio, sin filtrar, como un quiosco.</span></li>
     <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>`,
-  () => `<h2 id="guiaTit">Ajústala a tu gusto</h2><p>En <b>Filtros y ajustes</b>:</p>
-    <ul><li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>Con o sin capital</b>Muestra u oculta las noticias de Segovia capital.</span></li>
+  () => `<h2 id="guiaTit">Ajústala a tu gusto</h2><p>En la barra de arriba de Noticias y en <b>Filtros</b>:</p>
+    <ul><li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>Con o sin capital</b>Los botones <i>Con capital / Sin capital</i> muestran u ocultan las noticias de Segovia capital.</span></li>
     <li>${ic("M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16zM10 21h4")}<span><b>Avisos</b>Te llega una notificación con lo nuevo de interés (todo o solo lo importante) y, si quieres, de los periódicos que elijas. De 23 a 7 no molesta.</span></li>
-    <li>${ic("M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-5-5")}<span><b>Palabras vigiladas</b>Apunta nombres o temas y se resaltan cuando salgan.</span></li>
+    <li>${ic("M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-5-5")}<span><b>Palabras vigiladas</b>Apunta nombres o temas y se resaltan en amarillo cuando salgan. «Guardia Civil» ya viene puesta.</span></li>
     <li>${ic("M4 6h16M7 12h10M10 18h4")}<span><b>Periodo, letra y aspecto</b>3, 7 o 21 días; letra más grande; modo oscuro; vista compacta.</span></li>
-    <li>${ic("M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM8 11h8M8 15h8")}<span><b>Parte del día</b>Un resumen listo para copiar o mandar por WhatsApp.</span></li></ul>`,
+    <li>${ic("M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2zM8 11h8M8 15h8")}<span><b>Parte del día</b>El botón <i>Parte</i> te da un resumen listo para copiar o mandar por WhatsApp.</span></li></ul>`,
   pasoInstalar
 ];
 let guiaI = 0;
@@ -2329,25 +2330,30 @@ function pintaGuia(){
   $("#guiaPaso").textContent = `Guía rápida · ${guiaI+1} de ${n}`;
   $("#guiaPuntos").innerHTML = PASOS.map((_,i)=>`<i class="${i===guiaI?"on":""}"></i>`).join("");
   $("#guiaAtras").hidden = guiaI === 0;
-  $("#guiaSig").textContent = guiaI === n-1 ? "Empezar" : "Siguiente";
+  $("#guiaSig").textContent = guiaI === n-1 ? (guiaDesde ? "Cerrar" : "Empezar") : "Siguiente";
   $("#guiaX").hidden = guiaI === n-1;
-  $("#guiaCuerpo").scrollTop = 0;
+  $("#guiaCuerpo").scrollTop = 0; requestAnimationFrame(sombraGuia);
+  const ba = $("#guiaAvisos"); if (ba) ba.onclick = () => { cierraGuia(); abreAvisos(true); };
   const bi = $("#guiaInst"); if (bi) bi.onclick = async () => { if (!instalarEv) return; instalarEv.prompt(); try { await instalarEv.userChoice; } catch(e){} instalarEv = null; pintaGuia(); };
 }
-function abreGuia(paso=0){ guiaI = paso; pintaGuia(); $("#guia").classList.add("open"); setTimeout(()=>$("#guiaSig").focus(), 50); }
-function cierraGuia(){ $("#guia").classList.remove("open"); store.set("guiaVista", 1); }
+let guiaDesde = null;
+const FONDO_GUIA = ["#app","#aside","#appbar",".tabbar","#searchbar"];
+function sombraGuia(){ const c = $("#guiaCuerpo"); c.classList.toggle("mas", c.scrollHeight - c.scrollTop - c.clientHeight > 4); }
+$("#guiaCuerpo").addEventListener("scroll", sombraGuia, {passive:true});
+function abreGuia(paso=0, desde=null){ guiaDesde = desde; guiaI = paso; pintaGuia(); $("#guia").classList.add("open"); FONDO_GUIA.forEach(q=>document.querySelector(q)?.setAttribute("inert","")); setTimeout(()=>$("#guiaSig").focus(), 50); }
+function cierraGuia(){ $("#guia").classList.remove("open"); store.set("guiaVista", 1); FONDO_GUIA.forEach(q=>document.querySelector(q)?.removeAttribute("inert")); const d = guiaDesde; guiaDesde = null; if (d && d.isConnected) d.focus(); }
 $("#guiaSig").addEventListener("click", ()=>{ if (guiaI < PASOS.length-1){ guiaI++; pintaGuia(); } else cierraGuia(); });
 $("#guiaAtras").addEventListener("click", ()=>{ if (guiaI > 0){ guiaI--; pintaGuia(); } });
 $("#guiaX").addEventListener("click", cierraGuia);
 $("#guia").addEventListener("click", e=>{ if (e.target.id === "guia") cierraGuia(); });
 addEventListener("keydown", e=>{ if (!$("#guia").classList.contains("open")) return; if (e.key==="Escape") cierraGuia(); else if (e.key==="ArrowRight") $("#guiaSig").click(); else if (e.key==="ArrowLeft") $("#guiaAtras").click(); });
-$("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) atras(); abreGuia(); });
+$("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) atras(); abreGuia(0, document.querySelector('.side-btn[data-side="filtros"]') || $("#appbar")); });
 // Primera visita: solo a quien no ha usado la app antes (quien ya la usaba tiene algo guardado)
 (() => {
   if (store.get("guiaVista", 0)) return;
   let antes = false; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k && k.startsWith("psg:") && !/^psg:(recarga-|tema$)/.test(k)) { antes = true; break; } } } catch(e){}
   if (antes || /[?&]noguia\b/.test(location.search)) { store.set("guiaVista", 1); return; }
-  setTimeout(()=>abreGuia(instalada() ? 0 : 0), 600);
+  setTimeout(()=>abreGuia(esIOS() && instalada() ? PASOS.length-1 : 0), 600); // iPhone: la app del icono no comparte datos con Safari; ya vio la guía allí
 })();
 if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
@@ -2359,7 +2365,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v89";
+const VERSION_APP = "prensa-segovia-v90";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
