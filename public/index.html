@@ -1414,7 +1414,10 @@ function viewNoticias(news){
   }
   h += chipsBar(pool) + `<div class="feed">` + avisoFiltros();
   if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Prueba otro tema, amplía el periodo en Filtros o pulsa «Quitar filtros».<br><button class="btn ghost" data-act="limpiar" type="button">Quitar filtros</button></div></div>`;
-  if (nuevas.length || urg.length){
+  if (!nuevas.length && urg.length){
+    // Todo lo nuevo es importante y ya está en la franja de arriba: sin bloque vacío
+    h += `<div class="newhead"><h3>Lo nuevo está arriba, en Importante</h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
+  } else if (nuevas.length){
     h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevasTodas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
     h += nuevas.slice(0,3).map(n=>card(n)).join("") + tarjetaAvisos() + nuevas.slice(3).map(n=>card(n)).join("");
     h += `<div class="uptodate"><span>${I.check}Hasta aquí lo nuevo</span></div>`;
@@ -2250,7 +2253,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v86";
+const VERSION_APP = "prensa-segovia-v87";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
