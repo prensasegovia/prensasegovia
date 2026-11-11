@@ -2299,8 +2299,9 @@ function pasoInstalar(){
     <li><span class="gnum">2</span><span>Toca <b>⋮</b>, arriba a la derecha</span></li>
     <li><span class="gnum">3</span><span>Elige <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b> y confirma</span></li>
     <li><span class="gnum">4</span><span>Ábrela desde el icono nuevo de tu pantalla de inicio</span></li></ul>`);
-  return h + (instalarEv ? `<button class="gbtn ginst" id="guiaInst" type="button">Instalar en este ordenador</button>` : `<p>En el ordenador puedes usarla así, en el navegador. Para tenerla como programa: en Chrome o Edge, pulsa el icono de instalar de la barra de direcciones (una pantalla con una flecha).</p>`) +
-    `<div class="gnota"><b>Para el móvil:</b> abre esta misma dirección en el teléfono (prensasegovia.github.io/prensasegovia) y en iPhone usa Compartir → «Añadir a pantalla de inicio»; en Android, ⋮ → «Instalar aplicación».</div>`;
+  // Ordenador: sin pasos; se explica cuando la abra en el móvil
+  return `<h2 id="guiaTit">Tenla también en el móvil</h2><p>En el teléfono se puede guardar como una app: con su icono en la pantalla de inicio, a pantalla completa y con <b>avisos</b> de lo nuevo.</p>
+    <div class="gnota">Abre en el móvil <b>prensasegovia.github.io/prensasegovia</b> (o el enlace que te pasaron) y allí te explicará cómo guardarla, paso a paso para iPhone o Android.</div>`;
 }
 const PASOS = [
   () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio, ya filtrada: aquí arriba solo sale lo que interesa al servicio de los pueblos y de la provincia.</p>
@@ -2358,7 +2359,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v88";
+const VERSION_APP = "prensa-segovia-v89";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
