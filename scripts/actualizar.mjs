@@ -468,7 +468,7 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", lesio: "herid", herid: "herid", heric: "herid", recl: "carce", reclu: "carce", /* ni «inter» (internacional) ni «presi» (presidente) */
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", quema: "incen", fuego: "incen", arde: "incen", ardio: "incen", intox: "intox", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", tren: "tren", trene: "tren", maqui: "tren" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", quema: "incen", fuego: "incen", arde: "incen", ardio: "incen", intox: "intox", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", paros: "huelg", tren: "tren", trene: "tren", maqui: "tren" };
 // Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
 const MISMA_PERSONA = [[/alcalde de madrid|martinez-almeida|\balmeida\b/, "almeida"], [/presidente de la junta|\bmanueco\b/, "manueco"], [/presidenta de (la comunidad de )?madrid|\bayuso\b/, "ayuso"],
   [/presidente del gobierno|pedro sanchez/, "psanchez"], [/lider del pp|\bfeijoo\b/, "feijoo"], [/lider de vox|\babascal\b/, "abascal"], [/subdelegad[oa] del gobierno/, "subdelegado"], [/delegad[oa] del gobierno en castilla/, "delegado"]];
@@ -605,7 +605,7 @@ function mismaNoticia(a, b) {
   if (!CONCRETO(a.municipio) && !CONCRETO(b.municipio) && dias === 0) {
     let comun = 0; for (const w of a.tk) if (b.tk.has(w)) comun++;
     if (comun >= 3) return true;
-    if (comun >= 2 && fuertes.some(w => ["silic", "pinta", "guiom", "maqui"].includes(w))) return true;
+    if (comun >= 2 && fuertes.some(w => ["silic", "pinta", "tren"].includes(w))) return true;
   }
   return false;
 }
