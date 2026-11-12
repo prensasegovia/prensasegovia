@@ -1,0 +1,1182 @@
+{
+ "fuentesGoogle": {
+  "El Día de Segovia | https://www.eldiasegovia.es": 87,
+  "El Norte de Castilla | https://www.elnortedecastilla.es": 80,
+  "El Español | https://www.elespanol.com": 39,
+  "Tribuna de Segovia. | https://www.tribunasegovia.com": 30,
+  "El Adelantado | https://eladelantado.com": 27,
+  "Segoviadirecto.com | https://segoviadirecto.com": 21,
+  "Cadena SER | https://cadenaser.com": 17,
+  "La Vanguardia | https://www.lavanguardia.com": 16,
+  "La Razón | https://www.larazon.es": 14,
+  "Diputación de Segovia | https://www.dipsegovia.es": 12,
+  "esCuellar | https://escuellar.es": 11,
+  "Infobae | https://www.infobae.com": 8,
+  "ADN | A Diario Network | https://www.adiario.mx": 8,
+  "boletinbien.com | https://boletinbien.com": 6,
+  "Meganoticias | https://www.meganoticias.cl": 6,
+  "Megatiempo | https://www.megatiempo.cl": 6,
+  "RadioActiva 92.5 | https://www.radioactiva.cl": 6,
+  "El Confidencial | https://www.elconfidencial.com": 5,
+  "El Debate | https://www.eldebate.com": 5,
+  "Onda Cero | https://www.ondacero.es": 5,
+  "Europa Press | https://www.europapress.es": 5,
+  "MARCA | https://www.marca.com": 5,
+  "Correo del Sur | https://correodelsur.com": 5,
+  "COPE | https://www.cope.es": 4,
+  "Norte de Ciudad Juárez | https://nortedigital.mx": 4,
+  "TUDN | https://www.tudn.com": 4,
+  "Demócrata | https://www.democrata.es": 4,
+  "Diario de Jerez | https://www.diariodejerez.es": 3,
+  "Diario AS | https://as.com": 3,
+  "ABC | https://www.abc.es": 3,
+  "Huelva Información | https://www.huelvainformacion.es": 3,
+  "Diario de Castilla y León | https://www.diariodecastillayleon.es": 3,
+  "PSOE Segovia | https://www.psoesegovia.es": 3,
+  "El Sol de México | https://oem.com.mx": 3,
+  "Todo Es Política | https://todoespolitica.com.mx": 3,
+  "HOLA | https://www.hola.com": 3,
+  "La Provincia | https://www.laprovincia.es": 3,
+  "El Mundo | https://www.elmundo.es": 2,
+  "VOX España | https://www.voxespana.es": 2,
+  "Glorieta Digital – Paco Cañamero | https://www.glorietadigital.es": 2,
+  "Tribuna de Salamanca. | https://www.tribunasalamanca.com": 2,
+  "ACB | https://acb.com": 2,
+  "e-consulta.com | https://www.e-consulta.com": 2,
+  "Imagen Radio | https://www.imagenradio.com.mx": 2,
+  "860 Líder Informativo | https://860liderinformativo.mx": 2,
+  "Hoja de Ruta Digital | https://hojaderutadigital.mx": 2,
+  "El Periódico de Tlaxcala | https://elperiodicodetlaxcala.com": 2,
+  "Reporte Indigo | https://www.reporteindigo.com": 2,
+  "Talla Politica | https://www.tallapolitica.com.mx": 2,
+  "La Jornada de Oriente | https://www.lajornadadeoriente.com.mx": 2,
+  "El Heraldo de México | https://heraldodemexico.com.mx": 2,
+  "Segoviaudaz | https://segoviaudaz.es": 2,
+  "La Voz de Medina | https://www.lavozdemedinadigital.com": 2,
+  "veredictum.cl | https://veredictum.cl": 2,
+  "Central Noticia | https://www.centralnoticia.cl": 2,
+  "desdeSoria | https://www.desdesoria.es": 2,
+  "SoriaNoticias | https://sorianoticias.com": 2,
+  "Diario de Burgos | https://www.diariodeburgos.es": 2,
+  "Elplural.com | https://www.elplural.com": 2,
+  "Burgos CF | https://www.burgoscf.es": 2,
+  "Onda Vasca | https://www.ondavasca.com": 2,
+  "Gabinete de Comunicación de la Universidad de VAlladolid | https://comunicacion.uva.es": 1,
+  "Ayuntamiento de Segovia | https://www.segovia.es": 1,
+  "Triatlon Castilla y León | https://www.triatloncastillayleon.com": 1,
+  "Directo al Paladar | https://www.directoalpaladar.com": 1,
+  "RTVE.es | https://www.rtve.es": 1,
+  "LaBaneza.Net | https://labaneza.net": 1,
+  "Segovia 247 | http://segovia247.es": 1,
+  "Granada Hoy | https://www.granadahoy.com": 1,
+  "Excélsior | https://www.excelsior.com.mx": 1,
+  "Gente de Salta | https://www.gentedesalta.com": 1,
+  "El Nuevo Siglo | https://www.elnuevosiglo.com.co": 1,
+  "La Silla Rota | https://lasillarota.com": 1,
+  "Página|12 | https://www.pagina12.com.ar": 1,
+  "LV12 | https://www.lv12.com.ar": 1,
+  "La Política Online | https://www.lapoliticaonline.com": 1,
+  "Amanecer Querétaro | https://amanecerqro.com": 1,
+  "NewsMx Tv | https://newsmxtv.com.mx": 1,
+  "Proceso | https://www.proceso.com.mx": 1,
+  "La Gaceta | https://www.lagaceta.com.ar": 1,
+  "Plano Informativo | https://planoinformativo.com": 1,
+  "MILENIO | https://www.milenio.com": 1,
+  "Milenio | https://www.milenio.com": 1,
+  "El Diario | https://diario.mx": 1,
+  "Que Pasa Salta | https://www.quepasasalta.com.ar": 1,
+  "Gente Tlx | https://gentetlx.com.mx": 1,
+  "El Soberano | https://elsoberano.mx": 1,
+  "Tecnoempresa | https://tecnoempresa.mx": 1,
+  "El Espinar | https://elespinar.es": 1,
+  "Ayto. Torrelodones | https://torrelodones.es": 1,
+  "Sofascore | https://www.sofascore.com": 1,
+  "Diario de Almería | https://www.diariodealmeria.es": 1,
+  "Aquí en la Sierra | https://aquienlasierra.es": 1,
+  "sportlife.es | https://www.sportlife.es": 1,
+  "Diario de la Ribera | https://www.diariodelaribera.net": 1,
+  "CatalunyaPress | https://www.catalunyapress.es": 1,
+  "La Guía Go! | https://www.laguiago.com": 1,
+  "MANACOR NOTICIAS | https://www.manacornoticias.com": 1,
+  "MLB.com | https://www.mlb.com": 1,
+  "YouTube | https://youtu.be": 1,
+  "Diario Humano | https://diariohumano.com.mx": 1,
+  "EstadoDiario | https://estadodiario.com": 1,
+  "TV Más | https://tvmas.tv": 1,
+  "Radio JGM | https://radiojgm.uchile.cl": 1,
+  "La Cuarta | https://www.lacuarta.com": 1,
+  "Facebook | https://www.facebook.com": 1,
+  "Olé | https://www.ole.com.ar": 1,
+  "Diario Libre | https://www.diariolibre.com": 1,
+  "El Vacanudo | https://www.elvacanudo.cl": 1,
+  "Mega.cl | https://www.mega.cl": 1,
+  "OvejeroNoticias | https://www.ovejeronoticias.cl": 1,
+  "El Espectador | https://www.elespectador.com": 1,
+  "El Rancahuaso | https://www.elrancahuaso.cl": 1,
+  "El Pilón | https://elpilon.com.co": 1,
+  "La Jornada | https://www.jornada.com.mx": 1,
+  "El Desconcierto | https://eldesconcierto.cl": 1,
+  "The Clinic | https://www.theclinic.cl": 1,
+  "TV Azteca | https://www.tvazteca.com": 1,
+  "La Brújula 24 | https://www.labrujula24.com": 1,
+  "IP Virginio Gómez | https://noticias.virginiogomez.cl": 1,
+  "El Naveghable | https://www.elnaveghable.cl": 1,
+  "Desierto FM | https://www.desiertofm.cl": 1,
+  "El MorroCotudo | https://www.elmorrocotudo.cl": 1,
+  "Cutral Co al Instante | https://www.cutralcoalinstante.com": 1,
+  "ADN Informativo MX | https://adnportal.mx": 1,
+  "El Alto Jalón | https://www.elaltojalon.es": 1,
+  "Foro3D | https://foro3d.com": 1,
+  "Guioteca | https://www.guioteca.com": 1,
+  "El Diario de Coahuila | https://eldiariodecoahuila.com.mx": 1,
+  "Prensa Mercosur | https://prensamercosur.org": 1,
+  "AlMomento.net | https://almomento.net": 1,
+  "DUPLOS.CL | https://duplos.cl": 1,
+  "Doble Amarilla | https://www.dobleamarilla.com.ar": 1,
+  "Página 7 | https://www.pagina7.cl": 1,
+  "Ilustrado.cl | https://www.ilustrado.cl": 1,
+  "lineadirectaportal.com | https://lineadirectaportal.com": 1,
+  "Radio Agricultura | https://www.radioagricultura.cl": 1,
+  "Espacio Diario | https://espaciodiario.com": 1,
+  "Heraldo-Diario de Soria | https://www.heraldodiariodesoria.es": 1,
+  "RPP Noticias | https://rpp.pe": 1,
+  "Agencia Andina | https://andina.pe": 1,
+  "Erbol | | https://erbol.com.bo": 1,
+  "ABI - Agencia Boliviana de Información | https://abi.bo": 1,
+  "https://geniostv.pe/ | https://geniostv.pe": 1,
+  "www.oigo.com | https://www.oigo.com": 1,
+  "Uruguay Al Día | https://uruguayaldia.com.uy": 1,
+  "SOLO TIRO | https://solotiro.com": 1,
+  "Cadena 100 | https://www.cadena100.es": 1,
+  "Bebés y Más | https://www.bebesymas.com": 1,
+  "SincroGuia TV | https://sincroguia-tv.expansion.com": 1,
+  "The Objective | https://theobjective.com": 1,
+  "heraldo.es | https://www.heraldo.es": 1,
+  "El Placer de la Lectura | https://elplacerdelalectura.com": 1,
+  "WATmag | https://www.thewatmag.com": 1,
+  "Radio Mitre | https://radiomitre.cienradios.com": 1,
+  "Meridiano.net | https://meridiano.net": 1,
+  "La Tribuna de Ciudad Real | https://www.latribunadeciudadreal.es": 1,
+  "Viajablog | https://www.viajablog.com": 1,
+  "La Tribuna de Albacete | https://www.latribunadealbacete.es": 1,
+  "El Puerto Actualidad | https://elpuertoactualidad.es": 1,
+  "OkDiario | https://okdiario.com": 1,
+  "La Nación Costa Rica | https://www.nacion.com": 1,
+  "Récord | https://www.record.com.mx": 1,
+  "ESPN México | https://www.espn.com.mx": 1,
+  "Mindeporte | https://mindeporte.gob.ve": 1,
+  "La Tierra Del Toro | https://www.latierradeltoro.es": 1,
+  "Diario de Ávila | https://www.diariodeavila.es": 1,
+  "ESdiario | https://www.esdiario.com": 1,
+  "Ecuestre | https://www.ecuestre.es": 1,
+  "MariskalRock.com | https://mariskalrock.com": 1,
+  "El Digital de Albacete | https://www.eldigitaldealbacete.com": 1,
+  "Federación de Balonmano de Castilla y León | https://fcylbm.es": 1,
+  "Club Balonmano Nava | https://balonmanonava.com": 1,
+  "Atlético Valladolid | https://www.atleticovalladolid.es": 1,
+  "El Deporte Conquense | https://eldeporteconquense.com": 1,
+  "NueveCuatroUno | https://nuevecuatrouno.com": 1,
+  "La Rioja | https://www.larioja.com": 1,
+  "Castilla y León Televisión | https://www.cyltv.es": 1,
+  "Federación de Fútbol de Castilla y León | https://www.rfcylf.es": 1,
+  "infoCLM | https://www.infoclm.es": 1,
+  "El Digital de Cuenca | https://eldigitaldecuenca.com": 1,
+  "Las Provincias | https://www.lasprovincias.es": 1,
+  "Diario Sur | https://www.diariosur.es": 1,
+  "CaixaBank Research | https://www.caixabankresearch.com": 1,
+  "Diario Siglo XXI | https://www.diariosigloxxi.com": 1,
+  "Diario de León | https://www.diariodeleon.es": 1,
+  "Futbolme | https://futbolme.com": 1,
+  "MONCLOA.COM | https://www.moncloa.com": 1,
+  "Diario Palentino | https://www.diariopalentino.es": 1,
+  "El Constitucional | https://www.elconstitucional.es": 1,
+  "Animalshealth.es | https://www.animalshealth.es": 1,
+  "Huelva24 | https://www.huelva24.com": 1,
+  "Deia | https://www.deia.eus": 1,
+  "Stick Noticias | https://sticknoticias.com": 1,
+  "Ecijaweb | https://www.ecijaweb.com": 1,
+  "Diario Público | https://www.publico.es": 1
+ },
+ "ejemplos": {
+  "Diputación de Segovia | https://www.dipsegovia.es": [
+   "Segovia → ‘Viajero, yo te enseñaré Segovia’ muestra cuevas, barrancas y troncos fósiles en su segunda georruta - Diputac",
+   "Segovia → Prodestur da luz verde a un presupuesto de 1.346.000 euros para consolidar la provincia de Segovia como un des",
+   "Segovia → La Diputación de Segovia organiza el primer foro de profesionales de la Administración Local, denominado ‘Cone"
+  ],
+  "El Mundo | https://www.elmundo.es": [
+   "Segovia → El jefe antinarco de Segovia que se 'vendió' a una red - El Mundo",
+   "Guardia Civil Segovia → El jefe antinarco de Segovia que se 'vendió' a una red - El Mundo"
+  ],
+  "El Norte de Castilla | https://www.elnortedecastilla.es": [
+   "Segovia → Segovia fija los servicios mínimos de la huelga: menos autobuses, limpieza y atención domiciliaria garantizada",
+   "Segovia → La huelga general arranca en Segovia con los primeros piquetes - El Norte de Castilla",
+   "Segovia → Los sindicatos llaman a parar Segovia por el precio de la vivienda y los salarios - El Norte de Castilla"
+  ],
+  "El Día de Segovia | https://www.eldiasegovia.es": [
+   "Segovia → Los sindicatos llaman a parar el 11N por el coste de la vida - El Día de Segovia",
+   "Segovia → «Recé por cada fallecido que trasladamos» - El Día de Segovia",
+   "Segovia → Hospitalizado en La Paz un jugador cadete de La Lastrilla tras un choque con un rival - El Día de Segovia"
+  ],
+  "Gabinete de Comunicación de la Universidad de VAlladolid | https://comunicacion.uva.es": [
+   "Segovia → Gabinete de Comunicación de la Universidad de Valladolid - Gabinete de Comunicación de la Universidad de VAlla"
+  ],
+  "Ayuntamiento de Segovia | https://www.segovia.es": [
+   "Segovia → El Ayuntamiento de Segovia patrocina al Club Deportivo Spordeporte - Ayuntamiento de Segovia"
+  ],
+  "Tribuna de Segovia. | https://www.tribunasegovia.com": [
+   "Segovia → La huelga arranca con tensión y piquetes en los principales puntos de Castilla y León - Tribuna de Segovia.",
+   "Segovia → Prodestur Segovia aprueba un presupuesto de 1.346.000 euros para 2027 - Tribuna de Segovia.",
+   "Segovia → ¿Quieres jurar bandera?: así puedes hacerlo en el Real Alcázar de Segovia - Tribuna de Segovia."
+  ],
+  "VOX España | https://www.voxespana.es": [
+   "Segovia → Jorge Buxadé visita Segovia y aborda los problemas de vivienda, seguridad y abastecimiento de agua - VOX Españ",
+   "Segovia provincia → Samuel Vázquez aborda en Segovia el acceso a la vivienda y las oportunidades para los jóvenes - VOX España"
+  ],
+  "Triatlon Castilla y León | https://www.triatloncastillayleon.com": [
+   "Segovia → El programa Lideresas celebra una semana de actividades en Segovia - Triatlon Castilla y León"
+  ],
+  "Cadena SER | https://cadenaser.com": [
+   "Segovia → Cinco intoxicados por humo en el incendio de una vivienda en Segovia - Cadena SER",
+   "Segovia → La Guardia Civil de Segovia detiene a un hombre con 96 gramos de ketamina - Cadena SER",
+   "Cuéllar → El III Festival Interancional de Cine de Cuéllar calienta motores con la exposición homenaje a Paco Rabal - Ca"
+  ],
+  "Directo al Paladar | https://www.directoalpaladar.com": [
+   "Segovia → El refugio de Chenoa en Segovia: un pequeño pueblo a una hora de Madrid con una joya románica del siglo XII - "
+  ],
+  "Glorieta Digital – Paco Cañamero | https://www.glorietadigital.es": [
+   "Segovia → Andrés Rivas, un charro en Segovia - Glorieta Digital – Paco Cañamero",
+   "El Espinar → Andrés Rivas, un charro en Segovia - Glorieta Digital – Paco Cañamero"
+  ],
+  "Diario de Jerez | https://www.diariodejerez.es": [
+   "Segovia → El efecto Abel Segovia catapulta al Xerez CD: 13 puntos de 18 posibles - Diario de Jerez",
+   "Segovia → Abel Segovia: \"El Xerez siempre va a tener la misma convicción y la misma forma de jugar\" - Diario de Jerez",
+   "Segovia → Abel Segovia, técnico del Xerez CD: \"El resultado no fue ni abultado para lo que generamos\" - Diario de Jerez"
+  ],
+  "Diario AS | https://as.com": [
+   "Segovia → Ordenan al Ayuntamiento de Segovia retirar un vídeo por vulnerar la neutralidad institucional en periodo elect",
+   "elecciones 29N Segovia → Ordenan al Ayuntamiento de Segovia retirar un vídeo por vulnerar la neutralidad institucional en periodo elect",
+   "Junta Electoral Segovia → Ordenan al Ayuntamiento de Segovia retirar un vídeo por vulnerar la neutralidad institucional en periodo elect"
+  ],
+  "El Confidencial | https://www.elconfidencial.com": [
+   "Segovia → AEMET: pronóstico del tiempo en Segovia para hoy, martes 10 de noviembre - El Confidencial",
+   "Segovia → AEMET y la previsión del tiempo en Segovia para hoy, miércoles 11 de noviembre - El Confidencial",
+   "El Espinar → Cuatro heridos tras un alcance entre cuatro vehículos en El Espinar (Segovia) - El Confidencial"
+  ],
+  "RTVE.es | https://www.rtve.es": [
+   "Segovia → Informativo Segovia 8:45 - 10/11/26 - RTVE.es"
+  ],
+  "Segoviadirecto.com | https://segoviadirecto.com": [
+   "Segovia → La tasa de basuras y la aplicación de las bonificaciones en Segovia vuelve a enfrentar a PP y PSOE - Segoviadi",
+   "Segovia → Feria de Empleo, Innovación y Emprendimiento de Segovia 2026 - Segoviadirecto.com",
+   "Segovia → Nuevas ofertas de empleo de Segovia Empleo - Segoviadirecto.com"
+  ],
+  "El Debate | https://www.eldebate.com": [
+   "Segovia → Detenida en Segovia por trabajar con la identidad de una mujer extranjera mientras cobraba el paro - El Debate",
+   "Segovia → Caos ferroviario en Valladolid y Segovia por la huelga de maquinistas y el incumplimiento de los servicios mín",
+   "mitin Segovia → El alcalde de Valladolid pide diálogo a Feijóo por el soterramiento y denuncia la «desidia» del Gobierno - El "
+  ],
+  "ABC | https://www.abc.es": [
+   "Segovia → El refugio de Chenoa en Segovia: un pequeño pueblo a una hora de Madrid con una joya románica del siglo XII - ",
+   "Cuéllar → El análisis de Ángel Cuéllar del Elche - Betis: «La pegada decanta un partido con cierta incertidumbre» - ABC",
+   "Carbonero el Mayor → Sara Carbonero confiesa su mayor miedo: «Tengo miedo a la muerte y, sobre todo, por la gente que se queda» - A"
+  ],
+  "El Español | https://www.elespanol.com": [
+   "Segovia → La Diputación de Segovia organiza un primer foro para abordar el empleo público, la contratación y el papel de",
+   "Segovia provincia → La Diputación de Segovia recibe el apoyo del Diálogo Social por su alto cumplimiento en empleo público - El Es",
+   "Segovia provincia → Dos carreteras de Segovia en Matabuena y Orejana renuevan sus firmes tras una inversión de 770.000 euros - El "
+  ],
+  "Tribuna de Salamanca. | https://www.tribunasalamanca.com": [
+   "Segovia → Castilla y León levanta las restricciones por la enfermedad de Newcastle, salvo en el foco de Segovia - Tribun",
+   "Turégano → El Salamanca UDS 'B' cae en una jornada mágica para el Santa Marta: resultados y clasificación 3ª RFEF - Tribu"
+  ],
+  "Onda Cero | https://www.ondacero.es": [
+   "Segovia → Manuel Segovia: \"La cultura tiene que ayudar a que los espectadores se diviertan y al mismo tiempo reflexionen",
+   "Cuéllar → El Ayuntamiento de Cuéllar y UVESA construirán un aparcamiento junto al matadero en Prado Vega - Onda Cero",
+   "Cantalejo → El Ayuntamiento de Cantalejo rechaza la petición de \"Cantalejo saludable\" contra la planta de biogás - Onda Ce"
+  ],
+  "Huelva Información | https://www.huelvainformacion.es": [
+   "Segovia → Crisis interna en Vox Huelva: el parlamentario andaluz Rafael Segovia pide la dimisión de la cúpula provincial",
+   "campaña electoral Segovia → Rafael Segovia acusa a la dirección de Vox en Huelva de engañar a sus cargos y exige apartar a Tomás Fernández",
+   "campaña electoral Segovia → Crisis interna en Vox Huelva: el parlamentario andaluz Rafael Segovia pide la dimisión de la cúpula provincial"
+  ],
+  "COPE | https://www.cope.es": [
+   "Segovia → La huelga general \"naufraga\" bajo la lluvia en Segovia con un seguimiento mínimo y con cifras que quieren saca",
+   "Segovia provincia → Detienen a un hombre en Segovia con 116 gramos de distintas sustancias estupefacientes - COPE",
+   "Subdelegación Gobierno Segovia → Pablo García Ruiz, nuevo subdelegado del Gobierno en Granada - COPE"
+  ],
+  "Diario de Castilla y León | https://www.diariodecastillayleon.es": [
+   "Segovia → La borrasca Bruna se deja notar en Castilla y León: inundaciones en Salamanca y fuertes rachas de viento en Se",
+   "Cantalejo → Detenida en Cantalejo (Segovia) por robar joyas en el interior de casas y coches y 2.500 euros en efectivo - D",
+   "elecciones 29N Segovia → Mañueco llama a la «movilización total» para «derribar de una vez por todas el muro infame del sanchismo» - Di"
+  ],
+  "PSOE Segovia | https://www.psoesegovia.es": [
+   "Segovia provincia → El PSOE de Segovia apuesta desde el Colegio de Médicos por una sanidad pública con más recursos y una mejor at",
+   "candidatos Segovia Cortes → José Luis Aceves y Lirio Martín defienden un compromiso firme con agricultores y ganaderos y reclaman a la Jun",
+   "campaña electoral Segovia → Mazarías usa a la oposición como coartada para tratar de ocultar su incompetencia con el recinto ferial - PSOE"
+  ],
+  "boletinbien.com | https://boletinbien.com": [
+   "Segovia provincia → Elisa Martínez, nueva profesora de violín fija en el Ayuntamiento - boletinbien.com",
+   "Segovia provincia → Tardienta ajusta 19.000 euros en inversiones dentro de su presupuesto - boletinbien.com",
+   "Segovia provincia → Santa Cilia agiliza el contrato de sus nuevas placas solares - boletinbien.com"
+  ],
+  "ACB | https://acb.com": [
+   "Cuéllar → Estad. Avanzada David Cuéllar - ACB",
+   "Cuéllar → Temporada David Cuéllar - ACB"
+  ],
+  "Infobae | https://www.infobae.com": [
+   "Cuéllar → Cuéllar (Segovia) amanece a 8,6º bajo cero este jueves, la mínima nacional - Infobae",
+   "Cuéllar → Alejandro Ordóñez sacó a Hitler del Ministerio del Interior: esta es la nueva funcionaria de la cartera, que y",
+   "Ayllón → Perú en los Latin Grammy 2026: dónde y cuándo ver a Eva Ayllón, Nic, FABIÁN, Andre y Federico Tarazona en comp"
+  ],
+  "El Adelantado | https://eladelantado.com": [
+   "Cuéllar → Una mujer herida tras una colisión entre dos turismos en Cuéllar - El Adelantado",
+   "Cuéllar → El Cuéllar Cojalba y el Valverde Ontex vuelven a sumar en Tercera - El Adelantado",
+   "El Espinar → Cierre de parques en El Espinar ante la alerta de rachas de viento - El Adelantado"
+  ],
+  "esCuellar | https://escuellar.es": [
+   "Cuéllar → El líder se muestra superior a un condicionado CD Cuéllar - esCuellar",
+   "Cuéllar → Las murallas de Cuéllar se quedan fuera del programa 2 % cultural - esCuellar",
+   "Cuéllar → El FS Cuéllar Cojalba vence con claridad al segundo clasificado en la jornada previa al derbi cuellarano - esC"
+  ],
+  "La Vanguardia | https://www.lavanguardia.com": [
+   "Cuéllar → El tiempo en Cuéllar hoy - La Vanguardia",
+   "Cuéllar → El tiempo en Mata de Cuéllar por horas - La Vanguardia",
+   "Cuéllar → Calidad del aire en San Cristóbal de Cuéllar - La Vanguardia"
+  ],
+  "La Razón | https://www.larazon.es": [
+   "Cuéllar → Cuéllar (Segovia) sale a escena con el III Festival Internacional de Cine del 13 al 21 de noviembre - La Razón",
+   "Cantalejo → Detienen a una mujer por 19 robos en vehículos y viviendas de la zona de Cantalejo (Segovia) - La Razón",
+   "Carbonero el Mayor → Sara Carbonero se sincera sobre su mayor temor: \"Tengo miedo a la muerte, lo reconozco\" - La Razón"
+  ],
+  "LaBaneza.Net | https://labaneza.net": [
+   "Cuéllar → Rotunda victoria del Berarqui C.D. La Bañeza ante el Racing Cuéllar con dobletes de Kike y Luis Fe - LaBaneza."
+  ],
+  "Segovia 247 | http://segovia247.es": [
+   "Cuéllar → El Unami C.P. golea 0-5 al C.D. Cuéllar Balompié con doblete de Goyo - Segovia 247"
+  ],
+  "Granada Hoy | https://www.granadahoy.com": [
+   "Cuéllar → Synova, el lugar donde entrenar también significa aprender a cuidarse - Granada Hoy"
+  ],
+  "Excélsior | https://www.excelsior.com.mx": [
+   "Cuéllar → Rogelio Cuéllar exhibe una treintena de retratos inéditos de Jorge Luis Borges - Excélsior"
+  ],
+  "Gente de Salta | https://www.gentedesalta.com": [
+   "Cuéllar → Quién es Soledad Cuéllar, la referente Ava Guaraní de Pichanal que le habló a León XIV - Gente de Salta"
+  ],
+  "e-consulta.com | https://www.e-consulta.com": [
+   "Cuéllar → El ajedrez político perfila a mujeres en las elecciones de San Andrés Cholula | José Antonio Cuéllar M. - e-co",
+   "Cuéllar → Justicia ante victimización de Eduardo Rivera | José Antonio Cuéllar M. - e-consulta.com"
+  ],
+  "Imagen Radio | https://www.imagenradio.com.mx": [
+   "Cuéllar → Alfonso Ramírez Cuéllar destaca la urgencia de radicalizar lucha contra la corrupción - Imagen Radio",
+   "Cuéllar → Radicalizaremos lucha anticorrupción: Ramírez Cuéllar; Morena alista iniciativa - Imagen Radio"
+  ],
+  "El Nuevo Siglo | https://www.elnuevosiglo.com.co": [
+   "Cuéllar → Colombiano Cuéllar, invitado especial a Festival Limmat de Zurich - El Nuevo Siglo"
+  ],
+  "La Silla Rota | https://lasillarota.com": [
+   "Cuéllar → Ley General de Pensiones: propone Ramírez Cuéllar reforma - La Silla Rota"
+  ],
+  "860 Líder Informativo | https://860liderinformativo.mx": [
+   "Cuéllar → Cruz Pérez Cuéllar agradece adhesiones a su proyecto político - 860 Líder Informativo",
+   "Cuéllar → Pérez Cuéllar descarta preocupación por posible alianza PAN-PRI rumbo a 2027 - 860 Líder Informativo"
+  ],
+  "ADN | A Diario Network | https://www.adiario.mx": [
+   "Cuéllar → Suma Cruz Pérez Cuéllar a Alejandro Jiménez, Alfredo Urías y Maurilio Fuentes a su proyecto - ADN | A Diario N",
+   "Cuéllar → Señala Pérez Cuéllar falta de atención estatal a municipios de Chihuahua durante gira - ADN | A Diario Network",
+   "Cuéllar → Ofrece Cruz Pérez Cuéllar apoyo a ganaderos de Chihuahua para atender inseguridad y gestionar recursos - ADN |"
+  ],
+  "Página|12 | https://www.pagina12.com.ar": [
+   "Cuéllar → Soledad Cuéllar ante el papa: “Organizarse desde abajo” - Página|12"
+  ],
+  "LV12 | https://www.lv12.com.ar": [
+   "Cuéllar → Soledad Cuéllar: \"Feliz de haber compartido frente al papa mi historia\" - LV12"
+  ],
+  "La Política Online | https://www.lapoliticaonline.com": [
+   "Cuéllar → Andrea Chávez a Cruz Pérez Cuéllar: \"No me busquen en otro lado, nos vemos en las calles\" - La Política Online"
+  ],
+  "Amanecer Querétaro | https://amanecerqro.com": [
+   "Cuéllar → Alfonso Ramírez Cuéllar propone reforma integral al sistema de pensiones - Amanecer Querétaro"
+  ],
+  "Norte de Ciudad Juárez | https://nortedigital.mx": [
+   "Cuéllar → Plantean necesidades de carreteras, agua y salud a Pérez Cuéllar en Nonoava - Norte de Ciudad Juárez",
+   "Cuéllar → Recibe Pérez Cuéllar reclamo ciudadano por abandono de gobernadores a municipios - Norte de Ciudad Juárez",
+   "Cuéllar → Cruz Pérez Cuéllar suma a regidor, exalcalde y exfuncionario a su proyecto político - Norte de Ciudad Juárez"
+  ],
+  "Hoja de Ruta Digital | https://hojaderutadigital.mx": [
+   "Cuéllar → A 40 años de la partida de Jorge Luis Borges el Museo de la Ciudad de México inaugura exposición fotográfica “",
+   "Cuéllar → Diputado Ramírez Cuellar lleva al Senado de la República propuesta de iniciativa para combatir corrupción - Ho"
+  ],
+  "NewsMx Tv | https://newsmxtv.com.mx": [
+   "Cuéllar → Rogelio Cuéllar inaugurará exposición fotográfica sobre Borges - NewsMx Tv"
+  ],
+  "Proceso | https://www.proceso.com.mx": [
+   "Cuéllar → Ramírez Cuéllar presenta en el Senado una propuesta de reforma integral anticorrupción - Proceso"
+  ],
+  "El Sol de México | https://oem.com.mx": [
+   "Cuéllar → Suma Cruz Pérez Cuéllar a regidor, exalcalde y exfuncionario estatal a su proyecto político - El Sol de México",
+   "Cuéllar → Cruz Pérez Cuéllar se prepara para las elecciones de 2027 tras nombramiento en Morena - El Heraldo de Chihuahu",
+   "Cuéllar → Suma Cruz Pérez Cuéllar a su proyecto político a exalcalde de Juárez, exsubsecretario de Educación y regidor -"
+  ],
+  "La Gaceta | https://www.lagaceta.com.ar": [
+   "Cuéllar → Qué le dijeron al papa León XIV los trabajadores y emprendedores en la UCA - La Gaceta"
+  ],
+  "Plano Informativo | https://planoinformativo.com": [
+   "Cuéllar → Impulsan Higinio y Cuéllar reformas contra la corrupción - Plano Informativo"
+  ],
+  "El Periódico de Tlaxcala | https://elperiodicodetlaxcala.com": [
+   "Cuéllar → Lorena Cuéllar lleva las tradiciones y riqueza cultural de Tlaxcala a California - El Periódico de Tlaxcala",
+   "Cuéllar → Lorena Cuéllar prepara el gran balance de su gobierno: cinco años de transformación y resultados para Tlaxcala"
+  ],
+  "Reporte Indigo | https://www.reporteindigo.com": [
+   "Cuéllar → Cruz Pérez Cuéllar pide poner atención a los municipios - Reporte Indigo",
+   "Cuéllar → Ramírez Cuéllar propone renovar el sistema anticorrupción y combatir la impunidad - Reporte Indigo"
+  ],
+  "Talla Politica | https://www.tallapolitica.com.mx": [
+   "Cuéllar → Mensaje del diputado Alfonso Ramírez Cuéllar en la entrega del Paquete de Iniciativas en Materia de Combate a ",
+   "Cuéllar → Conferencia de prensa del senador Higinio Martínez Miranda, presidente del Senado de la República y del diputa"
+  ],
+  "MILENIO | https://www.milenio.com": [
+   "Cuéllar → Ramírez Cuéllar propone reforma a fiscalías y auditorías del país - MILENIO"
+  ],
+  "Milenio | https://www.milenio.com": [
+   "Cuéllar → Ramírez Cuéllar presenta al Senado paquete de reformas anticorrupción - Milenio"
+  ],
+  "La Jornada de Oriente | https://www.lajornadadeoriente.com.mx": [
+   "Cuéllar → Lorena Cuéllar respalda a presidenta Sheinbaum y pide esclarecer presuntas irregularidades en contratos electo",
+   "Cuéllar → Supervisa la gobernadora Cuéllar las 16 nuevas salas de oralidad del TSJE - La Jornada de Oriente"
+  ],
+  "El Heraldo de México | https://heraldodemexico.com.mx": [
+   "Cuéllar → Alfonso Ramírez Cuéllar plantea reconstruir el sistema de auditoría y fiscalización - El Heraldo de México",
+   "Cuéllar → Ramírez Cuéllar entrega al Senado paquete de reformas anticorrupción - El Heraldo de México"
+  ],
+  "El Diario | https://diario.mx": [
+   "Cuéllar → \"Hasta donde tope\", expresa Alejandro Jiménez su apoyo a Cruz Pérez Cuéllar - El Diario"
+  ],
+  "Que Pasa Salta | https://www.quepasasalta.com.ar": [
+   "Cuéllar → Orgullo salteño: la inspiradora historia de Soledad Cuéllar y el proyecto \"Ñande\" en Pichanal - Que Pasa Salta"
+  ],
+  "Gente Tlx | https://gentetlx.com.mx": [
+   "Cuéllar → Con nueva visita a San Francisco, Cuéllar suma seis viajes a Estados Unidos (Video) - Gente Tlx"
+  ],
+  "El Soberano | https://elsoberano.mx": [
+   "Cuéllar → Lorena Cuéllar invierte más de 150 millones en nuevo Archivo General de Tlaxcala - El Soberano"
+  ],
+  "Tecnoempresa | https://tecnoempresa.mx": [
+   "Cuéllar → Plantea Ramírez Cuéllar una Reforma Constitucional del Sistema de Pensiones - Tecnoempresa"
+  ],
+  "Todo Es Política | https://todoespolitica.com.mx": [
+   "Cuéllar → Asegura Cruz Pérez Cuéllar que el Estado tiene abandonado al municipio de Cuauhtémoc - Todo Es Política",
+   "Cuéllar → Se suman panistas al proyecto de Cruz Pérez Cuéllar - Todo Es Política",
+   "Cuéllar → El PRIAN vota en contra de los programas sociales: Cruz Pérez Cuéllar - Todo Es Política"
+  ],
+  "El Espinar | https://elespinar.es": [
+   "El Espinar → OTOÑOS CON PULSO, Rondalla Lorenzo Moya - El Espinar"
+  ],
+  "Europa Press | https://www.europapress.es": [
+   "El Espinar → Investigan a dos vecinos de El Espinar (Segovia) tras hallar ocho kilos de marihuana en un invernadero - Europ",
+   "San Cristóbal de Segovia → La Lotería Nacional deja parte de un tercer premio en Segovia capital y en San Cristóbal de Segovia - Europa P",
+   "Guardia Civil Segovia → Una detenida por 19 delitos cometidos en Cantalejo (Segovia) donde sustrajo joyas, dinero y objetos diversos -"
+  ],
+  "Segoviaudaz | https://segoviaudaz.es": [
+   "El Espinar → Encuentran 8,05 kilogramos de marihuana en un invernadero de El Espinar - Segoviaudaz",
+   "Ayllón → Diez pueblos de Segovia para disfrutar del otoño - Segoviaudaz"
+  ],
+  "La Voz de Medina | https://www.lavozdemedinadigital.com": [
+   "El Espinar → El olor a marihuana destapa un cultivo clandestino de ocho kilos en El Espinar - La Voz de Medina",
+   "Subdelegación Gobierno Segovia → Incidentes en nueve provincias durante la huelga, con barricadas en Ponferrada y cortes en Valladolid - La Voz"
+  ],
+  "Ayto. Torrelodones | https://torrelodones.es": [
+   "Cantalejo → Sofía Val, Diana Cantalejo y Paula Romaguera están en el Museo del deporte - Ayto. Torrelodones"
+  ],
+  "Sofascore | https://www.sofascore.com": [
+   "Cantalejo → Marcador en directo, H2H y alineaciones del C.D. Cantalejo – CD Villamuriel - Sofascore"
+  ],
+  "Diario de Almería | https://www.diariodealmeria.es": [
+   "Cantalejo → Veredicto unánime en la Audiencia: culpable el acusado de matar a su compañero a blocazos en El Ejido - Diario"
+  ],
+  "Aquí en la Sierra | https://aquienlasierra.es": [
+   "Cantalejo → Tres deportistas internacionales de Torrelodones forman ya parte del Museo del Deporte - Aquí en la Sierra"
+  ],
+  "sportlife.es | https://www.sportlife.es": [
+   "Riaza → Trail Challenge Riaza-4 - sportlife.es"
+  ],
+  "Diario de la Ribera | https://www.diariodelaribera.net": [
+   "Riaza → Cerca de un centenar de voluntarios participarán este fin de semana en el censo de buitres de las Hoces del Ri"
+  ],
+  "CatalunyaPress | https://www.catalunyapress.es": [
+   "Sepúlveda → El Aerobús anula la parada de Sepúlveda - CatalunyaPress"
+  ],
+  "MARCA | https://www.marca.com": [
+   "Sepúlveda → En Michoacán, Ángel Sepúlveda dejó el campo con una promesa para sus padres; años después, les construyó una c",
+   "Navas de Oro → Keylor Navas toma una decisión sobre su lesión y revela cómo buscará recuperarse; incertidumbre en Pumas - MAR",
+   "Navas de Oro → Keylor Navas ‘sacrifica’ a Selección de Costa Rica por Pumas - MARCA"
+  ],
+  "La Guía Go! | https://www.laguiago.com": [
+   "Sepúlveda → Pedraza y Sepúlveda en invierno: castillo, miradores sobre las Hoces del Duratón y asado de horno de leña - La"
+  ],
+  "MANACOR NOTICIAS | https://www.manacornoticias.com": [
+   "Sepúlveda → El próximo viernes 13 de noviembre, a las 20'00 horas se presentará en el local de S'Agrícola de Manacor, el l"
+  ],
+  "MLB.com | https://www.mlb.com": [
+   "Sepúlveda → Sepúlveda suena jonrón solitario | 07/11/2026 - MLB.com"
+  ],
+  "YouTube | https://youtu.be": [
+   "Sepúlveda → Alejandra Sepúlveda: \"Rabat es el niño símbolo de los errores\" - YouTube"
+  ],
+  "Diario Humano | https://diariohumano.com.mx": [
+   "Sepúlveda → Guardan minuto de silencio por policía jubilado José Antonio Sepúlveda en La Paz - Diario Humano"
+  ],
+  "TUDN | https://www.tudn.com": [
+   "Sepúlveda → Tremendo golpe de cabezas entre Tiloncito y el ‘Tiba’ Sepúlveda - TUDN",
+   "Sepúlveda → ¡Canta el gallo! Ángel Sepúlveda acerca a Querétaro con cabezo - TUDN",
+   "Sepúlveda → ¡GOL! anota para Guadalajara. Ángel Sepúlveda - TUDN"
+  ],
+  "EstadoDiario | https://estadodiario.com": [
+   "Sepúlveda → Nace Sepúlveda Durán: La firma boutique que integra Derecho e Ingeniería para viabilizar proyectos de energía,"
+  ],
+  "TV Más | https://tvmas.tv": [
+   "Sepúlveda → “Preparó la maleta y se fue”: Angélica Sepúlveda revela detalles de su quiebre con Gürsel - TV Más"
+  ],
+  "Radio JGM | https://radiojgm.uchile.cl": [
+   "Sepúlveda → Cristóbal Sepúlveda, fundador de No Más Zonas de Sacrificio: \"Si nos ganan con Dominga, nos van a ganar con to"
+  ],
+  "veredictum.cl | https://veredictum.cl": [
+   "Sepúlveda → Senado en tu Sala: Senadora Alejandra Sepúlveda - veredictum.cl",
+   "Sepúlveda → Senado en tu Sala: Sepúlveda y escolares de San Fernando - veredictum.cl"
+  ],
+  "Meganoticias | https://www.meganoticias.cl": [
+   "Sepúlveda → 'Una verdadera montaña rusa': Alejandro Sepúlveda anticipa los cambios en temperaturas en la RM luego de ola d",
+   "Sepúlveda → Del calor a la lluvia: Alejandro Sepúlveda adelanta posibles tormentas eléctricas este fin de semana en Santia",
+   "Sepúlveda → Alejandro Sepúlveda anticipa posible ola de calor con posteriores precipitaciones en Santiago: 'Vamos a monito"
+  ],
+  "La Cuarta | https://www.lacuarta.com": [
+   "Sepúlveda → ¿Por qué Rodrigo Sepúlveda no estuvo en Meganoticias Alerta? - La Cuarta"
+  ],
+  "Facebook | https://www.facebook.com": [
+   "Sepúlveda → #LoMásLeído María Camila Sepúlveda, expareja sentimental del creador de contenido Camilo Cifuentes, tuvo al hi"
+  ],
+  "Olé | https://www.ole.com.ar": [
+   "Sepúlveda → Maxi Sepúlveda sobre Juveniles y el cruce con Messi - Olé"
+  ],
+  "Megatiempo | https://www.megatiempo.cl": [
+   "Sepúlveda → \"Fiebre de primavera\": Alejandro Sepúlveda advierte que \"la sensación térmica podría superar los 40°C\" este do",
+   "Sepúlveda → \"Podrían regresar las precipitaciones\": Alejandro Sepúlveda adelanta el pronóstico para el fin de semana en Sa",
+   "Sepúlveda → \"El calor alcanza su peak\": Pronóstico del tiempo actualizado de Alejandro Sepúlveda para este domingo 8 de no"
+  ],
+  "RadioActiva 92.5 | https://www.radioactiva.cl": [
+   "Sepúlveda → ¿Del calor a la lluvia en Santiago?: Alejandro Sepúlveda revela cuándo volverían las precipitaciones a la capi",
+   "Sepúlveda → Calor en la Región Metropolitana: Alejandro Sepúlveda advirtió temperaturas de más de 35° para los próximos dí",
+   "Sepúlveda → De la lluvia al calor en Santiago: Alejandro Sepúlveda revela el pronóstico del tiempo para los próximos días "
+  ],
+  "Diario Libre | https://www.diariolibre.com": [
+   "Sepúlveda → Condenando a 30 años a hombre que mató a otro en medio de un velorio - Diario Libre"
+  ],
+  "El Vacanudo | https://www.elvacanudo.cl": [
+   "Sepúlveda → Alejandro Sepúlveda anticipa 3 sistemas frontales y 2 bajas segregadas la próxima semana: \"Precipitaciones abu"
+  ],
+  "Mega.cl | https://www.mega.cl": [
+   "Sepúlveda → Alejandro Sepúlveda advierte posible ola de calor en Santiago: Temperaturas alcanzarían los 32 °C - Mega.cl"
+  ],
+  "OvejeroNoticias | https://www.ovejeronoticias.cl": [
+   "Sepúlveda → Un fantasma recorre Europa | Ernesto Sepúlveda T. | Opinión - OvejeroNoticias"
+  ],
+  "El Espectador | https://www.elespectador.com": [
+   "Sepúlveda → Condenan a 10 años de prisión al ‘hacker’ Andrés Fernando Sepúlveda - El Espectador"
+  ],
+  "El Rancahuaso | https://www.elrancahuaso.cl": [
+   "Sepúlveda → Alejandro Sepúlveda advierte temperaturas históricas hasta los 35°C este domingo: Será desde Coquimbo al sur -"
+  ],
+  "El Pilón | https://elpilon.com.co": [
+   "Sepúlveda → Laura Hamburger y Sebastián Sepúlveda estrenarán ‘Campeones’, su nuevo álbum - El Pilón"
+  ],
+  "La Jornada | https://www.jornada.com.mx": [
+   "Sepúlveda → 'Aquí donde arde el fuego', otra mirada sobre la migración; versa sobre la vida cotidiana de migrantes haitian"
+  ],
+  "El Desconcierto | https://eldesconcierto.cl": [
+   "Sepúlveda → Ley de Incendios: senadora Sepúlveda plantea que Conaf limpie predios e indemnización a propietarios sea últim"
+  ],
+  "The Clinic | https://www.theclinic.cl": [
+   "Sepúlveda → Quién es Felipe Sepúlveda, el fiscal que investigará las denuncias contra las AFP por las pérdidas en el Fondo"
+  ],
+  "TV Azteca | https://www.tvazteca.com": [
+   "Sepúlveda → ¡Cruz Azul derrota al América con doblete de Sepúlveda y América FRACASA en Concachampions! - TV Azteca"
+  ],
+  "La Brújula 24 | https://www.labrujula24.com": [
+   "Sepúlveda → Incendio y rescate en el centro: \"Fue una situación traumática\" - La Brújula 24"
+  ],
+  "IP Virginio Gómez | https://noticias.virginiogomez.cl": [
+   "Sepúlveda → IP Virginio Gómez inicia una nueva etapa bajo el liderazgo del rector Claudio Roa Sepúlveda - IP Virginio Góme"
+  ],
+  "El Naveghable | https://www.elnaveghable.cl": [
+   "Sepúlveda → ¿Hasta cuándo durará el calor? Alejandro Sepúlveda anticipa alza de temperaturas desde Atacama hasta La Arauca"
+  ],
+  "Desierto FM | https://www.desiertofm.cl": [
+   "Sepúlveda → GENERAL MARCO GUTIÉRREZ SEPÚLVEDA asume como nuevo JEFE DE ZONA DE CARABINEROS ANTOFAGASTA - Desierto FM"
+  ],
+  "El MorroCotudo | https://www.elmorrocotudo.cl": [
+   "Sepúlveda → ¿A qué hora lloverá en Coquimbo, Santiago y Valparaíso este lunes y martes? Revisa el pronóstico de Alejandro "
+  ],
+  "Cutral Co al Instante | https://www.cutralcoalinstante.com": [
+   "Sepúlveda → MAGDALENA SEPÚLVEDA - Cutral Co al Instante"
+  ],
+  "ADN Informativo MX | https://adnportal.mx": [
+   "Sepúlveda → Paseo del Ángel amplía su corredor gastronómico hasta la calle Sepúlveda - ADN Informativo MX"
+  ],
+  "El Alto Jalón | https://www.elaltojalon.es": [
+   "Sepúlveda → Gregorio Miguel, alcalde de Medinaceli, elegido vocal de la nueva Asociación de Los Pueblos Más Bonitos de Cas"
+  ],
+  "Foro3D | https://foro3d.com": [
+   "Sepúlveda → Luis Sepúlveda llega al turco con Hot Line y el detective Caucamán - Foro3D"
+  ],
+  "Guioteca | https://www.guioteca.com": [
+   "Sepúlveda → Rodrigo Sepúlveda contó gran susto con su hija durante aluvión: \"La vida uno la pierde en un segundo\" - Guiote"
+  ],
+  "El Diario de Coahuila | https://eldiariodecoahuila.com.mx": [
+   "Sepúlveda → Pasión de Sepúlveda, formar científicos y aportar al conocimiento - El Diario de Coahuila"
+  ],
+  "Prensa Mercosur | https://prensamercosur.org": [
+   "Sepúlveda → Los Pueblos Más Bonitos de Castilla y León crean una asociación con 27 fundadores - Prensa Mercosur"
+  ],
+  "AlMomento.net | https://almomento.net": [
+   "Sepúlveda → NY: Senador Luis Sepúlveda agradece respaldo le dio triunfo 99.04% - AlMomento.net"
+  ],
+  "DUPLOS.CL | https://duplos.cl": [
+   "Sepúlveda → Del calor a la lluvia en Santiago: Alejandro Sepúlveda advierte posibles tormentas eléctricas este fin de sema"
+  ],
+  "Doble Amarilla | https://www.dobleamarilla.com.ar": [
+   "Sepúlveda → Pasó de ser una promesa de Boca y ser comparado con Gago a terminar como profesor de pádel - Doble Amarilla"
+  ],
+  "Página 7 | https://www.pagina7.cl": [
+   "Sepúlveda → Rodrigo Sepúlveda cuestionó actividad del Gobierno en teleférico durante paro y planteó teoría - Página 7"
+  ],
+  "Central Noticia | https://www.centralnoticia.cl": [
+   "Sepúlveda → ¿Por qué Rodrigo Sepúlveda no estuvo en Meganoticias Alerta? Esta es la razón de fondo - Central Noticia",
+   "Sepúlveda → Rodrigo Sepúlveda lanza teoría hacia Kast por paro de camioneros - Central Noticia"
+  ],
+  "Ilustrado.cl | https://www.ilustrado.cl": [
+   "Sepúlveda → \"¿Para desviar la atención?\": Rodrigo Sepúlveda impacta con feroz crítica al gobierno de Kast - Ilustrado.cl"
+  ],
+  "lineadirectaportal.com | https://lineadirectaportal.com": [
+   "Sepúlveda → Carlos Sepúlveda se pone la capa de héroe y guía a los Jaguares al triunfo sobre Algodoneros - lineadirectapor"
+  ],
+  "Radio Agricultura | https://www.radioagricultura.cl": [
+   "Sepúlveda → Comisión de Agricultura advierte al Presidente Kast grave impacto en exportaciones por paro de camioneros - Ra"
+  ],
+  "desdeSoria | https://www.desdesoria.es": [
+   "Ayllón → Berlanga de Duero - Renace, de Estudio Ayllón, premiado en los Premios MESTA - desdeSoria",
+   "Ayllón → Jimena Ayllón y Daniel Marín, al Campeonato de España Sub 17 de Granollers - desdeSoria"
+  ],
+  "SoriaNoticias | https://sorianoticias.com": [
+   "Ayllón → Estudio Ayllón gana el premio MESTA Oro por la identidad turística de Berlanga de Duero - SoriaNoticias",
+   "Ayllón → El bádminton busca medallas y puntos en tres citas nacionales - SoriaNoticias"
+  ],
+  "Espacio Diario | https://espaciodiario.com": [
+   "Ayllón → Se llevará a cabo ruta de senderismo en la Sierra de Ayllón en Venturada - Espacio Diario"
+  ],
+  "Heraldo-Diario de Soria | https://www.heraldodiariodesoria.es": [
+   "Ayllón → El catálogo de la exposición ‘Ibérica pura’y la imagen turística de Berlanga, Premios Mesta - Heraldo-Diario d"
+  ],
+  "HOLA | https://www.hola.com": [
+   "Ayllón → La magia de celebrar tu boda en un monasterio, como hicieron Stella Banderas o Rosanna Zanetti: los más popula",
+   "Carbonero el Mayor → La confesión más sincera de Sara Carbonero sobre la incertidumbre con la que vive: \"Tengo miedo a la muerte, l",
+   "San Ildefonso La Granja → La Boca del Asno, la escapada de Paula Echevarría en familia por la naturaleza segoviana es el plan perfecto p"
+  ],
+  "Correo del Sur | https://correodelsur.com": [
+   "Ayllón → Ayllón ve pasos \"muy lerdos\" en el Gobierno - Correo del Sur",
+   "Ayllón → Gobernación denuncia robo de costosos medicamentos para pacientes con cáncer - Correo del Sur",
+   "Ayllón → Fiscalía admite denuncia contra extrabajador del ICO - Correo del Sur"
+  ],
+  "RPP Noticias | https://rpp.pe": [
+   "Ayllón → El Agustino: reportan basura acumulada en la avenida Nicolás Ayllón desde hace una semana [VIDEO] - RPP Notici"
+  ],
+  "Agencia Andina | https://andina.pe": [
+   "Ayllón → Municipalidad de Lima avanza en la recuperación de espacios públicos en av Nicolás Ayllón - Agencia Andina"
+  ],
+  "Erbol | | https://erbol.com.bo": [
+   "Ayllón → Chuquisaca: Gobernación denuncia robo y reventa de medicamentos oncológicos - Erbol |"
+  ],
+  "ABI - Agencia Boliviana de Información | https://abi.bo": [
+   "Ayllón → Gobernación de Chuquisaca denuncia robo de medicamentos en el Instituto de Oncología - ABI - Agencia Boliviana"
+  ],
+  "https://geniostv.pe/ | https://geniostv.pe": [
+   "Ayllón → El Agustino: reportan basura acumulada en la avenida Nicolás Ayllón desde hace una semana [VIDEO] - https://ge"
+  ],
+  "www.oigo.com | https://www.oigo.com": [
+   "Ayllón → ¡Viva el amor! Maryto y su pareja Ángela Alor Ayllón se dieron el 'sí, acepto' - www.oigo.com"
+  ],
+  "Uruguay Al Día | https://uruguayaldia.com.uy": [
+   "Ayllón → Perú participará en los Latin Grammy 2026: cuándo y dónde… - Uruguay Al Día"
+  ],
+  "SOLO TIRO | https://solotiro.com": [
+   "Carbonero el Mayor → Entrenamientos con Premios Lotería del Niño en el Campo de Tiro Las Cárcavas en Carbonero el Mayor (Segovia). "
+  ],
+  "Cadena 100 | https://www.cadena100.es": [
+   "Carbonero el Mayor → El mayor miedo de Sara Carbonero años después de su enfermedad: “Lo peor que me podía mandar a mí la vida es a"
+  ],
+  "Bebés y Más | https://www.bebesymas.com": [
+   "Carbonero el Mayor → Martín, hijo de Casillas y Sara Carbonero: \"Mi padre siempre me dice que tengo que tener humildad, que es lo m"
+  ],
+  "SincroGuia TV | https://sincroguia-tv.expansion.com": [
+   "Carbonero el Mayor → Sara Carbonero confiesa su miedo a la muerte en La Mesa - SincroGuia TV"
+  ],
+  "The Objective | https://theobjective.com": [
+   "Carbonero el Mayor → Así hablaba Martín, hijo de Sara Carbonero, de su etapa en el Real Madrid: «Estábamos muy contentos y mi herma"
+  ],
+  "heraldo.es | https://www.heraldo.es": [
+   "Carbonero el Mayor → Martín y Lucas, hijos de Iker Casillas y Sara Carbonero, dejan el Real Madrid y fichan por otro equipo: \"No qu"
+  ],
+  "El Placer de la Lectura | https://elplacerdelalectura.com": [
+   "Carbonero el Mayor → Ten en cuenta los 10 libros recomendados por Sara… - El Placer de la Lectura"
+  ],
+  "WATmag | https://www.thewatmag.com": [
+   "Carbonero el Mayor → Martín y Lucas, hijos de Iker Casillas y Sara Carbonero, dejan el Real Madrid por otro equipo - WATmag"
+  ],
+  "Diario de Burgos | https://www.diariodeburgos.es": [
+   "Carbonero el Mayor → Mañueco llama a la \"movilización total\" para \"derribar\" a Sánchez - Diario de Burgos",
+   "elecciones 29N Segovia → Mañueco llama a la \"movilización total\" para \"derribar\" a Sánchez - Diario de Burgos"
+  ],
+  "Radio Mitre | https://radiomitre.cienradios.com": [
+   "Carbonero el Mayor → Martín y Lucas, hijos de Iker Casillas y Sara Carbonero, se fueron del Real Madrid para jugar en otro equipo d"
+  ],
+  "Meridiano.net | https://meridiano.net": [
+   "Carbonero el Mayor → Kilimanjaro y Carbonero: El duelo estelar del Clásico \"Antonio José de Sucre\" este sábado en La Rinc - Meridia"
+  ],
+  "La Tribuna de Ciudad Real | https://www.latribunadeciudadreal.es": [
+   "San Ildefonso La Granja → 250.000 euros para contenedores semisoterrados en tres barrios - La Tribuna de Ciudad Real"
+  ],
+  "Viajablog | https://www.viajablog.com": [
+   "San Ildefonso La Granja → Qué ver en la Sierra de Guadarrama: 10 lugares imprescindibles - Viajablog"
+  ],
+  "La Tribuna de Albacete | https://www.latribunadealbacete.es": [
+   "San Ildefonso La Granja → El Tobarra CB sorprendió al CBV en su mejor partido - La Tribuna de Albacete"
+  ],
+  "El Puerto Actualidad | https://elpuertoactualidad.es": [
+   "Navas de Oro → Miguel Navas Lora será el Cartero Real de El Puerto en la Navidad de 2026 - El Puerto Actualidad"
+  ],
+  "OkDiario | https://okdiario.com": [
+   "Navas de Oro → Alfonso VIII en la batalla de las Navas de Tolosa: «Aquí, señor obispo, morimos todos por la fe y por la pa..."
+  ],
+  "La Nación Costa Rica | https://www.nacion.com": [
+   "Navas de Oro → Keylor Navas evitó el quirófano: vea cómo se está tratando el problema en la rodilla - La Nación Costa Rica"
+  ],
+  "Récord | https://www.record.com.mx": [
+   "Navas de Oro → Keylor Navas con molestias físicas previo al duelo vs América; esto es lo que se sabe - Récord"
+  ],
+  "ESPN México | https://www.espn.com.mx": [
+   "Navas de Oro → Bryan Ruiz revela por qué Keylor Navas no jugará ante Argentina y Ecuador - ESPN México"
+  ],
+  "Mindeporte | https://mindeporte.gob.ve": [
+   "Navas de Oro → Campeón olímpico recibido con honores - Mindeporte"
+  ],
+  "La Tierra Del Toro | https://www.latierradeltoro.es": [
+   "Navas de Oro → Mario Navas inaugura los coloquios invernales de UTYAC en Barcelona - La Tierra Del Toro"
+  ],
+  "Elplural.com | https://www.elplural.com": [
+   "Villacastín → Rosa Villacastín: “Si PP y Vox gobiernan habrá que defenderse” - Elplural.com",
+   "Villacastín → Miguel Ángel Revilla: “La gente me mandaba cartas con billetes para pagar la demanda de Juan Carlos I” - Elplu"
+  ],
+  "Diario de Ávila | https://www.diariodeavila.es": [
+   "Villacastín → El precio de la gasolina frena el tráfico de la AP-51 - Diario de Ávila"
+  ],
+  "ESdiario | https://www.esdiario.com": [
+   "Villacastín → Rocío Carrasco suma a un nuevo integrante a su marea fucsia: Ana Obregón traiciona a Julio Iglesias - ESdiario"
+  ],
+  "La Provincia | https://www.laprovincia.es": [
+   "Villacastín → Vista del Puerto de La Luz en una jornada de Huelga General - La Provincia",
+   "Villacastín → Normalidad en el Puerto de La Luz y cumplimiento de servicios mínimos - La Provincia",
+   "Villacastín → Fotosub sumerge a pequeños de Primaria en la biodiversidad marina de Las Canteras - La Provincia"
+  ],
+  "Ecuestre | https://www.ecuestre.es": [
+   "Villacastín → El Raid Do Lea, Cto. de España de Veteranos, en el objetivo de Ollo Ecuestre - Ecuestre"
+  ],
+  "MariskalRock.com | https://mariskalrock.com": [
+   "Coca Segovia → Los Mejías completan 'Cinco formas de decir te quiero' - MariskalRock.com"
+  ],
+  "El Digital de Albacete | https://www.eldigitaldealbacete.com": [
+   "Coca Segovia → Estos son los cortes de tráfico previstos para este martes, 10 de noviembre, en Albacete - El Digital de Albac"
+  ],
+  "Federación de Balonmano de Castilla y León | https://fcylbm.es": [
+   "Nava de la Asunción → Los Hispanos Júnior examinaron su potencial en Nava de la Asunción y Burgos - Federación de Balonmano de Casti"
+  ],
+  "Club Balonmano Nava | https://balonmanonava.com": [
+   "Nava de la Asunción → Festival de goles y tablas ante los Hispanos Junior - Club Balonmano Nava"
+  ],
+  "Atlético Valladolid | https://www.atleticovalladolid.es": [
+   "Nava de la Asunción → Óscar Perales: “Sentíamos nervios pero una vez iniciado el juego pasamos gratos momentos” - Atlético Valladoli"
+  ],
+  "El Deporte Conquense | https://eldeporteconquense.com": [
+   "Nava de la Asunción → Jan Blas, jugador del REBI Cuenca, se estrena esta temporada con los Hispanos Júnior este jueves - El Deporte "
+  ],
+  "NueveCuatroUno | https://nuevecuatrouno.com": [
+   "Nava de la Asunción → El Dicorpebal prolonga dos temporadas el contrato de Miguel Velasco - NueveCuatroUno"
+  ],
+  "La Rioja | https://www.larioja.com": [
+   "Nava de la Asunción → Miguel Ángel Velasco suma y sigue en el Dicorpebal - La Rioja"
+  ],
+  "Castilla y León Televisión | https://www.cyltv.es": [
+   "Santa María la Real de Nieva → Santa María vuelve a pedir una salvación para 'La Saleta' - Castilla y León Televisión"
+  ],
+  "Federación de Fútbol de Castilla y León | https://www.rfcylf.es": [
+   "San Cristóbal de Segovia → Acta del partido - Federación de Fútbol de Castilla y León"
+  ],
+  "infoCLM | https://www.infoclm.es": [
+   "San Cristóbal de Segovia → La Lotería Nacional sonríe a Castilla-La Mancha: el segundo premio deja parte de sus 300.000 euros en Villanue"
+  ],
+  "El Digital de Cuenca | https://eldigitaldecuenca.com": [
+   "San Cristóbal de Segovia → El tercer premio de la Lotería Nacional deja parte de su suerte en Cuenca - El Digital de Cuenca"
+  ],
+  "Las Provincias | https://www.lasprovincias.es": [
+   "San Cristóbal de Segovia → El Tiempo - Las Provincias"
+  ],
+  "Diario Sur | https://www.diariosur.es": [
+   "San Cristóbal de Segovia → Cae en Málaga el primer y segundo premio del sorteo extraordinario de la Lotería Nacional de este sábado - Dia"
+  ],
+  "Burgos CF | https://www.burgoscf.es": [
+   "Turégano → BURGOS CF B VS TUREGANO CF | J10 Tercera Federación - Burgos CF",
+   "Turégano → RUEDA DE PRENSA Prepartido Isra Martinez ｜ Jornada 10 ｜ Burgos club de Futbol B - Burgos CF"
+  ],
+  "CaixaBank Research | https://www.caixabankresearch.com": [
+   "Turégano → La inflación roza el 4%, con señales mixtas en el balance de riesgos - CaixaBank Research"
+  ],
+  "Diario Siglo XXI | https://www.diariosigloxxi.com": [
+   "Turégano → CaixaBank Research prevé que la economía española crecerá un 2% en 2027 y un 2,6% este año - Diario Siglo XXI"
+  ],
+  "Diario de León | https://www.diariodeleon.es": [
+   "Turégano → Júpiter-Cristo Atlético, tres puntos en juego y el liderato - Diario de León"
+  ],
+  "Futbolme | https://futbolme.com": [
+   "Turégano → Burgos Pr vs Turégano CF de 000-TERCERA FEDERACIÓN - Grupo 08 - Futbolme"
+  ],
+  "MONCLOA.COM | https://www.moncloa.com": [
+   "Guardia Civil Segovia → Asuntos Internos de la Guardia Civil detiene al jefe antidroga de Segovia por presunta vinculación con el narc"
+  ],
+  "Demócrata | https://www.democrata.es": [
+   "elecciones 29N Segovia → Buxadé acusa al PSOE de “descojonarse” de los españoles y de las víctimas de Adamuz y Urda mientras jalea a Pu",
+   "elecciones 29N Segovia → El ciclo EatCology llega a Segovia para conectar gastronomía, medio ambiente y salud en ocho jornadas abiertas",
+   "elecciones 29N Segovia → Los piquetes no logran frenar los autobuses en Valladolid, pero sí causan cortes de tráfico - Demócrata"
+  ],
+  "Diario Palentino | https://www.diariopalentino.es": [
+   "elecciones 29N Segovia → La precampaña se relanza en Castilla y León con dos ministros, Mañueco y primeros espadas del PP - Diario Pale"
+  ],
+  "El Constitucional | https://www.elconstitucional.es": [
+   "elecciones 29N Segovia → De los Santos promete en Segovia que el PP no dará \"un solo paso atrás\" en derechos LGTBI si Feijóo gobierna t"
+  ],
+  "Animalshealth.es | https://www.animalshealth.es": [
+   "candidatos Segovia Cortes → Estos son los veterinarios que se presentan a las elecciones generales del 29 de noviembre - Animalshealth.es"
+  ],
+  "Onda Vasca | https://www.ondavasca.com": [
+   "mitin Segovia → La Junta Electoral obliga al Ayuntamiento de Segovia a retirar un vídeo de balance del alcalde - Onda Vasca",
+   "campaña electoral Segovia → La Junta Electoral obliga al Ayuntamiento de Segovia a retirar un vídeo de balance del alcalde - Onda Vasca"
+  ],
+  "Huelva24 | https://www.huelva24.com": [
+   "campaña electoral Segovia → Vox salta por los aires en Huelva: Rafael Segovia pide la dimisión de los líderes provinciales - Huelva24"
+  ],
+  "Deia | https://www.deia.eus": [
+   "Junta Electoral Segovia → La Junta Electoral obliga al Ayuntamiento de Segovia a retirar un vídeo de balance del alcalde - Deia"
+  ],
+  "Stick Noticias | https://sticknoticias.com": [
+   "Junta Electoral Segovia → El ciclo EatCology llega a Segovia para conectar gastronomía, medio ambiente y salud en ocho jornadas abiertas"
+  ],
+  "Ecijaweb | https://www.ecijaweb.com": [
+   "Subdelegación Gobierno Segovia → El ecijano Francisco José Martín Moya será el nuevo subdelegado de Defensa en Segovia - Ecijaweb"
+  ],
+  "Diario Público | https://www.publico.es": [
+   "Subdelegación Gobierno Segovia → Manifestaciones por la huelga general del 11N: estas son las convocatorias en toda España - Diario Público"
+  ]
+ },
+ "candidatas": {
+  "https://cadenaser.com/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://cadenaser.com/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": []
+  },
+  "https://cadenaser.com/rss/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://cadenaser.com/rss/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": []
+  },
+  "https://cadenaser.com/feed/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://cadenaser.com/feed/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": []
+  },
+  "https://feeds.cadenaser.com/segovia": {
+   "http": 403,
+   "final": "https://feeds.cadenaser.com/segovia",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": []
+  },
+  "https://cadenaser.com/emisora/radio-segovia/": {
+   "http": 404,
+   "final": "https://cadenaser.com/emisora/radio-segovia/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": []
+  },
+  "https://cadenaser.com/emisora/radio-cuellar/": {
+   "http": 404,
+   "final": "https://cadenaser.com/emisora/radio-cuellar/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.noticiascyl.com/t/segovia/feed/": {
+   "error": "fetch failed"
+  },
+  "https://www.noticiascyl.com/segovia/feed/": {
+   "error": "fetch failed"
+  },
+  "https://www.noticiascyl.com/feed/": {
+   "error": "fetch failed"
+  },
+  "https://www.cyltv.es/rss/segovia": {
+   "http": 404,
+   "final": "https://www.cyltv.es/rss/segovia",
+   "items": 0,
+   "segovia": 13,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.rtvcyl.es/segovia": {
+   "error": "fetch failed"
+  },
+  "https://www.rtvcyl.es/rss/segovia.xml": {
+   "error": "fetch failed"
+  },
+  "https://www.telesegovia.es/feed/": {
+   "error": "fetch failed"
+  },
+  "https://telesegovia.es/feed/": {
+   "error": "fetch failed"
+  },
+  "https://www.rtve.es/api/tematicas/123030/noticias.rss": {
+   "http": 200,
+   "final": "https://www.rtve.es/api/tematicas/123030/noticias.rss",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.rtve.es/noticias/castilla-y-leon/": {
+   "http": 200,
+   "final": "https://www.rtve.es/noticias/castilla-y-leon/",
+   "items": 0,
+   "segovia": 429,
+   "tit": [],
+   "rss": []
+  },
+  "https://segoviaaldia.es/coverrss": {
+   "http": 200,
+   "final": "https://segoviaaldia.es/coverrss",
+   "items": 0,
+   "segovia": 5,
+   "tit": [],
+   "rss": []
+  },
+  "https://segoviaaldia.es/feed/": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/feed/",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": []
+  },
+  "https://segoviaaldia.es/": {
+   "http": 200,
+   "final": "https://segoviaaldia.es/",
+   "items": 0,
+   "segovia": 258,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.20minutos.es/rss/castilla-y-leon/": {
+   "http": 200,
+   "final": "https://www.20minutos.es/rss/castilla-y-leon/",
+   "items": 26,
+   "segovia": 6,
+   "tit": [
+    "\n        <![CDATA[ Piedralaves mantiene el confinamiento preventivo ante la crecida del ni",
+    "\n        <![CDATA[ Imputan dos delitos a un cazador que mató en Tordehumos (Valladolid) al",
+    "\n        <![CDATA[ El temporal provoca el desbordamiento de la Garganta de Santa María en ",
+    "\n        <![CDATA[ La Fiscalía investiga presuntos abusos sexuales de un niño de 11 años a"
+   ],
+   "rss": []
+  },
+  "https://www.elespanol.com/rss/castilla-y-leon/": {
+   "http": 200,
+   "final": "https://www.elespanol.com/rss/castilla-y-leon/",
+   "items": 30,
+   "segovia": 0,
+   "tit": [
+    "Los sindicatos evitan hablar de fracaso en Castilla y León y lanzan su mensaje por la huel",
+    "\"Estamos a las puertas de un estallido social\": los sindicatos avisan desde Salamanca tras",
+    "Huelga general contra la oposición",
+    "Rocío de Meer arremete contra los sindicatos \"calladitos y pagaditos\": \"Hacen campaña por "
+   ],
+   "rss": []
+  },
+  "https://www.agronewscastillayleon.com/feed/": {
+   "http": 200,
+   "final": "https://www.agronewscastillayleon.com/feed/",
+   "items": 20,
+   "segovia": 1,
+   "tit": [
+    "Huelga decirlo",
+    "¿Puede quedarse la viuda las fincas privativas del marido por usucapión? STS 8-10-2026",
+    "¿Cuál es la duración mínima legal de un contrato de arrendamiento rústico y cuándo termina",
+    "La protección de datos"
+   ],
+   "rss": []
+  },
+  "https://www.europapress.es/rss/rss.aspx?ch=283": {
+   "http": 200,
+   "final": "https://www.europapress.es/rss/rss.aspx?ch=283",
+   "items": 10,
+   "segovia": 0,
+   "tit": [
+    "Miles de personas se movilizan en las calles de CyL para reclamar sueldos y viviendas dign",
+    "Huelga general en CyL: dos detenidos en Zamora y uno en Valladolid en una jornada que tran",
+    "Dos multitudinarias manifestaciones desafían a la lluvia y claman por sueldos y viviendas ",
+    "UGT y CCOO destacan la \"buena acogida\" de la huelga en CyL y creen \"desproporcionada\" la p"
+   ],
+   "rss": []
+  },
+  "https://www.europapress.es/castilla-y-leon/": {
+   "http": 200,
+   "final": "https://www.europapress.es/castilla-y-leon/",
+   "items": 0,
+   "segovia": 12,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.lagacetadesegovia.es/feed/": {
+   "error": "fetch failed"
+  },
+  "https://www.segoviaporsuspueblos.es/feed/": {
+   "error": "fetch failed"
+  },
+  "https://puebloenpueblo.com/blog-feed.xml": {
+   "http": 200,
+   "final": "https://www.puebloenpueblo.com/blog-feed.xml",
+   "items": 20,
+   "segovia": 10,
+   "tit": [
+    "Tejeda de Tosande: un bosque milenario entre montañas y silencio",
+    "Fuentes de Cuéllar: una ruina, muchas promesas y unas jóvenes que ya no esperan",
+    "Proponen un tren turístico para rescatar las estaciones de ferrocarril olvidadas de Segovi",
+    "Estos son los 7 castillos más espectaculares de la provincia de Segovia"
+   ],
+   "rss": []
+  },
+  "https://www.elcorreodeburgos.com/rss/": {
+   "http": 410,
+   "final": "https://www.elcorreodeburgos.com/rss/",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.leonoticias.com/rss/2.0/portada": {
+   "http": 200,
+   "final": "https://www.leonoticias.com/rss/2.0/portada/",
+   "items": 61,
+   "segovia": 0,
+   "tit": [
+    "Alertan por robos en furgonetas asaltadas en Trobajo del Camino: «Me han robado casi 3.000",
+    "Herido un hombre de unos 55 años al chocar dos turismos en la calle Modesto Lafuente de Le",
+    "Una marea humana se impone a la lluvia en León: «Va a ser la primera de muchas huelgas»",
+    "Los sindicalistas cortan Guzmán el Bueno y cargan contra servicios mínimos «abusivos»: «Es"
+   ],
+   "rss": []
+  },
+  "https://www.ical.es/feed/": {
+   "http": 200,
+   "final": "https://www.ical.es/feed/",
+   "items": 10,
+   "segovia": 0,
+   "tit": [
+    "CIRCULAR M-95/2026. Jornadas de formación especializada en Extranjería. León y Ponferrada,",
+    "V Ciclo de Cine Jurídico Abogacía de León 2026.",
+    "CIRCULAR M-94/2026. V Ciclo de Cine Jurídico 2026 Abogacía de León: &#8216;Justicia Artifi",
+    "CIRCULAR M-93/2026. ATENEA: Actualización-Incidencia en la publicación de edictos en TEJU "
+   ],
+   "rss": []
+  },
+  "https://www.subdelegaciongobierno.es/segovia": {
+   "error": "fetch failed"
+  },
+  "https://www.lamoncloa.gob.es/": {
+   "http": 200,
+   "final": "https://www.lamoncloa.gob.es/Paginas/index.aspx",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [
+    "/Paginas/rss.aspx?tipo=1",
+    "/Paginas/rss.aspx?tipo=42",
+    "/Paginas/rss.aspx?tipo=2",
+    "/Paginas/rss.aspx?tipo=20",
+    "/Paginas/rss.aspx?tipo=15"
+   ]
+  },
+  "https://www.jcyl.es/web/es/actualidad.html": {
+   "http": 404,
+   "final": "https://www.jcyl.es/web/es/actualidad.html",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": []
+  },
+  "https://comunicacion.jcyl.es/web/jcyl/Comunicacion/es/Plantilla100/1284877983892/_/_/_?asm=jcyl&rss=1": {
+   "http": 200,
+   "final": "https://comunicacion.jcyl.es/web/es/notas-prensa/ultimas-notas-prensa.html",
+   "items": 0,
+   "segovia": 2,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.segovia.es/rss": {
+   "http": 404,
+   "final": "https://www.segovia.es/rss",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": []
+  },
+  "https://www.vox.es/rss.xml": {
+   "http": 404,
+   "final": "https://www.vox.es/rss.xml",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": []
+  },
+  "https://iuclm.es/feed/": {
+   "http": 200,
+   "final": "https://www.iuclm.es/feed/",
+   "items": 12,
+   "segovia": 0,
+   "tit": [
+    "Izquierda Unida Castilla-La Mancha mostramos nuestra solidaridad y exigimos medidas de pre",
+    "Izquierda Unida CLM valora el debate electoral: “Emiliano García-Page está agotado para se",
+    "Unidas Podemos de Guadalajara reclama ante la Junta Electoral no haber sido invitado a par",
+    "El Área de Mujer IU CLM tras las declaraciones del presidente regional: “debemos pensar mu"
+   ],
+   "rss": []
+  }
+ }
+}
