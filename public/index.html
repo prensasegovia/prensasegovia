@@ -492,6 +492,10 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .uptodate{min-width:0}
 .searchbar button{height:auto;min-height:36px}
 .stat .n{flex:none}
+.stats.s4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+.newhead .linkbtn,.sect .linkbtn{font-size:13.5px;font-weight:600;min-height:32px;padding:6px 0;text-decoration:none;opacity:.9}
+.sect .linkbtn{margin-left:auto}
+@media (min-width:1024px){ .hero .stats.s4{grid-template-columns:repeat(4,minmax(84px,112px)) !important} }
 .vacc{display:flex;gap:4px;margin-left:auto}
 /* ajuste: el selector solo ocupa lo que necesita; los botones de la derecha, más grandes */
 .vbar .seg{flex:0 1 auto}
@@ -1458,29 +1462,28 @@ function viewNoticias(news){
   const sum = st.primera && !nuevasTodas.length && shown.length ? `<b>${plural(shown.length,"noticia de interés","noticias de interés")}</b> en los últimos ${st.rango} días.` : nuevasTodas.length ? `<b>${plural(nuevasTodas.length,"noticia nueva","noticias nuevas")}</b> desde tu última visita.`
     : shown.length ? `Estás al día. ${plural(shown.length,"noticia","noticias")} en los últimos ${st.rango} días.` : "No hay noticias con los filtros actuales.";
   let h = `<section class="hero"><div class="day">${esc(fmtLong(t))}</div><div class="sum">${sum}</div>
-    <div class="stats">
+    <div class="stats ${hayElecciones()?"s4":""}">
       <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l"><span>Importantes</span>${I.chev}</div></button>
       <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l"><span>Agenda</span>${I.chev}</div></button>
-      <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>
+      <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>${hayElecciones()?`
+      <button class="stat elec" data-act="elec" type="button"><div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${I.chev}</div></button>`:""}
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
-  if (hayElecciones()){ const el = elecNoticias(news), eln = el.filter(enNuevo).length;
-    h += `<button class="elecbtn" data-act="elec" type="button"><span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V11h12v10M9 11V6h6v5M10.5 8.5l1 1 2-2"/></svg></span><span><b>Elecciones 29N</b><small>Capital y provincia, todo junto</small></span><span class="en">${el.length}${eln?`<i>${eln} nuevas</i>`:""}</span></button>`; }
   const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
   // Lo que ya sale arriba en rojo no se repite en la lista
   const nuevas = nuevasTodas.filter(n=>!urg.includes(n));
+  h += chipsBar(pool);
   if (urg.length){
-    h += `<div class="sect"><h2>Importante y nuevo</h2></div><div class="rail">` +
+    h += `<div class="sect"><h2>Importante y nuevo</h2>${!nuevas.length?`<button class="linkbtn" data-act="leido" type="button">Marcar como visto</button>`:""}</div><div class="rail">` +
       urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}" target="_blank" rel="noopener"`:""} title="${esc((mediosDe(n)[0]||{}).nombre||"")}">
           <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio && n.municipio!=="General"?n.municipio:(CAT[n._cats[0]]?.n||""))}</span>
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${esc(cuando(n._dia,n.hora))}</span></a>`).join("") + `</div>`;
   }
-  h += chipsBar(pool) + `<div class="feed">` + avisoFiltros();
+  h += `<div class="feed">` + avisoFiltros();
   if (!shown.length) return h + `<div class="empty"><b>Nada con estos filtros</b>Prueba otro tema, amplía el periodo en Filtros o pulsa «Quitar filtros».<br><button class="btn ghost" data-act="limpiar" type="button">Quitar filtros</button></div></div>`;
   if (!nuevas.length && urg.length){
-    // Todo lo nuevo es importante y ya está en la franja de arriba: sin bloque vacío
-    h += `<div class="newhead"><h3>Lo nuevo está arriba, en Importante</h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
+    // Todo lo nuevo es importante y ya está justo encima (con su «Marcar como visto»)
   } else if (nuevas.length){
     h += `<div class="newhead"><h3>Nuevo para ti <span class="cnt">${nuevasTodas.length}</span></h3><button class="linkbtn" data-act="leido" type="button"><span class="lg">Marcar todo como visto</span><span class="sm">Marcar vistas</span></button></div>`;
     h += nuevas.slice(0,3).map(n=>card(n)).join("") + tarjetaAvisos() + nuevas.slice(3).map(n=>card(n)).join("");
@@ -2362,7 +2365,7 @@ const PASOS = [
     <li>${ic("M3 10h18M8 3v4M16 3v4M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z")}<span><b>Agenda</b>Concentraciones, huelgas, mítines, visitas y fiestas con fecha.</span></li>
     <li>${ic("M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z")}<span><b>Pueblos</b>Las noticias de cada pueblo.</span></li>
     <li>${ic("M3 4h18v16H3zM7 8h10M7 12h4M7 16h4M14 12h3v4h-3z")}<span><b>Periódicos</b>Todo lo que publica cada medio, sin filtrar, como un quiosco.</span></li>
-    <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>` + (hayElecciones() ? `<div class="gnota"><b>Elecciones 29N:</b> el recuadro de debajo del resumen reúne toda la campaña de la capital y la provincia, aunque tengas puesto «Sin capital».</div>` : ""),
+    <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>` + (hayElecciones() ? `<div class="gnota"><b>Elecciones 29N:</b> el acceso «Elecciones 29N» del resumen reúne toda la campaña de la capital y la provincia, aunque tengas puesto «Sin capital».</div>` : ""),
   () => `<h2 id="guiaTit">Ajústala a tu gusto</h2><p>En la barra de arriba de Noticias y en <b>Filtros</b>:</p>
     <ul><li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>Con o sin capital</b>Los botones <i>Con capital / Sin capital</i> muestran u ocultan las noticias de Segovia capital.</span></li>
     <li>${ic("M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16zM10 21h4")}<span><b>Avisos</b>Te llega una notificación con lo nuevo de interés (todo o solo lo importante) y, si quieres, de los periódicos que elijas. De 23 a 7 no molesta.</span></li>
@@ -2413,7 +2416,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v93";
+const VERSION_APP = "prensa-segovia-v94";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
