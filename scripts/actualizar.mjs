@@ -126,6 +126,11 @@ const BUSQUEDAS = [
   'Segovia fiestas OR encierros OR "concentración motera" OR festival',
   'Segovia visita ministro OR ministra OR presidente OR consejero OR delegado',
   'Segovia mitin OR "29N" OR campaña OR candidatos',
+  // Campaña 29N (hasta el 30-nov): visitas de dirigentes, candidatos y actos en los pueblos
+  'Segovia Feijóo OR Sánchez OR Abascal OR Mañueco OR Buxadé OR Tellado OR Montserrat OR Bolaños visita OR campaña',
+  'Segovia "cabeza de lista" OR candidato OR candidata Congreso OR Senado',
+  'Segovia "Junta Electoral" OR "jornada de reflexión" OR interventores OR apoderados OR "mesa electoral"',
+  '(Cuéllar OR "El Espinar" OR Cantalejo OR Riaza OR Sepúlveda OR Ayllón OR Coca OR "La Granja" OR "Nava de la Asunción" OR Carbonero) campaña OR mitin OR candidatos',
   'Labajos Onésimo OR "Onésimo Redondo" OR Falange OR homenaje',
   'Segovia Falange OR franquista OR "memoria histórica" OR fosa OR exhumación',
   'Segovia pintadas OR vandalismo OR ultras OR "extrema derecha" OR "extrema izquierda" OR antifascista OR neonazi',
