@@ -82,6 +82,14 @@ svg{flex:none}
 .stat.alta .n{color:#FFB4AB}
 .partebtn{margin-top:10px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:11px 13px;background:#fff;color:var(--pine);font-weight:700;font-size:15.5px;cursor:pointer;text-align:left}
 .partebtn svg{width:20px;height:20px}
+.elecbtn{margin:12px 0 0;width:100%;display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--surface);color:var(--ink);cursor:pointer;text-align:left;font:inherit}
+.elecbtn:hover{border-color:var(--pine-2)}
+.elecbtn .ei{flex:none;width:38px;height:38px;border-radius:11px;background:var(--pine);color:#fff;display:grid;place-items:center}
+.elecbtn .ei svg{width:20px;height:20px}
+.elecbtn b{display:block;font-size:16px}
+.elecbtn small{display:block;color:var(--muted);font-size:13px;margin-top:1px}
+.elecbtn .en{margin-left:auto;font-weight:800;font-size:20px;color:var(--pine-2)}
+.elecbtn .en i{font-style:normal;font-size:12px;font-weight:700;background:var(--new,#2563eb);color:#fff;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:3px}
 @media (max-width:360px){.partebtn span{display:none}}
 .partebtn span{margin-left:auto;font-weight:500;font-size:12.5px;color:#5B6763}
 .parte{white-space:pre-wrap;font:14.5px/1.5 "Archivo",system-ui,sans-serif;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;word-break:break-word;color:var(--ink)}
@@ -1456,6 +1464,8 @@ function viewNoticias(news){
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
+  if (hayElecciones()){ const el = elecNoticias(news), eln = el.filter(enNuevo).length;
+    h += `<button class="elecbtn" data-act="elec" type="button"><span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V11h12v10M9 11V6h6v5M10.5 8.5l1 1 2-2"/></svg></span><span><b>Elecciones 29N</b><small>Capital y provincia, todo junto</small></span><span class="en">${el.length}${eln?`<i>${eln} nuevas</i>`:""}</span></button>`; }
   const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
   // Lo que ya sale arriba en rojo no se repite en la lista
   const nuevas = nuevasTodas.filter(n=>!urg.includes(n));
@@ -1565,6 +1575,23 @@ function viewPueblo(news, name){
   if (prox.length) h += `<div class="dayhead"><h3>Próximas convocatorias</h3><span>${prox.length}</span></div>` + prox.map(n=>card(n,{hev:true})).join("");
   h += all.length ? porDias(all.filter(n=>!prox.includes(n))) : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés recientes de ${esc(name)}.<br><button class="btn ghost" data-act="buscapueblo" data-q="${esc(name)}" type="button">Buscar «${esc(name)}» en todo lo publicado</button></div>`;
   return h + bloqueArchivo(news, n=>n.municipio===name, "de " + name) + `</div>`;
+}
+/* Elecciones 29N: todo lo electoral de la capital y la provincia en un apartado (sin el filtro de capital) */
+const FIN_ELECCIONES = "2026-12-06";
+const hayElecciones = () => today() <= FIN_ELECCIONES;
+const ELEC_RE = /\b29n\b|29 de noviembre|elecciones|electoral|campana (del (pp|psoe|vox)|de (los|las) (candidat|elecciones))|candidat[oa]s? (al|a la|del|de la|por)|candidaturas?|cabeza de lista|\bmitin|junta electoral|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada de carteles|cierre de campana|jornada de reflexion|papeletas|interventor|apoderad|voto por correo|mesas? electoral|escanos?|diputados por segovia|senador|feijoo|abascal|buxade|tellado|montserrat|bolanos|pedro sanchez|manueco|martinez-almeida|de los santos/;
+const esElectoral = n => ELEC_RE.test(norm(n.titulo || ""));
+const INI_ELECCIONES = "2026-11-01"; // todo lo de la precampaña y campaña, sin depender de 3/7/21 días
+const elecNoticias = news => news.filter(n=>n._dia >= INI_ELECCIONES && esElectoral(n)).sort(porHora);
+function elecPeriodicos(news){
+  return periodicosNews().filter(n=>n._dia >= INI_ELECCIONES && n.municipio && n.municipio!=="General" && esElectoral(n) && !n._int).sort(porHora);
+}
+function viewElecciones(news){
+  const list = elecNoticias(news), per = elecPeriodicos(news);
+  let h = `<section class="subhero"><h1>Elecciones 29N</h1><p>Campaña, candidatos, visitas, mítines y Junta Electoral en Segovia capital y la provincia: ${plural(list.length,"noticia de interés","noticias de interés")} desde el inicio de la precampaña.</p></section><div class="feed">`;
+  h += list.length ? porDias(list) : `<div class="empty"><b>Sin noticias electorales</b>No hay noticias de la campaña en este periodo.</div>`;
+  if (per.length) h += `<div class="dayhead"><h3>Más en los periódicos</h3><span>${per.length}</span></div>` + per.slice(0,60).map(cardPer).join("");
+  return h + `</div>`;
 }
 function viewImportantes(news){
   const list = news.filter(n=>enRango(n) && pasa(n) && n.relevancia==="alta").sort(porHora);
@@ -1723,7 +1750,7 @@ function viewMedios(){
 function appbar(){
   const bar = $("#appbar");
   if (st.sub){
-    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="parte" ? "Parte del día" : "Medios";
+    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="elec" ? "Elecciones 29N" : st.sub.t==="parte" ? "Parte del día" : "Medios";
     bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div><div class="syncpill" id="syncPill" title="Las noticias se revisan cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto"></div>`;
     syncLabel();
     $("#btnBack").onclick = () => cerrarSub();
@@ -1780,7 +1807,7 @@ function render(keepScroll){
     app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
-  if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
+  if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
   else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
   const t = today();
   const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
@@ -1918,6 +1945,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); st.sesionNuevas = new Set(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
+  else if (act==="elec") abrirSub({t:"elec"});
   else if (act==="parte") abrirSub({t:"parte"});
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
@@ -2334,7 +2362,7 @@ const PASOS = [
     <li>${ic("M3 10h18M8 3v4M16 3v4M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z")}<span><b>Agenda</b>Concentraciones, huelgas, mítines, visitas y fiestas con fecha.</span></li>
     <li>${ic("M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z")}<span><b>Pueblos</b>Las noticias de cada pueblo.</span></li>
     <li>${ic("M3 4h18v16H3zM7 8h10M7 12h4M7 16h4M14 12h3v4h-3z")}<span><b>Periódicos</b>Todo lo que publica cada medio, sin filtrar, como un quiosco.</span></li>
-    <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>`,
+    <li>${ic("M6 3h12v18l-6-4-6 4z")}<span><b>Guardadas</b>Las que marques para leer luego.</span></li></ul>` + (hayElecciones() ? `<div class="gnota"><b>Elecciones 29N:</b> el recuadro de debajo del resumen reúne toda la campaña de la capital y la provincia, aunque tengas puesto «Sin capital».</div>` : ""),
   () => `<h2 id="guiaTit">Ajústala a tu gusto</h2><p>En la barra de arriba de Noticias y en <b>Filtros</b>:</p>
     <ul><li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>Con o sin capital</b>Los botones <i>Con capital / Sin capital</i> muestran u ocultan las noticias de Segovia capital.</span></li>
     <li>${ic("M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16zM10 21h4")}<span><b>Avisos</b>Te llega una notificación con lo nuevo de interés (todo o solo lo importante) y, si quieres, de los periódicos que elijas. De 23 a 7 no molesta.</span></li>
@@ -2385,7 +2413,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v92";
+const VERSION_APP = "prensa-segovia-v93";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
