@@ -434,6 +434,9 @@ function eventoDe(titulo, texto, publicada, categorias = []) {
   let f = null, m;
   if ((m = t.match(/\b(?:del?|el|los dias|dias)?\s*(\d{1,2})(?:\s*(?:y|al|-|a)\s*\d{1,2})?\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/))) {
     f = new Date(base); f.setMonth(MESES.indexOf(m[2]), +m[1]); f = conAnio(f);
+    // «miércoles, 11 de diciembre» cuando el 11 de diciembre no es miércoles: errata del medio, la fecha no vale
+    const ds = t.match(new RegExp("\\b(" + DIAS.join("|") + "),?\\s*(?:dia\\s*)?" + m[1] + "\\s+de\\s+" + m[2]));
+    if (f && ds && DIAS[f.getDay()] !== ds[1]) f = null;
   } else if ((m = t.match(/\b(\d{1,2})[\/.-](\d{1,2})[\/.-](20\d{2})\b/)) && +m[2] >= 1 && +m[2] <= 12) {
     f = new Date(+m[3], +m[2] - 1, +m[1], 12); if (f < base) pasada = true; if (f < base || (f - base) / 864e5 > 120) f = null;
   } else if ((m = tOrig.match(/\b(\d{1,2})([EFSOND])\b/))) {
@@ -463,7 +466,7 @@ const MENCIONA_SEGOVIA = new RegExp("segovia|" + MUNICIPIOS.filter(m => !AMBIGUO
 /* ------------------------------------------------------------------ */
 const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que se su sus por para con sin sobre tras ante entre como mas lo le les es son ha han segovia segoviano segoviana provincia".split(" "));
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
-const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", lesio: "herid", herid: "herid", heric: "herid", recl: "carce", // ni «inter» (internacional) ni «presi» (presidente) reclu: "carce",
+const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", lesio: "herid", herid: "herid", heric: "herid", recl: "carce", reclu: "carce", /* ni «inter» (internacional) ni «presi» (presidente) */
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
   fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", quema: "incen", fuego: "incen", arde: "incen", ardio: "incen", intox: "intox", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", tren: "tren", trene: "tren", maqui: "tren" };
 // Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
@@ -729,6 +732,8 @@ function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {
   const e = eventoDe(titulo, resumen, publicada, categorias);
   if (e.fecha_evento || !a?.evento) return e;
   if (!EVENTO.test(norm(String(titulo || "") + " " + String(resumen || ""))) && !/convoca|concentra|manifesta|huelga|protesta|acto|mitin|visita|reunion|pleno|asamblea|jornada|marcha|servicios minimos|paro|cierre/.test(norm(String(titulo || "") + " " + String(resumen || "")))) return e;
+  // La frase guardada se vuelve a comprobar con las reglas de hoy (p. ej. día de la semana que no cuadra)
+  if (a.evento.frase && !eventoDe(a.evento.frase, "", publicada, ["social"]).fecha_evento) return e;
   return { fecha_evento: a.evento.fecha_evento, ...(a.evento.hora_evento ? { hora_evento: a.evento.hora_evento } : {}), convocatoria: true };
 }
 

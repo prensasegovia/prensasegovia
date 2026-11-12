@@ -999,6 +999,8 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 #guia .gnum{flex:none;width:26px;height:26px;border-radius:50%;background:var(--pine);color:#fff;font-weight:800;font-size:13.5px;display:grid;place-items:center}
 #guia .gnota{font-size:13.5px;color:var(--muted);background:var(--stone);border-radius:12px;padding:10px 12px;margin:10px 0 4px}
 #guia .gok{color:var(--pine-2);font-weight:700}
+#guia .gnovedad,.stat .nv{display:inline-block;background:var(--new,#2563eb);color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;border-radius:999px;padding:3px 9px}
+.stat .nv{font-size:10px;padding:1px 6px;margin-left:4px;flex:none}
 #guia .gpie{display:flex;align-items:center;gap:10px;padding:12px 20px calc(16px + var(--safe-b,0px));border-top:1px solid var(--line)}
 #guia .gpuntos{display:flex;gap:6px;flex:1}
 #guia .gpuntos i{width:8px;height:8px;border-radius:50%;background:var(--line)}
@@ -1466,7 +1468,7 @@ function viewNoticias(news){
       <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l"><span>Importantes</span>${I.chev}</div></button>
       <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l"><span>Agenda</span>${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>${hayElecciones()?`
-      <button class="stat elec" data-act="elec" type="button"><div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${I.chev}</div></button>`:""}
+      <button class="stat elec" data-act="elec" type="button"><div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${store.get("elecVisto",0)?I.chev:`<b class="nv">Nuevo</b>`}</div></button>`:""}
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
@@ -1948,7 +1950,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="leidoPer"){ marcarVisto(periodicosNews().filter(n=>(st.periodico==="todos"||n.medio===st.periodico) && !(st.sinCapital && isCapital(n))).map(n=>n._key)); render(); actualizaPer(); }
   else if (act==="leido"){ marcarVisto(allNews().map(n=>n._key)); st.sesionNuevas = new Set(); render(); window.scrollTo({top:0,behavior:"smooth"}); }
   else if (act==="imp") abrirSub({t:"imp"});
-  else if (act==="elec") abrirSub({t:"elec"});
+  else if (act==="elec"){ store.set("elecVisto", 1); abrirSub({t:"elec"}); }
   else if (act==="parte") abrirSub({t:"parte"});
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
@@ -2355,7 +2357,13 @@ function pasoInstalar(){
   return `<h2 id="guiaTit">Tenla también en el móvil</h2><p>En el teléfono se puede guardar como una app: con su icono en la pantalla de inicio, a pantalla completa y con <b>avisos</b> de lo nuevo.</p>
     <div class="gnota">Abre en el móvil <b>prensasegovia.github.io/prensasegovia</b> (o el enlace que te pasaron) y allí te explicará cómo guardarla, paso a paso para iPhone o Android.</div>`;
 }
+const pasoElecciones = () => `<span class="gnovedad">Novedad</span><h2 id="guiaTit">Elecciones 29N</h2><p>Hasta las elecciones, en el resumen de Noticias tienes un acceso nuevo: <b>Elecciones</b>.</p>
+    <ul><li>${ic("M4 21h16M6 21V11h12v10M9 11V6h6v5M10.5 8.5l1 1 2-2")}<span><b>Todo junto</b>Campaña, candidatos, mítines, visitas de dirigentes y Junta Electoral, de Segovia capital y de los pueblos.</span></li>
+    <li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>También la capital</b>Sale todo aunque tengas puesto «Sin capital».</span></li>
+    <li>${ic("M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2zM8 9h7M8 13h7M8 17h4")}<span><b>Y lo de los periódicos</b>Debajo, los titulares electorales de la provincia que no han entrado en Noticias.</span></li></ul>
+    <button class="gbtn ginst" id="guiaElec" type="button">Ver Elecciones 29N</button>`;
 const PASOS = [
+  ...(hayElecciones() ? [pasoElecciones] : []),
   () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio. En <b>Noticias</b> solo sale lo que interesa al servicio, sobre todo en los pueblos.</p>
     <ul><li>${ic("M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z")}<span><b>Qué entra</b>Sucesos, movilizaciones, política, visitas de autoridades, medio ambiente, emergencias y fiestas.</span></li>
     <li>${ic("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z")}<span><b>Siempre al día</b>Se actualiza sola a lo largo del día. Lo que llega nuevo se marca en azul.</span></li>
@@ -2384,6 +2392,7 @@ function pintaGuia(){
   $("#guiaSig").textContent = guiaI === n-1 ? (guiaDesde ? "Cerrar" : "Empezar") : "Siguiente";
   $("#guiaX").hidden = guiaI === n-1;
   $("#guiaCuerpo").scrollTop = 0; requestAnimationFrame(sombraGuia);
+  const be = $("#guiaElec"); if (be) be.onclick = () => { cierraGuia(); store.set("elecVisto", 1); if (st.view!=="noticias") setView("noticias"); abrirSub({t:"elec"}); };
   const ba = $("#guiaAvisos"); if (ba) ba.onclick = () => { cierraGuia(); abreAvisos(true); };
   const bi = $("#guiaInst"); if (bi) bi.onclick = async () => { if (!instalarEv) return; instalarEv.prompt(); try { await instalarEv.userChoice; } catch(e){} instalarEv = null; pintaGuia(); };
 }
@@ -2392,7 +2401,8 @@ const FONDO_GUIA = ["#app","#aside","#appbar",".tabbar","#searchbar"];
 function sombraGuia(){ const c = $("#guiaCuerpo"); c.classList.toggle("mas", c.scrollHeight - c.scrollTop - c.clientHeight > 4); }
 $("#guiaCuerpo").addEventListener("scroll", sombraGuia, {passive:true});
 function abreGuia(paso=0, desde=null){ guiaDesde = desde; guiaI = paso; pintaGuia(); $("#guia").classList.add("open"); FONDO_GUIA.forEach(q=>document.querySelector(q)?.setAttribute("inert","")); setTimeout(()=>$("#guiaSig").focus(), 50); }
-function cierraGuia(){ $("#guia").classList.remove("open"); store.set("guiaVista", 1); FONDO_GUIA.forEach(q=>document.querySelector(q)?.removeAttribute("inert")); const d = guiaDesde; guiaDesde = null; if (d && d.isConnected) d.focus(); }
+const GUIA_V = 2;
+function cierraGuia(){ $("#guia").classList.remove("open"); store.set("guiaVista", GUIA_V); FONDO_GUIA.forEach(q=>document.querySelector(q)?.removeAttribute("inert")); const d = guiaDesde; guiaDesde = null; if (d && d.isConnected) d.focus(); }
 $("#guiaSig").addEventListener("click", ()=>{ if (guiaI < PASOS.length-1){ guiaI++; pintaGuia(); } else cierraGuia(); });
 $("#guiaAtras").addEventListener("click", ()=>{ if (guiaI > 0){ guiaI--; pintaGuia(); } });
 $("#guiaX").addEventListener("click", cierraGuia);
@@ -2401,10 +2411,12 @@ addEventListener("keydown", e=>{ if (!$("#guia").classList.contains("open")) ret
 $("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) atras(); abreGuia(0, document.querySelector('.side-btn[data-side="filtros"]') || $("#appbar")); });
 // Primera visita: solo a quien no ha usado la app antes (quien ya la usaba tiene algo guardado)
 (() => {
-  if (store.get("guiaVista", 0)) return;
-  let antes = false; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k && k.startsWith("psg:") && !/^psg:(recarga-|tema$)/.test(k)) { antes = true; break; } } } catch(e){}
-  if (antes || /[?&]noguia\b/.test(location.search)) { store.set("guiaVista", 1); return; }
-  setTimeout(()=>abreGuia(esIOS() && instalada() ? PASOS.length-1 : 0), 600); // iPhone: la app del icono no comparte datos con Safari; ya vio la guía allí
+  // Versión 2 de la guía (novedad Elecciones 29N): sale una vez a todos, también a quien ya la usaba
+  if (store.get("guiaVista", 0) >= GUIA_V) return;
+  let antes = false; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k && k.startsWith("psg:") && !/^psg:(recarga-|tema$|guiaVista$)/.test(k)) { antes = true; break; } } } catch(e){}
+  if (/[?&]noguia\b/.test(location.search)) { store.set("guiaVista", GUIA_V); return; }
+  // iPhone: la app recién instalada no comparte datos con Safari, donde ya vio la guía: novedad (si la hay) y la pantalla final
+  setTimeout(()=>abreGuia(esIOS() && instalada() && !antes ? (hayElecciones() ? 0 : PASOS.length-1) : 0), 600);
 })();
 if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
@@ -2416,7 +2428,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v94";
+const VERSION_APP = "prensa-segovia-v95";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
