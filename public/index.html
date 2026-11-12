@@ -995,6 +995,26 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 #guia .gbtn.sec{background:var(--stone);color:var(--ink)}
 #guia .ginst{width:100%;margin:8px 0 2px}
 .guiabtn{display:block;width:100%;margin-top:10px}
+@media (min-width:900px) and (min-height:640px){
+  #guia .gbox{max-width:680px;border-radius:26px}
+  #guia .gtop{padding:22px 26px 0 34px}
+  #guia .gpaso{font-size:14px}
+  #guia .gx{font-size:16px}
+  #guia .gcuerpo{padding:10px 34px 16px}
+  #guia h2{font-size:34px;margin:6px 0 12px}
+  #guia p{font-size:19px;line-height:1.5;margin-bottom:14px}
+  #guia ul{gap:16px;margin-top:10px}
+  #guia li{font-size:18px;line-height:1.45;gap:16px}
+  #guia li .gi + span b{font-size:19px;margin-bottom:2px}
+  #guia li .gi{width:42px;height:42px;border-radius:12px}
+  #guia li .gi svg{width:23px;height:23px}
+  #guia .gnum{width:34px;height:34px;font-size:16px}
+  #guia .gnota{font-size:17px;padding:14px 16px;border-radius:14px}
+  #guia .gpie{padding:18px 34px 22px}
+  #guia .gpuntos i{width:10px;height:10px}
+  #guia .gpuntos i.on{width:26px}
+  #guia .gbtn{font-size:17px;padding:13px 24px}
+}
 </style>
 </head>
 <body>
@@ -2365,7 +2385,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v91";
+const VERSION_APP = "prensa-segovia-v92";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
