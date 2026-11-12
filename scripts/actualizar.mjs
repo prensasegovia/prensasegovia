@@ -1088,6 +1088,8 @@ async function main() {
       // Desaparecida ya localizada (lo dice otro medio del grupo): deja de ser Importante y se marca
       if (/desaparecid|\bbusca/.test(norm(n.titulo)) && n.medios.some(m => /locali[zc]|hallad|encontrad|aparecid|aparece/.test(norm(decodeURIComponent(String(m.url)))))) { n.resuelta = "Localizada"; if (n.relevancia === "alta") n.relevancia = "media"; } else delete n.resuelta;
       if (c.porTexto) n.porTexto = true; else delete n.porTexto;
+      // Evento guardado de un análisis antiguo que hoy no se sostiene (errata de fecha, crónica en pasado): fuera
+      if (n.analisis?.evento?.frase && !eventoDe(n.analisis.evento.frase, "", new Date(n.publicado), ["social"]).fecha_evento) delete n.analisis.evento;
       delete n.fecha_evento; delete n.hora_evento; delete n.convocatoria;
       Object.assign(n, eventoConCuerpo(n.titulo, n.resumen || "", new Date(n.publicado), n.categorias, n.analisis));
       if (!interesa(n)) return false;

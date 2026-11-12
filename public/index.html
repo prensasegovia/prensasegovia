@@ -492,6 +492,11 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .uptodate{min-width:0}
 .searchbar button{height:auto;min-height:36px}
 .stat .n{flex:none}
+.stat.elec{position:relative;overflow:visible}
+.stat.elec.nuevo{box-shadow:inset 0 0 0 2px #FFD98A;animation:elecLatido 2.2s ease-in-out 4}
+.stat .nuevotag{position:absolute;top:-9px;right:8px;background:#FFD98A;color:#3a2a00;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;border-radius:999px;padding:2px 9px;box-shadow:0 2px 6px rgba(0,0,0,.25);line-height:1.4}
+@keyframes elecLatido{0%,100%{box-shadow:inset 0 0 0 2px #FFD98A}50%{box-shadow:inset 0 0 0 2px #FFD98A,0 0 0 6px rgba(255,217,138,.3)}}
+@media (prefers-reduced-motion:reduce){.stat.elec.nuevo{animation:none}}
 .stats.s4{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
 .newhead .linkbtn,.sect .linkbtn{font-size:13.5px;font-weight:600;min-height:32px;padding:6px 0;text-decoration:none;opacity:.9}
 .sect .linkbtn{margin-left:auto}
@@ -1468,7 +1473,7 @@ function viewNoticias(news){
       <button class="stat ${alta.length?"alta":""}" data-act="imp" type="button"><div class="n">${alta.length}</div><div class="l"><span>Importantes</span>${I.chev}</div></button>
       <button class="stat" data-act="agenda" type="button"><div class="n">${ag.length}</div><div class="l"><span>Agenda</span>${I.chev}</div></button>
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>${hayElecciones()?`
-      <button class="stat elec" data-act="elec" type="button"><div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${store.get("elecVisto",0)?I.chev:`<b class="nv">Nuevo</b>`}</div></button>`:""}
+      <button class="stat elec ${store.get("elecVisto",0)?"":"nuevo"}" data-act="elec" type="button">${store.get("elecVisto",0)?"":`<span class="nuevotag">Nuevo</span>`}<div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${I.chev}</div></button>`:""}
     </div>
     <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
@@ -2357,13 +2362,7 @@ function pasoInstalar(){
   return `<h2 id="guiaTit">Tenla también en el móvil</h2><p>En el teléfono se puede guardar como una app: con su icono en la pantalla de inicio, a pantalla completa y con <b>avisos</b> de lo nuevo.</p>
     <div class="gnota">Abre en el móvil <b>prensasegovia.github.io/prensasegovia</b> (o el enlace que te pasaron) y allí te explicará cómo guardarla, paso a paso para iPhone o Android.</div>`;
 }
-const pasoElecciones = () => `<span class="gnovedad">Novedad</span><h2 id="guiaTit">Elecciones 29N</h2><p>Hasta las elecciones, en el resumen de Noticias tienes un acceso nuevo: <b>Elecciones</b>.</p>
-    <ul><li>${ic("M4 21h16M6 21V11h12v10M9 11V6h6v5M10.5 8.5l1 1 2-2")}<span><b>Todo junto</b>Campaña, candidatos, mítines, visitas de dirigentes y Junta Electoral, de Segovia capital y de los pueblos.</span></li>
-    <li>${ic("M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6z")}<span><b>También la capital</b>Sale todo aunque tengas puesto «Sin capital».</span></li>
-    <li>${ic("M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2zM8 9h7M8 13h7M8 17h4")}<span><b>Y lo de los periódicos</b>Debajo, los titulares electorales de la provincia que no han entrado en Noticias.</span></li></ul>
-    <button class="gbtn ginst" id="guiaElec" type="button">Ver Elecciones 29N</button>`;
 const PASOS = [
-  ...(hayElecciones() ? [pasoElecciones] : []),
   () => `<h2 id="guiaTit">Prensa Segovia</h2><p>Toda la prensa de la provincia en un sitio. En <b>Noticias</b> solo sale lo que interesa al servicio, sobre todo en los pueblos.</p>
     <ul><li>${ic("M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z")}<span><b>Qué entra</b>Sucesos, movilizaciones, política, visitas de autoridades, medio ambiente, emergencias y fiestas.</span></li>
     <li>${ic("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z")}<span><b>Siempre al día</b>Se actualiza sola a lo largo del día. Lo que llega nuevo se marca en azul.</span></li>
@@ -2392,7 +2391,6 @@ function pintaGuia(){
   $("#guiaSig").textContent = guiaI === n-1 ? (guiaDesde ? "Cerrar" : "Empezar") : "Siguiente";
   $("#guiaX").hidden = guiaI === n-1;
   $("#guiaCuerpo").scrollTop = 0; requestAnimationFrame(sombraGuia);
-  const be = $("#guiaElec"); if (be) be.onclick = () => { cierraGuia(); store.set("elecVisto", 1); if (st.view!=="noticias") setView("noticias"); abrirSub({t:"elec"}); };
   const ba = $("#guiaAvisos"); if (ba) ba.onclick = () => { cierraGuia(); abreAvisos(true); };
   const bi = $("#guiaInst"); if (bi) bi.onclick = async () => { if (!instalarEv) return; instalarEv.prompt(); try { await instalarEv.userChoice; } catch(e){} instalarEv = null; pintaGuia(); };
 }
@@ -2411,12 +2409,12 @@ addEventListener("keydown", e=>{ if (!$("#guia").classList.contains("open")) ret
 $("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("open"); if (history.state && history.state.sheet) atras(); abreGuia(0, document.querySelector('.side-btn[data-side="filtros"]') || $("#appbar")); });
 // Primera visita: solo a quien no ha usado la app antes (quien ya la usaba tiene algo guardado)
 (() => {
-  // Versión 2 de la guía (novedad Elecciones 29N): sale una vez a todos, también a quien ya la usaba
+  // Versión 2 de la guía: sale una vez a todos, también a quien ya la usaba
   if (store.get("guiaVista", 0) >= GUIA_V) return;
   let antes = false; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (k && k.startsWith("psg:") && !/^psg:(recarga-|tema$|guiaVista$)/.test(k)) { antes = true; break; } } } catch(e){}
   if (/[?&]noguia\b/.test(location.search)) { store.set("guiaVista", GUIA_V); return; }
   // iPhone: la app recién instalada no comparte datos con Safari, donde ya vio la guía: novedad (si la hay) y la pantalla final
-  setTimeout(()=>abreGuia(esIOS() && instalada() && !antes ? (hayElecciones() ? 0 : PASOS.length-1) : 0), 600);
+  setTimeout(()=>abreGuia(esIOS() && instalada() && !antes ? PASOS.length-1 : 0), 600);
 })();
 if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
@@ -2428,7 +2426,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v95";
+const VERSION_APP = "prensa-segovia-v96";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
