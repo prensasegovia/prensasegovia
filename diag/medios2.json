@@ -1,0 +1,210 @@
+{
+ "fuentesGoogle": {},
+ "ejemplos": {},
+ "candidatas": {
+  "https://segoviaaldia.es/rss": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/rss",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": [],
+   "ini": "<!DOCTYPE html>\n<html lang=\"es\">\n<base href=\"https://segoviaaldia.es/\"/>\n<head>\n\t<!-- title-->\n    <title> Segovia al día | Noticias de Segovia y provincia</title>\n    <meta name=\"description\" content=\" Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia\">\n    <meta name=\"keywords\" content=\" segovia, provincia, local, cuéllar, El Día, la granja, san ildefonso, riaza, sepúlveda, segovia247, el día, ayllón, cantalejo, palazuelos de eresma, gimnástica segoviana, balonmano nava, bm nava, segosala, unami, información, noticias, periódico, deportes, ",
+   "links": [
+    "https://segoviaaldia.es/coverrss",
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://segoviaaldia.es/rss.xml": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/rss.xml",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": [],
+   "ini": "<!DOCTYPE html>\n<html lang=\"es\">\n<base href=\"https://segoviaaldia.es/\"/>\n<head>\n\t<!-- title-->\n    <title> Segovia al día | Noticias de Segovia y provincia</title>\n    <meta name=\"description\" content=\" Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia\">\n    <meta name=\"keywords\" content=\" segovia, provincia, local, cuéllar, El Día, la granja, san ildefonso, riaza, sepúlveda, segovia247, el día, ayllón, cantalejo, palazuelos de eresma, gimnástica segoviana, balonmano nava, bm nava, segosala, unami, información, noticias, periódico, deportes, ",
+   "links": [
+    "https://segoviaaldia.es/coverrss",
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://segoviaaldia.es/feed": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/feed",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": [],
+   "ini": "<!DOCTYPE html>\n<html lang=\"es\">\n<base href=\"https://segoviaaldia.es/\"/>\n<head>\n\t<!-- title-->\n    <title> Segovia al día | Noticias de Segovia y provincia</title>\n    <meta name=\"description\" content=\" Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia\">\n    <meta name=\"keywords\" content=\" segovia, provincia, local, cuéllar, El Día, la granja, san ildefonso, riaza, sepúlveda, segovia247, el día, ayllón, cantalejo, palazuelos de eresma, gimnástica segoviana, balonmano nava, bm nava, segosala, unami, información, noticias, periódico, deportes, ",
+   "links": [
+    "https://segoviaaldia.es/coverrss",
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://segoviaaldia.es/index.rss": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/index.rss",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": [],
+   "ini": "<!DOCTYPE html>\n<html lang=\"es\">\n<base href=\"https://segoviaaldia.es/\"/>\n<head>\n\t<!-- title-->\n    <title> Segovia al día | Noticias de Segovia y provincia</title>\n    <meta name=\"description\" content=\" Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia\">\n    <meta name=\"keywords\" content=\" segovia, provincia, local, cuéllar, El Día, la granja, san ildefonso, riaza, sepúlveda, segovia247, el día, ayllón, cantalejo, palazuelos de eresma, gimnástica segoviana, balonmano nava, bm nava, segosala, unami, información, noticias, periódico, deportes, ",
+   "links": [
+    "https://segoviaaldia.es/coverrss",
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://segoviaaldia.es/coverrss?format=xml": {
+   "http": 200,
+   "final": "https://segoviaaldia.es/coverrss?format=xml",
+   "items": 0,
+   "segovia": 5,
+   "tit": [],
+   "rss": [],
+   "ini": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:feedburner=\"http://rssnamespace.org/feedburner/ext/1.0\" xmlns:media=\"http://search.yahoo.com/mrss/\">\r\n \r\n\r\n\t<channel>\r\n        <atom:link href=\"https://segoviaaldia.es/coverrss\" rel=\"self\" type=\"application/rss+xml\" />\r\n        <title>Segovia al día</title>\r\n\t\t<link>https://segoviaaldia.es/coverrss</link>\r\n\t\t<description>Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia</description>\r\n\t\t<lastBuildDate>Thu, 12 Nov 2026 07:31:50 +0100</lastBu",
+   "links": [
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://segoviaaldia.es/sitemap.xml": {
+   "http": 200,
+   "final": "https://segoviaaldia.es/sitemap.xml",
+   "items": 0,
+   "segovia": 2470,
+   "tit": [],
+   "rss": [],
+   "ini": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\"><url><loc>https://segoviaaldia.es/art/18169/es-lo-mismo-el-modo-demo-de-un-casino-que-jugar-con-dinero-real-la-ley-espanola-responde</loc><lastmod>2026-11-12T07:31:51+01:00</lastmod><changefreq>daily</changefreq><priority>0.5</priority><news:news><news:publication><news:name>Segovia al día</news:name><news:language>es</news:language></news:publication><news:publication_date>2026-08-21T22:53:13+02:00</news:publication_date><news:title>¿Es",
+   "links": []
+  },
+  "https://segoviaaldia.es/sitemap-news.xml": {
+   "http": 404,
+   "final": "https://segoviaaldia.es/sitemap-news.xml",
+   "items": 0,
+   "segovia": 136,
+   "tit": [],
+   "rss": [],
+   "ini": "<!DOCTYPE html>\n<html lang=\"es\">\n<base href=\"https://segoviaaldia.es/\"/>\n<head>\n\t<!-- title-->\n    <title> Segovia al día | Noticias de Segovia y provincia</title>\n    <meta name=\"description\" content=\" Toda la información de Segovia y las noticias actualizadas en agenda y eventos de Segovia y provincia\">\n    <meta name=\"keywords\" content=\" segovia, provincia, local, cuéllar, El Día, la granja, san ildefonso, riaza, sepúlveda, segovia247, el día, ayllón, cantalejo, palazuelos de eresma, gimnástica segoviana, balonmano nava, bm nava, segosala, unami, información, noticias, periódico, deportes, ",
+   "links": [
+    "https://segoviaaldia.es/coverrss",
+    "https://segoviaaldia.es/coverrss"
+   ]
+  },
+  "https://www.elespanol.com/rss/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://www.elespanol.com/rss/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [
+    null
+   ],
+   "links": [
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  },
+  "https://www.elespanol.com/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://www.elespanol.com/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [
+    null
+   ],
+   "links": [
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  },
+  "https://www.elespanol.com/rss/castilla-y-leon/provincias/segovia/": {
+   "http": 404,
+   "final": "https://www.elespanol.com/rss/castilla-y-leon/provincias/segovia/",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [
+    null
+   ],
+   "links": [
+    "https://www.elespanol.com/sitemap_google_news.xml?utm_cmp_rs=trends"
+   ]
+  },
+  "https://cadenaser.com/arc/outboundfeeds/rss/category/castilla-y-leon/segovia/?outputType=xml": {
+   "http": 200,
+   "final": "https://cadenaser.com/arc/outboundfeeds/rss/category/castilla-y-leon/segovia/?outputType=xml",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [],
+   "links": [
+    "https://cadenaser.com/arc/outboundfeeds/rss/"
+   ]
+  },
+  "https://cadenaser.com/arc/outboundfeeds/rss/?outputType=xml": {
+   "http": 200,
+   "final": "https://cadenaser.com/arc/outboundfeeds/rss/?outputType=xml",
+   "items": 100,
+   "segovia": 3,
+   "tit": [
+    "Manu Carreño se posiciona en el 'caso Lamine Yamal': \"¿No será que no estamos acostumbrado",
+    "Leire Díez: \"Me ofrecieron 2 millones por mentir contra Pedro Sánchez\"",
+    "Escuchar al estómago: Cómo interpretar sus señales y dominar el arte del Hara Hachi Bu",
+    "Rancho Skinwalker: el lugar donde lo inexplicable parece tener su propia casa"
+   ],
+   "rss": [],
+   "links": [
+    "https://cadenaser.com/arc/outboundfeeds/rss/"
+   ]
+  },
+  "https://cadenaser.com/castilla-y-leon/": {
+   "http": 404,
+   "final": "https://cadenaser.com/castilla-y-leon/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": [],
+   "links": []
+  },
+  "https://cadenaser.com/tag/segovia/": {
+   "http": 404,
+   "final": "https://cadenaser.com/tag/segovia/",
+   "items": 0,
+   "segovia": 1,
+   "tit": [],
+   "rss": [],
+   "links": []
+  },
+  "https://cadenaser.com/arc/outboundfeeds/rss/tags/segovia/?outputType=xml": {
+   "http": 200,
+   "final": "https://cadenaser.com/arc/outboundfeeds/rss/tags/segovia/?outputType=xml",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [],
+   "links": [
+    "https://cadenaser.com/arc/outboundfeeds/rss/"
+   ]
+  },
+  "https://www.larazon.es/castilla-y-leon/segovia/": {
+   "http": 404,
+   "final": "https://www.larazon.es/castilla-y-leon/segovia/",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [
+    "https://www.larazon.es/?outputType=xml"
+   ],
+   "links": [
+    "https://www.larazon.es/?outputType=xml"
+   ]
+  },
+  "https://www.larazon.es/rss/castilla-y-leon.xml": {
+   "http": 503,
+   "final": "https://www.larazon.es/rss/castilla-y-leon.xml",
+   "items": 0,
+   "segovia": 0,
+   "tit": [],
+   "rss": [],
+   "links": []
+  }
+ }
+}
