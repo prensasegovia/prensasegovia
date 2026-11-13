@@ -849,6 +849,59 @@ async function periodicos(ahora) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Redes y organizaciones: lo que publican partidos, cargos, sindicatos y colectivos (redes oficiales y webs) */
+/* ------------------------------------------------------------------ */
+const SALIDA_REDES = new URL("../public/redes.json", import.meta.url);
+const BSKY = h => `https://bsky.app/profile/${h}/rss`;
+const REDES = [
+  // Redes sociales oficiales con canal público (Bluesky). X, Facebook e Instagram no se pueden leer automáticamente
+  { cuenta: "PSOE de Segovia", red: "Bluesky", tipo: "Partidos", url: BSKY("psoesegovia.bsky.social") },
+  { cuenta: "José Luis Aceves", cargo: "Diputado y secretario provincial del PSOE", red: "Bluesky", tipo: "Cargos públicos", url: BSKY("joseluisacevesg70.bsky.social") },
+  { cuenta: "Lirio Martín", cargo: "Subdelegada del Gobierno", red: "Bluesky", tipo: "Cargos públicos", url: BSKY("liriomartin.bsky.social") },
+  { cuenta: "PAH Segovia", cargo: "Plataforma de Afectados por la Hipoteca", red: "Bluesky", tipo: "Colectivos", url: BSKY("pahsegovia.bsky.social") },
+  // Webs oficiales
+  { cuenta: "PP de Segovia", red: "Web", tipo: "Partidos", url: "https://ppsegovia.com/feed/" },
+  { cuenta: "PSOE de Segovia", red: "Web", tipo: "Partidos", url: "https://www.psoesegovia.es/feed/" },
+  { cuenta: "IU Segovia", red: "Web", tipo: "Partidos", url: "https://iusegovia.es/sg/feed/" },
+  { cuenta: "PP de Castilla y León", red: "Web", tipo: "Partidos", url: "https://www.ppcyl.es/feed/", soloSiMenciona: true },
+  { cuenta: "IU Castilla y León", red: "Web", tipo: "Partidos", url: "https://www.iucyl.es/feed", soloSiMenciona: true },
+  { cuenta: "UGT Castilla y León", red: "Web", tipo: "Sindicatos y agrarias", url: "https://ugtcyl.es/web/feed", soloSiMenciona: true },
+  { cuenta: "STECyL", red: "Web", tipo: "Sindicatos y agrarias", url: "https://stecyl.net/feed/", soloSiMenciona: true },
+  { cuenta: "ASAJA Castilla y León", red: "Web", tipo: "Sindicatos y agrarias", url: "https://www.asajacyl.com/feed", soloSiMenciona: true },
+  { cuenta: "Salvemos la Saleta", red: "Web", tipo: "Colectivos", url: "https://salvemoslasaleta.blogspot.com/feeds/posts/default?alt=rss" },
+];
+async function redes(ahora) {
+  let previo = { posts: [] };
+  try { previo = JSON.parse(await readFile(SALIDA_REDES, "utf8")); } catch {}
+  const porUrl = new Map((previo.posts || []).map(x => [x.url, x]));
+  const estado = [];
+  for (const r of REDES) {
+    let n = 0, ok = false;
+    try {
+      for (const it of items(await descarga(r.url))) {
+        if (porUrl.has(it.url) || isNaN(it.fecha)) continue;
+        const texto = desEnt(String(it.texto || "").replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "")).trim();
+        if (r.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + texto))) continue;
+        const social = r.red !== "Web";
+        porUrl.set(it.url, { cuenta: r.cuenta, ...(r.cargo ? { cargo: r.cargo } : {}), red: r.red, tipo: r.tipo, titulo: social ? "" : desEnt(it.titulo),
+          texto: social ? texto.slice(0, 900) : recorta(norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: it.fecha.toISOString(), ...(it.img ? { img: it.img } : {}) });
+        n++;
+      }
+      ok = true;
+    } catch {}
+    estado.push({ cuenta: r.cuenta, red: r.red, ok, nuevas: n });
+  }
+  for (const x of porUrl.values()) x.municipio = conPueblo(municipioDe((x.titulo || "") + " " + (x.texto || "")), null);
+  // 30 días (publican poco) y como mucho 400
+  const limite = ahora.getTime() - 30 * 864e5;
+  const posts = [...porUrl.values()].filter(x => new Date(x.publicado).getTime() >= limite && new Date(x.publicado).getTime() <= ahora.getTime() + 36e5)
+    .sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 400);
+  const cuentas = REDES.map(r => ({ cuenta: r.cuenta, red: r.red, tipo: r.tipo, ...(r.cargo ? { cargo: r.cargo } : {}), web: r.url.replace(/\/rss$|\/feed\/?$|\/feeds\/.*$/, "") }));
+  await writeFile(SALIDA_REDES, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, cuentas, estado, posts }));
+  console.log("Redes:", estado.map(e => `${e.cuenta} (${e.red}) ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${posts.length} en total`);
+}
+
+/* ------------------------------------------------------------------ */
 /* Principal                                                           */
 /* ------------------------------------------------------------------ */
 async function main() {
@@ -1246,6 +1299,7 @@ async function main() {
   await writeFile(SALIDA, JSON.stringify(salida, null, 0));
   try { await archivar(dias, ahora); } catch (e) { console.log("Archivo: error", e.message); }
   try { await periodicos(ahora); } catch (e) { console.log("Periódicos: error", e.message); }
+  try { await redes(ahora); } catch (e) { console.log("Redes: error", e.message); }
   console.log(`Noticias leídas: ${brutos.length}. Agrupadas: ${grupos.length}. Nuevas añadidas: ${añadidas}.`);
   for (const e of estado) console.log(` - ${e.fuente}: ${e.ok ? "ok (" + e.noticias + ")" : "FALLO " + e.error}`);
 }
