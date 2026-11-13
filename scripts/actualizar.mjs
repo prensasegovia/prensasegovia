@@ -58,6 +58,11 @@ const FEEDS = [
   { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", soloSiMenciona: true },
+  { nombre: "IU Segovia", urls: ["https://iusegovia.es/sg/feed/"], tipo: "organizacion" },
+  { nombre: "IU Castilla y León", urls: ["https://www.iucyl.es/feed"], tipo: "organizacion", soloSiMenciona: true },
+  { nombre: "ASAJA Castilla y León", urls: ["https://www.asajacyl.com/feed"], tipo: "organizacion", soloSiMenciona: true },
+  // Redes sociales oficiales con canal público (Bluesky): lo que publican aparece aunque la prensa no lo recoja
+  { nombre: "PSOE de Segovia (Bluesky)", urls: ["https://bsky.app/profile/psoesegovia.bsky.social/rss"], tipo: "organizacion" },
   // Ayuntamientos con noticias propias (actos, plenos, fiestas, avisos)
   { nombre: "Ayuntamiento de Cuéllar", urls: ["https://www.aytocuellar.es/feed/"], pueblo: "Cuéllar" },
   { nombre: "Ayuntamiento de Cantalejo", urls: ["https://www.cantalejo.es/home/-/asset_publisher/QGA6lS8CBHs5/rss"], pueblo: "Cantalejo" },
@@ -103,6 +108,10 @@ const INFO_FUENTE = {
   "Salvemos la Saleta": ["Plataformas vecinales", "https://salvemoslasaleta.blogspot.com"],
   "PP de Castilla y León": ["Partidos y sindicatos", "https://www.ppcyl.es"],
   "STECyL": ["Partidos y sindicatos", "https://stecyl.net"],
+  "IU Segovia": ["Partidos y sindicatos", "https://iusegovia.es/sg/"],
+  "IU Castilla y León": ["Partidos y sindicatos", "https://www.iucyl.es"],
+  "ASAJA Castilla y León": ["Sector agrario", "https://www.asajacyl.com"],
+  "PSOE de Segovia (Bluesky)": ["Redes sociales oficiales", "https://bsky.app/profile/psoesegovia.bsky.social"],
   "UGT Castilla y León": ["Partidos y sindicatos", "https://ugtcyl.es/web/"],
 };
 const infoFuente = f => f.nombre.startsWith("Ayuntamiento de ") ? ["Ayuntamientos", (f.urls[0].match(/^https?:\/\/[^/]+/) || [""])[0]] : (INFO_FUENTE[f.nombre] || ["Otros", ""]);
@@ -261,7 +270,8 @@ function items(xml) {
     link = typeof link === "object" ? (link?.["@href"] ?? link?.["#text"]) : link;
     return {
       img: imagenDe(it),
-      titulo: limpia(txt(it.title)),
+      // Publicaciones de redes sociales (Bluesky) no traen título: se usa el principio del texto
+      titulo: limpia(txt(it.title)) || (t => t.length > 150 ? t.slice(0, 150).replace(/\s+\S*$/, "") + "…" : t)(limpia(txt(it.description)).split(/(?<=[.!?])\s/)[0] || ""),
       url: String(link ?? "").trim(),
       fecha: new Date(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"]) || Date.now()), sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
       sinFecha: !(txt(it.pubDate) || txt(it.published) || txt(it.updated) || txt(it["dc:date"])),
@@ -765,6 +775,12 @@ const PERIODICOS = [
   { nombre: "El Nordeste de Segovia", urls: ["https://www.elnordestedesegovia.es/noticias?format=feed&type=rss"] },
   { nombre: "COPE Segovia", urls: ["https://www.cope.es/rss/emisoras/castilla-y-leon/segovia-provincia/segovia.xml"], soloSiMenciona: true }, // mete mucha noticia nacional
   { nombre: "Onda Cero Segovia", urls: ["https://www.ondacero.es/rss/8521.xml"] },
+  // Partidos, sindicatos y organizaciones: todo lo que publican, aunque no sea noticia de interés
+  { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"] },
+  { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/", "https://bsky.app/profile/psoesegovia.bsky.social/rss"] },
+  { nombre: "IU Segovia", urls: ["https://iusegovia.es/sg/feed/"] },
+  { nombre: "ASAJA Castilla y León", urls: ["https://www.asajacyl.com/feed"], soloSiMenciona: true },
+  { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], soloSiMenciona: true },
 ];
 const SALIDA_PERIODICOS = new URL("../public/periodicos.json", import.meta.url);
 // Avisos de programas de radio ("08:24H | 05 NOVIEMBRE 2026 | HERRERA EN COPE", "Con X desde las 19:20 hasta las 19:40")
