@@ -515,7 +515,7 @@ const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|
 const INCIDENTE = /colapso|rotura de (la )?presa|riesgo de (rotura|desbordamiento)|desembalse de emergencia|accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 // Campaña de las elecciones del 29N: atención especial a todo lo electoral en la provincia (hasta el 30-nov)
 const EN_CAMPANA = () => fechaMadrid(new Date()) <= "2026-11-30";
-const ELECTORAL_ACTO = /\b29n\b|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral/;
+const ELECTORAL_ACTO = /\b(pp|psoe|vox|iu|sumar|podemos)( de segovia)? (apuesta|propone|promete|presenta|visita|se reune|se compromete|llevara|recorre)\b|\b29n\b|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral/;
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
   // Privatizar o adjudicar el servicio del agua de un pueblo: posible conflicto vecinal, entra
