@@ -59,6 +59,23 @@ jobs:
           git diff --cached --quiet || git commit -m "Noticias actualizadas $(date -u +'%Y-%m-%d %H:%M') UTC"
           for i in 1 2 3; do git push && break; git pull --rebase -X theirs -q; sleep 3; done
 
+      # Versión de pruebas: lo que haya en la rama «pruebas» se publica en /pruebas/ con los mismos datos,
+      # sin tocar la web principal (sus ajustes se guardan aparte y no se recarga con la versión principal)
+      - name: Versión de pruebas
+        run: |
+          rm -rf public/pruebas
+          if git fetch -q origin pruebas 2>/dev/null; then
+            mkdir -p public/pruebas
+            git show origin/pruebas:public/index.html \
+              | sed -e 's#^<head>$#<head><base href="../"><meta name="robots" content="noindex">#' \
+                    -e 's#psg:#psgp:#g' \
+                    -e 's#navigator.serviceWorker.register("sw.js")#Promise.resolve()#' \
+                    -e 's#async function compruebaVersion(){#async function compruebaVersion(){ return;#' \
+                    -e 's#^<body>$#<body><div style="position:fixed;left:50%;bottom:calc(74px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;background:\#b45309;color:\#fff;font:700 12px/1 system-ui;letter-spacing:.5px;padding:6px 12px;border-radius:999px;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.3)">VERSIÓN DE PRUEBAS</div>#' \
+              > public/pruebas/index.html
+            echo "Pruebas publicada desde $(git rev-parse --short origin/pruebas)"
+          fi
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
