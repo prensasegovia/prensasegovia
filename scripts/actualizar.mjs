@@ -853,27 +853,19 @@ async function periodicos(ahora) {
 /* ------------------------------------------------------------------ */
 const SALIDA_REDES = new URL("../public/redes.json", import.meta.url);
 const BSKY = h => `https://bsky.app/profile/${h}/rss`;
-const REDES = [
-  // Redes sociales oficiales con canal público (Bluesky). X, Facebook e Instagram no se pueden leer automáticamente
-  { cuenta: "PSOE de Segovia", red: "Bluesky", tipo: "Partidos", url: BSKY("psoesegovia.bsky.social") },
-  { cuenta: "José Luis Aceves", cargo: "Diputado y secretario provincial del PSOE", red: "Bluesky", tipo: "Cargos públicos", url: BSKY("joseluisacevesg70.bsky.social") },
-  { cuenta: "Lirio Martín", cargo: "Subdelegada del Gobierno", red: "Bluesky", tipo: "Cargos públicos", url: BSKY("liriomartin.bsky.social") },
-  { cuenta: "PAH Segovia", cargo: "Plataforma de Afectados por la Hipoteca", red: "Bluesky", tipo: "Colectivos", url: BSKY("pahsegovia.bsky.social") },
-  // Webs oficiales
-  { cuenta: "PP de Segovia", red: "Web", tipo: "Partidos", url: "https://ppsegovia.com/feed/" },
-  { cuenta: "PSOE de Segovia", red: "Web", tipo: "Partidos", url: "https://www.psoesegovia.es/feed/" },
-  { cuenta: "IU Segovia", red: "Web", tipo: "Partidos", url: "https://iusegovia.es/sg/feed/" },
-  { cuenta: "PP de Castilla y León", red: "Web", tipo: "Partidos", url: "https://www.ppcyl.es/feed/", soloSiMenciona: true },
-  { cuenta: "IU Castilla y León", red: "Web", tipo: "Partidos", url: "https://www.iucyl.es/feed", soloSiMenciona: true },
-  { cuenta: "UGT Castilla y León", red: "Web", tipo: "Sindicatos y agrarias", url: "https://ugtcyl.es/web/feed", soloSiMenciona: true },
-  { cuenta: "STECyL", red: "Web", tipo: "Sindicatos y agrarias", url: "https://stecyl.net/feed/", soloSiMenciona: true },
-  { cuenta: "ASAJA Castilla y León", red: "Web", tipo: "Sindicatos y agrarias", url: "https://www.asajacyl.com/feed", soloSiMenciona: true },
-  { cuenta: "Salvemos la Saleta", red: "Web", tipo: "Colectivos", url: "https://salvemoslasaleta.blogspot.com/feeds/posts/default?alt=rss" },
+// Perfiles de redes sociales que se siguen. Las publicaciones solo se pueden leer donde hay canal público (Bluesky);
+// de X, Facebook e Instagram se guarda el enlace al perfil para abrirlo con la cuenta de cada uno.
+const PERFILES = [
+  { nombre: "PSOE de Segovia", tipo: "Partidos", bluesky: "psoesegovia.bsky.social" },
+  { nombre: "José Luis Aceves", cargo: "Diputado y secretario provincial del PSOE", tipo: "Cargos públicos", bluesky: "joseluisacevesg70.bsky.social" },
+  { nombre: "Lirio Martín", cargo: "Subdelegada del Gobierno", tipo: "Cargos públicos", bluesky: "liriomartin.bsky.social" },
+  { nombre: "PAH Segovia", cargo: "Plataforma de Afectados por la Hipoteca", tipo: "Colectivos", bluesky: "pahsegovia.bsky.social" },
 ];
+const REDES = PERFILES.filter(p => p.bluesky).map(p => ({ cuenta: p.nombre, ...(p.cargo ? { cargo: p.cargo } : {}), red: "Bluesky", tipo: p.tipo, url: BSKY(p.bluesky) }));
 async function redes(ahora) {
   let previo = { posts: [] };
   try { previo = JSON.parse(await readFile(SALIDA_REDES, "utf8")); } catch {}
-  const porUrl = new Map((previo.posts || []).map(x => [x.url, x]));
+  const porUrl = new Map((previo.posts || []).filter(x => x.red !== "Web").map(x => [x.url, x]));
   const estado = [];
   for (const r of REDES) {
     let n = 0, ok = false;
@@ -896,7 +888,9 @@ async function redes(ahora) {
   const limite = ahora.getTime() - 30 * 864e5;
   const posts = [...porUrl.values()].filter(x => new Date(x.publicado).getTime() >= limite && new Date(x.publicado).getTime() <= ahora.getTime() + 36e5)
     .sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 400);
-  const cuentas = REDES.map(r => ({ cuenta: r.cuenta, red: r.red, tipo: r.tipo, ...(r.cargo ? { cargo: r.cargo } : {}), web: r.url.replace(/\/rss$|\/feed\/?$|\/feeds\/.*$/, "") }));
+  const enlaces = p => ({ ...(p.x ? { x: "https://x.com/" + p.x } : {}), ...(p.instagram ? { instagram: "https://www.instagram.com/" + p.instagram + "/" } : {}),
+    ...(p.facebook ? { facebook: "https://www.facebook.com/" + p.facebook } : {}), ...(p.bluesky ? { bluesky: "https://bsky.app/profile/" + p.bluesky } : {}), ...(p.telegram ? { telegram: "https://t.me/" + p.telegram } : {}) });
+  const cuentas = PERFILES.map(p => ({ cuenta: p.nombre, tipo: p.tipo, ...(p.cargo ? { cargo: p.cargo } : {}), ...(p.pueblo ? { pueblo: p.pueblo } : {}), enlaces: enlaces(p) }));
   await writeFile(SALIDA_REDES, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, cuentas, estado, posts }));
   console.log("Redes:", estado.map(e => `${e.cuenta} (${e.red}) ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${posts.length} en total`);
 }
