@@ -1,0 +1,203 @@
+{
+ "https://iusegovia.es/sg/feed/": {
+  "http": 200,
+  "final": "https://iusegovia.es/sg/feed/",
+  "items": 10,
+  "seg": 166,
+  "rss": [],
+  "tit": [
+   "12 Nov 2026 | El Frente Amplio defiende que los más ricos paguen lo que les corresponde para fortalecer ",
+   "10 Nov 2026 | IU critica a PP y Vox por tumbar su propuesta para recuperar las paradas de autobús suprim",
+   "06 Nov 2026 | IU Segovia destaca la modificación de normas contra el biogás en Cuéllar y reivindica el t",
+   "05 Nov 2026 | Izquierda Unida llama a participar en la Huelga General y manifiesta su respaldo a las mov"
+  ],
+  "title": "Izquierda Unida Segovia"
+ },
+ "https://www.voxespana.es/noticias/feed": {
+  "http": 403,
+  "final": "https://www.voxespana.es/noticias/feed",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://www.voxespana.es/feed": {
+  "http": 403,
+  "final": "https://www.voxespana.es/feed",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://www.voxespana.es/rss": {
+  "http": 403,
+  "final": "https://www.voxespana.es/rss",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://voxcastillayleon.es/feed/": "fetch failed",
+ "https://www.voxcyl.es/feed/": "fetch failed",
+ "https://www.uccl.es/feed/": "fetch failed",
+ "https://uccl.es/": "fetch failed",
+ "https://unioncampesinoscyl.es/feed/": "fetch failed",
+ "https://www.uccl.org/feed/": "fetch failed",
+ "https://coagcastillayleon.es/feed/": "fetch failed",
+ "https://www.coagcyl.org/feed/": "fetch failed",
+ "https://coag.org/feed/": "fetch failed",
+ "https://castillayleon.ccoo.es/rss": {
+  "http": 404,
+  "final": "https://castillayleon.ccoo.es/rss",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "links": []
+ },
+ "https://castillayleon.ccoo.es/rss.xml": {
+  "http": 200,
+  "final": "https://castillayleon.ccoo.es/rss.xml",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "links": []
+ },
+ "https://castillayleon.ccoo.es/Noticias": {
+  "http": 200,
+  "final": "https://castillayleon.ccoo.es/Noticias",
+  "items": 0,
+  "seg": 4,
+  "rss": [],
+  "tit": [],
+  "title": "CCOO de Castilla y León",
+  "links": []
+ },
+ "https://www.ccoo.es/rss/": {
+  "http": 404,
+  "final": "https://www.ccoo.es/rss/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "links": []
+ },
+ "https://podemoscastillayleon.es/feed/": "fetch failed",
+ "https://castillayleon.podemos.info/feed/": {
+  "http": 403,
+  "final": "https://castillayleon.podemos.info/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://cgtcyl.org/feed/": "fetch failed",
+ "https://www.cgt.org.es/feed/": "fetch failed",
+ "https://www.dipsegovia.es/bop/": {
+  "http": 200,
+  "final": "https://www.dipsegovia.es/bop/",
+  "items": 0,
+  "seg": 173,
+  "rss": [],
+  "tit": [],
+  "title": "Boletín Oficial de la Provincia de Segovia - Diputación de Segovia - dipsegovia.es",
+  "links": [
+   "/documents/39512/54242/SOLICITUD+PUBLICACI%C3%93N+ANUNCIOS+EN+BOP.pdf/e27dd9be-567d-c74f-13b4-f25813897906?t=1783514114194",
+   "/documents/39512/54242/PAGO+ANUNCIOS+%28LIQUIDACI%C3%93N%29.pdf/72b7e80f-cc85-8794-4c7e-76073096d0ef?t=1783514114296"
+  ]
+ },
+ "https://www.dipsegovia.es/bop/rss": {
+  "http": 404,
+  "final": "https://www.dipsegovia.es/bop/rss",
+  "items": 0,
+  "seg": 148,
+  "rss": [],
+  "tit": [],
+  "title": "Inicio - Diputación de Segovia - dipsegovia.es",
+  "links": []
+ },
+ "https://www.dipsegovia.es/rss": {
+  "http": 404,
+  "final": "https://www.dipsegovia.es/rss",
+  "items": 0,
+  "seg": 148,
+  "rss": [],
+  "tit": [],
+  "title": "Inicio - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://t.me/s/ppsegovia": {
+  "http": 200,
+  "final": "https://t.me/ppsegovia",
+  "items": 0,
+  "seg": 14,
+  "rss": [],
+  "tit": [],
+  "title": "Telegram: Contact @ppsegovia"
+ },
+ "https://t.me/s/voxsegovia": {
+  "http": 200,
+  "final": "https://t.me/voxsegovia",
+  "items": 0,
+  "seg": 14,
+  "rss": [],
+  "tit": [],
+  "title": "Telegram: Contact @voxsegovia"
+ },
+ "https://t.me/s/psoesegovia": {
+  "http": 200,
+  "final": "https://t.me/psoesegovia",
+  "items": 0,
+  "seg": 14,
+  "rss": [],
+  "tit": [],
+  "title": "Telegram: Contact @psoesegovia"
+ },
+ "https://bsky.app/profile/psoesegovia.bsky.social/rss": {
+  "http": 200,
+  "final": "https://bsky.app/profile/did:plc:lhcnmabylktebkgx54gvfnij/rss",
+  "items": 29,
+  "seg": 74,
+  "rss": [],
+  "tit": [],
+  "title": "@psoesegovia.bsky.social - PSOE de Segovia"
+ },
+ "https://nitter.net/ppsegovia/rss": {
+  "http": 410,
+  "final": "https://nitter.net/ppsegovia/rss",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": []
+ },
+ "https://rss.app/": {
+  "http": 200,
+  "final": "https://rss.app/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": []
+ },
+ "https://www.facebook.com/ppsegovia": {
+  "http": 400,
+  "final": "https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2Fppsegovia",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Error"
+ },
+ "https://x.com/ppsegovia": {
+  "http": 403,
+  "final": "https://x.com/ppsegovia",
+  "items": 0,
+  "seg": 3,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ }
+}
