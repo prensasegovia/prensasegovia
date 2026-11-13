@@ -1,20 +1,14 @@
-// Diagnóstico (16ª ronda): Vox, UCCL, COAG, CCOO, Podemos, IU Segovia, Telegram y Bluesky
+// Diagnóstico (17ª ronda): cuentas de Segovia en Bluesky (API pública)
 import { writeFileSync } from "node:fs";
-const UA = { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" };
-const U = ["https://iusegovia.es/sg/feed/", "https://www.voxespana.es/noticias/feed", "https://www.voxespana.es/feed", "https://www.voxespana.es/rss", "https://voxcastillayleon.es/feed/", "https://www.voxcyl.es/feed/",
-  "https://www.uccl.es/feed/", "https://uccl.es/", "https://unioncampesinoscyl.es/feed/", "https://www.uccl.org/feed/", "https://coagcastillayleon.es/feed/", "https://www.coagcyl.org/feed/", "https://coag.org/feed/",
-  "https://castillayleon.ccoo.es/rss", "https://castillayleon.ccoo.es/rss.xml", "https://castillayleon.ccoo.es/Noticias", "https://www.ccoo.es/rss/",
-  "https://podemoscastillayleon.es/feed/", "https://castillayleon.podemos.info/feed/", "https://cgtcyl.org/feed/", "https://www.cgt.org.es/feed/",
-  "https://www.dipsegovia.es/bop/", "https://www.dipsegovia.es/bop/rss", "https://www.dipsegovia.es/rss",
-  "https://t.me/s/ppsegovia", "https://t.me/s/voxsegovia", "https://t.me/s/psoesegovia", "https://bsky.app/profile/psoesegovia.bsky.social/rss",
-  "https://nitter.net/ppsegovia/rss", "https://rss.app/", "https://www.facebook.com/ppsegovia", "https://x.com/ppsegovia"];
 const out = {};
-for (const u of U) {
-  try { const r = await fetch(u, { headers: UA, redirect: "follow", signal: AbortSignal.timeout(15000) }); const t = await r.text();
-    out[u] = { http: r.status, final: r.url, items: (t.match(/<item[\s>]/g) || []).length + (t.match(/tgme_widget_message_text/g) || []).length, seg: (t.match(/segovia/gi) || []).length,
-      rss: [...t.matchAll(/<link[^>]+type="application\/(?:rss|atom)\+xml"[^>]*>/g)].map(m => m[0].match(/href="([^"]+)"/)?.[1]).slice(0, 4),
-      tit: [...t.matchAll(/<item[\s\S]*?<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>[\s\S]*?<pubDate>([^<]*)/g)].slice(0, 4).map(m => m[2].slice(5, 16) + " | " + m[1].slice(0, 90)),
-      title: (t.match(/<title>([^<]{0,90})/) || [])[1], links: /bop|ccoo/.test(u) ? [...t.matchAll(/href="([^"]*(rss|feed|xml|pdf|anuncio|boletin)[^"]*)"/gi)].map(m => m[1]).slice(0, 10) : undefined };
-  } catch (e) { out[u] = String(e.message).slice(0, 60); }
+for (const q of ["segovia", "segoviano", "cuéllar", "cuellar", "el espinar", "la granja segovia", "cantalejo", "riaza", "sepúlveda", "pp segovia", "psoe segovia", "vox segovia", "iu segovia", "ccoo segovia", "ugt segovia", "asaja", "uccl", "plataforma segovia", "ayuntamiento segovia", "diputación segovia", "concejal segovia", "alcalde segovia", "procurador segovia"]) {
+  try { const r = await fetch("https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors?limit=40&q=" + encodeURIComponent(q)); const j = await r.json();
+    for (const a of j.actors || []) out[a.handle] = { nombre: a.displayName, desc: (a.description || "").replace(/\s+/g, " ").slice(0, 160), q };
+  } catch (e) { out["ERR " + q] = String(e.message); }
 }
-writeFileSync("diag/organizaciones2.json", JSON.stringify(out, null, 1));
+// seguidores y posts para filtrar inactivas
+for (const h of Object.keys(out).filter(h => !h.startsWith("ERR"))) {
+  try { const p = await (await fetch("https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=" + h)).json(); out[h].seguidores = p.followersCount; out[h].posts = p.postsCount;
+    const f = await (await fetch("https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=1&actor=" + h)).json(); out[h].ultimo = f.feed?.[0]?.post?.indexedAt?.slice(0, 10); } catch (e) {}
+}
+writeFileSync("diag/bluesky.json", JSON.stringify(out, null, 1));
