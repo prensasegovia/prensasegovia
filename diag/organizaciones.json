@@ -1,0 +1,524 @@
+{
+ "https://asajasegovia.com/": "fetch failed",
+ "https://asajasegovia.com/feed/": "fetch failed",
+ "https://asajasegovia.es/": "fetch failed",
+ "https://asajasegovia.es/feed/": "fetch failed",
+ "https://asajacyl.com/": {
+  "http": 200,
+  "final": "https://www.asajacyl.com/",
+  "items": 0,
+  "seg": 2,
+  "rss": [
+   "https://www.asajacyl.com/feed",
+   "https://www.asajacyl.com/comments/feed"
+  ],
+  "tit": [],
+  "title": "Asaja Castilla y León"
+ },
+ "https://asajacyl.com/feed/": {
+  "http": 200,
+  "final": "https://www.asajacyl.com/feed",
+  "items": 10,
+  "seg": 4,
+  "rss": [],
+  "tit": [
+   "13 Nov 2026 | Semana del 07 al 13 de noviembre de 2026",
+   "13 Nov 2026 | Plazos de solicitud de ayudas y convocatorias",
+   "11 Nov 2026 | ASAJA Mujeres pide oportunidades para que las jóvenes se queden",
+   "11 Nov 2026 | Cinco días para aceptar las subvenciones a las explotaciones avícolas afectadas por la enf",
+   "11 Nov 2026 | La Junta concede ayudas directas a 141 agricultores, ganaderos y apicultores afectados por"
+  ],
+  "title": "ASAJA Castilla y León"
+ },
+ "https://uccl.es/": "fetch failed",
+ "https://uccl.es/feed/": "fetch failed",
+ "https://unioncampesinossegovia.es/": "fetch failed",
+ "https://unioncampesinossegovia.es/feed/": "fetch failed",
+ "https://uccl-segovia.org/": "fetch failed",
+ "https://uccl-segovia.org/feed/": "fetch failed",
+ "https://upacyl.es/": "fetch failed",
+ "https://upacyl.es/feed/": "fetch failed",
+ "https://upa.es/": {
+  "http": 200,
+  "final": "https://upa.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [
+   "https://upa.es/feed/",
+   "https://upa.es/comments/feed/"
+  ],
+  "tit": [],
+  "title": "UPA Federal | Unión de Pequeños Agricultores y Ganaderos"
+ },
+ "https://upa.es/feed/": {
+  "http": 200,
+  "final": "https://upa.es/feed/",
+  "items": 10,
+  "seg": 0,
+  "rss": [],
+  "tit": [
+   "12 Nov 2026 | UPA defiende en Uruguay acuerdos comerciales con garantías: “Somos una potencia exportador",
+   "06 Nov 2026 | UPA: “La regulación del mercado del aceite es necesaria y será beneficiosa para productore",
+   "06 Nov 2026 | Un nuevo proyecto estudia las oportunidades del biochar para mejorar los suelos agrícolas ",
+   "05 Nov 2026 | UPA alerta de una campaña apícola “desastrosa” y reclama ayudas urgentes para evitar el ci",
+   "27 Oct 2026 | UPA tilda de “impreciso y preocupante” el acuerdo del Consejo Europeo sobre la PAC"
+  ],
+  "title": "UPA"
+ },
+ "https://coagcyl.es/": "fetch failed",
+ "https://coagcyl.es/feed/": "fetch failed",
+ "https://coag.org/": "fetch failed",
+ "https://coag.org/feed/": "fetch failed",
+ "https://alianzaupacoag.es/": "fetch failed",
+ "https://alianzaupacoag.es/feed/": "fetch failed",
+ "https://castillayleon.ccoo.es/": {
+  "http": 200,
+  "final": "https://castillayleon.ccoo.es/",
+  "items": 0,
+  "seg": 4,
+  "rss": [],
+  "tit": [],
+  "title": "CCOO de Castilla y León"
+ },
+ "https://castillayleon.ccoo.es/feed/": {
+  "http": 404,
+  "final": "https://castillayleon.ccoo.es/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": []
+ },
+ "https://segovia.ccoo.es/": "fetch failed",
+ "https://segovia.ccoo.es/feed/": "fetch failed",
+ "https://ugtcyl.es/": {
+  "http": 200,
+  "final": "https://ugtcyl.es/web/",
+  "items": 0,
+  "seg": 4,
+  "rss": [
+   "https://ugtcyl.es/web/feed",
+   "https://ugtcyl.es/web/comments/feed"
+  ],
+  "tit": [],
+  "title": "UGTCyL o Unión General de Trabajadores de Castilla y León, sindicato"
+ },
+ "https://ugtcyl.es/feed/": {
+  "http": 404,
+  "final": "https://ugtcyl.es/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "404 Not Found"
+ },
+ "https://ugt.es/": {
+  "http": 200,
+  "final": "https://ugt.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "UGT | Sindicato Unión General de Trabajadoras y Trabajadores de España"
+ },
+ "https://ugt.es/feed/": {
+  "http": 410,
+  "final": "https://ugt.es/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "UGT | Sindicato Unión General de Trabajadoras y Trabajadores de España"
+ },
+ "https://cgtcyl.org/": "fetch failed",
+ "https://cgtcyl.org/feed/": "fetch failed",
+ "https://cgt.org.es/": "fetch failed",
+ "https://cgt.org.es/feed/": "fetch failed",
+ "https://csif.es/": {
+  "http": 200,
+  "final": "https://www.csif.es/es/",
+  "items": 0,
+  "seg": 2,
+  "rss": [],
+  "tit": [],
+  "title": "    CSIF | Central Sindical Independiente y de Funcionarios\n"
+ },
+ "https://csif.es/feed/": {
+  "http": 404,
+  "final": "https://www.csif.es/es/404",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "CSIF | Página no encontrada"
+ },
+ "https://stecyl.net/": {
+  "http": 200,
+  "final": "https://stecyl.net/",
+  "items": 0,
+  "seg": 2,
+  "rss": [
+   "https://stecyl.net/feed/",
+   "https://stecyl.net/comments/feed/"
+  ],
+  "tit": [],
+  "title": "STECyL-i"
+ },
+ "https://stecyl.net/feed/": {
+  "http": 200,
+  "final": "https://stecyl.net/feed/",
+  "items": 30,
+  "seg": 0,
+  "rss": [],
+  "tit": [
+   "12 Nov 2026 | Acceso al Cuerpo de Catedráticos de Enseñanza Secundaria en Castilla y León: 1.000 plazas",
+   "12 Nov 2026 | Se anuncia la distribución por especialidad de las 758 plazas en las oposiciones del Cuerp",
+   "12 Nov 2026 | Asamblea online informativa sobre el Concurso de Traslados",
+   "12 Nov 2026 | Procedimiento de adquisición de nuevas especialidades docentes. Cuerpo de Maestros/as 2026",
+   "11 Nov 2026 | STECyL-i en la Huelga y en la calle. 11 de noviembre de 2026."
+  ],
+  "title": "STECyL-i"
+ },
+ "https://usocyl.es/": "fetch failed",
+ "https://usocyl.es/feed/": "fetch failed",
+ "https://ppsegovia.es/": {
+  "http": 200,
+  "final": "https://ppsegovia.es/",
+  "items": 0,
+  "seg": 2,
+  "rss": [],
+  "tit": [],
+  "title": "ppsegovia.es"
+ },
+ "https://ppsegovia.es/feed/": {
+  "http": 200,
+  "final": "https://ppsegovia.es/feed/",
+  "items": 0,
+  "seg": 2,
+  "rss": [],
+  "tit": [],
+  "title": "ppsegovia.es"
+ },
+ "https://ppsegovia.com/": {
+  "http": 200,
+  "final": "https://ppsegovia.com/",
+  "items": 0,
+  "seg": 395,
+  "rss": [
+   "https://ppsegovia.com/feed/",
+   "https://ppsegovia.com/comments/feed/"
+  ],
+  "tit": [],
+  "title": "PP Segovia - Partido Popular de Segovia | Web del PP en la provincia de Segovia"
+ },
+ "https://ppsegovia.com/feed/": {
+  "http": 200,
+  "final": "https://ppsegovia.com/feed/",
+  "items": 10,
+  "seg": 134,
+  "rss": [],
+  "tit": [
+   "05 Nov 2026 | Mañueco participa en un acto con las candidaturas del Congreso y al Senado del PP de Segov",
+   "04 Nov 2026 | Dolors Montserrat destaca en Segovia el compromiso del Partido Popular con las mujeres, el",
+   "02 Nov 2026 | El Grupo popular lamenta el rechazo del PSOE a los avances para el desarrollo de los terre",
+   "26 Oct 2026 | El PP de Segovia presenta en la Junta Electoral sus candidaturas al Congreso y al Senado p",
+   "23 Oct 2026 | Pablo Pérez encabeza la lista del PP de Segovia al Congreso, y Juan José Sanz Vitorio al S"
+  ],
+  "title": "PP Segovia &#8211; Partido Popular de Segovia"
+ },
+ "https://ppcyl.es/": {
+  "http": 200,
+  "final": "https://www.ppcyl.es/",
+  "items": 0,
+  "seg": 4,
+  "rss": [
+   "https://www.ppcyl.es/feed/",
+   "https://www.ppcyl.es/comments/feed/"
+  ],
+  "tit": [],
+  "title": "Partido Popular de Castilla y León &#8211; Página web del Partido Popular de Castilla y Le"
+ },
+ "https://ppcyl.es/feed/": {
+  "http": 200,
+  "final": "https://www.ppcyl.es/feed/",
+  "items": 10,
+  "seg": 8,
+  "rss": [],
+  "tit": [
+   "24 Aug 2026 | El Partido Popular lamenta que Óscar Puente convierta la inauguración de un tramo de la Au",
+   "11 May 2026 | María Pardo Álvarez",
+   "11 May 2026 | María del Carmen Santillana del Río",
+   "17 Mar 2026 | Mañueco: “Cuando el PP ha gobernado en solitario, se ha producido mayor crecimiento económ",
+   "16 Mar 2026 | Mañueco celebra la “significativa” victoria electoral del Partido Popular y asume la respo"
+  ],
+  "title": "Partido Popular de Castilla y León"
+ },
+ "https://pp.es/": {
+  "http": 200,
+  "final": "https://www.pp.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Home - Partido Popular"
+ },
+ "https://pp.es/feed/": {
+  "http": 200,
+  "final": "https://www.pp.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Home - Partido Popular"
+ },
+ "https://psoesegovia.es/": {
+  "http": 200,
+  "final": "https://www.psoesegovia.es/",
+  "items": 0,
+  "seg": 319,
+  "rss": [
+   "https://www.psoesegovia.es/feed/",
+   "https://www.psoesegovia.es/comments/feed/",
+   "https://www.psoesegovia.es/inicio/feed/"
+  ],
+  "tit": [],
+  "title": "PSOE Segovia &#8211; Gobernando con hechos"
+ },
+ "https://psoesegovia.es/feed/": {
+  "http": 200,
+  "final": "https://www.psoesegovia.es/feed/",
+  "items": 10,
+  "seg": 229,
+  "rss": [],
+  "tit": [
+   "12 Nov 2026 | El PSOE de Segovia inicia la campaña del 29N apelando a la movilización de la fuerza de la",
+   "12 Nov 2026 | La Junta Electoral condena al Ayuntamiento de Palazuelos de Eresma por vulnerar la ley ele",
+   "12 Nov 2026 | El PSOE plantea otro modelo para Turismo y Deportes con más control y planificación en la ",
+   "10 Nov 2026 | José Luis Aceves y Lirio Martín defienden un compromiso firme con agricultores y ganaderos",
+   "10 Nov 2026 | Los segovianos pagan un 44% más de tasa de basuras que en ciudades similares mientras Maza"
+  ],
+  "title": "PSOE Segovia"
+ },
+ "https://psoesegovia.com/": {
+  "http": 200,
+  "final": "https://psoesegovia.com/",
+  "items": 0,
+  "seg": 2,
+  "rss": [],
+  "tit": [],
+  "title": "psoesegovia.com"
+ },
+ "https://psoesegovia.com/feed/": {
+  "http": 200,
+  "final": "https://psoesegovia.com/feed/",
+  "items": 0,
+  "seg": 2,
+  "rss": [],
+  "tit": [],
+  "title": "psoesegovia.com"
+ },
+ "https://psoecyl.es/": {
+  "http": 200,
+  "final": "https://www.psoecyl.com/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": []
+ },
+ "https://psoecyl.es/feed/": {
+  "http": 404,
+  "final": "https://www.psoecyl.com/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "404 Not Found"
+ },
+ "https://voxespana.es/": {
+  "http": 403,
+  "final": "https://voxespana.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://voxespana.es/feed/": {
+  "http": 403,
+  "final": "https://voxespana.es/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Just a moment..."
+ },
+ "https://iusegovia.es/": {
+  "http": 200,
+  "final": "https://iusegovia.es/sg/",
+  "items": 0,
+  "seg": 309,
+  "rss": [
+   "https://iusegovia.es/sg/feed/",
+   "https://iusegovia.es/sg/comments/feed/"
+  ],
+  "tit": [],
+  "title": "Izquierda Unida Segovia"
+ },
+ "https://iusegovia.es/feed/": {
+  "http": 404,
+  "final": "https://iusegovia.es/feed/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "404 Not Found"
+ },
+ "https://izquierdaunidasegovia.es/": "fetch failed",
+ "https://izquierdaunidasegovia.es/feed/": "fetch failed",
+ "https://iucyl.es/": {
+  "http": 200,
+  "final": "https://www.iucyl.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [
+   "https://www.iucyl.es/feed",
+   "https://www.iucyl.es/comments/feed"
+  ],
+  "tit": [],
+  "title": "Inicio - IUCyL"
+ },
+ "https://iucyl.es/feed/": {
+  "http": 200,
+  "final": "https://www.iucyl.es/feed",
+  "items": 10,
+  "seg": 0,
+  "rss": [],
+  "tit": [
+   "08 Nov 2026 | A la huelga del 11N",
+   "08 Nov 2026 | Actuar frente a las redes de extrema derecha como Núcleo Nacional de forma contundente",
+   "06 Nov 2026 | Conoce la nueva dirección de IUCyL elegida tras el proceso asambleario",
+   "04 Nov 2026 | IU ÁVILA ELIGE A PABLO GARCINUÑO Y CRISTINA PINDADO COMO CANDIDATOS AL CONGRESO Y AL SENAD",
+   "03 Nov 2026 | IU respalda la denuncia por la cancelación de la obra sobre Lorca y exige explicaciones"
+  ],
+  "title": "IUCyL"
+ },
+ "https://podemoscyl.info/": "fetch failed",
+ "https://podemoscyl.info/feed/": "fetch failed",
+ "https://segoviaenmarcha.es/": "fetch failed",
+ "https://segoviaenmarcha.es/feed/": "fetch failed",
+ "https://sumar.info/": {
+  "http": 200,
+  "final": "https://sumar.info/",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Portal de Proveedores | Facturación y pagos"
+ },
+ "https://sumar.info/feed/": {
+  "http": 404,
+  "final": "https://sumar.info/feed",
+  "items": 0,
+  "seg": 0,
+  "rss": [],
+  "tit": [],
+  "title": "Portal de Proveedores"
+ },
+ "https://porsegoviaporlaespañavaciada.es/": "fetch failed",
+ "https://porsegoviaporlaespañavaciada.es/feed/": "fetch failed",
+ "https://espanavaciada.org/": {
+  "http": 200,
+  "final": "https://xn--espaavaciada-dhb.org/",
+  "items": 0,
+  "seg": 0,
+  "rss": [
+   "https://xn--espaavaciada-dhb.org/feed/",
+   "https://xn--espaavaciada-dhb.org/comments/feed/"
+  ],
+  "tit": [],
+  "title": "España Vaciada - España Vaciada ¡Es el MOMENTO!"
+ },
+ "https://espanavaciada.org/feed/": {
+  "http": 200,
+  "final": "https://espanavaciada.org/feed/",
+  "items": 10,
+  "seg": 0,
+  "rss": [],
+  "tit": [
+   "16 Apr 2024 | Comunicado España Vaciada elecciones europeas 2024",
+   "14 Jan 2024 | España Vaciada trabaja en un plan común para las  elecciones europeas de junio",
+   "15 Nov 2023 | ESPAÑA VACIADA MÁS NECESARIA QUE NUNCA",
+   "28 Oct 2023 | España Vaciada concurrirá a las elecciones al Parlamento Europeo",
+   "05 Jul 2023 | Presentación candidaturas al Congreso de los Diputados y al Senado del partido político Le"
+  ],
+  "title": "España Vaciada ¡Es el MOMENTO!"
+ },
+ "https://upl.es/": {
+  "http": 200,
+  "final": "https://www.upl.es/",
+  "items": 0,
+  "seg": 0,
+  "rss": [
+   "https://www.upl.es/feed/",
+   "https://www.upl.es/comments/feed/"
+  ],
+  "tit": [],
+  "title": "UPL &#8211; Unión del Pueblo Leones"
+ },
+ "https://upl.es/feed/": {
+  "http": 200,
+  "final": "https://www.upl.es/feed/",
+  "items": 10,
+  "seg": 0,
+  "rss": [],
+  "tit": [
+   "12 Nov 2026 | UPL defiende la devolución de los presupuestos autonómicos por ser únicamente “la expresió",
+   "12 Nov 2026 | Santa María del Páramo ofrece un fin de semana cultural con literatura, crochet y maquetas",
+   "12 Nov 2026 | UPL reclama que la segunda fase del Parador de San Marcos reciba la misma celeridad que su",
+   "12 Nov 2026 | El ILC publica una nueva convocatoria de sus ayudas para audiovisuales que narren la reali",
+   "11 Nov 2026 | UPL La Bañeza reclama soluciones ante los vertidos de aguas fecales en la avenida Portugal"
+  ],
+  "title": "UPL"
+ },
+ "https://xavila.es/": "fetch failed",
+ "https://xavila.es/feed/": "fetch failed",
+ "https://subdelegaciongobierno.es/": "fetch failed",
+ "https://subdelegaciongobierno.es/feed/": "fetch failed",
+ "https://dipsegovia.es/": {
+  "http": 200,
+  "final": "https://www.dipsegovia.es/",
+  "items": 0,
+  "seg": 211,
+  "rss": [],
+  "tit": [],
+  "title": "Inicio - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://dipsegovia.es/feed/": {
+  "http": 404,
+  "final": "https://www.dipsegovia.es/feed/",
+  "items": 0,
+  "seg": 148,
+  "rss": [],
+  "tit": [],
+  "title": "Inicio - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://bopsegovia.es/": "fetch failed",
+ "https://bopsegovia.es/feed/": "fetch failed",
+ "https://dipsegovia.es/bop/": {
+  "http": 200,
+  "final": "https://www.dipsegovia.es/bop/",
+  "items": 0,
+  "seg": 173,
+  "rss": [],
+  "tit": [],
+  "title": "Boletín Oficial de la Provincia de Segovia - Diputación de Segovia - dipsegovia.es"
+ },
+ "https://dipsegovia.es/bop/feed/": {
+  "http": 404,
+  "final": "https://www.dipsegovia.es/bop/feed/",
+  "items": 0,
+  "seg": 148,
+  "rss": [],
+  "tit": [],
+  "title": "Inicio - Diputación de Segovia - dipsegovia.es"
+ }
+}
