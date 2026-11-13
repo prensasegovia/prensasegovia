@@ -849,53 +849,6 @@ async function periodicos(ahora) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Redes y organizaciones: lo que publican partidos, cargos, sindicatos y colectivos (redes oficiales y webs) */
-/* ------------------------------------------------------------------ */
-const SALIDA_REDES = new URL("../public/redes.json", import.meta.url);
-const BSKY = h => `https://bsky.app/profile/${h}/rss`;
-// Perfiles de redes sociales que se siguen. Las publicaciones solo se pueden leer donde hay canal público (Bluesky);
-// de X, Facebook e Instagram se guarda el enlace al perfil para abrirlo con la cuenta de cada uno.
-const PERFILES = [
-  { nombre: "PSOE de Segovia", tipo: "Partidos", bluesky: "psoesegovia.bsky.social" },
-  { nombre: "José Luis Aceves", cargo: "Diputado y secretario provincial del PSOE", tipo: "Cargos públicos", bluesky: "joseluisacevesg70.bsky.social" },
-  { nombre: "Lirio Martín", cargo: "Subdelegada del Gobierno", tipo: "Cargos públicos", bluesky: "liriomartin.bsky.social" },
-  { nombre: "PAH Segovia", cargo: "Plataforma de Afectados por la Hipoteca", tipo: "Colectivos", bluesky: "pahsegovia.bsky.social" },
-];
-const REDES = PERFILES.filter(p => p.bluesky).map(p => ({ cuenta: p.nombre, ...(p.cargo ? { cargo: p.cargo } : {}), red: "Bluesky", tipo: p.tipo, url: BSKY(p.bluesky) }));
-async function redes(ahora) {
-  let previo = { posts: [] };
-  try { previo = JSON.parse(await readFile(SALIDA_REDES, "utf8")); } catch {}
-  const porUrl = new Map((previo.posts || []).filter(x => x.red !== "Web").map(x => [x.url, x]));
-  const estado = [];
-  for (const r of REDES) {
-    let n = 0, ok = false;
-    try {
-      for (const it of items(await descarga(r.url))) {
-        if (porUrl.has(it.url) || isNaN(it.fecha)) continue;
-        const texto = desEnt(String(it.texto || "").replace(/La entrada .{0,400}? se public[oó] primero en .*$/i, "")).trim();
-        if (r.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + texto))) continue;
-        const social = r.red !== "Web";
-        porUrl.set(it.url, { cuenta: r.cuenta, ...(r.cargo ? { cargo: r.cargo } : {}), red: r.red, tipo: r.tipo, titulo: social ? "" : desEnt(it.titulo),
-          texto: social ? texto.slice(0, 900) : recorta(norm(texto) !== norm(it.titulo) ? texto : ""), url: it.url, publicado: it.fecha.toISOString(), ...(it.img ? { img: it.img } : {}) });
-        n++;
-      }
-      ok = true;
-    } catch {}
-    estado.push({ cuenta: r.cuenta, red: r.red, ok, nuevas: n });
-  }
-  for (const x of porUrl.values()) x.municipio = conPueblo(municipioDe((x.titulo || "") + " " + (x.texto || "")), null);
-  // 30 días (publican poco) y como mucho 400
-  const limite = ahora.getTime() - 30 * 864e5;
-  const posts = [...porUrl.values()].filter(x => new Date(x.publicado).getTime() >= limite && new Date(x.publicado).getTime() <= ahora.getTime() + 36e5)
-    .sort((a, b) => b.publicado.localeCompare(a.publicado)).slice(0, 400);
-  const enlaces = p => ({ ...(p.x ? { x: "https://x.com/" + p.x } : {}), ...(p.instagram ? { instagram: "https://www.instagram.com/" + p.instagram + "/" } : {}),
-    ...(p.facebook ? { facebook: "https://www.facebook.com/" + p.facebook } : {}), ...(p.bluesky ? { bluesky: "https://bsky.app/profile/" + p.bluesky } : {}), ...(p.telegram ? { telegram: "https://t.me/" + p.telegram } : {}) });
-  const cuentas = PERFILES.map(p => ({ cuenta: p.nombre, tipo: p.tipo, ...(p.cargo ? { cargo: p.cargo } : {}), ...(p.pueblo ? { pueblo: p.pueblo } : {}), enlaces: enlaces(p) }));
-  await writeFile(SALIDA_REDES, JSON.stringify({ actualizado: `${fechaMadrid(ahora)} ${horaMadrid(ahora)}`, cuentas, estado, posts }));
-  console.log("Redes:", estado.map(e => `${e.cuenta} (${e.red}) ${e.ok ? "+" + e.nuevas : "FALLO"}`).join(", "), `· ${posts.length} en total`);
-}
-
-/* ------------------------------------------------------------------ */
 /* Principal                                                           */
 /* ------------------------------------------------------------------ */
 async function main() {
@@ -1293,7 +1246,6 @@ async function main() {
   await writeFile(SALIDA, JSON.stringify(salida, null, 0));
   try { await archivar(dias, ahora); } catch (e) { console.log("Archivo: error", e.message); }
   try { await periodicos(ahora); } catch (e) { console.log("Periódicos: error", e.message); }
-  try { await redes(ahora); } catch (e) { console.log("Redes: error", e.message); }
   console.log(`Noticias leídas: ${brutos.length}. Agrupadas: ${grupos.length}. Nuevas añadidas: ${añadidas}.`);
   for (const e of estado) console.log(` - ${e.fuente}: ${e.ok ? "ok (" + e.noticias + ")" : "FALLO " + e.error}`);
 }
