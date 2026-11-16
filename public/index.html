@@ -2421,12 +2421,20 @@ aplicaLetra();
 const vistaHash = () => { const h = location.hash.slice(1); if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
 vistaHash(); addEventListener("hashchange", vistaHash);
 confPush().then(c=>{ if (c && c.url) render(true); });
+// Uso anónimo: un número al azar por aparato, una vez al día (sin datos personales), para saber cuántos la usan
+confPush().then(c=>{ try {
+  if (!c || !c.url || /\/pruebas\//.test(location.pathname)) return;
+  let id = store.get("uid", ""); if (!/^[a-z0-9]{12}$/.test(id)){ id = Array.from(crypto.getRandomValues(new Uint8Array(12)), b=>"abcdefghijklmnopqrstuvwxyz0123456789"[b%36]).join(""); store.set("uid", id); }
+  if (store.get("uidDia", "") === today()) return;
+  const tipo = esIOS() ? "iPhone" : esAndroid() ? "Android" : /Windows|Macintosh|Linux|CrOS/.test(navigator.userAgent) ? "Ordenador" : "Otro";
+  fetch(c.url, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ accion:"visita", id, tipo }) }).then(()=>store.set("uidDia", today())).catch(()=>{});
+} catch(e){} });
 render();
 load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v96";
+const VERSION_APP = "prensa-segovia-v97";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

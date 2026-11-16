@@ -13,12 +13,21 @@ const TOKEN = 'PEGA_AQUI_EL_TOKEN';
 
 function guardar_(subs) { PropertiesService.getScriptProperties().setProperty('SUBS', JSON.stringify(subs)); }
 function leer_() { try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('SUBS') || '[]'); } catch (e) { return []; } }
+// Uso anónimo: cada aparato manda un número al azar una vez al día (sin nombre ni nada que identifique)
+function leerVis_() { try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('VISITAS') || '{}'); } catch (e) { return {}; } }
+function hoy_() { return Utilities.formatDate(new Date(), 'Europe/Madrid', 'yyyy-MM-dd'); }
+function uso_() {
+  const v = leerVis_(), h = hoy_(), ms = Date.parse(h), dias = n => Object.keys(v).filter(k => ms - Date.parse(v[k][1]) < n * 864e5).length;
+  const tipos = {}; Object.keys(v).forEach(k => { tipos[v[k][2]] = (tipos[v[k][2]] || 0) + 1; });
+  return { aparatos_distintos: Object.keys(v).length, hoy: dias(1), ultimos_7_dias: dias(7), ultimos_30_dias: dias(30), por_tipo: tipos, desde: Object.keys(v).map(k => v[k][0]).sort()[0] || h };
+}
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
 // GitHub pide la lista de suscritos (solo con el token)
 function doGet(e) {
   const p = e.parameter || {};
   if (p.accion === 'lista' && p.token === TOKEN) return json_({ subs: leer_() });
+  if (p.accion === 'uso') return json_(uso_());
   return json_({ ok: true });
 }
 
@@ -27,6 +36,13 @@ function doPost(e) {
   const lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
     const d = JSON.parse(e.postData.contents || '{}');
+    if (d.accion === 'visita' && /^[a-z0-9]{8,16}$/.test(String(d.id || ''))) {
+      const v = leerVis_(), h = hoy_(), t = ['iPhone', 'Android', 'Ordenador', 'Otro'].indexOf(d.tipo) >= 0 ? d.tipo : 'Otro';
+      v[d.id] = [v[d.id] ? v[d.id][0] : h, h, t];
+      const ks = Object.keys(v); if (ks.length > 3000) ks.sort((a, b) => v[a][1].localeCompare(v[b][1])).slice(0, ks.length - 3000).forEach(k => delete v[k]);
+      PropertiesService.getScriptProperties().setProperty('VISITAS', JSON.stringify(v));
+      return json_({ ok: true });
+    }
     let subs = leer_();
     if (d.accion === 'alta' && d.sub && d.sub.endpoint && d.sub.keys) {
       subs = subs.filter(s => s.endpoint !== d.sub.endpoint);
