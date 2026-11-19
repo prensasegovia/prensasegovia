@@ -1,14 +1,27 @@
-// Diagnóstico (17ª ronda): cuentas de Segovia en Bluesky (API pública)
-import { writeFileSync } from "node:fs";
+// Diagnóstico (18ª ronda): búsquedas con operadores (site:, intitle:, -) en Google Noticias
+import { writeFileSync, readFileSync } from "node:fs";
+const UA = { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36" };
+const ya = new Set(JSON.parse(readFileSync("public/periodicos.json", "utf8")).noticias.map(n => n.titulo.toLowerCase().slice(0, 60)));
+const datos = JSON.parse(readFileSync("public/datos.json", "utf8"));
+for (const n of datos.dias.flatMap(d => d.noticias)) ya.add(n.titulo.toLowerCase().slice(0, 60));
+const Q = [
+  "site:cadenaser.com Segovia", "site:elespanol.com Segovia", "site:noticiascyl.com Segovia", "site:rtvcyl.es Segovia", "site:europapress.es Segovia",
+  "site:lavanguardia.com Segovia", "site:20minutos.es Segovia", "site:larazon.es Segovia", "site:telesegovia.es", "site:eldiario.es Segovia", "site:infobae.com Segovia",
+  "site:lavozdeelespinar.es", "site:elnordestedesegovia.es", "site:escuellar.es",
+  'intitle:Segovia "Guardia Civil" -fútbol -baloncesto', 'intitle:Segovia (detenido OR detenida OR investigado OR herido OR fallecido) -fútbol',
+  '(intitle:Cuéllar OR intitle:Espinar OR intitle:Cantalejo OR intitle:Riaza OR intitle:Sepúlveda OR intitle:Ayllón OR intitle:Coca) -fútbol -baloncesto',
+  '(intitle:Carbonero OR intitle:Navafría OR intitle:Turégano OR intitle:Villacastín OR intitle:Fuentepelayo OR intitle:Navalmanzano OR intitle:Bernardos OR intitle:Prádena) -fútbol',
+  'intitle:segoviano OR intitle:segoviana OR intitle:segovianos -Gimnástica -fútbol -baloncesto',
+  '"provincia de Segovia" (vecinos OR plataforma OR protesta OR concentración) -fútbol',
+];
 const out = {};
-for (const q of ["segovia", "segoviano", "cuéllar", "cuellar", "el espinar", "la granja segovia", "cantalejo", "riaza", "sepúlveda", "pp segovia", "psoe segovia", "vox segovia", "iu segovia", "ccoo segovia", "ugt segovia", "asaja", "uccl", "plataforma segovia", "ayuntamiento segovia", "diputación segovia", "concejal segovia", "alcalde segovia", "procurador segovia"]) {
-  try { const r = await fetch("https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors?limit=40&q=" + encodeURIComponent(q)); const j = await r.json();
-    for (const a of j.actors || []) out[a.handle] = { nombre: a.displayName, desc: (a.description || "").replace(/\s+/g, " ").slice(0, 160), q };
-  } catch (e) { out["ERR " + q] = String(e.message); }
+for (const q of Q) {
+  const u = `https://news.google.com/rss/search?q=${encodeURIComponent(q + " when:3d")}&hl=es&gl=ES&ceid=ES:es`;
+  try { const x = await (await fetch(u, { headers: UA })).text();
+    const its = [...x.matchAll(/<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<source[^>]*>([\s\S]*?)<\/source>/g)].map(m => ({ t: m[1].replace(/ - [^-]+$/, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"'), s: m[2] }));
+    const nuevas = its.filter(i => !ya.has(i.t.toLowerCase().slice(0, 60)));
+    out[q] = { total: its.length, nuevas: nuevas.length, ej: nuevas.slice(0, 8).map(i => i.s + " | " + i.t.slice(0, 100)) };
+  } catch (e) { out[q] = String(e.message); }
+  await new Promise(r => setTimeout(r, 800));
 }
-// seguidores y posts para filtrar inactivas
-for (const h of Object.keys(out).filter(h => !h.startsWith("ERR"))) {
-  try { const p = await (await fetch("https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=" + h)).json(); out[h].seguidores = p.followersCount; out[h].posts = p.postsCount;
-    const f = await (await fetch("https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?limit=1&actor=" + h)).json(); out[h].ultimo = f.feed?.[0]?.post?.indexedAt?.slice(0, 10); } catch (e) {}
-}
-writeFileSync("diag/bluesky.json", JSON.stringify(out, null, 1));
+writeFileSync("diag/dorks.json", JSON.stringify(out, null, 1));
