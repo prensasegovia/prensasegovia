@@ -1,5 +1,7 @@
 // Diagnóstico (19ª ronda): ¿qué aportan las búsquedas site: nuevas frente a las de siempre?
-import { writeFileSync, readFileSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync } from "node:fs";
+import { execSync } from "node:child_process";
+if (!existsSync("node_modules/fast-xml-parser")) execSync("npm ci --silent || npm install --silent", { stdio: "inherit" });
 let src = readFileSync("scripts/actualizar.mjs", "utf8"); src = src.slice(0, src.lastIndexOf("\nmain()"));
 writeFileSync("scripts/_c.mjs", src + "\nexport { BUSQUEDAS, clasifica, municipioDe, fueraDeProvincia, relleno, norm };");
 const M = await import("./_c.mjs");
