@@ -1302,7 +1302,7 @@ function bloqueHemeroteca(words){
   const unicos = resultadosHem(words);
   const mas = hem.meses.some(m=>!hem.cargados.includes(m));
   let h = `<div class="dayhead"><h3>${plural(unicos.length,"noticia","noticias")}${hem.desde?` desde ${esc(mesLargo(hem.desde))}`:""}</h3><span>todos nuestros medios</span></div>`;
-  h += unicos.length ? `<div class="hlist">` + unicos.slice(0,150).map(x=>`<a class="hrow" href="${esc(safeUrl(x.u)||"#")}"><b>${hl(x.t)}</b><span>${esc(x.m||"")} · ${esc(cuando(x.f.slice(0,10), x.f.slice(11,16)))}${x.p?` · ${esc(x.p)}`:""}</span>${x.r?`<em>${hl(x.r)}</em>`:""}</a>`).join("") + `</div>` + (unicos.length>150?`<div class="empty small">Se muestran las 150 más recientes. Afina la búsqueda con más palabras.</div>`:"")
+  h += unicos.length ? `<div class="hlist">` + unicos.slice(0,150).map(x=>`<a class="hrow" href="${esc(safeUrl(x.u)||"#")}" target="_blank" rel="noopener"><b>${hl(x.t)}</b><span>${esc(x.m||"")} · ${esc(cuando(x.f.slice(0,10), x.f.slice(11,16)))}${x.p?` · ${esc(x.p)}`:""}</span>${x.r?`<em>${hl(x.r)}</em>`:""}</a>`).join("") + `</div>` + (unicos.length>150?`<div class="empty small">Se muestran las 150 más recientes. Afina la búsqueda con más palabras.</div>`:"")
     : `<div class="empty"><b>Nada publicado con esa búsqueda</b>Prueba con otras palabras o <button class="linkbtn" data-ambito="google" type="button">busca en Google</button>.</div>`;
   if (mas) h += `<div class="arcbox"><div><b>¿Más atrás?</b><span>Cargar los meses anteriores.</span></div><button class="btn ghost" data-act="hemeroteca-mas" type="button">Cargar meses anteriores</button></div>`;
   return h;
@@ -1433,7 +1433,7 @@ function card(n, opts={}){
   const abierto = st.abiertos.has(n._key);
   const maxV = 1;
   const visibles = abierto ? medios : medios.slice(0,maxV);
-  const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
+  const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
     + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-maxV} ${medios.length-maxV===1?"medio":"medios"}`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
@@ -1513,7 +1513,7 @@ function viewNoticias(news){
   h += chipsBar(pool);
   if (urg.length){
     h += `<div class="sect"><h2>Importante y nuevo</h2>${!nuevas.length?`<button class="linkbtn" data-act="leido" type="button">Marcar como visto</button>`:""}</div><div class="rail">` +
-      urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}"`:""} title="${esc((mediosDe(n)[0]||{}).nombre||"")}">
+      urg.map(n=>`<a class="urg ${urg.length===1?"alone":""}" data-k="${esc(n._key)}" ${mediosDe(n)[0]?`href="${esc(mediosDe(n)[0].url)}" target="_blank" rel="noopener"`:""} title="${esc((mediosDe(n)[0]||{}).nombre||"")}">
           <span class="where">${ICON(CAT[n._cats[0]]?.d||CAT.policial.d)}${esc(n.municipio && n.municipio!=="General"?n.municipio:(CAT[n._cats[0]]?.n||""))}</span>
           <h3>${esc(n.titulo)}</h3>
           <span class="when">${esc(cuando(n._dia,n.hora))}</span></a>`).join("") + `</div>`;
@@ -1757,7 +1757,7 @@ function viewParte(news){
   const lugar = m => m.municipio && m.municipio!=="General" ? m.municipio : "Provincia";
   const medio = m => { const md = mediosDe(m)[0]; return md ? ` <span class="md">· ${esc(md.nombre)}</span>` : ""; };
   const linea = (m, antes="") => { const md = mediosDe(m)[0], c = `${antes}<b class="lg">${esc(lugar(m))}</b> — <span class="ti">${esc(m.titulo)}</span>${medio(m)}`;
-    return `<li>${md ? `<a href="${esc(md.url)}" data-k="${esc(m._key)}">${c}</a>` : `<span>${c}</span>`}</li>`; };
+    return `<li>${md ? `<a href="${esc(md.url)}" target="_blank" rel="noopener" data-k="${esc(m._key)}">${c}</a>` : `<span>${c}</span>`}</li>`; };
   const t = today(), hora = new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit",timeZone:TZ});
   const f = filtrosActivos().filter(v=>!/días$/.test(v));
   const grupos = [...CATS.map(c=>[c.n, resto.filter(m=>m._cats[0]===c.k)]), ["Otras", resto.filter(m=>!CAT[m._cats[0]])]].filter(([,l])=>l.length);
@@ -1980,7 +1980,7 @@ $("#app").addEventListener("click", e=>{
       if (st.detalle) card.classList.add("sel");
       renderAside(allNews()); $("#aside").scrollTop = 0; return;
     }
-    if (card && card.dataset.href){ marcarAbierta(card.dataset.k); location.assign(card.dataset.href); } // en la misma pestaña: se vuelve con «atrás»
+    if (card && card.dataset.href){ marcarAbierta(card.dataset.k); window.open(card.dataset.href, "_blank", "noopener"); }
     return;
   }
   const act = b.dataset.act;
@@ -2047,11 +2047,11 @@ function panelDetalle(n){
     ${n.resumen?`<p class="dt-r">${hl(n.resumen)}</p>`:""}
     ${ext?`<div class="pista"><b>En la noticia:</b> ${hl(ext)}</div>`:""}
     <div class="dt-acts">
-      ${libre?`<a class="btn" href="${esc(libre.url)}">Leer en ${esc(libre.nombre)} ${I.ext}</a>`:""}
+      ${libre?`<a class="btn" href="${esc(libre.url)}" target="_blank" rel="noopener">Leer en ${esc(libre.nombre)} ${I.ext}</a>`:""}
       <button class="btn ghost" data-dt="fav" type="button" aria-pressed="${fav}">${fav?"Guardada ✓":"Guardar"}</button>
       <button class="btn ghost" data-dt="share" type="button">Compartir</button>
     </div>
-    ${medios.length>1?`<div class="dt-med"><b>La cuentan ${medios.length} medios</b>${medios.map(m=>`<a href="${esc(m.url)}">${esc(m.nombre)}${m.pago?' <span class="pay-s">Suscriptores</span>':""}${I.ext}</a>`).join("")}</div>`:""}
+    ${medios.length>1?`<div class="dt-med"><b>La cuentan ${medios.length} medios</b>${medios.map(m=>`<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay-s">Suscriptores</span>':""}${I.ext}</a>`).join("")}</div>`:""}
     <div class="dt-hint">Pulsa otra noticia para verla aquí, o Esc para cerrar.</div>
   </div>`;
 }
@@ -2080,9 +2080,9 @@ function renderAside(news){
   const enlace = n => esc((mediosDe(n)[0]||{}).url||"#");
   const lugar = n => n.municipio && n.municipio!=="General" ? n.municipio : "Provincia";
   let h = `<div class="abox"><h3>Próximo en agenda <button data-act="agenda" type="button">Ver todo</button></h3>`;
-  h += ag.length ? ag.map(n=>{ const d=D(n.fecha_evento); return `<a class="arow" href="${enlace(n)}" data-k="${esc(n._key)}"><span class="ad ${n.fecha_evento===t?"hoy":""}"><b>${d.getDate()}</b><span>${esc(d.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</span></span><span><div class="at">${esc(n.titulo)}</div><div class="am">${esc(lugar(n))}${n.hora_evento?" · "+esc(n.hora_evento)+" h":""}</div></span></a>`; }).join("") : `<div class="aempty">Sin convocatorias con fecha.</div>`;
+  h += ag.length ? ag.map(n=>{ const d=D(n.fecha_evento); return `<a class="arow" href="${enlace(n)}" target="_blank" rel="noopener" data-k="${esc(n._key)}"><span class="ad ${n.fecha_evento===t?"hoy":""}"><b>${d.getDate()}</b><span>${esc(d.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</span></span><span><div class="at">${esc(n.titulo)}</div><div class="am">${esc(lugar(n))}${n.hora_evento?" · "+esc(n.hora_evento)+" h":""}</div></span></a>`; }).join("") : `<div class="aempty">Sin convocatorias con fecha.</div>`;
   h += `</div><div class="abox"><h3>Importante <button data-act="imp" type="button">Ver todo</button></h3>`;
-  h += imp.length ? imp.map(n=>`<a class="arow" href="${enlace(n)}" data-k="${esc(n._key)}"><span class="adot"></span><span><div class="at">${esc(n.titulo)}</div><div class="am">${esc(lugar(n))} · ${esc(cuando(n._dia,n.hora))}</div></span></a>`).join("") : `<div class="aempty">Nada grave en los últimos ${st.rango} días.</div>`;
+  h += imp.length ? imp.map(n=>`<a class="arow" href="${enlace(n)}" target="_blank" rel="noopener" data-k="${esc(n._key)}"><span class="adot"></span><span><div class="at">${esc(n.titulo)}</div><div class="am">${esc(lugar(n))} · ${esc(cuando(n._dia,n.hora))}</div></span></a>`).join("") : `<div class="aempty">Nada grave en los últimos ${st.rango} días.</div>`;
   h += `</div><div class="abox"><h3>Pueblos con noticias <button data-act="pueblos" type="button">Ver todos</button></h3>`;
   h += pue.length ? pue.map(([k,v])=>`<button class="prow" data-pueblo="${esc(k)}" type="button"><span>${esc(k)}</span><b>${v}</b></button>`).join("") : `<div class="aempty">Sin noticias de pueblos.</div>`;
   h += `</div>`;
@@ -2472,7 +2472,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v102";
+const VERSION_APP = "prensa-segovia-v103";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
