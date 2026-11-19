@@ -154,6 +154,11 @@ const BUSQUEDAS = [
   'Segovia carteles electorales OR mitin incidentes OR boicot OR abucheos campaña',
   'Segovia desinformación OR bulo OR injerencia OR rusa OR espionaje OR ciberataque',
   'Segovia dron OR drones prisión OR "centro penitenciario" OR sobrevuelo',
+  // Operadores avanzados (site:): medios que publican de Segovia pero no tienen canal de noticias propio para la provincia
+  'site:europapress.es Segovia',
+  'site:larazon.es Segovia',
+  'site:elespanol.com Segovia -cochinillo -"pueblo más bonito"',
+  'site:cadenaser.com Segovia -"Hoy por Hoy" -"A vivir"',
   // Pueblos grandes y cabeceras de comarca
   '(Cuéllar OR "Navas de Oro" OR Samboal OR Chañe OR Fuentepelayo) Segovia',
   '("El Espinar" OR "San Rafael" OR "Navas de San Antonio" OR "Otero de Herreros") Segovia',
