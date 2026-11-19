@@ -2490,6 +2490,22 @@ setTimeout(compruebaVersion, 4000);
 setInterval(compruebaVersion, 30*60*1000);
 fijaCortePer();
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="hidden"){ ocultoDesde = Date.now(); return; } if (ocultoDesde && Date.now()-ocultoDesde > 10*6e4){ fijaCortePer(); if (st.view==="periodicos" && !st.sub) render(true); } if (document.visibilityState==="visible"){ poll(); compruebaVersion(); if (st.letra==="auto") aplicaLetra(); } });
-</script>
+
+/* Enlace «Leer completo» en las noticias de medios de pago: el texto se abre con un lector, sin muro */
+(function(){
+  const poner = raiz => {
+    const cards = raiz.matches && raiz.matches('article.card[data-href]') ? [raiz] : (raiz.querySelectorAll ? [...raiz.querySelectorAll('article.card[data-href]')] : []);
+    for (const c of cards){
+      if (c.dataset.chip) continue;
+      c.dataset.chip = '1';
+      if (!c.querySelector('.pay')) continue;
+      const h4 = c.querySelector('h4'); if (!h4) continue;
+      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${c.dataset.href}" target="_blank" rel="noopener">Leer completo</a>`);
+    }
+  };
+  poner(document);
+  new MutationObserver(l => l.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && poner(n))))
+    .observe(document.body, { childList:true, subtree:true });
+})();</script>
 </body>
 </html>
