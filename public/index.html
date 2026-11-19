@@ -1034,6 +1034,61 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   #guia .gpuntos i.on{width:26px}
   #guia .gbtn{font-size:17px;padding:13px 24px}
 }
+/* Parte del día, visual */
+.pv{padding:12px 14px 48px}
+.pv-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.pv-bar .sp{flex:1}
+.pv-bar .btn{min-height:40px;padding:8px 16px;font-size:14.5px}
+@media(max-width:640px){.pv-bar .seg{width:100%}.pv-bar .sp{display:none}.pv-bar .btn{flex:1}}
+.pv-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:760px){.pv-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pv-tile{display:flex;flex-direction:column;gap:3px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font:inherit;color:var(--ink)}
+button.pv-tile{cursor:pointer}
+button.pv-tile:hover{border-color:var(--pine-2)}
+.pv-tile b{font-size:32px;line-height:1;font-variation-settings:"wdth" 80}
+.pv-tile span{font-size:13.5px;color:var(--muted);font-weight:600}
+.pv-tile.alta{background:var(--alta-soft);border-color:transparent}
+.pv-tile.alta b,.pv-tile.alta span{color:var(--alta-ink)}
+.pv-tile.ev b{color:var(--media)}
+.pv-h{display:flex;align-items:center;gap:9px;margin:24px 2px 10px;scroll-margin-top:calc(var(--bar,56px) + 12px)}
+.pv-h .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--pine-soft);color:var(--pine-2)}
+.pv-h .ic svg{width:17px;height:17px}
+.pv-h h3{margin:0;font-size:18px;font-variation-settings:"wdth" 85}
+.pv-h .n{color:var(--muted);font-size:14px;font-weight:600}
+.pv-h.alta .ic{background:var(--alta);color:#fff}
+.pv-h.ev .ic{background:var(--media-soft);color:var(--media)}
+.pv-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+.pv-grid.gr{grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr))}
+.pv-row{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-decoration:none;color:var(--ink)}
+a.pv-row:hover{border-color:var(--pine-2)}
+.pv-row img{flex:none;width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--stone)}
+.pv-row .b{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pv-row .m{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.pv-row .lg{font-weight:700;color:var(--pine-2);background:var(--pine-soft);border-radius:999px;padding:1px 9px;max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-row .t{font-size:15px;font-weight:650;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pv-row .s{font-size:12.5px;color:var(--muted)}
+.pv-row.imp{border-left:4px solid var(--alta);padding:12px 14px}
+.pv-row.imp img{width:104px;height:104px;border-radius:12px}
+.pv-row.imp .t{font-size:17.5px;-webkit-line-clamp:4}
+.pv-row.imp .lg{background:var(--alta-soft);color:var(--alta-ink)}
+.pv-date{flex:none;width:54px;border-radius:12px;background:var(--media-soft);color:var(--media);text-align:center;padding:7px 0;line-height:1.1}
+.pv-date b{display:block;font-size:22px;color:var(--ink)}
+.pv-date small{font-size:11px;font-weight:700;text-transform:uppercase}
+.pv-cols{columns:360px;column-gap:14px}
+.pv-cat{break-inside:avoid;margin:0 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pv-cat > header{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:700;font-size:14.5px}
+.pv-cat > header svg{width:17px;height:17px;color:var(--pine-2)}
+.pv-cat > header .n{margin-left:auto;color:var(--muted);font-weight:600;font-size:13px}
+.pv-cat .pv-row{border:0;border-radius:0;border-bottom:1px solid var(--line);padding:9px 12px}
+.pv-cat .pv-row:last-child{border-bottom:0}
+.pv-cat a.pv-row:hover{background:var(--stone)}
+.pv-cat .pv-row img{width:52px;height:52px}
+.pv-cat .pv-row .t{font-size:14.5px;font-weight:600;-webkit-line-clamp:2}
+.pv-txt{margin-top:24px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.pv-txt summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:14.5px}
+.pv-txt .in{padding:0 14px 12px}
+.pv-txt .parte{border:0;padding:0;margin:10px 0 0;background:none}
+
 </style>
 </head>
 <body>
@@ -1719,20 +1774,46 @@ function textoParte(news){
   if (resto.length){
     x += `\n*RESTO DE NOTICIAS*\n`;
     for (const c of CATS){ const l = resto.filter(n=>n._cats[0]===c.k); if (l.length) x += `_${c.n}_\n` + l.map(linea).join("\n") + "\n"; }
+    const otras = resto.filter(n=>!CAT[n._cats[0]]); if (otras.length) x += `_Otras_\n` + otras.map(linea).join("\n") + "\n";
   }
-  return { x, n: unicas };
+  return { x, n: unicas, imp, ag, resto };
 }
+/* Parte del día, visual: cifras arriba, lo importante en grande, las convocatorias con su fecha y el resto por temas.
+   El texto para pegar en WhatsApp sigue estando (plegado) y es lo que copian los botones. */
 function viewParte(news){
-  const { x, n } = textoParte(news);
-  return `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto. ${filtrosActivos().length?`Con estos filtros: <b>${esc(filtrosActivos().join(", "))}</b>.`:"Sin filtros: incluye todo."}</p></section>
-  <div class="feed parte-wrap" style="padding-top:12px">
-    <div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div>
-    <label class="sw" style="margin:12px 4px 0"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
-    <textarea id="parteRaw" hidden>${esc(x)}</textarea><div class="parte" id="parteTxt">${esc(x).replace(/\*([^*\n]+)\*/g,"<b>$1</b>").replace(/(^|\n)_([^_\n]+)_/g,"$1<i>$2</i>")}</div>
-    <div class="parte-acts"><button class="btn ghost" data-act="parteCopiar" type="button">Copiar</button><button class="btn" data-act="parteEnviar" type="button"><span class="solo-movil">Enviar…</span><span class="solo-pc">Abrir en WhatsApp</span></button></div>
-    <p class="note" style="padding:0 4px">${plural(n,"noticia","noticias")} en el parte. Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p>
-  </div>`;
+  const { x, n, imp, ag, resto } = textoParte(news);
+  const lugar = m => m.municipio && m.municipio!=="General" ? m.municipio : "Provincia";
+  const foto = m => fotoValida(m.img) ? `<img src="${esc(m.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+  const enlace = m => { const md = mediosDe(m)[0]; return md ? `href="${esc(md.url)}" target="_blank" rel="noopener"` : ""; };
+  const medio = m => { const l = mediosDe(m); return l.length ? `<span class="s">${esc(l[0].nombre)}${l.length>1?` · +${l.length-1} ${l.length===2?"medio":"medios"}`:""}</span>` : ""; };
+  const fila = (m, cls="") => `<a class="pv-row ${cls}" ${enlace(m)} data-k="${esc(m._key)}">${foto(m)}<span class="b"><span class="m"><b class="lg">${esc(lugar(m))}</b>${esc(cuando(m._dia, m.hora))}</span><span class="t">${esc(m.titulo)}</span>${medio(m)}</span></a>`;
+  const cita = m => { const d = D(m.fecha_evento);
+    return `<a class="pv-row" ${enlace(m)} data-k="${esc(m._key)}"><span class="pv-date"><small>${esc(d.toLocaleDateString("es-ES",{weekday:"short"}).replace(".",""))}</small><b>${d.getDate()}</b><small>${esc(d.toLocaleDateString("es-ES",{month:"short"}).replace(".",""))}</small></span><span class="b"><span class="m"><b class="lg">${esc(lugar(m))}</b>${m.hora_evento ? esc(m.hora_evento)+" h" : "Hora sin confirmar"}</span><span class="t">${esc(m.titulo)}</span>${medio(m)}</span></a>`; };
+  const cab = (id, cls, icono, titulo, num) => `<div class="pv-h ${cls}" id="pv-${id}"><span class="ic">${icono}</span><h3>${titulo}</h3><span class="n">${num}</span></div>`;
+  const pueblos = new Set([...imp, ...ag, ...resto].filter(m=>m.municipio && !["General","Provincia","Segovia"].includes(m.municipio)).map(m=>m.municipio)).size;
+  const grupos = [...CATS.map(c=>[c, resto.filter(m=>m._cats[0]===c.k)]), [{n:"Otras", d:"M5 12h14M12 5v14"}, resto.filter(m=>!CAT[m._cats[0]])]].filter(([,l])=>l.length);
+  let h = `<section class="subhero"><h1>Parte del día</h1><p>Lo importante, la agenda de la semana y el resto. ${filtrosActivos().length?`Con estos filtros: <b>${esc(filtrosActivos().join(", "))}</b>.`:"Sin filtros: incluye todo."}</p></section>
+  <div class="pv"><div class="pv-bar"><div class="seg" id="segParte"><button data-v="24h" type="button" aria-pressed="${st.parteDesde==="24h"}">Últimas 24 h</button><button data-v="hoy" type="button" aria-pressed="${st.parteDesde==="hoy"}">Solo hoy</button></div><span class="sp"></span>
+    <button class="btn ghost" data-act="parteCopiar" type="button">Copiar texto</button><button class="btn" data-act="parteEnviar" type="button"><span class="solo-movil">Enviar…</span><span class="solo-pc">Abrir en WhatsApp</span></button></div>
+  <div class="pv-tiles">
+    <button class="pv-tile ${imp.length?"alta":""}" type="button" data-act="pvIr" data-v="imp"><b>${imp.length}</b><span>${imp.length===1?"Importante":"Importantes"}</span></button>
+    <button class="pv-tile ev" type="button" data-act="pvIr" data-v="ag"><b>${ag.length}</b><span>${ag.length===1?"Convocatoria":"Convocatorias"} · 7 días</span></button>
+    <button class="pv-tile" type="button" data-act="pvIr" data-v="resto"><b>${resto.length}</b><span>${resto.length===1?"Noticia más":"Noticias más"}</span></button>
+    <div class="pv-tile"><b>${pueblos}</b><span>${pueblos===1?"Pueblo":"Pueblos"} con noticias</span></div></div>`;
+  if (!n) h += `<div class="empty"><b>Sin noticias en este periodo</b>Prueba con «Últimas 24 h» o quita algún filtro.</div>`;
+  if (imp.length) h += cab("imp", "alta", ICON("M12 3l9 16H3zM12 10v4M12 17h.01"), "Importante", imp.length) + `<div class="pv-grid gr">${imp.map(m=>fila(m,"imp")).join("")}</div>`;
+  if (ag.length) h += cab("ag", "ev", I.cal, "Convocatorias y eventos", ag.length) + `<div class="pv-grid">${ag.map(cita).join("")}</div>`;
+  if (grupos.length) h += cab("resto", "", ICON("M4 6h16M4 12h16M4 18h10"), "Resto de noticias", resto.length)
+    + `<div class="pv-cols">${grupos.map(([c,l])=>`<section class="pv-cat"><header>${ICON(c.d)}${esc(c.n)}<span class="n">${l.length}</span></header>${l.map(m=>fila(m)).join("")}</section>`).join("")}</div>`;
+  h += `<details class="pv-txt" id="pvTxt" ${st.parteTexto?"open":""}><summary>Ver el texto que se copia y se envía</summary><div class="in">
+      <label class="sw"><span class="h" style="margin:0;font-size:14.5px;color:var(--ink)">Incluir enlaces a las noticias</span><input type="checkbox" id="parteLinks" ${st.parteLinks?"checked":""}></label>
+      <div class="parte" id="parteTxt">${esc(x).replace(/\*([^*\n]+)\*/g,"<b>$1</b>").replace(/(^|\n)_([^_\n]+)_/g,"$1<i>$2</i>")}</div>
+      <p class="note" style="padding:0">Los asteriscos ponen el texto en negrita al pegarlo en WhatsApp.</p></div></details>
+    <textarea id="parteRaw" hidden>${esc(x)}</textarea></div>`;
+  return h;
 }
+document.addEventListener("toggle", e=>{ if (e.target.id==="pvTxt") st.parteTexto = e.target.open; }, true);
+document.addEventListener("click", e=>{ const r = e.target.closest && e.target.closest(".pv-row[data-k]"); if (r) marcarAbierta(r.dataset.k); });
 const GRUPOS_MEDIOS = ["Periódicos y digitales de Segovia","Comarcales y locales","Radio","Agencias y medios regionales","Instituciones","Partidos y sindicatos","Plataformas vecinales","Sector agrario","Ayuntamientos","Google Noticias","Otros"];
 function viewMedios(){
   const F = st.fuentes;
@@ -1961,6 +2042,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="elec"){ store.set("elecVisto", 1); abrirSub({t:"elec"}); }
   else if (act==="parte") abrirSub({t:"parte"});
+  else if (act==="pvIr"){ const d = document.getElementById("pv-"+b.dataset.v); if (d) d.scrollIntoView({behavior:"smooth", block:"start"}); }
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
@@ -2430,7 +2512,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v99";
+const VERSION_APP = "prensa-segovia-v100";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
