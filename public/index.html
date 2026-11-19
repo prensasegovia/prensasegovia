@@ -2491,14 +2491,79 @@ setInterval(compruebaVersion, 30*60*1000);
 fijaCortePer();
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="hidden"){ ocultoDesde = Date.now(); return; } if (ocultoDesde && Date.now()-ocultoDesde > 10*6e4){ fijaCortePer(); if (st.view==="periodicos" && !st.sub) render(true); } if (document.visibilityState==="visible"){ poll(); compruebaVersion(); if (st.letra==="auto") aplicaLetra(); } });
 
-/* Noticias de medios de pago: el titular abre el texto entero con un lector; «Original» va al medio */
+/* Noticias de medios de pago: se abren en una página de lectura limpia, con el texto entero */
 (function(){
   document.head.insertAdjacentHTML('beforeend','<style>.leer-completo{display:inline-block;margin-top:8px;margin-right:8px;padding:4px 10px;border:1px solid currentColor;border-radius:999px;font-size:.78rem;text-decoration:none;opacity:.75;color:inherit}.leer-completo:hover{opacity:1}</style>');
+  const abs = (u, base) => /^https?:/i.test(u) ? u : base + (u.charAt(0) === '/' ? '' : '/') + u;
+  const inline = (s, base) => esc(s)
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, (m,a,u)=>`<img src="${abs(u,base)}" alt="${a}" loading="lazy">`)
+    .replace(/\[([^\]]+)\]\(([^)\s]+)[^)]*\)/g, (m,t,u)=>`<a href="${abs(u,base)}" target="_blank" rel="noopener">${t}</a>`)
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  const md2html = (md, base) => {
+    const out = [];
+    for (let l of md.split('\n')){
+      l = l.trim();
+      if (!l || l === '---') continue;
+      const im = l.match(/^!\[([^\]]*)\]\(([^)\s]+)/);
+      if (im){ out.push(`<img src="${abs(im[2], base)}" alt="${esc(im[1])}" loading="lazy">`); continue; }
+      if (l.startsWith('### ')){ out.push(`<h3>${inline(l.slice(4), base)}</h3>`); continue; }
+      if (l.startsWith('## ')){ out.push(`<h2>${inline(l.slice(3), base)}</h2>`); continue; }
+      if (l.startsWith('# ')) continue;
+      if (l.startsWith('* ')){ out.push(`<p class="li">· ${inline(l.slice(2), base)}</p>`); continue; }
+      out.push(`<p>${inline(l, base)}</p>`);
+    }
+    return out.join('');
+  };
+  const pagina = (t, url) => `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(t||'Noticia')}</title>
+<style>
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:#16181a;font:19px/1.62 Georgia,"Times New Roman",serif}
+.bar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #e6e6e6;font:14px/1.3 system-ui,sans-serif;position:sticky;top:0;background:rgba(255,255,255,.94)}
+.bar a{color:#1E4A3F;font-weight:700;text-decoration:none}
+main{max-width:720px;margin:0 auto;padding:26px 18px 80px}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.15;margin:0 0 18px}
+img{max-width:100%;height:auto;border-radius:8px;margin:10px 0}
+h2{font-size:22px;line-height:1.25;margin:26px 0 10px}
+h3{font-size:19px;margin:22px 0 8px}
+p{margin:0 0 18px}
+p.li{margin:0 0 8px;padding-left:6px}
+a{color:#1E4A3F}
+.cargando{color:#6b7573;font-style:italic}
+.pie{margin-top:34px;padding-top:16px;border-top:1px solid #e6e6e6;font:14px/1.5 system-ui,sans-serif;color:#6b7573}
+@media (prefers-color-scheme:dark){body{background:#111514;color:#e6ebe8}.bar{background:rgba(17,21,20,.94);border-color:#26302c}.pie{border-color:#26302c}.bar a,a{color:#86CAB5}}
+</style></head><body>
+<div class="bar"><a href="${esc(url)}" target="_blank" rel="noopener">↗ Original</a></div>
+<main><h1>${esc(t||'')}</h1><div id="c"><p class="cargando">Abriendo la noticia…</p></div>
+<div class="pie">Texto leído con un servicio de lectura. La visita y las cookies se las lleva el medio: <a href="${esc(url)}" target="_blank" rel="noopener">abrir el original</a>.</div>
+</main></body></html>`;
+  async function abrirLector(url, titulo){
+    const w = window.open('', '_blank');
+    if (!w){ location.href = 'https://r.jina.ai/' + url; return; }
+    let base = ''; try { base = new URL(url).origin; } catch(e){}
+    w.document.write(pagina(titulo, url)); w.document.close();
+    let txt = '';
+    try { txt = await (await fetch('https://r.jina.ai/' + url)).text(); } catch(e){}
+    if (!txt || txt.length < 600){
+      try { txt = await (await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://r.jina.ai/' + url))).text(); } catch(e){}
+    }
+    const c = w.document.getElementById('c'); if (!c) return;
+    if (!txt || txt.length < 600){ c.innerHTML = '<p class="cargando">No se ha podido leer ahora mismo. Prueba en un rato o abre el original.</p>'; return; }
+    let i = txt.lastIndexOf('\n# '); if (i < 0) i = txt.lastIndexOf('Saltar al contenido');
+    if (i > 0) txt = txt.slice(i);
+    let fin = txt.length;
+    for (const m of ['\nComenta\n','\nReportar un error','\nTE PUEDE INTERESAR','\nLo más leído']){ const j = txt.indexOf(m); if (j > 800 && j < fin) fin = j; }
+    c.innerHTML = md2html(txt.slice(0, fin), base);
+    w.focus();
+  }
   document.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a.leer-completo');
     if (!a) return;
-    e.preventDefault(); e.stopPropagation();
-    window.open(a.href, '_blank', 'noopener');
+    e.stopPropagation();
+    if (!a.dataset.orig) return;
+    e.preventDefault();
+    abrirLector(a.dataset.orig, a.dataset.titulo || '');
   }, true);
   const poner = raiz => {
     const cards = raiz.matches && raiz.matches('article.card[data-href]') ? [raiz] : (raiz.querySelectorAll ? [...raiz.querySelectorAll('article.card[data-href]')] : []);
@@ -2508,10 +2573,9 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
       if (!c.querySelector('.pay')) continue;
       const original = c.dataset.href;
       if (!original || original.indexOf('r.jina.ai') > -1) continue;
-      const lector = 'https://r.jina.ai/' + original;
-      c.dataset.href = lector;
+      c.dataset.href = 'https://r.jina.ai/' + original;
       const h4 = c.querySelector('h4'); if (!h4) continue;
-      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="${lector}" target="_blank" rel="noopener">Leer completo</a><a class="leer-completo" href="${original}" target="_blank" rel="noopener">Original</a>`);
+      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${original}" data-orig="${esc(original)}" data-titulo="${esc(h4.textContent.trim())}" target="_blank" rel="noopener">Leer completo</a><a class="leer-completo" href="${original}" target="_blank" rel="noopener">Original</a>`);
     }
   };
   poner(document);
