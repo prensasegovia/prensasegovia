@@ -2491,14 +2491,13 @@ setInterval(compruebaVersion, 30*60*1000);
 fijaCortePer();
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="hidden"){ ocultoDesde = Date.now(); return; } if (ocultoDesde && Date.now()-ocultoDesde > 10*6e4){ fijaCortePer(); if (st.view==="periodicos" && !st.sub) render(true); } if (document.visibilityState==="visible"){ poll(); compruebaVersion(); if (st.letra==="auto") aplicaLetra(); } });
 
-/* Enlace «Leer completo» en las noticias de medios de pago: el texto se abre con un lector, sin muro */
+/* Noticias de medios de pago: el titular abre el texto entero con un lector; «Original» va al medio */
 (function(){
-  document.head.insertAdjacentHTML('beforeend','<style>.leer-completo{display:inline-block;margin-top:8px;padding:4px 10px;border:1px solid currentColor;border-radius:999px;font-size:.78rem;text-decoration:none;opacity:.75;color:inherit}.leer-completo:hover{opacity:1}</style>');
+  document.head.insertAdjacentHTML('beforeend','<style>.leer-completo{display:inline-block;margin-top:8px;margin-right:8px;padding:4px 10px;border:1px solid currentColor;border-radius:999px;font-size:.78rem;text-decoration:none;opacity:.75;color:inherit}.leer-completo:hover{opacity:1}</style>');
   document.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a.leer-completo');
     if (!a) return;
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault(); e.stopPropagation();
     window.open(a.href, '_blank', 'noopener');
   }, true);
   const poner = raiz => {
@@ -2507,8 +2506,11 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
       if (c.dataset.chip) continue;
       c.dataset.chip = '1';
       if (!c.querySelector('.pay')) continue;
+      const original = c.dataset.href;
+      const lector = 'https://r.jina.ai/' + original;
+      c.dataset.href = lector;
       const h4 = c.querySelector('h4'); if (!h4) continue;
-      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${c.dataset.href}" target="_blank" rel="noopener">Leer completo</a>`);
+      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="${lector}" target="_blank" rel="noopener">Leer completo</a><a class="leer-completo" href="${original}" target="_blank" rel="noopener">Original</a>`);
     }
   };
   poner(document);
