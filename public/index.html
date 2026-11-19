@@ -1357,6 +1357,10 @@ function faviconConNumero(n){
   } catch(e){} };
   if (favBase && favBase.complete) pinta(favBase); else { favBase = new Image(); favBase.onload = () => pinta(favBase); favBase.src = orig; }
 }
+/* Abrir una noticia = leída: quita también la etiqueta «Nueva» (pasar por pantalla no la quita hasta la siguiente visita) */
+function marcarAbierta(k){ if(!k) return; marcarVisto([k]); if (st.sesionNuevas) st.sesionNuevas.delete(k);
+  document.querySelectorAll(`.card[data-k="${CSS.escape(k)}"]`).forEach(c=>{ c.classList.remove("unseen","llego","nueva"); c.querySelectorAll(".top > .nvtag:not([style])").forEach(t=>t.remove()); });
+  actualizaTitulo(); }
 function marcarVisto(keys){ let c=false; for (const k of keys) if(k && !st.seen.has(k)){ st.seen.add(k); c=true; } if(c){ store.set("seen", [...st.seen].slice(-6000)); actualizaPer(); } }
 // Noticias de Periódicos sin ver: insignia de la pestaña, burbujas de cada periódico y «te quedan»
 function actualizaPer(){
@@ -1916,7 +1920,7 @@ $("#app").addEventListener("click", e=>{
   const am = e.target.closest("[data-ambito]"); if (am){ st.ambito = am.dataset.ambito; store.set("ambito", st.ambito); render(); window.scrollTo({top:0}); return; }
   const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }
   const a = e.target.closest("a");
-  if (a){ const c = a.closest("[data-k]"); if (c){ marcarVisto([c.dataset.k]); c.classList.remove("llego"); } return; }
+  if (a){ const c = a.closest("[data-k]"); if (c) marcarAbierta(c.dataset.k); return; }
   const card = e.target.closest(".card");
   const b = e.target.closest("button");
   if (b && card){
@@ -1928,13 +1932,13 @@ $("#app").addEventListener("click", e=>{
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
   if (!b){
     if (card && conPanel() && tarjetas.has(card.dataset.k)){ // ordenador: se amplía en el panel de la derecha
-      marcarVisto([card.dataset.k]); card.classList.remove("unseen", "llego");
+      marcarAbierta(card.dataset.k);
       st.detalle = st.detalle===card.dataset.k ? null : card.dataset.k;
       document.querySelectorAll(".card.sel").forEach(c=>c.classList.remove("sel"));
       if (st.detalle) card.classList.add("sel");
       renderAside(allNews()); $("#aside").scrollTop = 0; return;
     }
-    if (card && card.dataset.href){ marcarVisto([card.dataset.k]); card.classList.remove("unseen", "llego"); window.open(card.dataset.href, "_blank", "noopener"); }
+    if (card && card.dataset.href){ marcarAbierta(card.dataset.k); window.open(card.dataset.href, "_blank", "noopener"); }
     return;
   }
   const act = b.dataset.act;
@@ -2052,7 +2056,7 @@ $("#aside").addEventListener("click", e=>{
     if (v==="fav"){ toggleFav(n._key); render(true); return; }
     if (v==="share"){ const m = mediosDe(n).find(m=>!m.pago) || mediosDe(n)[0]; compartir({ querySelector:()=>({textContent:n.titulo}), dataset:{ href: m ? m.url : "" } }); return; }
   }
-  const a = e.target.closest("a[data-k]"); if (a){ marcarVisto([a.dataset.k]); return; }
+  const a = e.target.closest("a[data-k]"); if (a){ marcarAbierta(a.dataset.k); return; }
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.per){ st.periodico = b.dataset.per; render(true); window.scrollTo({top:0, behavior:"smooth"}); return; }
   if (b.dataset.dia){ st.perDia = b.dataset.dia; render(true); window.scrollTo({top:0, behavior:"smooth"}); return; }
@@ -2426,7 +2430,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v98";
+const VERSION_APP = "prensa-segovia-v99";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
