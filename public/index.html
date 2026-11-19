@@ -2507,6 +2507,7 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
       c.dataset.chip = '1';
       if (!c.querySelector('.pay')) continue;
       const original = c.dataset.href;
+      if (!original || original.indexOf('r.jina.ai') > -1) continue;
       const lector = 'https://r.jina.ai/' + original;
       c.dataset.href = lector;
       const h4 = c.querySelector('h4'); if (!h4) continue;
