@@ -154,11 +154,6 @@ const BUSQUEDAS = [
   'Segovia carteles electorales OR mitin incidentes OR boicot OR abucheos campaña',
   'Segovia desinformación OR bulo OR injerencia OR rusa OR espionaje OR ciberataque',
   'Segovia dron OR drones prisión OR "centro penitenciario" OR sobrevuelo',
-  // Operadores avanzados (site:): medios que publican de Segovia pero no tienen canal de noticias propio para la provincia
-  'site:europapress.es Segovia',
-  'site:larazon.es Segovia',
-  'site:elespanol.com Segovia -cochinillo -"pueblo más bonito"',
-  'site:cadenaser.com Segovia -"Hoy por Hoy" -"A vivir"',
   // Pueblos grandes y cabeceras de comarca
   '(Cuéllar OR "Navas de Oro" OR Samboal OR Chañe OR Fuentepelayo) Segovia',
   '("El Espinar" OR "San Rafael" OR "Navas de San Antonio" OR "Otero de Herreros") Segovia',
@@ -422,7 +417,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (OBITUARIO.test(tt) && !/accidente|atropell|incendio|choque|colision|ahog|herid|apunal|disparo|asesin|agresion|violencia/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
   if (categorias.every(c => c === "emergencias") && PREVENTIVO.test(tt) && !SUCESO.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Estadísticas demográficas y trámites electorales (mesas, locales): fuera aunque digan «fallecimientos» o «elecciones»
-  if (/fallecimientos mas que nacid|mas (muertes|defunciones|fallecimientos) que nacimientos|saldo vegetativo|locales electorales|secciones,? mesas|relacion (definitiva )?de (secciones|mesas)/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
+  if (/cuantos votos (son|cuesta|vale)|fallecimientos mas que nacid|mas (muertes|defunciones|fallecimientos) que nacimientos|saldo vegetativo|locales electorales|secciones,? mesas|relacion (definitiva )?de (secciones|mesas)/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Animales en adopción: fuera aunque digan «rescate» (el maltrato o abandono denunciado sí entra)
   if ((/(perros?|gatos?|mascotas?|animales|cachorros?)\b.{0,60}\b(adopcion|adoptar|buscan (familia|hogar|casa))/.test(tt) || /(rescatan?|rescate|salvan?)\b.{0,30}\b(perr\w*|gat[oai]\w*|cachorr\w*|animal\w*|caballo|vaca|oveja)/.test(tt)) && !/maltrat|abandon|investigad|detenid|denuncia/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   if (SIN_INTERES.test(tt) && !SUCESO.test(tt) && !/protesta|concentracion|manifestacion|denuncia|contra (el|la|los) (proyecto|planta|cierre)/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
@@ -509,7 +504,8 @@ const INTERNACIONAL = /\b(ucrania|rusia|kiev|moscu|putin|zelenski|gaza|israel|ha
 const OTRA_CIUDAD = /\b(malaga|sevilla|barcelona|valencia|bilbao|zaragoza|murcia|alicante|cordoba|granada|cadiz|huelva|almeria|asturias|oviedo|gijon|coruna|vigo|pontevedra|canarias|tenerife|mallorca|ibiza|pamplona|logrono|san sebastian|vitoria|badajoz|caceres|albacete|ciudad real|jaen|tarragona|girona|lleida|castellon)\b/;
 const NACIONAL_TREN = t => /maquinistas|\bouigo\b|\biryo\b|\badif\b|\brenfe\b/.test(t) && !/segovia|guiomar/.test(t);
 // «…en Ávila y Segovia»: si el titular junta otra provincia con Segovia, también es nuestra
-const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && FUERA.test(norm(titulo)) && !/\b(y|e|,) (la provincia de )?segovia\b|\bsegovia (y|e) /.test(norm(titulo)) ? "General" : municipio;
+const OTRA_PROV_TIT = t => /\b(avila|valladolid|burgos|soria|zamora|salamanca|leon|palencia|madrid|guadalajara)\b/.test(norm(t).replace(/castilla y leon/g, "")) && !/segovia|segovian/.test(norm(t));
+const fueraDeProvincia = (titulo, municipio) => !CONCRETO(municipio) && (FUERA.test(norm(titulo)) || OTRA_PROV_TIT(titulo)) && !/\b(y|e|,) (la provincia de )?segovia\b|\bsegovia (y|e) /.test(norm(titulo)) ? "General" : municipio;
 // Relleno que no aporta a la unidad aunque toque un tema de interés
 const POL_CONFLICTO = /junta electoral|manipul|propaganda|desinform|injerencia|\bespias?\b|espionaje|ciberataque|oposicion|acusa|critica|denuncia|exige|reprocha|polemica|bronco|tension|dimision|dimite|reprobac|mocion de censura|29n|elecciones|candidat|campana|mitin|abucheo|insultos|enfrentamiento|rechazo vecinal|vecinos/;
 // Titulares de política nacional: si el texto nombra un pueblo de pasada, la noticia no es de ese pueblo
@@ -518,7 +514,7 @@ const NACIONAL_FIG = /^el gobierno\b|interministerial|ministr[oa]s?\b|\bsanchez\
 // Política nacional: entra como «Provincia» solo si el titular o el resumen tocan Segovia; si no, fuera (para eso están los Periódicos)
 const ELECTORAL_PROV = /\b(diputados|senadores|escanos|encuesta|sondeo|candidaturas|reparto de)\b/;
 const nacionalLugar = (titulo, resumen) => /segovia|segovian|mazarias|san rafael|guiomar/.test(norm(titulo + " " + (resumen || ""))) ? "Provincia" : "General";
-const ESTADISTICA_ELECTORAL = /locales electorales|secciones,? mesas|relacion (definitiva )?de (secciones|mesas)|votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
+const ESTADISTICA_ELECTORAL = /cuantos votos (son|cuesta|vale)|votos (por|para) (un )?escano|locales electorales|secciones,? mesas|relacion (definitiva )?de (secciones|mesas)|votantes|votos (que )?(se quedaron )?sin representacion|censo|electores|sorteo de (las |los )?(mesas|miembros)|mesas electorales|(ser|tocado|eres) (de )?mesa|miembros de (las )?mesas?|sorteo (de )?(los )?miembros|voto por correo|\bcera\b|voto exterior|en el extranjero|participacion/;
 const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|\boperacion (salida|especial|retorno)|regulacion del trafico|accesos al cementerio|cortes? (de|del) trafico|corte trafico|desvios|\bbando\b|ruta |campana de|dispositivo especial/;
 const INCIDENTE = /colapso|rotura de (la )?presa|riesgo de (rotura|desbordamiento)|desembalse de emergencia|accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 // Campaña de las elecciones del 29N: atención especial a todo lo electoral en la provincia (hasta el 30-nov)
