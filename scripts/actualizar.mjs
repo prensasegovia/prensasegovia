@@ -355,6 +355,9 @@ const ALTA = /(arranca\w*|destroz\w*|vandaliz\w*|queman?|rajan?|pintadas? (en|co
 const ACTO_RECUERDO = /homenaje|exaltacion|marcha|monolito|cruz|recuerda a|en (el )?recuerdo|minutos? de silencio|aniversario|conmemora|ofrenda|misa|funeral|acto (de|en|por)|memoria de|placa|monumento|concentracion|exhumacion|fosa/;
 const POLITIZADO = /onesimo|redondo|\bjons\b|labajos|franquis|falang|jose antonio|primo de rivera|\bcaidos\b|cruz de los caidos|memoria (historica|democratica)|fusilad|represaliad|represion|\bfosas?\b|exhumac|guerra civil|republican|brigadist|exaltacion|simbolog|18 de julio|\b20-?n\b|20 de noviembre|francisco franco|caudillo|dictadura|dictador|victimas del terrorismo|victimas de eta|\beta\b|\bultras?\b|neonazi|nostalgic|organizad[oa] por (vox|el pp|el psoe|podemos|iu|sumar|falange)|\bvox\b|carlist|monarquic|nacionalcatolic/;
 // Nunca importante: actos de recuerdo y conmemoración (salvo los politizados)
+const NECRO = /\b(muere|fallece|fallecimiento de|adios a|ultimo adios|luto por)\b/;
+const MUERTE_SUCESO = /accidente|atropell|incendio|choque|colision|vuelc|ahog|asesin|homicid|herid|apunal|disparo|agresion|violencia|cadaver|arrollad|electrocut|desaparecid|detenid|precipit|autopsia|suicid|extranas circunstancias|sin vida|siniestro|intoxic|explosion|derrumb|sepultad|aplastad/;
+const MUERTO_ANONIMO = /\b(muere|fallece)n? (a los \d+ anos )?(en [a-z ]{3,30} )?(un|una|el|la|dos|tres|cuatro|cinco|varios|varias|\d+) (hombre|mujer|joven|varon|persona|vecin|conductor|motorista|motociclista|ciclista|peaton|trabajador|operari|ancian|nin[oa]|menor|bebe|octogenari|septuagenari|nonagenari|camionero|cazador|senderista|montaner|agricultor|ganadero|pastor|temporero|migrante|pres[oa]|recluso|intern[oa]|pasajer|ocupante)/;
 const OBITUARIO = /(muere|fallece|fallecimiento|adios a).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)/;
 const NO_ALTA = /(muere|fallece|fallecimiento|adios a)(?!.*(accidente|atropell|incendio|choque|colision|ahog|asesin|herid|agresion|violencia)).{0,60}(alcalde|exalcalde|concejal|maestr[oa]|parroco|sacerdote|durante \d+ anos)|homenaje|recuerda a|en (el )?recuerdo|minutos? de silencio|guarda silencio|aniversario|conmemora|ofrenda|misa|funeral|condolencias|luto|memoria de|placa en honor|juzgado especializado|tendra un juzgado|(crea|creara|nuevo) (un )?juzgado|aniversari|^«[^»]+»$/;
 
@@ -390,6 +393,10 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (/\b(aviso|alerta)s? (amarill|naranja|roj)/.test(tt) && (!/segovia/.test(tt) || !/naranja|roj/.test(tt))) return { categorias: [], relevancia: "baja", descartar: true };
   // Selección y futbolistas: deporte aunque el titular no lo diga claro («vuelve a la Selección»)
   if ((/\bseleccion\b|seleccionador/.test(tt) || /\b(jugador|futbolista|delantero|centrocampista|portero|seleccionador)\b/.test(tt)) && /jugador|futbol|seleccionador|partido|liga|gol|equipo|club/.test(t) && !LIO_DEPORTIVO.test(t)) return { categorias: [], relevancia: "baja", descartar: true };
+  // Necrológicas («Fallece Fulano, presidente del club…»): muerte natural de una persona conocida. No es suceso ni interesa.
+  // Sí siguen entrando las muertes en sucesos (accidente, incendio, crimen…), las de alguien sin nombrar («muere un hombre…»)
+  // y las de cargos públicos o agentes.
+  if (NECRO.test(tt) && !MUERTE_SUCESO.test(t) && !MUERTO_ANONIMO.test(tt) && !/alcalde|concejal|diputad|senador|procurador|subdelegad|consejer|ministr|guardia civil|policia|agente|militar|bombero/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   let categorias = UTILES.filter(k => PATRONES[k].test(tt));
   // Visitas y actos de cualquier cargo político: verbo de visita/acto en el titular y un cargo en la noticia
   if (!categorias.includes("autoridades") && VISITA.test(tt) && CARGO.test(t)) categorias.unshift("autoridades");
