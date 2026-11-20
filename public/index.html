@@ -1079,6 +1079,10 @@ body.ancho #app .feed.parte-wrap > .parte.pd{max-width:820px}
 .rz[data-red="ig"]{--ac:#D6336C;--ac-t:#C2255C}
 .rz[data-red="fb"]{--ac:#1877F2;--ac-t:#1565D8}
 .rz[data-red="x"]{--ac:var(--ink);--ac-t:var(--ink);--ac-ink:var(--stone)}
+.rz[data-red="tt"]{--ac:#FE2C55;--ac-t:#D91D46}
+:root[data-theme="dark"] .rz[data-red="tt"]{--ac-t:#FF6B88}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .rz[data-red="tt"]{--ac-t:#FF6B88} }
+.rk.tt{border-radius:22%;box-shadow:0 0 0 1px var(--line)}
 :root[data-theme="dark"] .rz[data-red="ig"]{--ac-t:#F783AC}
 :root[data-theme="dark"] .rz[data-red="fb"]{--ac-t:#74A9FF}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .rz[data-red="ig"]{--ac-t:#F783AC} :root:not([data-theme="light"]) .rz[data-red="fb"]{--ac-t:#74A9FF} }
@@ -1722,7 +1726,8 @@ function elecPeriodicos(news){
 const REDES = {
   ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Ficha de cada perfil con su foto y sus últimas publicaciones, tal como la sirve Instagram. Solo funciona con cuentas públicas: si sale «es posible que el enlace al perfil no funcione», la cuenta es privada o no permite mostrarse fuera de Instagram. La foto de cada perfil no se puede traer sola desde Instagram: ponla con el lápiz (en Instagram, botón derecho sobre su foto → «Copiar imagen», y aquí Ctrl+V)."},
   fb:{n:"Facebook", c:"#1877F2", nota:"Últimas publicaciones de cada página, servidas por Facebook. Solo funciona con páginas públicas, no con perfiles personales."},
-  x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil, servidos por X. X solo los enseña si tienes tu sesión de X abierta en este mismo navegador."}
+  x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil, servidos por X. X solo los enseña si tienes tu sesión de X abierta en este mismo navegador."},
+  tt:{n:"TikTok", c:"#FE2C55", av:true, nota:"Ficha de cada perfil con sus últimos vídeos, tal como la sirve TikTok. Solo funciona con cuentas públicas."}
 };
 const REDES_GRUPOS = ["Partidos y candidatos","Sindicatos","Organizaciones agrarias","Plataformas y asociaciones","Ayuntamientos","Otros"];
 const RI = {
@@ -1734,10 +1739,10 @@ const RI = {
   lock:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`
 };
 const redKey = (r, t="") => `<img class="rk ${r} ${t}" src="redes/${r}.png" alt="${REDES[r].n}" width="20" height="20">`;
-const redUrl = (r,u) => r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : "https://x.com/"+u.replace(/^@/,"");
+const redUrl = (r,u) => r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : r==="tt" ? "https://www.tiktok.com/@"+u.replace(/^@/,"") : "https://x.com/"+u.replace(/^@/,"");
 // Acepta «@usuario», «usuario» o el enlace pegado tal cual
 const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1];
-  const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
+  const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com|tiktok\.com)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
   return /^[\w.\-]{1,80}$/.test(x) ? (r==="fb" ? x : "@"+x) : ""; };
 const iniciales = n => n.replace(/[·|].*$/,"").replace(/^@/,"").split(/[\s._-]+/).filter(w=>/^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w) && !/^(de|del|la|el|los|las|y)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join("") || "?";
 const redActual = () => REDES[st.redRed] ? st.redRed : "ig";
@@ -1762,6 +1767,12 @@ function redIncrusta(el){
   } else if (r==="fb"){
     const w = Math.max(280, Math.min(500, Math.floor(el.clientWidth) || 380));
     el.innerHTML = fallo + `<iframe title="Publicaciones de ${esc(u)} en Facebook" loading="lazy" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(url)}&tabs=timeline&width=${w}&height=440&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_ES" width="${w}" height="440" style="border:0;overflow:hidden;display:block;margin:0 auto" scrolling="no" frameborder="0" allow="encrypted-media; picture-in-picture; web-share"></iframe>`;
+  } else if (r==="tt"){
+    const us = u.replace(/^@/,"");
+    el.innerHTML = `<blockquote class="tiktok-embed" cite="${esc(url)}" data-unique-id="${esc(us)}" data-embed-type="creator" style="max-width:780px;min-width:288px;margin:0"><section>${fallo}</section></blockquote>`;
+    // el script de TikTok solo mira la página al cargarse: se vuelve a cargar con cada perfil nuevo
+    const viejo = document.getElementById("ttEmbed"); if (viejo) viejo.remove();
+    cargaScript("ttEmbed", "https://www.tiktok.com/embed.js");
   } else {
     el.innerHTML = `<a class="twitter-timeline rz-fallo" data-height="440" data-theme="${temaOscuro()?"dark":"light"}" data-chrome="noheader nofooter transparent" data-lang="es" data-dnt="true" href="https://twitter.com/${encodeURIComponent(u.replace(/^@/,""))}">Cargando los tuits de ${esc(u)}…<br>Solo se ven con tu sesión de X abierta en este navegador y sin bloqueador de anuncios.<b>Abrir en X ↗</b></a>`;
     cargaScript("xWidgets", "https://platform.twitter.com/widgets.js").then(()=>{ try{ window.twttr.widgets.load(el); }catch(e){} });
@@ -1842,7 +1853,7 @@ function viewRedes(){
     + `<button class="rz-link rz-out" data-act="redCerrar">Cerrar zona privada</button></div>`;
   h += `<div class="rz-bar"><div class="rz-chips">${redChips(L, grp)}</div><button class="rz-add" data-act="redNuevo">${RI.mas} Añadir ${que}</button></div>`;
   h += `<form class="rz-form" data-form="redPerfil" hidden><h3>${red==="fb"?"Nueva página":"Nuevo perfil"} de ${R.n}</h3>
-    <label>Enlace o usuario<input type="text" name="u" id="redU" maxlength="200" autocomplete="off" placeholder="${red==="fb"?"https://www.facebook.com/nombre.de.la.pagina":red==="ig"?"https://www.instagram.com/usuario o @usuario":"https://x.com/usuario o @usuario"}"></label>
+    <label>Enlace o usuario<input type="text" name="u" id="redU" maxlength="200" autocomplete="off" placeholder="${red==="fb"?"https://www.facebook.com/nombre.de.la.pagina":red==="tt"?"https://www.tiktok.com/@usuario o @usuario":red==="ig"?"https://www.instagram.com/usuario o @usuario":"https://x.com/usuario o @usuario"}"></label>
     <label>Nombre (opcional)<input type="text" name="n" maxlength="60" autocomplete="off" placeholder="Cómo quieres que aparezca"></label>
     <label>Grupo<select name="g">${REDES_GRUPOS.map(g=>`<option${g===(grp!=="todos"?grp:"Otros")?" selected":""}>${esc(g)}</option>`).join("")}</select></label>
     ${R.av ? `<label class="chk"><input type="checkbox" name="av"> Avisarme cuando publique</label>` : ""}
@@ -2740,7 +2751,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v105";
+const VERSION_APP = "prensa-segovia-v106";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
