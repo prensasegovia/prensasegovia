@@ -400,6 +400,8 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (/\b(aviso|alerta)s? (amarill|naranja|roj)/.test(tt) && (!/segovia/.test(tt) || !/naranja|roj/.test(tt))) return { categorias: [], relevancia: "baja", descartar: true };
   // Selección y futbolistas: deporte aunque el titular no lo diga claro («vuelve a la Selección»)
   if ((/\bseleccion\b|seleccionador/.test(tt) || /\b(jugador|futbolista|delantero|centrocampista|portero|seleccionador)\b/.test(tt)) && /jugador|futbol|seleccionador|partido|liga|gol|equipo|club/.test(t) && !LIO_DEPORTIVO.test(t)) return { categorias: [], relevancia: "baja", descartar: true };
+  // Concursos y certámenes culturales («rescatar la memoria gastronómica», relatos, fotografía…): «rescatar» aquí no es un rescate
+  if (/concurso de (relatos|cuentos|microrrelatos|poesia|fotografia|pintura|dibujo|carteles|escaparates|belenes|tapas|pinchos|cocina|disfraces)|certamen (de |literario|nacional de )|premio (literario|de (poesia|novela|relato|pintura|fotografia))|rescat\w+ (la |el )?(memoria|patrimonio|tradicion|receta|oficio|legado|historia)|memoria gastronomica/.test(tt + " " + norm(texto || "").slice(0, 200)) && !/fraude|denuncia|detenid|polemica|plagio/.test(tt)) return { categorias: [], relevancia: "baja", descartar: true };
   // Necrológicas («Fallece Fulano, presidente del club…»): muerte natural de una persona conocida. No es suceso ni interesa.
   // Sí siguen entrando las muertes en sucesos (accidente, incendio, crimen…), las de alguien sin nombrar («muere un hombre…»)
   // y las de cargos públicos o agentes.
@@ -559,7 +561,8 @@ function relleno(n) {
   // Privatizar o adjudicar el servicio del agua de un pueblo: posible conflicto vecinal, entra
   if (c.includes("medioambiente") && /privatiz|\bagua\b|abastecimiento|depuracion/.test(tt) && /privatiz|adjudica|concesion|gestion (integral )?del/.test(tt)) return false;
   // En campaña: candidatos, dirigentes y actos electorales en la provincia entran (no las estadísticas)
-  if (EN_CAMPANA() && c.includes("politica") && (ELECTORAL_ACTO.test(tt) || DIRIGENTES.test(tt)) && !ESTADISTICA_ELECTORAL.test(tt)) return false;
+  // (las municipales de 2027 no son esta campaña: «el alcalde niega que las elecciones de 2027 influyan en los presupuestos»)
+  if (EN_CAMPANA() && c.includes("politica") && (ELECTORAL_ACTO.test(tt) || DIRIGENTES.test(tt)) && !ESTADISTICA_ELECTORAL.test(tt) && !/elecciones (municipales )?(de |del )?2027|municipales de 2027/.test(tt)) return false;
   if (CONCRETO(n.municipio) && c.includes("politica") && tt.includes(" en " + norm(n.municipio)) && /\b(psoe|pp|vox|iu|podemos|sumar|upl|socialistas|populares|candidat\w*|diputad[oa]s?|senador\w*|mitin)\b/.test(tt)) return false; // campaña: actos de partidos en un pueblo
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
   if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)

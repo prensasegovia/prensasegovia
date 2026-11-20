@@ -1741,6 +1741,7 @@ const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile
   return /^[\w.\-]{1,80}$/.test(x) ? (r==="fb" ? x : "@"+x) : ""; };
 const iniciales = n => n.replace(/[·|].*$/,"").replace(/^@/,"").split(/[\s._-]+/).filter(w=>/^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w) && !/^(de|del|la|el|los|las|y)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join("") || "?";
 const redActual = () => REDES[st.redRed] ? st.redRed : "ig";
+const REDES_CLAVE = "2daa7d78da68335e567c39515cf19cf2066123882deb3628a9d4e39fbfa8fbe5";
 const redHuella = async (sal, pw) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(sal + "|" + pw))), x=>x.toString(16).padStart(2,"0")).join("");
 function redesAbierto(){ try{ return sessionStorage.getItem("redesOk")==="1"; }catch(e){ return !!st.redesOk; } }
 const redesData = () => { if (!st.redesD){ let d = store.get("redesPerfiles", null);
@@ -1826,19 +1827,17 @@ const redChips = (L, grp) => { const grupos = REDES_GRUPOS.filter(g=>L.some(p=>p
   return grupos.length > 1 ? ["todos",...grupos].map(g=>`<button class="chip" data-act="redGrupo" data-v="${esc(g)}" aria-pressed="${grp===g}">${g==="todos"?"Todos":esc(g)} <span class="c">${g==="todos"?L.length:L.filter(p=>p.g===g).length}</span></button>`).join("") : ""; };
 function viewRedes(){
   const hero = `<section class="subhero"><h1>Redes</h1><p>Perfiles de interés · acceso restringido</p></section>`;
-  // La contraseña se crea en cada dispositivo la primera vez (se guarda solo su huella, no la contraseña) y protege la lista guardada en él
-  if (!redesAbierto()){ const hay = !!store.get("redesClave", null);
-    return hero + `<div class="rlock"><div class="ico">${RI.lock}</div>
-    <h3>Zona privada</h3><p>${hay ? "Escribe tu contraseña para ver los perfiles." : "Crea una contraseña para esta zona en este dispositivo. Tu lista de perfiles se guarda solo aquí."}</p>
-    <form data-form="redes"><input id="redesPw" type="password" autocomplete="${hay?"current-password":"new-password"}" placeholder="${hay?"Contraseña":"Contraseña nueva (mínimo 6)"}" aria-label="Contraseña">${hay ? "" : `<input id="redesPw2" type="password" autocomplete="new-password" placeholder="Repítela" aria-label="Repite la contraseña">`}<div class="err" id="redesErr"></div><button class="btn" type="submit">${hay?"Entrar":"Crear y entrar"}</button></form>
-    ${hay ? `<p style="margin:12px 0 0;font-size:12.5px"><button class="rz-link" data-act="redOlvido" type="button">He olvidado la contraseña</button></p>` : ""}</div>`; }
+  // Contraseña única y provisional para todos (se cambiará la forma de entrar más adelante)
+  if (!redesAbierto()) return hero + `<div class="rlock"><div class="ico">${RI.lock}</div>
+    <h3>Zona privada</h3><p>Escribe la contraseña para ver los perfiles.</p>
+    <form data-form="redes"><input id="redesPw" type="password" autocomplete="off" placeholder="Contraseña" aria-label="Contraseña"><div class="err" id="redesErr"></div><button class="btn" type="submit">Entrar</button></form></div>`;
   const P = redesData(), red = redActual(), R = REDES[red];
   const de = r => P.filter(p=>p.r===r);
   const L = de(red), grp = st.redGrupo || "todos";
   const grupos = REDES_GRUPOS.filter(g=>L.some(p=>p.g===g));
   const LF = L.filter(p=>grp==="todos" || p.g===grp);
   const que = red==="fb" ? "página" : "perfil";
-  let h = hero + `<div class="rz" data-red="${red}"><div class="rz-demo"><b>En desarrollo.</b> Lo que se ve en cada columna lo sirve cada red. La lista de perfiles y la contraseña se guardan solo en este dispositivo.</div>`;
+  let h = hero + `<div class="rz" data-red="${red}"><div class="rz-demo"><b>En desarrollo.</b> Lo que se ve en cada columna lo sirve cada red. La lista de perfiles se guarda solo en este dispositivo.</div>`;
   h += `<div class="rz-tabs" role="tablist" aria-label="Redes">` + Object.keys(REDES).map(r=>`<button class="rz-tile" role="tab" data-act="redRed" data-v="${r}" aria-selected="${r===red}" style="--tc:${REDES[r].c}">${redKey(r,"lg")}<span class="t"><b>${REDES[r].n}</b><span class="s">${plural(de(r).length, r==="fb"?"página":"perfil", r==="fb"?"páginas":"perfiles")}</span></span></button>`).join("")
     + `<button class="rz-link rz-out" data-act="redCerrar">Cerrar zona privada</button></div>`;
   h += `<div class="rz-bar"><div class="rz-chips">${redChips(L, grp)}</div><button class="rz-add" data-act="redNuevo">${RI.mas} Añadir ${que}</button></div>`;
@@ -1855,15 +1854,10 @@ function viewRedes(){
 }
 document.addEventListener("submit", e=>{ const f = e.target.dataset.form;
   if (f==="redes"){ e.preventDefault();
-    const v = ($("#redesPw")||{}).value||"", err = $("#redesErr"), clave = store.get("redesClave", null);
-    const dentro = ()=>{ try{ sessionStorage.setItem("redesOk","1"); }catch(_){ st.redesOk = true; } st.redesPinta = true; render(); window.scrollTo({top:0}); };
+    const v = ($("#redesPw")||{}).value||"", err = $("#redesErr");
     if (!v){ err.textContent = "Escribe la contraseña"; return; }
-    if (!clave){
-      if (v.length < 6){ err.textContent = "Mínimo 6 caracteres"; return; }
-      if (v !== (($("#redesPw2")||{}).value||"")){ err.textContent = "Las dos contraseñas no coinciden"; return; }
-      const sal = Array.from(crypto.getRandomValues(new Uint8Array(16)), x=>x.toString(16).padStart(2,"0")).join("");
-      redHuella(sal, v).then(h=>{ store.set("redesClave", {s:sal, h}); dentro(); }).catch(()=>{ err.textContent = "Este navegador no permite crear la contraseña"; });
-    } else redHuella(clave.s, v).then(h=>{ if (h===clave.h) dentro(); else { err.textContent = "Contraseña incorrecta"; $("#redesPw").select(); } }).catch(()=>{ err.textContent = "No se pudo comprobar"; }); }
+    redHuella("prensa-segovia-redes", v).then(h=>{ if (h===REDES_CLAVE){ try{ sessionStorage.setItem("redesOk","1"); }catch(_){ st.redesOk = true; } st.redesPinta = true; render(); window.scrollTo({top:0}); }
+      else { err.textContent = "Contraseña incorrecta"; $("#redesPw").select(); } }).catch(()=>{ err.textContent = "No se pudo comprobar"; }); }
   else if (f==="redPerfil"){ e.preventDefault(); const r = redActual(), F = e.target.elements;
     const u = redUser(r, F.u.value), n = F.n.value.trim() || u.replace(/^@/,""), err = $("#redFormErr");
     if (!u){ err.textContent = F.u.value.trim() ? "No reconozco ese enlace o usuario" : "Pega el enlace o escribe el usuario"; F.u.focus(); return; }
@@ -1888,9 +1882,6 @@ function redesAccion(act, b){
   else if (act==="redBorraNo" && p){ b.closest(".acts").innerHTML = redActs(p); }
   // Avisos: se guarda la preferencia; empezarán a llegar cuando la red esté conectada por su API
   else if (act==="redAv" && p){ p.av = !p.av; redesSave(); b.closest(".acts").innerHTML = redActs(p); aviso(p.av ? `Marcado. Activa también la campana de este perfil en ${REDES[p.r].n}` : "Marca quitada"); }
-  // Contraseña olvidada: no se puede recuperar; se borra junto con la lista de este dispositivo (pide confirmación)
-  else if (act==="redOlvido"){ b.outerHTML = `<span class="rz-conf" style="justify-content:center">Se borrará la lista de este dispositivo. <button class="si" data-act="redOlvidoSi" type="button">Borrar y empezar</button></span>`; }
-  else if (act==="redOlvidoSi"){ store.set("redesClave", null); st.redesD = []; redesSave(); st.redesPinta = true; render(); }
   else if (act==="redEdita" && p){ const hd = b.closest("header");
     hd.innerHTML = `<form class="rz-edit" data-form="redEdita" data-id="${esc(p.id)}"><input type="text" name="n" maxlength="60" value="${esc(p.n)}" aria-label="Nombre"><select name="g" aria-label="Grupo">${REDES_GRUPOS.map(g=>`<option${g===p.g?" selected":""}>${esc(g)}</option>`).join("")}</select><button class="rz-ic ok" type="submit" title="Guardar" aria-label="Guardar">${RI.ok}</button><button class="rz-ic" type="button" data-act="redEditaNo" data-id="${esc(p.id)}" title="Cancelar" aria-label="Cancelar">✕</button><div class="ft"><span class="pv">${redAvt(p)}</span><label class="rz-fb"><input type="file" accept="image/*" hidden>Poner foto</label>${p.f?`<button type="button" class="rz-fb" data-act="redFotoNo" data-id="${esc(p.id)}">Quitar</button>`:""}<small>o pégala con Ctrl+V</small></div></form>`;
     hd.querySelector("input").focus(); }
@@ -2749,7 +2740,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v104";
+const VERSION_APP = "prensa-segovia-v105";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
