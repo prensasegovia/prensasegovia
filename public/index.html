@@ -1752,7 +1752,28 @@ function redesAbierto(){ try{ return sessionStorage.getItem("redesOk")==="1"; }c
 const redesData = () => { if (!st.redesD){ let d = store.get("redesPerfiles", null);
     if (!d) d = (store.get("redesDemo", []) || []).filter(p=>/^u/.test(p.id) && REDES[p.r]).map(({id,r,g,n,u,av})=>({id,r,g,n,u,av:!!av})); // lo que se añadió a mano en la maqueta anterior
     st.redesD = d; } return st.redesD; };
-const redesSave = () => store.set("redesPerfiles", st.redesD);
+/* Lista compartida: los perfiles se guardan también en el Apps Script de la unidad (no en el repositorio público),
+   así se ven igual en todos los dispositivos. Si ese script aún no tiene la parte de Redes, sigue funcionando solo en local. */
+const redClave = () => { try{ return sessionStorage.getItem("redesPw") || ""; }catch(e){ return st.redesPw || ""; } };
+const redNube = async cuerpo => { const c = await confPush(); if (!c.url) return null;
+  try { return await (await fetch(c.url, { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ ...cuerpo, clave: redClave() }) })).json(); } catch(e){ return null; } };
+let redSubeT = null;
+const redesSube = () => { clearTimeout(redSubeT); redSubeT = setTimeout(async ()=>{ const d = await redNube({ accion:"redesGuardar", perfiles: st.redesD }); if (!(d && d.guardado)) aviso("No se pudo guardar en la lista compartida"); }, 700); };
+const redesSave = () => { store.set("redesPerfiles", st.redesD); if (st.redesNube) redesSube(); };
+async function redesBaja(){ // al entrar: trae la lista compartida
+  st.redesBajado = true;
+  const d = await redNube({ accion:"redesLeer" });
+  if (!(d && Array.isArray(d.perfiles))){ st.redesNube = false; redNubePinta(); return; }
+  st.redesNube = true;
+  const nube = d.perfiles.filter(p=>p && REDES[p.r] && p.u), clave = p => p.r + "|" + String(p.u).toLowerCase();
+  // La primera vez en este dispositivo, lo que hubiera guardado aquí se suma a la lista compartida; después manda la compartida
+  const propios = store.get("redesSinc", false) ? [] : redesData().filter(p=>!nube.some(q=>clave(q)===clave(p)));
+  st.redesD = [...propios, ...nube]; store.set("redesPerfiles", st.redesD); store.set("redesSinc", true);
+  if (propios.length) redesSube();
+  if (redesAbierto() && st.sub && st.sub.t==="redes"){ st.redesPinta = true; render(true); }
+}
+const redNubeTxt = () => st.redesNube ? "La lista de perfiles es compartida: se ve igual en todos los dispositivos." : st.redesNube===false ? "La lista compartida aún no está activada: de momento los perfiles se guardan solo en este dispositivo." : "Cargando la lista compartida…";
+const redNubePinta = () => { const e = document.getElementById("redNubeTxt"); if (e) e.textContent = redNubeTxt(); };
 const temaOscuro = () => { const t = document.documentElement.dataset.theme; return t ? t==="dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
 const cargaScript = (id, src) => new Promise(res=>{ let s = document.getElementById(id);
   if (s){ if (s.dataset.ok) res(); else s.addEventListener("load", ()=>res()); return; }
@@ -1848,7 +1869,9 @@ function viewRedes(){
   const grupos = REDES_GRUPOS.filter(g=>L.some(p=>p.g===g));
   const LF = L.filter(p=>grp==="todos" || p.g===grp);
   const que = red==="fb" ? "página" : "perfil";
-  let h = hero + `<div class="rz" data-red="${red}"><div class="rz-demo"><b>En desarrollo.</b> Lo que se ve en cada columna lo sirve cada red. La lista de perfiles se guarda solo en este dispositivo.</div>`;
+  let h = hero + `<div class="rz" data-red="${red}"><div class="rz-demo"><b>En desarrollo.</b> Lo que se ve en cada columna lo sirve cada red. <span id="redNubeTxt">${redNubeTxt()}</span></div>`;
+  if (!st.redesBajado) redesBaja();
+  h += ``;
   h += `<div class="rz-tabs" role="tablist" aria-label="Redes">` + Object.keys(REDES).map(r=>`<button class="rz-tile" role="tab" data-act="redRed" data-v="${r}" aria-selected="${r===red}" style="--tc:${REDES[r].c}">${redKey(r,"lg")}<span class="t"><b>${REDES[r].n}</b><span class="s">${plural(de(r).length, r==="fb"?"página":"perfil", r==="fb"?"páginas":"perfiles")}</span></span></button>`).join("")
     + `<button class="rz-link rz-out" data-act="redCerrar">Cerrar zona privada</button></div>`;
   h += `<div class="rz-bar"><div class="rz-chips">${redChips(L, grp)}</div><button class="rz-add" data-act="redNuevo">${RI.mas} Añadir ${que}</button></div>`;
@@ -1867,7 +1890,7 @@ document.addEventListener("submit", e=>{ const f = e.target.dataset.form;
   if (f==="redes"){ e.preventDefault();
     const v = ($("#redesPw")||{}).value||"", err = $("#redesErr");
     if (!v){ err.textContent = "Escribe la contraseña"; return; }
-    redHuella("prensa-segovia-redes", v).then(h=>{ if (h===REDES_CLAVE){ try{ sessionStorage.setItem("redesOk","1"); }catch(_){ st.redesOk = true; } st.redesPinta = true; render(); window.scrollTo({top:0}); }
+    redHuella("prensa-segovia-redes", v).then(h=>{ if (h===REDES_CLAVE){ try{ sessionStorage.setItem("redesOk","1"); sessionStorage.setItem("redesPw", v); }catch(_){ st.redesOk = true; st.redesPw = v; } st.redesBajado = false; st.redesPinta = true; render(); window.scrollTo({top:0}); }
       else { err.textContent = "Contraseña incorrecta"; $("#redesPw").select(); } }).catch(()=>{ err.textContent = "No se pudo comprobar"; }); }
   else if (f==="redPerfil"){ e.preventDefault(); const r = redActual(), F = e.target.elements;
     const u = redUser(r, F.u.value), n = F.n.value.trim() || u.replace(/^@/,""), err = $("#redFormErr");
@@ -2751,7 +2774,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v106";
+const VERSION_APP = "prensa-segovia-v107";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
