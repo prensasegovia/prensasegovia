@@ -639,7 +639,11 @@ function mismaNoticia(a, b) {
   // así que si uno tiene pueblo concreto y el otro no es ese mismo pueblo, son sucesos distintos
   if (a.municipio !== b.municipio && (CONCRETO(a.municipio) || CONCRETO(b.municipio)) && [...a.tk, ...b.tk].some(w => SUCESO_TK.has(w))) return false;
   let comunes = 0; for (const w of a.tk) if (b.tk.has(w)) comunes++;
-  if (parecido(a.tk, b.tk) >= 0.55 && comunes >= 3) return true;
+  // Titulares parecidos, pero de días cercanos: en un conflicto largo (huelga de autobuses) los titulares se parecen
+  // durante semanas y lo nuevo no puede acabar dentro de una noticia de hace diez días
+  const lejos = Math.abs(new Date(a.dia) - new Date(b.dia)) / 864e5;
+  if (parecido(a.tk, b.tk) >= 0.55 && comunes >= 3 && (lejos <= 3 || parecido(a.tk, b.tk) >= 0.85)) return true;
+  if (lejos > 6) return false;
   // Mismo incendio o intoxicación el mismo día, aunque un titular hable de desalojos y otro no
   if (Math.abs(new Date(a.dia) - new Date(b.dia)) === 0 && a.tk.has("intox") && b.tk.has("intox") && a.tk.has("incen") && b.tk.has("incen")) return true;
   if (a.titulo && b.titulo && DESARROLLO.test(norm(a.titulo)) !== DESARROLLO.test(norm(b.titulo))) return false;
