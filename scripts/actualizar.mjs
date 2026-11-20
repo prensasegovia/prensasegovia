@@ -52,13 +52,13 @@ const FEEDS = [
   { nombre: "El Español Castilla y León", urls: ["https://www.elespanol.com/rss/castilla-y-leon/"], soloSiMenciona: true },
   { nombre: "HoyCyL", urls: ["https://hoycyl.com/secciones/segovia/feed/", "https://hoycyl.com/feed/"], soloSiMenciona: true },
   // Partidos y sindicatos: solo cuentan movilizaciones, visitas, actos con fecha o noticias de un pueblo
-  { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion" },
-  { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion" },
+  { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion", local: true },
+  { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion", local: true },
   { nombre: "Salvemos la Saleta", urls: ["https://salvemoslasaleta.blogspot.com/feeds/posts/default?alt=rss"], pueblo: "Santa María la Real de Nieva" },
   { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", soloSiMenciona: true },
-  { nombre: "IU Segovia", urls: ["https://iusegovia.es/sg/feed/"], tipo: "organizacion" },
+  { nombre: "IU Segovia", urls: ["https://iusegovia.es/sg/feed/"], tipo: "organizacion", local: true },
   { nombre: "IU Castilla y León", urls: ["https://www.iucyl.es/feed"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "ASAJA Castilla y León", urls: ["https://www.asajacyl.com/feed"], tipo: "organizacion", soloSiMenciona: true },
   // Redes sociales oficiales con canal público (Bluesky): lo que publican aparece aunque la prensa no lo recoja
@@ -537,7 +537,7 @@ const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|
 const INCIDENTE = /colapso|rotura de (la )?presa|riesgo de (rotura|desbordamiento)|desembalse de emergencia|accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 // Campaña de las elecciones del 29N: atención especial a todo lo electoral en la provincia (hasta el 30-nov)
 const EN_CAMPANA = () => fechaMadrid(new Date()) <= "2026-11-30";
-const ELECTORAL_ACTO = /\b(pp|psoe|vox|iu|sumar|podemos)( de segovia)? (apuesta|propone|promete|presenta|visita|se reune|se compromete|llevara|recorre|defiende|traslada|exige|reclama)\b|\b29n\b|ayusomania|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral|\b(pide|piden|pidio|pidieron|pedido|pedir) (el|su) voto\b/;
+const ELECTORAL_ACTO = /\b(pp|psoe|vox|iu|sumar|podemos|frente amplio|izquierda unida)( de segovia)? (apuesta|propone|promete|presenta|visita|se reune|se compromete|llevara|recorre|defiende|traslada|exige|reclama|respalda|apoya|se suma)\b|\b29n\b|ayusomania|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral|\b(pide|piden|pidio|pidieron|pedido|pedir) (el|su) voto\b/;
 // Biogás y biometano: entran siempre (proyectos nuevos, información pública, alegaciones), salvo cursos y jornadas técnicas
 const BIOGAS = /biog|biomet|digestion anaerobia/;
 const BIOGAS_NO = /\bcursos?\b|jornadas? tecnicas?|congreso|\bferia\b|\btaller/;
@@ -604,7 +604,7 @@ const CONCRETO = m => m && !["Segovia", "Provincia", "General"].includes(m);
 // Dos titulares son la misma noticia si se parecen mucho, o si son del mismo pueblo,
 // de días cercanos y comparten al menos 2 palabras significativas (además del nombre del pueblo).
 // Un titular que trae un cambio (se suspende, hay un detenido, fallece...) no se junta con el anterior: es otra noticia
-const DESARROLLO = /suspend|desconvoc|aplaz|cancel|detenid|detien|retien|retenid|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
+const DESARROLLO = /pon\w+ fin|\bfin (de|a) la huelga|acaba la huelga|preacuerdo|firma\w* (el|un) (acuerdo|convenio)|suspend|desconvoc|aplaz|cancel|detenid|detien|retien|retenid|fallec|muere|murio|acuerdo|levanta|finaliza|termina|desalojad|condena|absuel/;
 // Si comparten el enlace de un artículo, son la misma noticia sin duda
 const comparteUrl = (a, b) => (a.medios || []).some(m => (b.medios || []).some(x => x.url === m.url));
 // Nombres propios de un titular (en mayúscula y no al principio), sin lugares ni instituciones
