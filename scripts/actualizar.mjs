@@ -301,14 +301,17 @@ const MUNI_RE = MUNIS.map(([nombre, municipio]) => {
 const PERMITIDOS_ANTES = new Set(["Ayuntamiento","Villa","Comunidad","Tierra","Real","Sitio","Plaza","Colegio","Instituto","Club","Diputación","Alcalde","Alcaldesa","Centro","Hoces","Castillo","Feria","Fiestas","Polígono","Calle","Carretera","Puerto","Estación","Mancomunidad","Partido","Juzgado","Cuartel","Puesto","Municipio","Pueblo","Localidad","Noticias","Vecinos","Segovia","Provincia","Hoy","Ayer"]);
 function municipioDe(texto) {
   let t = " " + texto + " ";
-  const hallados = [];
+  const hallados = [], viales = [];
   for (const { municipio, re, inicio } of MUNI_RE) {
     const m = t.match(re) || (inicio && t.match(inicio)) || (inicio && t.replace(/\(Segovia\)/g, "(segovia)").match(inicio));
     if (m) {
       const antes = t.slice(Math.max(0, m.index + m[0].indexOf(m[1]) - 30), m.index + m[0].indexOf(m[1]));
       const prev = antes.match(/([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)[\s-]+$/u);
       const esApellido = prev && !PERMITIDOS_ANTES.has(prev[1]);
-      if (municipio && !esApellido) hallados.push(municipio);
+      // «Carretera de Villacastín» (o «de Cuéllar a Navalmanzano») es una vía, a menudo una calle de la capital: no dice que pase en ese pueblo
+      const esVia = /\b(carretera|ctra\.?)\s+(del?\s+)?((\S+\s+){0,3}(a|hasta|hacia)\s+)?$/iu.test(antes);
+      if (municipio && !esApellido && !esVia) hallados.push(municipio);
+      if (municipio && esVia) viales.push(municipio);
       t = t.replace(m[1], " ".repeat(m[1].length)); // evita que "Nieva" vuelva a contar dentro de "Santa María la Real de Nieva"
     }
   }
@@ -318,6 +321,7 @@ function municipioDe(texto) {
   if (pueblos.length > 1) return "Provincia";
   if (/\b(un|una|el|la|varios|algunos) (pueblos?|localidad(es)?|municipios?) (de (la provincia de )?segovia|segovian[oa]s?)|provincia de segovia/.test(norm(texto))) return "Provincia";
   if (unicos.includes("Segovia")) return "Segovia";
+  if (viales.length) return "Provincia"; // solo sale una carretera: en la provincia, sin pueblo concreto
   const n = norm(texto);
   if (/\bprovincia\b(?! de (avila|valladolid|soria|burgos|madrid|toledo|leon|salamanca|zamora|palencia|guadalajara|badajoz|caceres|cuenca|teruel|huesca|zaragoza|la rioja|cantabria|asturias|lugo|ourense|pontevedra|a coruna|sevilla|cordoba|jaen|granada|malaga|cadiz|huelva|almeria|murcia|alicante|valencia|castellon|albacete|ciudad real|barcelona|girona|lleida|tarragona|navarra|alava|bizkaia|gipuzkoa|baleares|las palmas|tenerife)\b)|diputacion(?! permanente| (provincial )?de (avila|valladolid|soria|burgos|madrid|toledo|leon|salamanca|zamora|palencia|guadalajara|badajoz|caceres|cuenca|teruel|huesca|zaragoza|la rioja|cantabria|asturias|lugo|ourense|pontevedra|a coruna|sevilla|cordoba|jaen|granada|malaga|cadiz|huelva|almeria|murcia|alicante|valencia|castellon|albacete|ciudad real|barcelona|girona|lleida|tarragona|navarra|alava|bizkaia|gipuzkoa|baleares|las palmas|tenerife)\b)|pueblos de segovia|toda segovia|comarca|nordeste|tierra de pinares|campina segoviana|sierra de ayllon|alcaldes de la zona/.test(n)) return "Provincia";
   return /segovia/.test(n) ? "Segovia" : "General";
@@ -409,6 +413,10 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   if (!categorias.includes("social") && SERVICIO.test(tt) && SERVICIO_MAL.test(tt)) categorias.unshift("social");
   // Energía, macrogranjas, campo, inmigración...: cuentan como conflicto solo si hay rechazo o protesta
   if (!categorias.includes("social") && PATRONES.proyecto.test(t) && CONFLICTO.test(t)) categorias.unshift("social");
+  // Biogás y biometano: siempre interesan, aunque aún no haya rechazo (es lo que suele acabar en plataformas y alegaciones)
+  if (BIOGAS.test(tt) && !categorias.some(c => ["medioambiente", "social"].includes(c))) categorias.push("medioambiente");
+  // Convocatorias en la calle por el 25N, el 8M…
+  if (convocaCalle(tt) && !categorias.includes("social")) categorias.unshift("social");
   const porTexto = !categorias.length;
   if (!categorias.length && !OCIO_TIT.test(tt)) categorias = UTILES.filter(k => k !== "medioambiente" && fuerteEnTexto(k, t) && (k !== "emergencias" || /accidente|herid|fallec|muere|murio|incendio|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe/.test(t))).slice(0, 2);
   if (/minutos? de silencio|guarda silencio|en (el )?recuerdo|homenaje|condolencias|luto/.test(tt)) categorias = categorias.filter(c => c !== "emergencias");
@@ -529,9 +537,25 @@ const PREVENTIVO_EMERG = /preve|prevision|peligro|riesgo|recomendacion|consejos|
 const INCIDENTE = /colapso|rotura de (la )?presa|riesgo de (rotura|desbordamiento)|desembalse de emergencia|accidente|herid|fallec|muere|murio|incendio (en|declarado|forestal en)|calcina|rescat|desaparecid|evacu|colision|atropell|vuelco|explosion|derrumbe|aviso (naranja|rojo)|alerta (naranja|roja)|nevada|inundac/;
 // Campaña de las elecciones del 29N: atención especial a todo lo electoral en la provincia (hasta el 30-nov)
 const EN_CAMPANA = () => fechaMadrid(new Date()) <= "2026-11-30";
-const ELECTORAL_ACTO = /\b(pp|psoe|vox|iu|sumar|podemos)( de segovia)? (apuesta|propone|promete|presenta|visita|se reune|se compromete|llevara|recorre|defiende|traslada|exige|reclama)\b|\b29n\b|ayusomania|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral/;
+const ELECTORAL_ACTO = /\b(pp|psoe|vox|iu|sumar|podemos)( de segovia)? (apuesta|propone|promete|presenta|visita|se reune|se compromete|llevara|recorre|defiende|traslada|exige|reclama)\b|\b29n\b|ayusomania|elecciones|electoral|campana|candidat\w*|cabeza de lista|mitin\w*|\((vox|pp|psoe|sumar|podemos|iu|upl|se|frente amplio|xav)\)|pegada|papeletas|interventor|apoderad|debate|junta electoral|\b(pide|piden|pidio|pidieron|pedido|pedir) (el|su) voto\b/;
+// Biogás y biometano: entran siempre (proyectos nuevos, información pública, alegaciones), salvo cursos y jornadas técnicas
+const BIOGAS = /biog|biomet|digestion anaerobia/;
+const BIOGAS_NO = /\bcursos?\b|jornadas? tecnicas?|congreso|\bferia\b|\btaller/;
+// Convocatorias en la calle por el 25N, el 8M…: entran. Los programas de talleres, charlas o concursos, no
+const DIA_REIVINDICATIVO = /\b(25n|8m)\b|25 de noviembre|8 de marzo|1 de mayo|violencia (de genero|machista)|dia (internacional )?de la mujer/;
+const A_LA_CALLE = /concentra|manifesta|\bmarcha\b|movilizac|convoca|protesta|lectura (de|del) manifiesto|minutos? de silencio|cadena humana|✊/;
+const CALLE_NO = /taller|charla|curso|concurso|microrrelato|exposicion|programa de actividades|\bcine\b|teatro/;
+const convocaCalle = tt => DIA_REIVINDICATIVO.test(tt) && A_LA_CALLE.test(tt) && !CALLE_NO.test(tt);
+// «Carretera de Villacastín»: si el pueblo solo sale como nombre de carretera, no es el sitio de la noticia
+// (corrige también lo que se leyó del cuerpo con la regla vieja y quedó guardado)
+const soloComoCarretera = (texto, muni) => {
+  const t = norm(texto), via = new RegExp("\\b(carretera|ctra\\.?)\\s+(del?\\s+)?" + reEsc(norm(muni)) + "\\b", "g");
+  return via.test(t) && !new RegExp("\\b" + reEsc(norm(muni)) + "\\b").test(t.replace(via, " "));
+};
 function relleno(n) {
   const tt = norm(n.titulo), c = n.categorias;
+  if (BIOGAS.test(tt) && !BIOGAS_NO.test(tt)) return false;
+  if (convocaCalle(tt)) return false;
   // Privatizar o adjudicar el servicio del agua de un pueblo: posible conflicto vecinal, entra
   if (c.includes("medioambiente") && /privatiz|\bagua\b|abastecimiento|depuracion/.test(tt) && /privatiz|adjudica|concesion|gestion (integral )?del/.test(tt)) return false;
   // En campaña: candidatos, dirigentes y actos electorales en la provincia entran (no las estadísticas)
@@ -1010,6 +1034,7 @@ async function main() {
     else if (municipio === "General" && a?.lugar && a.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(g.titulo)) && !FUERA.test(norm(g.titulo)) && !INTERNACIONAL.test(norm(g.titulo)) && !regionalTit((g.titulo))) municipio = NACIONAL_FIG.test(norm(g.titulo)) ? nacionalLugar(g.titulo, resumen) : a.lugar;
     // «en un pueblo de Segovia», «una localidad segoviana»: el pueblo lo dice el texto
     else if (municipio === "Provincia" && CONCRETO(a?.lugar) && UN_PUEBLO.test(norm(g.titulo))) municipio = a.lugar;
+    if (CONCRETO(municipio) && soloComoCarretera(g.titulo + " " + resumen, municipio)) municipio = "Provincia";
     municipio = fueraDeProvincia(g.titulo, municipio);
     if (CONCRETO(municipio) && NACIONAL_FIG.test(norm(g.titulo)) && municipioDe(g.titulo) === "General") municipio = nacionalLugar(g.titulo, resumen);
     if (municipio === "General" && g.local && !FUERA.test(norm(g.titulo)) && !(INTERNACIONAL.test(norm(g.titulo)) && !MENCIONA_SEGOVIA.test(norm(g.titulo))) && !NACIONAL_TREN(norm(g.titulo)) && !(OTRA_CIUDAD.test(norm(g.titulo + " " + resumen)) && !MENCIONA_SEGOVIA.test(norm(g.titulo + " " + resumen)))) municipio = "Segovia"; // sección local de un medio de Segovia
@@ -1102,6 +1127,7 @@ async function main() {
       else if (nuevo === "General" && ELECTORAL_PROV.test(norm(n.titulo))) nuevo = nacionalLugar(n.titulo, n.resumen);
       else if (nuevo === "General" && n.analisis?.lugar && n.analisis.lugar !== "Provincia" && !OTRA_CIUDAD.test(norm(n.titulo)) && !FUERA.test(norm(n.titulo)) && !INTERNACIONAL.test(norm(n.titulo)) && !regionalTit((n.titulo))) nuevo = NACIONAL_FIG.test(norm(n.titulo)) ? nacionalLugar(n.titulo, n.resumen) : n.analisis.lugar;
       else if (nuevo === "Provincia" && CONCRETO(n.analisis?.lugar) && UN_PUEBLO.test(norm(n.titulo))) nuevo = n.analisis.lugar;
+      if (CONCRETO(nuevo) && soloComoCarretera(n.titulo + " " + (n.resumen || ""), nuevo)) nuevo = "Provincia";
       n.municipio = nuevo;
       n.municipio = fueraDeProvincia(n.titulo, n.municipio);
       if (CONCRETO(n.municipio) && NACIONAL_FIG.test(norm(n.titulo)) && municipioDe(n.titulo) === "General") n.municipio = nacionalLugar(n.titulo, n.resumen);
