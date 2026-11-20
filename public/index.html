@@ -1034,6 +1034,7 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
   #guia .gpuntos i.on{width:26px}
   #guia .gbtn{font-size:17px;padding:13px 24px}
 }
+
 /* Parte del día: el mismo parte de siempre (una línea por noticia), con el aspecto de un documento */
 .parte.pd{white-space:normal;padding:0;overflow:hidden;font-size:15px;line-height:1.4}
 .pd-h{padding:16px 18px 14px;background:var(--pine);color:#fff}
@@ -1061,6 +1062,91 @@ mark{background:#FFE58A;color:#1b1b1b;border-radius:3px;padding:0 2px}
 .pd-s .nada{padding:6px 0 10px;color:var(--muted)}
 .pd-s.alta li a{border-left:3px solid var(--alta);padding-left:10px}
 body.ancho #app .feed.parte-wrap > .parte.pd{max-width:820px}
+/* Redes (zona privada) — EN PRUEBAS, pensada primero para pantalla grande. Una columna por perfil con su contenido real */
+.rlock{max-width:420px;margin:28px auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
+@media(max-width:460px){.rlock{margin:18px 14px}}
+.rlock .ico{width:54px;height:54px;border-radius:16px;background:var(--pine);color:#fff;display:grid;place-items:center;margin:0 auto 10px}
+.rlock h3{margin:0 0 4px;font-size:19px}
+.rlock p{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+.rlock .rz-conf{flex-wrap:wrap;font-weight:500}
+.rlock input{width:100%;box-sizing:border-box;height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--stone);color:var(--ink);font-size:16px;padding:0 14px;margin-bottom:10px}
+.rlock .btn{width:100%}
+.rlock .err{color:var(--alta);font-size:13.5px;min-height:18px;margin:-4px 0 6px}
+.rk{flex:none;display:block;width:20px;height:20px;object-fit:contain}
+.rk.x{border-radius:22%;box-shadow:0 0 0 1px var(--line)}
+.rk.lg{width:32px;height:32px}
+.rz{padding:16px 16px 56px;--ac:var(--pine);--ac-t:var(--pine-2);--ac-ink:#fff}
+.rz[data-red="ig"]{--ac:#D6336C;--ac-t:#C2255C}
+.rz[data-red="fb"]{--ac:#1877F2;--ac-t:#1565D8}
+.rz[data-red="x"]{--ac:var(--ink);--ac-t:var(--ink);--ac-ink:var(--stone)}
+:root[data-theme="dark"] .rz[data-red="ig"]{--ac-t:#F783AC}
+:root[data-theme="dark"] .rz[data-red="fb"]{--ac-t:#74A9FF}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .rz[data-red="ig"]{--ac-t:#F783AC} :root:not([data-theme="light"]) .rz[data-red="fb"]{--ac-t:#74A9FF} }
+.rz-demo{border:1px dashed var(--line);border-radius:12px;padding:8px 12px;margin:0 0 14px;color:var(--muted);font-size:13px}
+.rz-demo b{color:var(--ink)}
+.rz-link{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--pine-2);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.rz-tabs{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+.rz-tile{display:flex;align-items:center;gap:11px;text-align:left;min-width:210px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:9px 16px 9px 12px;cursor:pointer;color:var(--ink);font:inherit;transition:border-color .12s,background .12s}
+.rz-tile:hover{border-color:var(--tc)}
+.rz-tile[aria-selected="true"]{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 9%,var(--surface));box-shadow:inset 0 -3px 0 var(--tc)}
+.rz-tile .t{display:flex;flex-direction:column;min-width:0}
+.rz-tile b{font-size:16px;line-height:1.2}
+.rz-tile .s{color:var(--muted);font-size:12.5px}
+.rz-out{margin-left:auto;align-self:center;font-size:13.5px;color:var(--muted);font-weight:500}
+@media(max-width:700px){.rz-tile{min-width:0;flex:1 1 140px}.rz-out{margin:0}}
+.rz-bar{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.rz-chips{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
+.rz .rz-chips .chip[aria-pressed="true"]{background:var(--ac)!important;border-color:var(--ac)!important;color:var(--ac-ink)!important}
+.rz .rz-chips .chip[aria-pressed="true"] .c{color:inherit!important;opacity:.8}
+.rz-add{flex:none;display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 15px;border-radius:999px;border:0;background:var(--ac);color:var(--ac-ink);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+.rz-form{display:grid;gap:12px 14px;grid-template-columns:minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.rz-form[hidden]{display:none}
+@media(min-width:900px){.rz-form{grid-template-columns:1.3fr 1.1fr 1fr}}
+.rz-form h3{grid-column:1/-1;margin:0;font-size:16.5px}
+.rz-form label{display:flex;flex-direction:column;gap:5px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.rz-form input[type=text],.rz-form select{height:44px;border-radius:11px;border:1.5px solid var(--line);background:var(--stone);color:var(--ink);font:inherit;font-size:15.5px;padding:0 12px;min-width:0}
+.rz-form .fa{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rz-form .fa .btn:not(.ghost){background:var(--ac);color:var(--ac-ink)}
+.rz-form .err{color:var(--alta);font-size:13.5px}
+.rz-nota{font-size:13.5px;color:var(--muted);margin:0 2px 14px}
+.rz-ic{flex:none;width:30px;height:30px;border-radius:50%;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;text-decoration:none;font-size:16px}
+.rz-ic:hover{background:var(--stone);color:var(--ink)}
+.rz-ic.del:hover{color:var(--alta)}
+.rz-conf{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;flex:none}
+.rz-conf button{height:32px;padding:0 11px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.rz-conf button.si{background:var(--alta);border-color:var(--alta);color:#fff}
+.rz-vacio{grid-column:1/-1;border:1px dashed var(--line);border-radius:16px;padding:34px 22px;text-align:center;color:var(--muted);font-size:14.5px}
+.rz-vacio b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+.rz-avt{flex:none;width:36px;height:36px;border-radius:50%;background:var(--stone);border:1px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:12px;color:var(--muted)}
+/* Una columna por perfil */
+.rz-deck{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,328px),340px));align-items:start}
+.rz-col{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:14px;overflow:hidden;max-width:540px;width:100%}
+.rz-col header{display:flex;align-items:center;gap:9px;padding:8px 6px 8px 10px;border-bottom:1px solid var(--line);min-height:54px;box-sizing:border-box}
+.rz-edit{display:grid;grid-template-columns:minmax(0,1fr) 32px 32px;gap:6px 2px;align-items:center;width:100%}
+.rz-edit input,.rz-edit select{height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--stone);color:var(--ink);font:inherit;font-size:14px;padding:0 9px;min-width:0}
+.rz-edit select{grid-column:1;grid-row:2}
+.rz-edit .ok{color:var(--ac-t)}
+.rz-edit .ft{grid-column:1/-1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rz-edit .ft small{color:var(--muted);font-size:12px}
+.rz-fb{display:inline-flex;align-items:center;height:30px;padding:0 11px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.rz-fb:hover{border-color:var(--ac)}
+img.rz-avt{object-fit:cover;padding:0}
+.rz-ic.bell[aria-pressed="true"]{background:var(--ac);color:var(--ac-ink)}
+.rz-form .chk{flex-direction:row;align-items:center;gap:8px;font-weight:500;color:var(--ink);font-size:14.5px;grid-column:1/-1}
+.rz-form .chk input{width:18px;height:18px;accent-color:var(--ac)}
+.rz-col header .i{flex:1;min-width:0}
+.rz-col header b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rz-col header .i span{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rz-col .acts{display:flex;align-items:center;flex:none}
+.rz-emb{position:relative;min-height:180px;max-height:440px;overflow:auto;scrollbar-width:thin;display:flex;flex-direction:column}
+.rz-emb > iframe,.rz-emb .instagram-media{position:relative;z-index:1}
+.rz-emb[data-r="fb"]{background:#fff;min-height:440px;overflow:hidden}
+.rz-emb[data-r="x"]{min-height:240px}
+.rz-emb[data-r="ig"]{background:#fff}
+.rz-fallo{display:block;margin:auto 0;padding:28px 18px;text-align:center;font-size:13.5px;line-height:1.45;color:var(--muted);text-decoration:none}
+.rz-fallo b{display:block;color:var(--ac-t);font-size:14.5px;margin-top:6px}
+.rz-emb[data-r="fb"] .rz-fallo{position:absolute;inset:0;z-index:0;display:flex;flex-direction:column;justify-content:center;color:#65676b}
+.rz-emb[data-r="ig"] .rz-fallo{color:#65676b}
 </style>
 </head>
 <body>
@@ -1082,6 +1168,7 @@ body.ancho #app .feed.parte-wrap > .parte.pd{max-width:820px}
     <button class="side-btn" data-side="filtros" type="button" title="Filtros y ajustes" aria-label="Filtros y ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Filtros y ajustes</span></button>
     <button class="side-btn" data-side="avisos" type="button" title="Avisos" aria-label="Avisos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16z"/><path d="M10 21h4"/></svg><span>Avisos</span></button>
     <button class="side-btn" data-side="medios" type="button" title="Medios y fuentes" aria-label="Medios y fuentes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h5"/></svg><span>Medios y fuentes</span></button>
+    <button class="side-btn" data-side="redes" type="button" title="Redes (zona privada)" aria-label="Redes, zona privada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.6"/><circle cx="17.5" cy="5.5" r="2.6"/><circle cx="17.5" cy="18.5" r="2.6"/><path d="M8.3 10.7l6.9-3.9M8.3 13.3l6.9 3.9"/></svg><span>Redes</span></button>
     <div class="side-foot" id="sideFoot"></div>
   </div>
 </nav>
@@ -1530,7 +1617,7 @@ function viewNoticias(news){
     h += `<div class="uptodate"><span>${I.check}Estás al día: nada nuevo</span></div>`;
   }
   h += porDias(vistas, nuevasTodas.length ? " · ya visto" : "");
-  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button></p>`;
+  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button> · <button type="button" data-act="redes">Redes</button></p>`;
 }
 function porDias(list, extra="", opts={}){
   const by = {}; for (const n of list) (by[n._dia] ||= []).push(n);
@@ -1626,6 +1713,191 @@ const INI_ELECCIONES = "2026-11-01"; // todo lo de la precampaña y campaña, si
 const elecNoticias = news => news.filter(n=>n._dia >= INI_ELECCIONES && esElectoral(n)).sort(porHora);
 function elecPeriodicos(news){
   return periodicosNews().filter(n=>n._dia >= INI_ELECCIONES && n.municipio && n.municipio!=="General" && esElectoral(n) && !n._int).sort(porHora);
+}
+
+/* ===== Redes sociales (zona privada) — EN PRUEBAS.
+   Cada perfil se muestra con el incrustado oficial de su red (Instagram, Facebook, X): el contenido real lo sirve la
+   propia red en el navegador de quien mira; aquí no se copia ni se guarda nada. La lista de perfiles se guarda,
+   de momento, solo en este navegador, y la contraseña es de muestra. ===== */
+const REDES = {
+  ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Ficha de cada perfil con su foto y sus últimas publicaciones, tal como la sirve Instagram. Solo funciona con cuentas públicas: si sale «es posible que el enlace al perfil no funcione», la cuenta es privada o no permite mostrarse fuera de Instagram. La foto de cada perfil no se puede traer sola desde Instagram: ponla con el lápiz (en Instagram, botón derecho sobre su foto → «Copiar imagen», y aquí Ctrl+V)."},
+  fb:{n:"Facebook", c:"#1877F2", nota:"Últimas publicaciones de cada página, servidas por Facebook. Solo funciona con páginas públicas, no con perfiles personales."},
+  x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil, servidos por X. X solo los enseña si tienes tu sesión de X abierta en este mismo navegador."}
+};
+const REDES_GRUPOS = ["Partidos y candidatos","Sindicatos","Organizaciones agrarias","Plataformas y asociaciones","Ayuntamientos","Otros"];
+const RI = {
+  bell:`<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>`,
+  edit:`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+  ok:`<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`,
+  del:`<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>`,
+  mas:`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`,
+  lock:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`
+};
+const redKey = (r, t="") => `<img class="rk ${r} ${t}" src="redes/${r}.png" alt="${REDES[r].n}" width="20" height="20">`;
+const redUrl = (r,u) => r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : "https://x.com/"+u.replace(/^@/,"");
+// Acepta «@usuario», «usuario» o el enlace pegado tal cual
+const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1];
+  const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
+  return /^[\w.\-]{1,80}$/.test(x) ? (r==="fb" ? x : "@"+x) : ""; };
+const iniciales = n => n.replace(/[·|].*$/,"").replace(/^@/,"").split(/[\s._-]+/).filter(w=>/^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w) && !/^(de|del|la|el|los|las|y)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join("") || "?";
+const redActual = () => REDES[st.redRed] ? st.redRed : "ig";
+const redHuella = async (sal, pw) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(sal + "|" + pw))), x=>x.toString(16).padStart(2,"0")).join("");
+function redesAbierto(){ try{ return sessionStorage.getItem("redesOk")==="1"; }catch(e){ return !!st.redesOk; } }
+const redesData = () => { if (!st.redesD){ let d = store.get("redesPerfiles", null);
+    if (!d) d = (store.get("redesDemo", []) || []).filter(p=>/^u/.test(p.id) && REDES[p.r]).map(({id,r,g,n,u,av})=>({id,r,g,n,u,av:!!av})); // lo que se añadió a mano en la maqueta anterior
+    st.redesD = d; } return st.redesD; };
+const redesSave = () => store.set("redesPerfiles", st.redesD);
+const temaOscuro = () => { const t = document.documentElement.dataset.theme; return t ? t==="dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+const cargaScript = (id, src) => new Promise(res=>{ let s = document.getElementById(id);
+  if (s){ if (s.dataset.ok) res(); else s.addEventListener("load", ()=>res()); return; }
+  s = document.createElement("script"); s.id = id; s.async = true; s.src = src; s.onload = ()=>{ s.dataset.ok = "1"; res(); }; s.onerror = ()=>res(); document.head.appendChild(s); });
+/* Incrustado oficial de cada red. Si la red (o un bloqueador de anuncios) no lo deja cargar, queda el enlace para abrirlo fuera */
+function redIncrusta(el){
+  const r = el.dataset.r, u = el.dataset.u, url = redUrl(r,u), R = REDES[r];
+  const fallo = `<a class="rz-fallo" href="${esc(url)}" target="_blank" rel="noopener">Cargando lo último de ${esc(u)}…<br>Si no aparece, desactiva el bloqueador de anuncios en esta web.<b>Abrir en ${R.n} ↗</b></a>`;
+  if (r==="ig"){
+    el.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${esc(url)}?utm_source=ig_embed" data-instgrm-version="14" style="margin:0;width:100%;min-width:0;max-width:none;border:0;background:transparent">${fallo}</blockquote>`;
+    cargaScript("igEmbed", "https://www.instagram.com/embed.js").then(()=>{ try{ window.instgrm.Embeds.process(); }catch(e){} });
+  } else if (r==="fb"){
+    const w = Math.max(280, Math.min(500, Math.floor(el.clientWidth) || 380));
+    el.innerHTML = fallo + `<iframe title="Publicaciones de ${esc(u)} en Facebook" loading="lazy" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(url)}&tabs=timeline&width=${w}&height=440&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_ES" width="${w}" height="440" style="border:0;overflow:hidden;display:block;margin:0 auto" scrolling="no" frameborder="0" allow="encrypted-media; picture-in-picture; web-share"></iframe>`;
+  } else {
+    el.innerHTML = `<a class="twitter-timeline rz-fallo" data-height="440" data-theme="${temaOscuro()?"dark":"light"}" data-chrome="noheader nofooter transparent" data-lang="es" data-dnt="true" href="https://twitter.com/${encodeURIComponent(u.replace(/^@/,""))}">Cargando los tuits de ${esc(u)}…<br>Solo se ven con tu sesión de X abierta en este navegador y sin bloqueador de anuncios.<b>Abrir en X ↗</b></a>`;
+    cargaScript("xWidgets", "https://platform.twitter.com/widgets.js").then(()=>{ try{ window.twttr.widgets.load(el); }catch(e){} });
+  }
+}
+let redObs = null;
+function redesObserva(){ // cada columna se carga cuando está a punto de verse, no todas de golpe
+  if (redObs) redObs.disconnect();
+  redFotosPide();
+  const els = document.querySelectorAll(".rz-emb[data-r]:not([data-ok])"); if (!els.length) return;
+  redObs = new IntersectionObserver(es=>es.forEach(e=>{ if (e.isIntersecting){ redObs.unobserve(e.target); e.target.dataset.ok = "1"; redIncrusta(e.target); } }), {rootMargin:"500px"});
+  els.forEach(el=>redObs.observe(el));
+}
+const redActs = p => (REDES[p.r].av ? `<button class="rz-ic bell" data-act="redAv" data-id="${esc(p.id)}" aria-pressed="${!!p.av}" title="${p.av?"Aviso pedido: quitar":"Avisarme cuando publique"}" aria-label="Avisos de ${esc(p.n)}">${RI.bell}</button>` : "")
+  + `<button class="rz-ic" data-act="redEdita" data-id="${esc(p.id)}" title="Cambiar nombre, grupo o foto" aria-label="Editar ${esc(p.n)}">${RI.edit}</button><a class="rz-ic" href="${esc(redUrl(p.r,p.u))}" target="_blank" rel="noopener" title="Abrir en ${REDES[p.r].n}" aria-label="Abrir en ${REDES[p.r].n}">↗</a><button class="rz-ic del" data-act="redBorra" data-id="${esc(p.id)}" title="Quitar perfil" aria-label="Quitar ${esc(p.n)}">${RI.del}</button>`;
+// Foto del perfil: la que se haya puesto a mano; si no, la que se trae sola (X y Facebook); si no, las iniciales
+const redAvt = p => (p.f || p.fa) ? `<img class="rz-avt" src="${esc(p.f || p.fa)}" alt="">` : `<span class="rz-avt">${esc(iniciales(p.n))}</span>`;
+/* Foto automática: unavatar.io da gratis la foto de perfil de X y de páginas de Facebook (25 consultas al día por conexión;
+   lo que ya tiene en su caché no cuenta). Se trae una sola vez, se recorta a 96 px y se guarda con el perfil en este navegador;
+   se renueva cada 30 días. Si falla (no existe, sin foto o tope del día), quedan las iniciales y se reintenta al día siguiente.
+   Instagram no: unavatar solo lo da en su plan de pago, y desde el navegador Instagram no deja leerla. */
+const RED_FOTO = {fb:"facebook", x:"x"};
+const redFotoCola = new Set(); let redFotoVa = false;
+function redFotosPide(){
+  if (st.redFotoTope || !redesAbierto()) return;
+  const ahora = Date.now();
+  for (const p of redesData()) if (RED_FOTO[p.r] && !p.f && (!p.fa || ahora - (p.fad||0) > 30*864e5) && !(p.fz && ahora - p.fz < 864e5)) redFotoCola.add(p.id);
+  redFotoSigue();
+}
+async function redFotoTrae(p){
+  const r = await fetch(`https://unavatar.io/${RED_FOTO[p.r]}/${encodeURIComponent(p.u.replace(/^@/,""))}?fallback=false`, {referrerPolicy:"no-referrer"});
+  if (!r.ok) throw new Error(String(r.status));
+  const b = await r.blob(); if (!/^image\//.test(b.type)) throw new Error("no es imagen");
+  const im = await createImageBitmap(b), m = Math.min(im.width, im.height), c = document.createElement("canvas"); c.width = c.height = 96;
+  c.getContext("2d").drawImage(im, (im.width-m)/2, (im.height-m)/2, m, m, 0, 0, 96, 96);
+  return c.toDataURL("image/jpeg", .85);
+}
+async function redFotoSigue(){
+  if (redFotoVa) return; redFotoVa = true;
+  for (const id of redFotoCola){ redFotoCola.delete(id); // de una en una, para no gastar el cupo de golpe
+    const p = redesData().find(q=>q.id===id); if (!p || p.f) continue;
+    try{ p.fa = await redFotoTrae(p); p.fad = Date.now(); delete p.fz; }
+    catch(e){ p.fz = Date.now(); if (e.message==="429"){ st.redFotoTope = true; redFotoCola.clear(); } }
+    redesSave();
+    document.querySelectorAll(`.rz-col[data-id="${CSS.escape(id)}"] .rz-avt`).forEach(el=>{ el.outerHTML = redAvt(p); });
+  }
+  redFotoVa = false;
+}
+function redFoto(file, id){
+  if (!file || !/^image\//.test(file.type)){ aviso("Eso no es una imagen"); return; }
+  const img = new Image(), url = URL.createObjectURL(file);
+  img.onload = ()=>{ const c = document.createElement("canvas"); c.width = c.height = 96; const m = Math.min(img.width, img.height); // recorte cuadrado centrado, 96 px
+    c.getContext("2d").drawImage(img, (img.width-m)/2, (img.height-m)/2, m, m, 0, 0, 96, 96); URL.revokeObjectURL(url);
+    const p = redesData().find(q=>q.id===id); if (!p) return; p.f = c.toDataURL("image/jpeg", .85); redesSave();
+    const pv = document.querySelector(`.rz-col[data-id="${CSS.escape(id)}"] .rz-edit .pv`); if (pv) pv.innerHTML = redAvt(p); aviso("Foto puesta"); };
+  img.onerror = ()=>{ URL.revokeObjectURL(url); aviso("No se pudo leer la imagen"); }; img.src = url;
+}
+document.addEventListener("change", e=>{ const i = e.target; if (i.matches && i.matches(".rz-edit input[type=file]")) redFoto(i.files[0], i.closest("form").dataset.id); });
+document.addEventListener("paste", e=>{ const f = document.querySelector(".rz-edit"); if (!f) return; // con un perfil en edición, pegar una imagen la pone de foto
+  const it = [...((e.clipboardData && e.clipboardData.items) || [])].find(x=>x.type.startsWith("image/")); if (it){ e.preventDefault(); redFoto(it.getAsFile(), f.dataset.id); } });
+const redCab = p => `${redAvt(p)}<div class="i"><b>${esc(p.n)}</b><span>${esc(p.u)} · ${esc(p.g)}</span></div><span class="acts">${redActs(p)}</span>`;
+const redChips = (L, grp) => { const grupos = REDES_GRUPOS.filter(g=>L.some(p=>p.g===g));
+  return grupos.length > 1 ? ["todos",...grupos].map(g=>`<button class="chip" data-act="redGrupo" data-v="${esc(g)}" aria-pressed="${grp===g}">${g==="todos"?"Todos":esc(g)} <span class="c">${g==="todos"?L.length:L.filter(p=>p.g===g).length}</span></button>`).join("") : ""; };
+function viewRedes(){
+  const hero = `<section class="subhero"><h1>Redes</h1><p>Perfiles de interés · acceso restringido</p></section>`;
+  // La contraseña se crea en cada dispositivo la primera vez (se guarda solo su huella, no la contraseña) y protege la lista guardada en él
+  if (!redesAbierto()){ const hay = !!store.get("redesClave", null);
+    return hero + `<div class="rlock"><div class="ico">${RI.lock}</div>
+    <h3>Zona privada</h3><p>${hay ? "Escribe tu contraseña para ver los perfiles." : "Crea una contraseña para esta zona en este dispositivo. Tu lista de perfiles se guarda solo aquí."}</p>
+    <form data-form="redes"><input id="redesPw" type="password" autocomplete="${hay?"current-password":"new-password"}" placeholder="${hay?"Contraseña":"Contraseña nueva (mínimo 6)"}" aria-label="Contraseña">${hay ? "" : `<input id="redesPw2" type="password" autocomplete="new-password" placeholder="Repítela" aria-label="Repite la contraseña">`}<div class="err" id="redesErr"></div><button class="btn" type="submit">${hay?"Entrar":"Crear y entrar"}</button></form>
+    ${hay ? `<p style="margin:12px 0 0;font-size:12.5px"><button class="rz-link" data-act="redOlvido" type="button">He olvidado la contraseña</button></p>` : ""}</div>`; }
+  const P = redesData(), red = redActual(), R = REDES[red];
+  const de = r => P.filter(p=>p.r===r);
+  const L = de(red), grp = st.redGrupo || "todos";
+  const grupos = REDES_GRUPOS.filter(g=>L.some(p=>p.g===g));
+  const LF = L.filter(p=>grp==="todos" || p.g===grp);
+  const que = red==="fb" ? "página" : "perfil";
+  let h = hero + `<div class="rz" data-red="${red}"><div class="rz-demo"><b>En desarrollo.</b> Lo que se ve en cada columna lo sirve cada red. La lista de perfiles y la contraseña se guardan solo en este dispositivo.</div>`;
+  h += `<div class="rz-tabs" role="tablist" aria-label="Redes">` + Object.keys(REDES).map(r=>`<button class="rz-tile" role="tab" data-act="redRed" data-v="${r}" aria-selected="${r===red}" style="--tc:${REDES[r].c}">${redKey(r,"lg")}<span class="t"><b>${REDES[r].n}</b><span class="s">${plural(de(r).length, r==="fb"?"página":"perfil", r==="fb"?"páginas":"perfiles")}</span></span></button>`).join("")
+    + `<button class="rz-link rz-out" data-act="redCerrar">Cerrar zona privada</button></div>`;
+  h += `<div class="rz-bar"><div class="rz-chips">${redChips(L, grp)}</div><button class="rz-add" data-act="redNuevo">${RI.mas} Añadir ${que}</button></div>`;
+  h += `<form class="rz-form" data-form="redPerfil" hidden><h3>${red==="fb"?"Nueva página":"Nuevo perfil"} de ${R.n}</h3>
+    <label>Enlace o usuario<input type="text" name="u" id="redU" maxlength="200" autocomplete="off" placeholder="${red==="fb"?"https://www.facebook.com/nombre.de.la.pagina":red==="ig"?"https://www.instagram.com/usuario o @usuario":"https://x.com/usuario o @usuario"}"></label>
+    <label>Nombre (opcional)<input type="text" name="n" maxlength="60" autocomplete="off" placeholder="Cómo quieres que aparezca"></label>
+    <label>Grupo<select name="g">${REDES_GRUPOS.map(g=>`<option${g===(grp!=="todos"?grp:"Otros")?" selected":""}>${esc(g)}</option>`).join("")}</select></label>
+    ${R.av ? `<label class="chk"><input type="checkbox" name="av"> Avisarme cuando publique</label>` : ""}
+    <div class="fa"><button class="btn" type="submit">Añadir</button><button class="btn ghost" type="button" data-act="redNuevo">Cancelar</button><span class="err" id="redFormErr"></span></div></form>`;
+  if (L.length) h += `<p class="rz-nota">${R.nota}</p>`;
+  h += `<div class="rz-deck">` + (LF.length ? LF.map(p=>`<section class="rz-col" data-id="${esc(p.id)}"><header>${redCab(p)}</header><div class="rz-emb" data-r="${p.r}" data-u="${esc(p.u)}"></div></section>`).join("")
+    : `<div class="rz-vacio"><b>${L.length ? "Nada en este grupo" : `Todavía no hay ${red==="fb"?"páginas":"perfiles"} de ${R.n}`}</b>${L.length ? "Elige otro grupo o añade uno nuevo." : `Pulsa «Añadir ${que}» y pega el enlace: aparecerá aquí con su foto y lo último que haya publicado.`}</div>`) + `</div>`;
+  return h + `</div>`;
+}
+document.addEventListener("submit", e=>{ const f = e.target.dataset.form;
+  if (f==="redes"){ e.preventDefault();
+    const v = ($("#redesPw")||{}).value||"", err = $("#redesErr"), clave = store.get("redesClave", null);
+    const dentro = ()=>{ try{ sessionStorage.setItem("redesOk","1"); }catch(_){ st.redesOk = true; } st.redesPinta = true; render(); window.scrollTo({top:0}); };
+    if (!v){ err.textContent = "Escribe la contraseña"; return; }
+    if (!clave){
+      if (v.length < 6){ err.textContent = "Mínimo 6 caracteres"; return; }
+      if (v !== (($("#redesPw2")||{}).value||"")){ err.textContent = "Las dos contraseñas no coinciden"; return; }
+      const sal = Array.from(crypto.getRandomValues(new Uint8Array(16)), x=>x.toString(16).padStart(2,"0")).join("");
+      redHuella(sal, v).then(h=>{ store.set("redesClave", {s:sal, h}); dentro(); }).catch(()=>{ err.textContent = "Este navegador no permite crear la contraseña"; });
+    } else redHuella(clave.s, v).then(h=>{ if (h===clave.h) dentro(); else { err.textContent = "Contraseña incorrecta"; $("#redesPw").select(); } }).catch(()=>{ err.textContent = "No se pudo comprobar"; }); }
+  else if (f==="redPerfil"){ e.preventDefault(); const r = redActual(), F = e.target.elements;
+    const u = redUser(r, F.u.value), n = F.n.value.trim() || u.replace(/^@/,""), err = $("#redFormErr");
+    if (!u){ err.textContent = F.u.value.trim() ? "No reconozco ese enlace o usuario" : "Pega el enlace o escribe el usuario"; F.u.focus(); return; }
+    if (redesData().some(p=>p.r===r && p.u.toLowerCase()===u.toLowerCase())){ err.textContent = "Ya está en la lista"; return; }
+    redesData().unshift({id:"u"+Date.now(), r, g:F.g.value, n, u, av: !!(F.av && F.av.checked)}); redesSave();
+    st.redGrupo = "todos"; st.redesPinta = true; render(true); aviso("Añadido"); }
+  else if (f==="redEdita"){ e.preventDefault(); const p = redesData().find(q=>q.id===e.target.dataset.id), F = e.target.elements; if (!p) return;
+    p.n = F.n.value.trim() || p.u.replace(/^@/,""); p.g = F.g.value; redesSave();
+    const grp = st.redGrupo || "todos";
+    if (grp!=="todos" && p.g!==grp){ st.redesPinta = true; render(true); } // ya no es de este grupo: sale de la vista
+    else { e.target.closest("header").innerHTML = redCab(p); const c = document.querySelector(".rz-chips"); if (c) c.innerHTML = redChips(redesData().filter(q=>q.r===p.r), grp); }
+    aviso("Guardado"); }
+});
+function redesAccion(act, b){
+  const P = redesData(), p = P.find(q=>q.id===b.dataset.id);
+  const pinta = keep => { st.redesPinta = true; render(keep); };
+  if (act==="redRed"){ if (b.dataset.v===redActual()) return; st.redRed = b.dataset.v; st.redGrupo = "todos"; pinta(); window.scrollTo({top:0}); }
+  else if (act==="redGrupo"){ st.redGrupo = b.dataset.v; pinta(true); }
+  else if (act==="redNuevo"){ const f = document.querySelector('form[data-form="redPerfil"]'); if (!f) return; f.hidden = !f.hidden; $("#redFormErr").textContent = ""; if (!f.hidden) setTimeout(()=>$("#redU")?.focus(), 30); }
+  // Quitar: la confirmación se pinta solo en esa columna, sin recargar las demás
+  else if (act==="redBorra" && p){ b.closest(".acts").innerHTML = `<span class="rz-conf">¿Quitar? <button class="si" data-act="redBorraSi" data-id="${esc(p.id)}">Sí</button><button data-act="redBorraNo" data-id="${esc(p.id)}">No</button></span>`; }
+  else if (act==="redBorraNo" && p){ b.closest(".acts").innerHTML = redActs(p); }
+  // Avisos: se guarda la preferencia; empezarán a llegar cuando la red esté conectada por su API
+  else if (act==="redAv" && p){ p.av = !p.av; redesSave(); b.closest(".acts").innerHTML = redActs(p); aviso(p.av ? `Marcado. Activa también la campana de este perfil en ${REDES[p.r].n}` : "Marca quitada"); }
+  // Contraseña olvidada: no se puede recuperar; se borra junto con la lista de este dispositivo (pide confirmación)
+  else if (act==="redOlvido"){ b.outerHTML = `<span class="rz-conf" style="justify-content:center">Se borrará la lista de este dispositivo. <button class="si" data-act="redOlvidoSi" type="button">Borrar y empezar</button></span>`; }
+  else if (act==="redOlvidoSi"){ store.set("redesClave", null); st.redesD = []; redesSave(); st.redesPinta = true; render(); }
+  else if (act==="redEdita" && p){ const hd = b.closest("header");
+    hd.innerHTML = `<form class="rz-edit" data-form="redEdita" data-id="${esc(p.id)}"><input type="text" name="n" maxlength="60" value="${esc(p.n)}" aria-label="Nombre"><select name="g" aria-label="Grupo">${REDES_GRUPOS.map(g=>`<option${g===p.g?" selected":""}>${esc(g)}</option>`).join("")}</select><button class="rz-ic ok" type="submit" title="Guardar" aria-label="Guardar">${RI.ok}</button><button class="rz-ic" type="button" data-act="redEditaNo" data-id="${esc(p.id)}" title="Cancelar" aria-label="Cancelar">✕</button><div class="ft"><span class="pv">${redAvt(p)}</span><label class="rz-fb"><input type="file" accept="image/*" hidden>Poner foto</label>${p.f?`<button type="button" class="rz-fb" data-act="redFotoNo" data-id="${esc(p.id)}">Quitar</button>`:""}<small>o pégala con Ctrl+V</small></div></form>`;
+    hd.querySelector("input").focus(); }
+  else if (act==="redEditaNo" && p){ b.closest("header").innerHTML = redCab(p); }
+  else if (act==="redFotoNo" && p){ delete p.f; delete p.fz; redesSave(); const pv = b.closest(".ft").querySelector(".pv"); if (pv) pv.innerHTML = redAvt(p); b.remove(); redFotosPide(); }
+  else if (act==="redBorraSi" && p){ st.redesD = P.filter(q=>q!==p); redesSave(); pinta(true); aviso("Quitado"); }
+  else if (act==="redCerrar"){ try{ sessionStorage.removeItem("redesOk"); }catch(_){} st.redesOk = false; pinta(); window.scrollTo({top:0}); }
 }
 function viewElecciones(news){
   const list = elecNoticias(news), per = elecPeriodicos(news);
@@ -1806,7 +2078,7 @@ function viewMedios(){
 function appbar(){
   const bar = $("#appbar");
   if (st.sub){
-    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="elec" ? "Elecciones 29N" : st.sub.t==="parte" ? "Parte del día" : "Medios";
+    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="elec" ? "Elecciones 29N" : st.sub.t==="parte" ? "Parte del día" : st.sub.t==="redes" ? "Zona privada" : "Medios";
     bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div><div class="syncpill" id="syncPill" title="Las noticias se revisan cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto"></div>`;
     syncLabel();
     $("#btnBack").onclick = () => cerrarSub();
@@ -1863,8 +2135,11 @@ function render(keepScroll){
     app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
-  if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios());
+  // Redes: no se repinta sola (recargaría los incrustados de cada perfil); solo cuando cambia algo de la propia zona
+  if (st.sub && st.sub.t==="redes" && !st.redesPinta && app.querySelector(".rz-deck")){ /* se conserva lo que hay */ }
+  else if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : st.sub.t==="redes" ? viewRedes() : viewMedios());
   else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
+  st.redesPinta = false; if (st.sub && st.sub.t==="redes") setTimeout(redesObserva, 0);
   const t = today();
   const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
   const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg; actualizaPer();
@@ -2003,9 +2278,11 @@ $("#app").addEventListener("click", e=>{
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="elec"){ store.set("elecVisto", 1); abrirSub({t:"elec"}); }
   else if (act==="parte") abrirSub({t:"parte"});
+  else if (/^red[A-Z]/.test(act||"")) redesAccion(act, b);
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
+  else if (act==="redes") abrirSub({t:"redes"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);
@@ -2464,7 +2741,7 @@ $("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("op
 })();
 if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
-const vistaHash = () => { const h = location.hash.slice(1); if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
+const vistaHash = () => { const h = location.hash.slice(1); if (h==="redes"){ if (!st.sub || st.sub.t!=="redes") abrirSub({t:"redes"}); return; } if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
 vistaHash(); addEventListener("hashchange", vistaHash);
 confPush().then(c=>{ if (c && c.url) render(true); });
 render();
@@ -2472,7 +2749,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v103";
+const VERSION_APP = "prensa-segovia-v104";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
