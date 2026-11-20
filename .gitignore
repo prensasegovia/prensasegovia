@@ -1,1 +1,4 @@
 node_modules/
+usuarios/.env
+usuarios/*.db
+usuarios/*.db-*

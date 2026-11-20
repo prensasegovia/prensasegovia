@@ -17,6 +17,7 @@ function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).se
 
 // GitHub pide la lista de suscritos (solo con el token)
 function doGet(e) {
+  const rx = redesXGet_(e); if (rx) return rx;   // Redes → X (redesx.gs)
   const p = e.parameter || {};
   if (p.accion === 'lista' && p.token === TOKEN) return json_({ subs: leer_() });
   return json_({ ok: true });
@@ -27,6 +28,7 @@ function doPost(e) {
   const lock = LockService.getScriptLock(); lock.waitLock(10000);
   try {
     const d = JSON.parse(e.postData.contents || '{}');
+    const rx = redesX_(d); if (rx) return rx;   // Redes → X (redesx.gs)
     if (d.accion === 'redesLeer' || d.accion === 'redesGuardar') return redes_(d); // lista compartida de perfiles de Redes
     let subs = leer_();
     if (d.accion === 'alta' && d.sub && d.sub.endpoint && d.sub.keys) {

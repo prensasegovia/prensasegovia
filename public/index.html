@@ -1146,6 +1146,20 @@ img.rz-avt{object-fit:cover;padding:0}
 .rz-emb > iframe,.rz-emb .instagram-media{position:relative;z-index:1}
 .rz-emb[data-r="fb"]{background:#fff;min-height:440px;overflow:hidden}
 .rz-emb[data-r="x"]{min-height:240px}
+.rx{list-style:none;margin:0;padding:0}
+.rx li{padding:10px 14px;border-bottom:1px solid var(--line)}
+.rx li:last-child{border-bottom:0}
+.rx li.nuevo{background:color-mix(in srgb,var(--pine) 8%,transparent);box-shadow:inset 3px 0 0 var(--pine)}
+.rx p{margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px;line-height:1.42}
+.rx img{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin:0 0 6px;background:var(--stone)}
+.rx a{font-size:12.5px;color:var(--muted);text-decoration:none}
+.rx a:hover{text-decoration:underline}
+.rx a b{color:var(--pine-2)}
+.rx-rt{display:inline-block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.rx-vacio{margin:auto;padding:24px 18px;text-align:center;color:var(--muted);font-size:14px;line-height:1.45}
+.rx-vacio a{display:block;margin-top:8px;font-weight:700;color:var(--ink);text-decoration:none}
+.rx-estado{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 0 12px;font-size:13.5px;color:var(--muted)}
+.rx-estado.mal{color:var(--alta);font-weight:600}
 .rz-emb[data-r="ig"]{background:#fff}
 .rz-fallo{display:block;margin:auto 0;padding:28px 18px;text-align:center;font-size:13.5px;line-height:1.45;color:var(--muted);text-decoration:none}
 .rz-fallo b{display:block;color:var(--ac-t);font-size:14.5px;margin-top:6px}
@@ -1726,7 +1740,7 @@ function elecPeriodicos(news){
 const REDES = {
   ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Ficha de cada perfil con su foto y sus últimas publicaciones, tal como la sirve Instagram. Solo funciona con cuentas públicas: si sale «es posible que el enlace al perfil no funcione», la cuenta es privada o no permite mostrarse fuera de Instagram. La foto de cada perfil no se puede traer sola desde Instagram: ponla con el lápiz (en Instagram, botón derecho sobre su foto → «Copiar imagen», y aquí Ctrl+V)."},
   fb:{n:"Facebook", c:"#1877F2", nota:"Últimas publicaciones de cada página, servidas por Facebook. Solo funciona con páginas públicas, no con perfiles personales."},
-  x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil, servidos por X. X solo los enseña si tienes tu sesión de X abierta en este mismo navegador."},
+  x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil. X no deja mostrarlos en otras webs, así que los lee la cuenta de lectura de la unidad y aparecen aquí; al entrar, si son de hace más de 10 minutos, se piden de nuevo (tarda 1–2 minutos)."},
   tt:{n:"TikTok", c:"#FE2C55", av:true, nota:"Ficha de cada perfil con sus últimos vídeos, tal como la sirve TikTok. Solo funciona con cuentas públicas."}
 };
 const REDES_GRUPOS = ["Partidos y candidatos","Sindicatos","Organizaciones agrarias","Plataformas y asociaciones","Ayuntamientos","Otros"];
@@ -1794,10 +1808,69 @@ function redIncrusta(el){
     // el script de TikTok solo mira la página al cargarse: se vuelve a cargar con cada perfil nuevo
     const viejo = document.getElementById("ttEmbed"); if (viejo) viejo.remove();
     cargaScript("ttEmbed", "https://www.tiktok.com/embed.js");
+  } else if (r==="x"){
+    el.innerHTML = redXHtml(u); redesXAsegura();
+    if (st.redesX && st.redesX.datos && !st.redesX.datos[redXUsuario(u)] && !redXLeyendo()) { clearTimeout(redXNuevoT); redXNuevoT = setTimeout(()=>redesXAsegura(true), 800); }
   } else {
     el.innerHTML = `<a class="twitter-timeline rz-fallo" data-height="440" data-theme="${temaOscuro()?"dark":"light"}" data-chrome="noheader nofooter transparent" data-lang="es" data-dnt="true" href="https://twitter.com/${encodeURIComponent(u.replace(/^@/,""))}">Cargando los tuits de ${esc(u)}…<br>Solo se ven con tu sesión de X abierta en este navegador y sin bloqueador de anuncios.<b>Abrir en X ↗</b></a>`;
     cargaScript("xWidgets", "https://platform.twitter.com/widgets.js").then(()=>{ try{ window.twttr.widgets.load(el); }catch(e){} });
   }
+}
+/* X no deja mostrar tuits en otras webs (su incrustado ya no carga). Los lee GitHub con la cuenta de lectura de la unidad
+   y los guarda el Apps Script (herramientas/redesx.gs); aquí se piden y se pintan. Si son viejos, se pide una lectura nueva. */
+const REDX_VIEJO_MIN = 10, REDX_ESPERA_MIN = 4;
+const redXUsuario = u => String(u).replace(/^@/,"").toLowerCase();
+const redXHace = ms => { const m = Math.round((Date.now()-ms)/6e4); return m<1 ? "ahora mismo" : m<60 ? `hace ${m} min` : m<1440 ? `hace ${Math.floor(m/60)} h` : `hace ${Math.floor(m/1440)} días`; };
+const redXFecha = iso => { const d = new Date(iso); return d.toLocaleString("es-ES", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }); };
+const redXLeyendo = () => { const X = st.redesX || {}; return X.pedido && X.pedido > ((X.estado||{}).hora||0) && Date.now() - X.pedido < REDX_ESPERA_MIN*6e4; };
+let redXNuevoT = null, redXPollT = null;
+function redXHtml(u){
+  const X = st.redesX || {}, k = redXUsuario(u), d = (X.datos||{})[k];
+  const abrir = `<a href="${esc(redUrl("x",u))}" target="_blank" rel="noopener">Abrir en X ↗</a>`;
+  if (!d || !(d.tuits||[]).length) return `<div class="rx-vacio">${X.cargando ? "Cargando…" : redXLeyendo() ? `Leyendo los tuits de ${esc(u)} en X…<br>tarda 1–2 minutos.` : d && d.error ? esc(d.error) : X.sinScript ? "La lectura de X todavía no está activada." : "Todavía no hay tuits leídos de este perfil."}${abrir}</div>`;
+  if (!st.redXVistoAntes) st.redXVistoAntes = store.get("redesXVisto", {}) || {};
+  const antes = st.redXVistoAntes[k] || "", visto = store.get("redesXVisto", {}) || {};
+  const ultimo = d.tuits.reduce((m,t)=>t.fecha>m?t.fecha:m, ""); if (ultimo > (visto[k]||"")) { visto[k] = ultimo; store.set("redesXVisto", visto); }
+  return `<ol class="rx">` + d.tuits.map(t=>{ const nuevo = antes && t.fecha > antes;
+    return `<li${nuevo?' class="nuevo"':""}>${t.rt?'<span class="rx-rt">Retuit</span>':""}<p>${esc(t.texto)}</p>${(t.fotos||[]).map(f=>`<img loading="lazy" src="${esc(f)}${/\?/.test(f)?"":"?name=small"}" alt="" referrerpolicy="no-referrer">`).join("")}<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(redXFecha(t.fecha))}${nuevo?" · <b>nuevo</b>":""}</a></li>`; }).join("") + `</ol>`;
+}
+function redXEstadoHtml(){
+  const X = st.redesX || {}, E = X.estado || {};
+  if (X.cargando) return `<span>Cargando tuits…</span>`;
+  if (X.sinScript) return `<span>La lectura de X aún no está activada (falta poner al día el Apps Script).</span>`;
+  if (X.error === "clave") return `<span>El Apps Script no reconoce la contraseña de la zona privada.</span>`;
+  const btn = `<button class="rz-link" data-act="redXActualiza" type="button">Actualizar</button>`;
+  if (X.errorPedir) return `<span>No se pudo pedir una lectura nueva: ${esc(X.errorPedir)}</span>${btn}`;
+  if (redXLeyendo()) return `<span>Leyendo en X… (1–2 minutos)${E.hora ? ` · lo que ves es de ${redXHace(E.hora)}` : ""}</span>`;
+  if (E.estado === "caducada" || E.estado === "limitada") return `<span>⚠ ${esc(E.detalle || "La cuenta de lectura de X no está disponible.")}</span>${btn}`;
+  return E.hora ? `<span>Tuits leídos ${redXHace(E.hora)}</span>${btn}` : `<span>Todavía no se ha leído nada.</span>${btn}`;
+}
+function redXRepinta(){
+  document.querySelectorAll('.rz-emb[data-r="x"][data-ok]').forEach(el=>{ el.innerHTML = redXHtml(el.dataset.u); });
+  const e = document.getElementById("redXEstado"); if (e){ e.innerHTML = redXEstadoHtml(); const E = (st.redesX||{}).estado||{}; e.classList.toggle("mal", E.estado==="caducada" || E.estado==="limitada"); }
+}
+async function redesXTrae(){
+  const d = await redNube({ accion:"redesXLeer" });
+  if (d && d.datos) st.redesX = { ...st.redesX, datos: d.datos, estado: d.estado || {}, pedido: Math.max(d.pedido||0, (st.redesX||{}).pedido||0), cargando:false, sinScript:false, error:"" };
+  else st.redesX = { ...st.redesX, cargando:false, sinScript: !(d && d.error==="clave"), error: d && d.error };
+}
+async function redesXAsegura(forzar){
+  if (st.redesXIniciado && !forzar) return;
+  st.redesXIniciado = true;
+  if (!st.redesX){ st.redesX = { cargando:true }; redXRepinta(); }
+  await redesXTrae();
+  const X = st.redesX;
+  if (X.sinScript || X.error) return redXRepinta();
+  const usuarios = redesData().filter(p=>p.r==="x").map(p=>redXUsuario(p.u));
+  const faltan = usuarios.some(u=>!(X.datos||{})[u]), viejo = !X.estado.hora || Date.now() - X.estado.hora > REDX_VIEJO_MIN*6e4;
+  if (usuarios.length && (forzar || faltan || viejo) && !redXLeyendo()){
+    const d = await redNube({ accion:"redesXPedir", usuarios });
+    if (d && d.pedido) { X.pedido = d.pedido; X.errorPedir = ""; } else X.errorPedir = (d && d.error) || "sin respuesta";
+  }
+  redXRepinta();
+  // Mientras GitHub lee, se mira cada 15 s si ya ha llegado
+  clearInterval(redXPollT);
+  if (redXLeyendo()) redXPollT = setInterval(async ()=>{ await redesXTrae(); redXRepinta(); if (!redXLeyendo()) clearInterval(redXPollT); }, 15000);
 }
 let redObs = null;
 function redesObserva(){ // cada columna se carga cuando está a punto de verse, no todas de golpe
@@ -1882,6 +1955,7 @@ function viewRedes(){
     ${R.av ? `<label class="chk"><input type="checkbox" name="av"> Avisarme cuando publique</label>` : ""}
     <div class="fa"><button class="btn" type="submit">Añadir</button><button class="btn ghost" type="button" data-act="redNuevo">Cancelar</button><span class="err" id="redFormErr"></span></div></form>`;
   if (L.length) h += `<p class="rz-nota">${R.nota}</p>`;
+  if (red==="x" && L.length) h += `<div class="rx-estado" id="redXEstado">${redXEstadoHtml()}</div>`;
   h += `<div class="rz-deck">` + (LF.length ? LF.map(p=>`<section class="rz-col" data-id="${esc(p.id)}"><header>${redCab(p)}</header><div class="rz-emb" data-r="${p.r}" data-u="${esc(p.u)}"></div></section>`).join("")
     : `<div class="rz-vacio"><b>${L.length ? "Nada en este grupo" : `Todavía no hay ${red==="fb"?"páginas":"perfiles"} de ${R.n}`}</b>${L.length ? "Elige otro grupo o añade uno nuevo." : `Pulsa «Añadir ${que}» y pega el enlace: aparecerá aquí con su foto y lo último que haya publicado.`}</div>`) + `</div>`;
   return h + `</div>`;
@@ -1922,6 +1996,7 @@ function redesAccion(act, b){
   else if (act==="redEditaNo" && p){ b.closest("header").innerHTML = redCab(p); }
   else if (act==="redFotoNo" && p){ delete p.f; delete p.fz; redesSave(); const pv = b.closest(".ft").querySelector(".pv"); if (pv) pv.innerHTML = redAvt(p); b.remove(); redFotosPide(); }
   else if (act==="redBorraSi" && p){ st.redesD = P.filter(q=>q!==p); redesSave(); pinta(true); aviso("Quitado"); }
+  else if (act==="redXActualiza"){ redesXAsegura(true); }
   else if (act==="redCerrar"){ try{ sessionStorage.removeItem("redesOk"); }catch(_){} st.redesOk = false; pinta(); window.scrollTo({top:0}); }
 }
 function viewElecciones(news){
@@ -2774,7 +2849,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v107";
+const VERSION_APP = "prensa-segovia-v108";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();
