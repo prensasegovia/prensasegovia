@@ -136,15 +136,27 @@ $("#fGuia").addEventListener("click", ()=>{ $("#sheetWrap").classList.remove("op
 })();
 if (/[?&]guia\b/.test(location.search)) setTimeout(()=>abreGuia(), 700);
 aplicaLetra();
-const vistaHash = () => { const h = location.hash.slice(1); if (h==="redes"){ if (!st.sub || st.sub.t!=="redes") abrirSub({t:"redes"}); return; } if (["noticias","periodicos","agenda","pueblos"].includes(h) && st.view !== h){ st.view = h; document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===h)); render(); } };
-vistaHash(); addEventListener("hashchange", vistaHash);
+// Abre la sección que diga el enlace (al cargar, o si se cambia a mano en la barra de direcciones)
+const vistaHash = (alCargar) => {
+  let h = location.hash.slice(1); try { h = decodeURIComponent(h); } catch(e){}
+  const sub = h.startsWith("pueblo/") ? {t:"pueblo", name:h.slice(7)} : SUBS.includes(h) ? {t:h} : null;
+  if (sub){
+    if (st.sub && st.sub.t===sub.t && st.sub.name===sub.name) return;
+    // Al cargar, debajo queda la portada: «Volver» lleva a Noticias en vez de salir de la app
+    if (alCargar === true) history.replaceState(null, "", "#" + st.view);
+    abrirSub(sub, alCargar !== true && history.state && history.state.sub);
+    return;
+  }
+  if (VISTAS.includes(h) && (st.view !== h || st.sub)){ cierraTodo(); setView(h); }
+};
+vistaHash(true); hashListo = true; fijaHash(); addEventListener("hashchange", vistaHash);
 confPush().then(c=>{ if (c && c.url) render(true); });
 render();
 load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v109";
+const VERSION_APP = "prensa-segovia-v110";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

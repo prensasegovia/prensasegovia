@@ -51,7 +51,7 @@ function render(keepScroll){
   document.body.classList.toggle("v-periodicos", st.view==="periodicos" && !st.sub);
   // Ordenador: en Noticias y Periódicos el menú se recoge y las noticias ocupan todo el ancho en mosaico
   document.body.classList.toggle("ancho", esPC());
-  appbar();
+  seguro("la barra superior", appbar);
   const app = $("#app"); const y = window.scrollY; const chipsX = $("#chips")?.scrollLeft || 0;
   if (!st.loaded){ app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">Cargando noticias…</div></section><div class="feed" style="padding-top:14px">${'<div class="skel"></div>'.repeat(4)}</div>`; return; }
   const news = allNews();
@@ -61,12 +61,15 @@ function render(keepScroll){
   }
   // Redes: no se repinta sola (recargaría los incrustados de cada perfil); solo cuando cambia algo de la propia zona
   if (st.sub && st.sub.t==="redes" && !st.redesPinta && app.querySelector(".rz-deck")){ /* se conserva lo que hay */ }
-  else if (st.sub) app.innerHTML = avisoViejo() + (st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : st.sub.t==="redes" ? viewRedes() : viewMedios());
-  else app.innerHTML = avisoViejo() + (st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news));
-  st.redesPinta = false; if (st.sub && st.sub.t==="redes") setTimeout(redesObserva, 0);
+  else if (st.sub) app.innerHTML = seguro("el aviso de actualización", avisoViejo, "") + seguro(NOMBRE_SECCION[st.sub.t] || "esta sección", () => st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : st.sub.t==="redes" ? viewRedes() : viewMedios(), cajaFallo);
+  else app.innerHTML = seguro("el aviso de actualización", avisoViejo, "") + seguro(NOMBRE_SECCION[st.view] || "esta sección", () => st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news), cajaFallo);
+  fijaHash();
+  st.redesPinta = false; if (st.sub && st.sub.t==="redes") setTimeout(() => seguro("Redes", redesObserva), 0);
   const t = today();
-  const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
-  const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg; actualizaPer();
+  seguro("los contadores del menú", () => {
+    const nAg = (({ev,sinFecha})=>ev.length+sinFecha.length)(agendaDe(news));
+    const b = $("#agBadge"); b.hidden = !nAg; b.textContent = nAg; actualizaPer();
+  });
   const nf = Object.keys(st.favs).length; const fb = $("#favBadge"); fb.hidden = !nf; fb.textContent = nf;
   if (keepScroll) window.scrollTo(0,y);
   if (chipObs) chipObs.disconnect();
@@ -78,9 +81,9 @@ function render(keepScroll){
     if (sel && (sel.offsetLeft < ch.scrollLeft || sel.offsetLeft + sel.offsetWidth > ch.scrollLeft + ch.clientWidth)) ch.scrollLeft = sel.offsetLeft - 16;
     const sent = document.createElement("div"); ch.before(sent);
     chipObs = new IntersectionObserver(([e])=>ch.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 200), {rootMargin:`-${$("#appbar").offsetHeight+2}px 0px 0px 0px`}); chipObs.observe(sent); }
-  observarVistos();
-  renderAside(news);
-  actualizaTitulo(news);
+  seguro("las noticias vistas", observarVistos);
+  seguro("el panel derecho", () => renderAside(news));
+  seguro("el título", () => actualizaTitulo(news));
   const tq = $("#townQ");
   if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); });
 }

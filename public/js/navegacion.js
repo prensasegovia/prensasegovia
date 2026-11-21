@@ -1,5 +1,17 @@
 /* ================= Navegación ================= */
 let scrollPrevio = 0;
+// Cada sección tiene su enlace (#noticias, #agenda, #redes, #pueblo/Cuéllar…): al recargar se queda donde estaba
+const VISTAS = ["noticias","agenda","pueblos","periodicos","guardadas"];
+const SUBS = ["redes","parte","medios","imp","elec"];
+const NOMBRE_SECCION = {noticias:"Noticias", agenda:"la Agenda", pueblos:"Pueblos", periodicos:"Periódicos", guardadas:"Guardadas",
+  redes:"Redes", parte:"el Parte del día", medios:"Medios y fuentes", imp:"Importantes", elec:"Elecciones", pueblo:"este pueblo"};
+function hashActual(){
+  const s = st.sub;
+  if (!s) return "#" + st.view;
+  return "#" + (s.t==="pueblo" ? "pueblo/" + encodeURIComponent(s.name) : s.t);
+}
+let hashListo = false; // hasta leer el enlace con el que se abrió la app, no se toca
+function fijaHash(){ if (!hashListo) return; const h = hashActual(); if (location.hash !== h) try { history.replaceState(history.state, "", h); } catch(e){} }
 function setView(v){
   st.view = v; st.sub = null; st.pila = []; st.detalle = null;
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
@@ -7,13 +19,14 @@ function setView(v){
 }
 let saltarPop = 0; // pasos atrás provocados por la propia app (no por el usuario)
 function atras(n=1){ if (n>0){ saltarPop++; history.go(-n); } }
-function abrirSub(sub){
+function abrirSub(sub, sinHistorial){
   scrollPrevio = window.scrollY;
   if (!$("#searchbar").hidden && !esPC()) toggleSearch(false, true);
   st.detalle = null;
   if (st.sub){ st.pila = [...(st.pila||[]), st.sub]; }
+  // Primero el paso en el historial y después se pinta: así el enlace nuevo queda en este paso y «atrás» vuelve al anterior
+  if (!sinHistorial) history.pushState({sub:true}, "");
   st.sub = sub; render(); window.scrollTo({top:0});
-  history.pushState({sub:true}, "");
 }
 function cerrarSub(desdeHistorial){
   if (!st.sub) return;
@@ -24,7 +37,7 @@ function cerrarSub(desdeHistorial){
 // Cierra todas las pantallas encima (al ir a una pestaña)
 function cierraTodo(){ const n = (st.sub ? 1 : 0) + (st.pila ? st.pila.length : 0); st.sub = null; st.pila = []; if (n && history.state && history.state.sub) atras(n); }
 window.addEventListener("popstate", ()=>{
-  if (saltarPop){ saltarPop--; return; }
+  if (saltarPop){ saltarPop--; fijaHash(); return; }
   if ($("#sheetWrap").classList.contains("open")){ $("#sheetWrap").classList.remove("open"); render(true); return; }
   if (!esPC() && !$("#searchbar").hidden){ toggleSearch(false, false, true); return; }
   if (st.sub) cerrarSub(true);

@@ -11,6 +11,8 @@ Web que reúne cada día las noticias de los pueblos de la provincia de Segovia.
 - `index.html`: solo el esqueleto de la página; carga los estilos y el código en este orden.
 - `css/`: `base.css` (móvil), `ordenador.css` (pantallas grandes), `ajustes.css` (repasos de diseño), `guia-parte.css` (guía rápida y parte del día) y `redes.css`.
 - `js/`: `config.js`, `utilidades.js`, `estado.js`, `datos.js` (noticias, hemeroteca y archivo), `tarjeta.js`, `vistas.js`, `redes.js`, `periodicos.js`, `parte.js`, `render.js`, `navegacion.js`, `panel.js` (panel derecho, búsqueda, filtros, letra), `avisos.js` y `arranque.js` (carga, guía y aviso de versión nueva). Son scripts normales que comparten variables: el orden de `index.html` importa.
+- **Enlaces por sección:** `#noticias`, `#agenda`, `#pueblos`, `#periodicos`, `#guardadas`, `#redes`, `#parte`, `#medios`, `#pueblo/Cuéllar`… Al recargar, la web se queda en la misma sección (`js/navegacion.js` y `vistaHash` en `js/arranque.js`).
+- **Cada sección va aislada:** si una falla (incluso si su archivo entero está roto), solo esa muestra «Esta sección ha fallado» y el resto sigue funcionando. Lo hace `seguro()` de `js/utilidades.js`; el detalle del fallo sale en la consola del navegador.
 - **Al publicar un cambio de la web**, sube la versión en tres sitios a la vez para que los móviles se recarguen solos: `CACHE` en `sw.js`, `VERSION_APP` en `js/arranque.js` y los `?v=` de `index.html`.
 - **Probar en local:** `python3 -m http.server 8000 --directory public` y abrir http://localhost:8000.
 

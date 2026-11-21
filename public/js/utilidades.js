@@ -31,3 +31,12 @@ const store = {
 const esPueblo = m => !!m && !["segovia","provincia","general"].includes(norm(m));
 const isCapital = n => norm(n.municipio)==="segovia";
 
+
+/* Cada parte va aislada: si una falla, se avisa en esa parte y el resto de la app sigue funcionando */
+function seguro(parte, fn, siFalla){
+  try { return fn(); }
+  catch(e){ console.error("[Prensa Segovia] Ha fallado: " + parte, e); return typeof siFalla === "function" ? siFalla(parte, e) : siFalla; }
+}
+function cajaFallo(parte){
+  return `<div class="empty"><b>Esta sección ha fallado</b>No se ha podido mostrar ${esc(parte)}. El resto de la app funciona con normalidad.<br><button class="btn" type="button" onclick="location.reload()" style="margin-top:12px">Volver a cargar</button></div>`;
+}
