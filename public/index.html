@@ -1837,13 +1837,8 @@ async function redIg(el, u, fallo){
       return;
     }
     const meta = (d.perfiles && d.perfiles[0]) || {};
-    const av = meta.avatar ? esc(API + meta.avatar) : "";
     el.innerHTML =
-      `<div style="display:flex;align-items:center;gap:10px;padding:2px 2px 10px">` +
-        (av ? `<img src="${av}" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover">` : "") +
-        `<div style="line-height:1.15"><div style="font-weight:600;font-size:.85rem">${esc(u)}</div>` +
-        `<div style="font-size:.7rem;opacity:.7">${redNum(meta.total)} publicaciones · ${redNum(meta.seguidores)} seguidores</div></div>` +
-      `</div>` +
+      `<div style="font-size:.7rem;opacity:.7;padding:0 2px 8px">${redNum(meta.total)} publicaciones · ${redNum(meta.seguidores)} seguidores</div>` +
       `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">` +
       posts.slice(0, 9).map(p => {
         const img = p.imagenes && p.imagenes[0]
