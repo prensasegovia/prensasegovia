@@ -1165,22 +1165,25 @@ img.rz-avt{object-fit:cover;padding:0}
 .rz-fallo b{display:block;color:var(--ac-t);font-size:14.5px;margin-top:6px}
 .rz-emb[data-r="fb"] .rz-fallo{position:absolute;inset:0;z-index:0;display:flex;flex-direction:column;justify-content:center;color:#65676b}
 .rz-emb[data-r="ig"] .rz-fallo{color:#65676b}
-/* Instagram como la app: historias arriba, una tarjeta por publicación (todos los perfiles mezclados, lo último primero)
-   y a la derecha los perfiles que sigues */
-.rz-deck.ig-wrap{display:grid;grid-template-columns:minmax(0,470px) 340px;justify-content:center;gap:24px 48px;align-items:start}
-@media (max-width:980px){.rz-deck.ig-wrap{grid-template-columns:minmax(0,470px)}}
+/* Instagram como la app: historias arriba y una tarjeta por publicación (todos los perfiles mezclados, lo último primero),
+   en rejilla para aprovechar el ancho: 3 por fila en un portátil, más en pantallas grandes, una en el móvil */
+.rz-deck.ig-wrap{display:block}
 .ig-main{min-width:0}
+.ig-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px;align-items:start}
+.ig-feed > :not(.ig-post){grid-column:1/-1}
 .ig-stories{display:flex;gap:12px;overflow-x:auto;padding:6px 4px 14px;margin:0 0 18px;scrollbar-width:none;border-bottom:1px solid var(--line)}
 .ig-stories::-webkit-scrollbar{display:none}
 .ig-st{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink);font:inherit}
-.ig-st .ring{width:66px;height:66px;border-radius:50%;padding:2.5px;box-sizing:border-box;background:var(--line);display:grid}
+.ig-st .ring{position:relative;width:66px;height:66px;border-radius:50%;padding:2.5px;box-sizing:border-box;background:var(--line);display:grid}
 .ig-st.hay .ring{background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
 .ig-st .ring > *{width:100%;height:100%;border-radius:50%;border:3px solid var(--surface);box-sizing:border-box;background:var(--stone);object-fit:cover;display:grid;place-items:center;font-weight:800;font-size:16px;color:var(--muted)}
 .ig-st .ring svg{width:24px;height:24px}
+.ig-st .ring > .campana{position:absolute;right:-3px;bottom:-3px;width:23px;height:23px;border-radius:50%;border:2px solid var(--surface);background:#d62976;color:#fff;display:grid;place-items:center;box-sizing:border-box}
+.ig-st .ring > .campana svg{width:12px;height:12px}
 .ig-st .n{font-size:12px;max-width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
 .ig-st[aria-pressed="true"] .n{color:var(--ink);font-weight:800}
 .ig-st[aria-pressed="true"] .ring{outline:2px solid var(--ink);outline-offset:2px}
-.ig-post{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:0 0 20px;overflow:hidden}
+.ig-post{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:0;overflow:hidden;min-width:0}
 .ig-post > header{display:flex;align-items:center;gap:10px;padding:10px 8px 10px 12px}
 .ig-post .av{flex:none;width:38px;height:38px;border-radius:50%;padding:2px;box-sizing:border-box;background:var(--line);display:grid;text-decoration:none}
 .ig-post.nuevo .av{background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
@@ -1194,7 +1197,7 @@ img.rz-avt{object-fit:cover;padding:0}
 .ig-post .abre:hover{background:var(--stone);color:var(--ink)}
 .ig-post .abre svg{width:19px;height:19px}
 .ig-media{position:relative;background:var(--stone)}
-.ig-media > a > img{display:block;width:100%;height:auto;max-height:588px;object-fit:cover}
+.ig-media > a > img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
 .ig-car{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:4/5}
 .ig-car::-webkit-scrollbar{display:none}
 .ig-car > a{flex:0 0 100%;scroll-snap-align:start}
@@ -1220,23 +1223,24 @@ img.rz-avt{object-fit:cover;padding:0}
 .ig-mas{border:0;background:none;padding:2px 12px 0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer}
 .ig-com{display:block;padding:5px 12px 0;font-size:14px;color:var(--muted);text-decoration:none}
 .ig-fecha{display:block;padding:7px 12px 13px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
-.ig-aldia{text-align:center;padding:6px 10px 26px;margin:0 0 20px;border-bottom:1px solid var(--line);color:var(--muted);font-size:14px}
+.ig-aldia{text-align:center;padding:10px 10px 22px;margin:0;border-bottom:1px solid var(--line);color:var(--muted);font-size:14px}
 .ig-aldia .ok{width:52px;height:52px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);display:grid;place-items:center;color:#fff}
 .ig-aldia .ok svg{width:26px;height:26px}
 .ig-aldia b{display:block;color:var(--ink);font-size:16px}
-.ig-perfil{display:flex;align-items:center;gap:16px;padding:4px 4px 18px;margin:0 0 18px;border-bottom:1px solid var(--line)}
+.ig-perfil{display:flex;align-items:center;gap:16px;padding:0 4px 18px;margin:0;border-bottom:1px solid var(--line)}
+.ig-perfil .ig-pf-i{flex:1;min-width:0;max-width:560px}
 .ig-perfil .ring{flex:none;width:76px;height:76px;border-radius:50%;padding:3px;box-sizing:border-box;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);display:grid}
 .ig-perfil .ring > *{width:100%;height:100%;border-radius:50%;border:3px solid var(--surface);box-sizing:border-box;object-fit:cover;background:var(--stone);display:grid;place-items:center;font-weight:800;color:var(--muted)}
-.ig-perfil b{display:block;font-size:17px}
-.ig-perfil span{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
-.ig-perfil a{display:inline-block;margin-top:6px;font-size:13.5px;font-weight:700;color:#0095f6;text-decoration:none}
-.ig-errs{font-size:13px;color:var(--muted);margin:0 0 14px}
-.ig-cargar{display:block;margin:0 auto 28px}
-.ig-skel{height:560px;border-radius:12px;background:var(--stone);margin:0 0 20px;animation:igLate 1.2s ease-in-out infinite alternate}
+.ig-perfil .cifras{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.ig-perfil .ver{display:inline-block;margin-top:6px;font-size:13.5px;font-weight:700;color:#0095f6;text-decoration:none}
+.ig-perfil .rz-col.ig-pf header{padding:0;min-height:0}
+.ig-perfil .rz-col.ig-pf header b{font-size:17px}
+.ig-perfil .rz-avt{display:none}
+.ig-errs{font-size:13px;color:var(--muted);margin:0}
+.ig-cargar{display:block;justify-self:center;margin:4px auto 28px}
+.ig-skel{aspect-ratio:4/5.7;border-radius:12px;background:var(--surface);border:1px solid var(--line);margin:0;animation:igLate 1.2s ease-in-out infinite alternate}
 @keyframes igLate{from{opacity:.55}to{opacity:1}}
-.ig-side{position:sticky;top:76px}
-.ig-side h4{margin:6px 0 8px;font-size:14px;font-weight:700;color:var(--muted)}
-.rz-col.ig-pf{background:none;border:0;border-radius:0;max-width:none;overflow:visible}
+.rz-col.ig-pf{background:none;border:0;border-radius:0;max-width:none;overflow:visible;width:auto}
 .rz-col.ig-pf header{border-bottom:0;padding:5px 0;min-height:50px}
 .rz-col.ig-pf header .i span{font-size:12px}
 .rz-col.ig-pf .rz-ic{width:28px;height:28px}
@@ -1814,7 +1818,7 @@ function elecPeriodicos(news){
    propia red en el navegador de quien mira; aquí no se copia ni se guarda nada. La lista de perfiles se guarda,
    de momento, solo en este navegador, y la contraseña es de muestra. ===== */
 const REDES = {
-  ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Como en la app: las publicaciones de todos los perfiles juntas, de la más nueva a la más antigua. Toca una historia de arriba para ver solo ese perfil. Las lee el servidor y las guarda media hora; al tocar una publicación se abre en Instagram."},
+  ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Todas las publicaciones juntas, de la más nueva a la más antigua. Toca una historia para ver solo ese perfil y su aviso, editar o quitar."},
   fb:{n:"Facebook", c:"#1877F2", nota:"Últimas publicaciones de cada página, servidas por Facebook. Solo funciona con páginas públicas, no con perfiles personales."},
   x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil. X no deja mostrarlos en otras webs, así que los lee la cuenta de lectura de la unidad y aparecen aquí; al entrar, si son de hace más de 10 minutos, se piden de nuevo (tarda 1–2 minutos)."},
   tt:{n:"TikTok", c:"#FE2C55", av:true, nota:"Ficha de cada perfil con sus últimos vídeos, tal como la sirve TikTok. Solo funciona con cuentas públicas."}
@@ -1938,10 +1942,11 @@ async function redIg(el, u, fallo){
   }
 }
 
-/* Instagram como la app: historias arriba (una por perfil, con anillo de color si tiene algo nuevo), una tarjeta por
-   publicación con todos los perfiles mezclados de la más nueva a la más antigua, y a la derecha los perfiles que sigues.
+/* Instagram como la app: historias arriba (una por perfil, con anillo de color si tiene algo nuevo y campanita si tiene aviso)
+   y una tarjeta por publicación, todos los perfiles mezclados de la más nueva a la más antigua, en rejilla.
+   Al tocar una historia sale la cabecera de ese perfil con aviso, editar, abrir y quitar.
    Las publicaciones las sirve el Worker (que las guarda media hora); aquí se reutilizan 5 minutos. */
-const IG_CACHE = {}, IG_PAG = 15;
+const IG_CACHE = {}, IG_PAG = 24;
 const IG_SVG = {
   heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M16.8 3.6c-1.9 0-3.6 1-4.8 2.6-1.2-1.6-2.9-2.6-4.8-2.6C4.3 3.6 2 6 2 9c0 5.6 8.5 11 10 11.5 1.5-.5 10-5.9 10-11.5 0-3-2.3-5.4-5.2-5.4z"/></svg>`,
   com: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M20.7 16.2A9.5 9.5 0 1 0 17 20.1L21.5 21z"/></svg>`,
@@ -1972,12 +1977,13 @@ async function igTrae(u){
 }
 const igVista = LF => { if (st.igVer && !LF.some(p => p.id === st.igVer)) st.igVer = null;
   return `<div class="rz-deck ig-wrap"><div class="ig-main"><div class="ig-stories" id="igHist">${igHistorias(LF)}</div>`
-    + `<div class="ig-feed" id="igFeed" data-ids="${esc(LF.map(p => p.id).join(","))}">${'<div class="ig-skel"></div>'.repeat(2)}</div></div>`
-    + `<aside class="ig-side"><h4>Perfiles que sigues</h4>${LF.map(p => `<section class="rz-col ig-pf" data-id="${esc(p.id)}"><header>${redCab(p)}</header></section>`).join("")}</aside></div>`; };
+    + `<div class="ig-feed" id="igFeed" data-ids="${esc(LF.map(p => p.id).join(","))}">${'<div class="ig-skel"></div>'.repeat(3)}</div></div></div>`; };
+const igLF = () => { const el = document.getElementById("igFeed"); return el ? (el.dataset.ids || "").split(",").map(id => redesData().find(p => p.id === id)).filter(Boolean) : []; };
+const igHistRepinta = () => { const h = document.getElementById("igHist"); if (h) h.innerHTML = igHistorias(igLF()); };
 function igHistorias(LF){
   const ver = st.igVer, hay = id => st.ig && st.ig.posts.some(o => o.p.id === id && igEsNuevo(o.x));
   return `<button class="ig-st" data-act="redIgVer" data-v="" aria-pressed="${!ver}"><span class="ring"><span>${IG_SVG.todos}</span></span><span class="n">Todos</span></button>`
-    + LF.map(p => `<button class="ig-st${hay(p.id) ? " hay" : ""}" data-act="redIgVer" data-v="${esc(p.id)}" aria-pressed="${ver === p.id}" title="${esc(p.n)}"><span class="ring">${igAvt(p)}</span><span class="n">${esc(igUsr(p.u))}</span></button>`).join("");
+    + LF.map(p => `<button class="ig-st${hay(p.id) ? " hay" : ""}" data-act="redIgVer" data-v="${esc(p.id)}" aria-pressed="${ver === p.id}" title="${esc(p.n)}"><span class="ring">${igAvt(p)}${p.av ? `<span class="campana" title="Con aviso">${RI.bell}</span>` : ""}</span><span class="n">${esc(igUsr(p.u))}</span></button>`).join("");
 }
 async function igCarga(){
   const el = document.getElementById("igFeed"); if (!el || el.dataset.ok) return; el.dataset.ok = "1";
@@ -1997,16 +2003,14 @@ async function igCarga(){
 }
 function igPinta(){
   const el = document.getElementById("igFeed"), hist = document.getElementById("igHist"); if (!el || !st.ig) return;
-  const ids = (el.dataset.ids || "").split(","), LF = ids.map(id => redesData().find(p => p.id === id)).filter(Boolean);
+  const LF = igLF();
   if (hist) hist.innerHTML = igHistorias(LF);
-  // Fotos de Instagram también en la lista de la derecha (si no se ha puesto una a mano)
-  LF.forEach(p => { if (p.f) return; const f = igFoto(p); if (!f) return;
-    document.querySelectorAll(`.ig-pf[data-id="${CSS.escape(p.id)}"] .rz-avt`).forEach(a => { a.outerHTML = `<img class="rz-avt" src="${esc(f)}" alt="">`; }); });
   const ver = st.igVer, L = st.ig.posts.filter(o => !ver || o.p.id === ver), errs = st.ig.errs.filter(e => !ver || e.p.id === ver);
   let h = "";
   if (ver){ const p = LF.find(q => q.id === ver), m = st.ig.meta[ver] || {};
-    if (p) h += `<div class="ig-perfil"><span class="ring">${igAvt(p)}</span><div><b>${esc(igUsr(p.u))}</b><span>${esc(p.n)} · ${esc(p.g)}</span>`
-      + `<span>${redNum(m.total)} publicaciones · ${redNum(m.seguidores)} seguidores</span><a href="https://www.instagram.com/${encodeURIComponent(igUsr(p.u))}/" target="_blank" rel="noopener">Ver perfil en Instagram ↗</a></div></div>`; }
+    // Cabecera del perfil con sus botones (aviso, editar, abrir, quitar): los mismos de siempre, dentro de su «.rz-col»
+    if (p) h += `<div class="ig-perfil"><span class="ring">${igAvt(p)}</span><div class="ig-pf-i"><section class="rz-col ig-pf" data-id="${esc(p.id)}"><header>${redCab(p)}</header></section>`
+      + `<span class="cifras">${redNum(m.total)} publicaciones · ${redNum(m.seguidores)} seguidores</span><a class="ver" href="https://www.instagram.com/${encodeURIComponent(igUsr(p.u))}/" target="_blank" rel="noopener">Ver perfil en Instagram ↗</a></div></div>`; }
   if (errs.length) h += `<p class="ig-errs">No se ha podido leer: ${errs.map(e => `<b>${esc(e.p.n)}</b> (${esc(e.e)})`).join(", ")}</p>`;
   if (!L.length && !errs.length) h += `<div class="rz-vacio"><b>Sin publicaciones</b>${ver ? "Este perfil no tiene publicaciones que se puedan leer ahora." : "Ningún perfil tiene publicaciones que se puedan leer ahora."}</div>`;
   let aldia = false;
@@ -2039,13 +2043,11 @@ function igPost({ x, p }){
     + (coms > 0 ? `<a class="ig-com" href="${url}" target="_blank" rel="noopener">Ver ${coms === 1 ? "el comentario" : `los ${redNum(coms)} comentarios`}</a>` : "")
     + `<time class="ig-fecha" datetime="${esc(x.fecha)}">${esc(igFechaLarga(x.fecha))}</time></article>`;
 }
-// Carrusel: contador «2/5» y puntos al deslizar; altura según la primera foto (entre 4:5 y 1,91:1, como en la app)
+// Carrusel: contador «2/5» y puntos al deslizar
 document.addEventListener("scroll", e => { const c = e.target; if (!(c instanceof Element) || !c.classList.contains("ig-car")) return;
   const i = Math.round(c.scrollLeft / (c.clientWidth || 1)), m = c.parentElement, cnt = m.querySelector(".ig-cnt"), pts = m.nextElementSibling;
   if (cnt) cnt.textContent = `${i + 1}/${c.children.length}`;
   if (pts && pts.classList.contains("ig-puntos")) [...pts.children].forEach((d, j) => d.classList.toggle("on", j === i)); }, true);
-document.addEventListener("load", e => { const im = e.target; if (!(im instanceof HTMLImageElement)) return; const c = im.closest(".ig-car");
-  if (c && im.parentElement === c.firstElementChild && im.naturalHeight) c.style.aspectRatio = Math.min(1.91, Math.max(.8, im.naturalWidth / im.naturalHeight)); }, true);
 
 function redSync(){
   try{
@@ -2230,7 +2232,7 @@ function redesAccion(act, b){
   else if (act==="redBorra" && p){ b.closest(".acts").innerHTML = `<span class="rz-conf">¿Quitar? <button class="si" data-act="redBorraSi" data-id="${esc(p.id)}">Sí</button><button data-act="redBorraNo" data-id="${esc(p.id)}">No</button></span>`; }
   else if (act==="redBorraNo" && p){ b.closest(".acts").innerHTML = redActs(p); }
   // Avisos: se guarda la preferencia; empezarán a llegar cuando la red esté conectada por su API
-  else if (act==="redAv" && p){ p.av = !p.av; redesSave(); b.closest(".acts").innerHTML = redActs(p); aviso(p.av ? `Marcado. Activa también la campana de este perfil en ${REDES[p.r].n}` : "Marca quitada"); }
+  else if (act==="redAv" && p){ p.av = !p.av; redesSave(); b.closest(".acts").innerHTML = redActs(p); if (p.r==="ig") igHistRepinta(); aviso(p.av ? `Marcado. Activa también la campana de este perfil en ${REDES[p.r].n}` : "Marca quitada"); }
   else if (act==="redEdita" && p){ const hd = b.closest("header");
     hd.innerHTML = `<form class="rz-edit" data-form="redEdita" data-id="${esc(p.id)}"><input type="text" name="n" maxlength="60" value="${esc(p.n)}" aria-label="Nombre"><select name="g" aria-label="Grupo">${REDES_GRUPOS.map(g=>`<option${g===p.g?" selected":""}>${esc(g)}</option>`).join("")}</select><button class="rz-ic ok" type="submit" title="Guardar" aria-label="Guardar">${RI.ok}</button><button class="rz-ic" type="button" data-act="redEditaNo" data-id="${esc(p.id)}" title="Cancelar" aria-label="Cancelar">✕</button><div class="ft"><span class="pv">${redAvt(p)}</span><label class="rz-fb"><input type="file" accept="image/*" hidden>Poner foto</label>${p.f?`<button type="button" class="rz-fb" data-act="redFotoNo" data-id="${esc(p.id)}">Quitar</button>`:""}<small>o pégala con Ctrl+V</small></div></form>`;
     hd.querySelector("input").focus(); }
