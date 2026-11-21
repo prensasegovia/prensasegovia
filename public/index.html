@@ -1237,6 +1237,11 @@ img.rz-avt{object-fit:cover;padding:0}
 .ig-perfil .rz-col.ig-pf header b{font-size:17px}
 .ig-perfil .rz-avt{display:none}
 .ig-errs{font-size:13px;color:var(--muted);margin:0}
+.ig-dia{display:flex;align-items:center;gap:12px;padding:8px 2px 0;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ig-dia::after{content:"";flex:1;height:1px;background:var(--line)}
+.ig-corte{border:1.5px dashed var(--line);border-radius:12px;padding:16px 18px;color:var(--muted);font-size:14px;line-height:1.45;text-align:center}
+.ig-corte b{color:var(--ink)}
+.ig-corte .btn{display:inline-flex;margin-top:10px}
 .ig-cargar{display:block;justify-self:center;margin:4px auto 28px}
 .ig-skel{aspect-ratio:4/5.7;border-radius:12px;background:var(--surface);border:1px solid var(--line);margin:0;animation:igLate 1.2s ease-in-out infinite alternate}
 @keyframes igLate{from{opacity:.55}to{opacity:1}}
@@ -1960,6 +1965,13 @@ const igHace = f => { const s = (Date.now() - new Date(f)) / 1000; if (!(s >= 0)
   if (s < 3600) return Math.max(1, Math.round(s / 60)) + " min"; if (s < 86400) return Math.round(s / 3600) + " h"; if (s < 7 * 86400) return Math.round(s / 86400) + " d";
   return new Date(f).toLocaleDateString("es-ES", { day:"numeric", month:"short" }).replace(".", ""); };
 const igFechaLarga = f => { const d = new Date(f); return d.toLocaleDateString("es-ES", d.getFullYear() === new Date().getFullYear() ? { day:"numeric", month:"long" } : { day:"numeric", month:"long", year:"numeric" }); };
+const igHora = f => new Date(f).toLocaleTimeString("es-ES", { hour:"2-digit", minute:"2-digit" });
+const igDiaClave = f => new Date(f).toDateString();
+// Cabecera de cada día del feed: «Hoy», «Ayer» o «Jueves, 19 de noviembre»
+const igDia = f => { const d = new Date(f), h = new Date(), ay = new Date(); ay.setDate(h.getDate() - 1);
+  if (d.toDateString() === h.toDateString()) return "Hoy"; if (d.toDateString() === ay.toDateString()) return "Ayer";
+  const t = d.toLocaleDateString("es-ES", d.getFullYear() === h.getFullYear() ? { weekday:"long", day:"numeric", month:"long" } : { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+  return t.charAt(0).toUpperCase() + t.slice(1); };
 // Texto con #etiquetas y @menciones enlazadas, como en la app
 const igTexto = t => esc(t).replace(/(^|[\s(¡¿])([#@])([\p{L}\p{N}_.]*[\p{L}\p{N}_])/gu, (m, a, s, w) =>
   `${a}<a href="https://www.instagram.com/${s === "#" ? "explore/tags/" + encodeURIComponent(w) : encodeURIComponent(w)}/" target="_blank" rel="noopener">${s}${w}</a>`);
@@ -1992,7 +2004,7 @@ async function igCarga(){
   const res = await Promise.allSettled(perf.map(p => igTrae(p.u)));
   const posts = [], errs = [], meta = {};
   res.forEach((r, i) => { const p = perf[i], d = r.status === "fulfilled" ? r.value : null, ps = (d && d.posts) || [];
-    meta[p.id] = (d && d.perfiles && d.perfiles[0]) || {};
+    meta[p.id] = { ...((d && d.perfiles && d.perfiles[0]) || {}), n: ps.length, min: ps.length ? Math.min(...ps.map(x => new Date(x.fecha).getTime())) : 0 };
     if (!ps.length) errs.push({ p, e: d ? ((d.errores && d.errores[0] && d.errores[0].error) || "sin publicaciones") : "el servidor no responde" });
     ps.forEach(x => posts.push({ x, p })); });
   posts.sort((a, b) => new Date(b.x.fecha) - new Date(a.x.fecha));
@@ -2013,13 +2025,29 @@ function igPinta(){
       + `<span class="cifras">${redNum(m.total)} publicaciones · ${redNum(m.seguidores)} seguidores</span><a class="ver" href="https://www.instagram.com/${encodeURIComponent(igUsr(p.u))}/" target="_blank" rel="noopener">Ver perfil en Instagram ↗</a></div></div>`; }
   if (errs.length) h += `<p class="ig-errs">No se ha podido leer: ${errs.map(e => `<b>${esc(e.p.n)}</b> (${esc(e.e)})`).join(", ")}</p>`;
   if (!L.length && !errs.length) h += `<div class="rz-vacio"><b>Sin publicaciones</b>${ver ? "Este perfil no tiene publicaciones que se puedan leer ahora." : "Ningún perfil tiene publicaciones que se puedan leer ahora."}</div>`;
-  let aldia = false;
-  L.slice(0, st.ig.n).forEach((o, i) => {
-    if (!aldia && i > 0 && !igEsNuevo(o.x) && igEsNuevo(L[i - 1].x)){ aldia = true;
+  /* El servidor trae solo las últimas 12 de cada perfil. Un perfil que publica mucho (el PP en campaña) las cubre en un día
+     y otro (Guardia Civil) en una semana: más atrás de la más antigua del primero ya solo saldrían las del segundo.
+     En «Todos» se enseña solo el tramo en que están todos los perfiles, bien mezclados por fecha y hora, y lo anterior
+     queda detrás de un botón que lo explica. */
+  const tm = o => new Date(o.x.fecha).getTime(), M = st.ig.meta;
+  const conPosts = LF.filter(p => (M[p.id] || {}).n > 0), tope = Math.max(0, ...conPosts.map(p => M[p.id].n));
+  const llenos = tope >= 10 ? conPosts.filter(p => M[p.id].n === tope) : [];
+  const corte = !ver && conPosts.length > 1 && llenos.length ? Math.max(...llenos.map(p => M[p.id].min)) : 0;
+  const cortos = corte ? llenos.filter(p => M[p.id].min === corte) : [];
+  const antes = corte ? L.filter(o => tm(o) < corte).length : 0;
+  const aviso = abierto => `<div class="ig-corte">${abierto ? "Desde aquí" : "Hasta aquí están todas, por fecha y hora. Más atrás"} ya no salen publicaciones de <b>${cortos.map(p => esc(p.n)).join("</b> ni de <b>")}</b>: el servidor solo trae las ${tope} últimas de cada perfil${abierto ? "." : ", así que las anteriores serían solo de los demás."}`
+    + `<br><button class="btn ghost" data-act="redIgTodo">${abierto ? "Ocultar las anteriores" : `Ver también las anteriores (${antes})`}</button></div>`;
+  const V = corte && !st.igTodo ? L.filter(o => tm(o) >= corte) : L;
+  let aldia = false, dia = "", cortado = false;
+  V.slice(0, st.ig.n).forEach((o, i) => {
+    if (!aldia && i > 0 && !igEsNuevo(o.x) && igEsNuevo(V[i - 1].x)){ aldia = true;
       h += `<div class="ig-aldia"><div class="ok">${IG_SVG.ok}</div><b>Estás al día</b>Has visto todo lo nuevo desde tu última visita</div>`; }
+    if (corte && !cortado && tm(o) < corte){ cortado = true; h += aviso(true); dia = ""; }
+    if (igDiaClave(o.x.fecha) !== dia){ dia = igDiaClave(o.x.fecha); h += `<div class="ig-dia">${esc(igDia(o.x.fecha))}</div>`; }
     h += igPost(o);
   });
-  if (L.length > st.ig.n) h += `<button class="btn ghost ig-cargar" data-act="redIgMasPosts">Ver más publicaciones</button>`;
+  if (V.length > st.ig.n) h += `<button class="btn ghost ig-cargar" data-act="redIgMasPosts">Ver más publicaciones</button>`;
+  else if (corte && antes && !st.igTodo) h += aviso(false);
   el.innerHTML = h;
 }
 function igPost({ x, p }){
@@ -2034,14 +2062,14 @@ function igPost({ x, p }){
   const k = (n, ic, t) => n == null || n < 0 ? "" : `<span class="k" title="${t}">${ic}<b>${redNum(n)}</b></span>`;
   const texto = String(x.texto || "").trim(), largo = texto.length > 140 || (texto.match(/\n/g) || []).length > 1;
   return `<article class="ig-post${nuevo ? " nuevo" : ""}"><header><a class="av" href="${perfil}" target="_blank" rel="noopener">${igAvt(p)}</a>`
-    + `<div class="who"><a href="${perfil}" target="_blank" rel="noopener">${esc(usr)}</a> <time datetime="${esc(x.fecha)}" title="${esc(new Date(x.fecha).toLocaleString("es-ES"))}">· ${esc(igHace(x.fecha))}</time>${nuevo ? `<span class="ig-nuevo">Nuevo</span>` : ""}`
+    + `<div class="who"><a href="${perfil}" target="_blank" rel="noopener">${esc(usr)}</a> <time datetime="${esc(x.fecha)}" title="${esc(new Date(x.fecha).toLocaleString("es-ES"))}">· ${esc(igHora(x.fecha))}</time>${nuevo ? `<span class="ig-nuevo">Nuevo</span>` : ""}`
     + `<small>${esc(p.n)}${p.g ? " · " + esc(p.g) : ""}</small></div>`
     + `<a class="abre" href="${url}" target="_blank" rel="noopener" title="Abrir en Instagram" aria-label="Abrir en Instagram">${IG_SVG.abre}</a></header>`
     + media
     + `<div class="ig-acts">${k(likes, IG_SVG.heart, "Me gusta")}${k(coms, IG_SVG.com, "Comentarios")}</div>`
     + (texto ? `<div class="ig-cap${largo ? " corto" : ""}"><b>${esc(usr)}</b>${igTexto(texto)}</div>${largo ? `<button class="ig-mas" data-act="redIgMas">más</button>` : ""}` : "")
     + (coms > 0 ? `<a class="ig-com" href="${url}" target="_blank" rel="noopener">Ver ${coms === 1 ? "el comentario" : `los ${redNum(coms)} comentarios`}</a>` : "")
-    + `<time class="ig-fecha" datetime="${esc(x.fecha)}">${esc(igFechaLarga(x.fecha))}</time></article>`;
+    + `<time class="ig-fecha" datetime="${esc(x.fecha)}">${esc(igFechaLarga(x.fecha))}, ${esc(igHora(x.fecha))}${Date.now() - new Date(x.fecha) < 7 * 864e5 ? " · hace " + esc(igHace(x.fecha)) : ""}</time></article>`;
 }
 // Carrusel: contador «2/5» y puntos al deslizar
 document.addEventListener("scroll", e => { const c = e.target; if (!(c instanceof Element) || !c.classList.contains("ig-car")) return;
@@ -2244,6 +2272,7 @@ function redesAccion(act, b){
   else if (act==="redIgVer"){ st.igVer = b.dataset.v || null; igPinta(); const m = document.querySelector(".ig-main"); if (m && m.getBoundingClientRect().top < 0) m.scrollIntoView({ behavior:"smooth" }); }
   else if (act==="redIgMas"){ const c = b.previousElementSibling; if (c) c.classList.remove("corto"); b.remove(); }
   else if (act==="redIgMasPosts"){ if (st.ig){ st.ig.n += IG_PAG; igPinta(); } }
+  else if (act==="redIgTodo"){ st.igTodo = !st.igTodo; igPinta(); }
   else if (act==="redIgCar"){ const c = b.parentElement.querySelector(".ig-car"); if (c) c.scrollBy({ left: c.clientWidth * (+b.dataset.v || 1), behavior:"smooth" }); }
   else if (act==="redCerrar"){ try{ sessionStorage.removeItem("redesOk"); }catch(_){} st.redesOk = false; pinta(); window.scrollTo({top:0}); }
 }
