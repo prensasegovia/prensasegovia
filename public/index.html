@@ -1839,16 +1839,24 @@ async function redIg(el, u, fallo){
     const meta = (d.perfiles && d.perfiles[0]) || {};
     el.innerHTML =
       `<div style="font-size:.7rem;opacity:.7;padding:0 2px 8px">${redNum(meta.total)} publicaciones · ${redNum(meta.seguidores)} seguidores</div>` +
-      `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">` +
-      posts.slice(0, 9).map(p => {
+      posts.map(p => {
+        const f = new Date(p.fecha).toLocaleDateString("es-ES", {day:"numeric", month:"short", year:"numeric"});
+        const av = p.avatar ? `<img src="${esc(API + p.avatar)}" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover">` : "";
         const img = p.imagenes && p.imagenes[0]
-          ? `<img loading="lazy" src="${esc(API + p.imagenes[0])}" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;display:block">`
-          : `<span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:4px;font-size:.62rem;overflow:hidden">${esc((p.texto||"").slice(0,60))}</span>`;
-        const vid = p.esVideo ? `<span style="position:absolute;top:4px;right:4px;color:#fff;font-size:.6rem;background:#0009;border-radius:3px;padding:1px 3px">▶</span>` : "";
-        return `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="position:relative;display:block;background:#0001;overflow:hidden">${img}${vid}</a>`;
+          ? `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="display:block;position:relative"><img loading="lazy" src="${esc(API + p.imagenes[0])}" alt="" style="width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:6px">${p.esVideo ? `<span style="position:absolute;top:6px;right:6px;color:#fff;font-size:.65rem;background:#0009;border-radius:3px;padding:1px 4px">▶</span>` : ""}</a>`
+          : "";
+        return `<article style="border-bottom:1px solid #0001;padding:12px 0">` +
+          `<header style="display:flex;align-items:center;gap:8px;margin-bottom:8px">${av}` +
+          `<div style="line-height:1.15"><b style="font-size:.8rem">${esc(p.autor || u)}</b>` +
+          `<div style="font-size:.68rem;opacity:.65">@${esc(p.usuario)}</div></div>` +
+          `<time style="margin-left:auto;font-size:.65rem;opacity:.6">${esc(f)}</time></header>` +
+          img +
+          `<div style="font-size:.72rem;opacity:.75;margin-top:6px">${p.metricas?.likes ?? 0} me gusta · ${p.metricas?.respuestas ?? 0} comentarios</div>` +
+          (p.texto ? `<p style="font-size:.78rem;white-space:pre-wrap;margin:6px 0 0">${esc(p.texto)}</p>` : "") +
+          `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;font-size:.7rem;opacity:.7;text-decoration:none">Ver en Instagram ↗</a>` +
+          `</article>`;
       }).join("") +
-      `</div>` +
-      `<a href="https://www.instagram.com/${encodeURIComponent(u)}/" target="_blank" rel="noopener" style="display:block;margin-top:8px;font-size:.72rem;text-align:center;opacity:.75;text-decoration:none">Ver todo en Instagram ↗</a>`;
+      `<a href="https://www.instagram.com/${encodeURIComponent(u)}/" target="_blank" rel="noopener" style="display:block;margin-top:10px;font-size:.72rem;text-align:center;opacity:.75;text-decoration:none">Ver todo en Instagram ↗</a>`;
   }catch(e){
     el.innerHTML = fallo;
   }
