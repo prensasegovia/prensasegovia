@@ -1738,7 +1738,7 @@ function elecPeriodicos(news){
    propia red en el navegador de quien mira; aquí no se copia ni se guarda nada. La lista de perfiles se guarda,
    de momento, solo en este navegador, y la contraseña es de muestra. ===== */
 const REDES = {
-  ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Ficha de cada perfil con su foto y sus últimas publicaciones, tal como la sirve Instagram. Solo funciona con cuentas públicas: si sale «es posible que el enlace al perfil no funcione», la cuenta es privada o no permite mostrarse fuera de Instagram. La foto de cada perfil no se puede traer sola desde Instagram: ponla con el lápiz (en Instagram, botón derecho sobre su foto → «Copiar imagen», y aquí Ctrl+V)."},
+  ig:{n:"Instagram", c:"#D6336C", av:true, nota:"Las publicaciones se leen desde el servidor y se guardan en caché media hora. Solo salen las cuentas que tengas en la lista y que sean públicas. Al tocar una publicación se abre en Instagram."},
   fb:{n:"Facebook", c:"#1877F2", nota:"Últimas publicaciones de cada página, servidas por Facebook. Solo funciona con páginas públicas, no con perfiles personales."},
   x:{n:"X", c:"var(--ink)", av:true, nota:"Últimos tuits de cada perfil. X no deja mostrarlos en otras webs, así que los lee la cuenta de lectura de la unidad y aparecen aquí; al entrar, si son de hace más de 10 minutos, se piden de nuevo (tarda 1–2 minutos)."},
   tt:{n:"TikTok", c:"#FE2C55", av:true, nota:"Ficha de cada perfil con sus últimos vídeos, tal como la sirve TikTok. Solo funciona con cuentas públicas."}
@@ -1818,8 +1818,15 @@ function redIncrusta(el){
 const API = "https://redes.josango11.workers.dev";
 const CLAVE = "psg-redes-7f3c91b2e48a4d05";
 
+function redNum(n){
+  if (n == null) return "—";
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(".", ",") + " M";
+  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(".", ",") + " mil";
+  return String(n);
+}
+
 async function redIg(el, u, fallo){
-  el.innerHTML = `<div class="rz-nota">Cargando lo último de ${esc(u)}…</div>`;
+  el.innerHTML = `<div class="rz-nota">Cargando @${esc(u)}…</div>`;
   try{
     const r = await fetch(`${API}/api/feed?red=instagram&usuario=${encodeURIComponent(u)}`);
     const d = await r.json();
@@ -1829,12 +1836,24 @@ async function redIg(el, u, fallo){
       el.innerHTML = fallo + `<div class="rz-nota">${esc(err)}</div>`;
       return;
     }
-    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">` +
+    const meta = (d.perfiles && d.perfiles[0]) || {};
+    const av = meta.avatar ? esc(API + meta.avatar) : "";
+    el.innerHTML =
+      `<div style="display:flex;align-items:center;gap:10px;padding:2px 2px 10px">` +
+        (av ? `<img src="${av}" alt="" style="width:34px;height:34px;border-radius:50%;object-fit:cover">` : "") +
+        `<div style="line-height:1.15"><div style="font-weight:600;font-size:.85rem">${esc(u)}</div>` +
+        `<div style="font-size:.7rem;opacity:.7">${redNum(meta.total)} publicaciones · ${redNum(meta.seguidores)} seguidores</div></div>` +
+      `</div>` +
+      `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">` +
       posts.slice(0, 9).map(p => {
-        const f = new Date(p.fecha).toLocaleDateString("es-ES", {day:"numeric", month:"short"});
-        const img = p.imagenes && p.imagenes[0] ? `<img loading="lazy" src="${esc(API + p.imagenes[0])}" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;display:block">` : `<span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:6px;font-size:.7rem">${esc((p.texto||"").slice(0,90))}</span>`;
-        return `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="position:relative;display:block;text-decoration:none;color:inherit;background:#0001;border-radius:4px;overflow:hidden">${img}<time style="position:absolute;bottom:2px;left:3px;font-size:.6rem;background:#000a;color:#fff;padding:0 3px;border-radius:2px">${esc(f)}</time></a>`;
-      }).join("") + `</div>`;
+        const img = p.imagenes && p.imagenes[0]
+          ? `<img loading="lazy" src="${esc(API + p.imagenes[0])}" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;display:block">`
+          : `<span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:4px;font-size:.62rem;overflow:hidden">${esc((p.texto||"").slice(0,60))}</span>`;
+        const vid = p.esVideo ? `<span style="position:absolute;top:4px;right:4px;color:#fff;font-size:.6rem;background:#0009;border-radius:3px;padding:1px 3px">▶</span>` : "";
+        return `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="position:relative;display:block;background:#0001;overflow:hidden">${img}${vid}</a>`;
+      }).join("") +
+      `</div>` +
+      `<a href="https://www.instagram.com/${encodeURIComponent(u)}/" target="_blank" rel="noopener" style="display:block;margin-top:8px;font-size:.72rem;text-align:center;opacity:.75;text-decoration:none">Ver todo en Instagram ↗</a>`;
   }catch(e){
     el.innerHTML = fallo;
   }
