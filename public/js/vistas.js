@@ -140,4 +140,15 @@ const elecNoticias = news => news.filter(n=>n._dia >= INI_ELECCIONES && esElecto
 function elecPeriodicos(news){
   return periodicosNews().filter(n=>n._dia >= INI_ELECCIONES && n.municipio && n.municipio!=="General" && esElectoral(n) && !n._int).sort(porHora);
 }
-
+function viewElecciones(news){
+  const list = elecNoticias(news), per = elecPeriodicos(news);
+  let h = `<section class="subhero"><h1>Elecciones 29N</h1><p>Campaña, candidatos, visitas, mítines y Junta Electoral en Segovia capital y la provincia: ${plural(list.length,"noticia de interés","noticias de interés")} desde el inicio de la precampaña.</p></section><div class="feed">`;
+  h += list.length ? porDias(list) : `<div class="empty"><b>Sin noticias electorales</b>No hay noticias de la campaña en este periodo.</div>`;
+  if (per.length) h += `<div class="dayhead"><h3>Más en los periódicos</h3><span>${per.length}</span></div>` + per.slice(0,60).map(cardPer).join("");
+  return h + `</div>`;
+}
+function viewImportantes(news){
+  const list = news.filter(n=>enRango(n) && pasa(n) && n.relevancia==="alta").sort(porHora);
+  let h = `<section class="subhero"><h1>Importantes</h1><p>${plural(list.length,"noticia","noticias")} en los últimos ${st.rango} días.</p></section><div class="feed">${avisoFiltros()}`;
+  return h + (list.length ? porDias(list) : `<div class="empty"><b>Nada importante</b>No hay noticias marcadas como importantes en este periodo.</div>`) + `</div>`;
+}

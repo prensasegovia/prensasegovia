@@ -112,7 +112,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="elec"){ store.set("elecVisto", 1); abrirSub({t:"elec"}); }
   else if (act==="parte") abrirSub({t:"parte"});
-  else if (/^red[A-Z]/.test(act||"")) redesAccion(act, b);
+  else if (/^red[A-Z]/.test(act||"")) seguro("Redes", () => redesAccion(act, b));
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
