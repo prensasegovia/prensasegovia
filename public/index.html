@@ -1773,7 +1773,7 @@ const redNube = async cuerpo => { const c = await confPush(); if (!c.url) return
   try { return await (await fetch(c.url, { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify({ ...cuerpo, clave: redClave() }) })).json(); } catch(e){ return null; } };
 let redSubeT = null;
 const redesSube = () => { clearTimeout(redSubeT); redSubeT = setTimeout(async ()=>{ const d = await redNube({ accion:"redesGuardar", perfiles: st.redesD }); if (!(d && d.guardado)) aviso("No se pudo guardar en la lista compartida"); }, 700); };
-const redesSave = () => { store.set("redesPerfiles", st.redesD); if (st.redesNube) redesSube(); };
+const redesSave = () => { store.set("redesPerfiles", st.redesD); if (st.redesNube) redesSube(); redSync(); };
 async function redesBaja(){ // al entrar: trae la lista compartida
   st.redesBajado = true;
   const d = await redNube({ accion:"redesLeer" });
@@ -1797,8 +1797,7 @@ function redIncrusta(el){
   const r = el.dataset.r, u = el.dataset.u, url = redUrl(r,u), R = REDES[r];
   const fallo = `<a class="rz-fallo" href="${esc(url)}" target="_blank" rel="noopener">Cargando lo último de ${esc(u)}…<br>Si no aparece, desactiva el bloqueador de anuncios en esta web.<b>Abrir en ${R.n} ↗</b></a>`;
   if (r==="ig"){
-    el.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${esc(url)}?utm_source=ig_embed" data-instgrm-version="14" style="margin:0;width:100%;min-width:0;max-width:none;border:0;background:transparent">${fallo}</blockquote>`;
-    cargaScript("igEmbed", "https://www.instagram.com/embed.js").then(()=>{ try{ window.instgrm.Embeds.process(); }catch(e){} });
+    redIg(el, u, fallo);
   } else if (r==="fb"){
     const w = Math.max(280, Math.min(500, Math.floor(el.clientWidth) || 380));
     el.innerHTML = fallo + `<iframe title="Publicaciones de ${esc(u)} en Facebook" loading="lazy" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(url)}&tabs=timeline&width=${w}&height=440&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_ES" width="${w}" height="440" style="border:0;overflow:hidden;display:block;margin:0 auto" scrolling="no" frameborder="0" allow="encrypted-media; picture-in-picture; web-share"></iframe>`;
@@ -1815,6 +1814,38 @@ function redIncrusta(el){
     el.innerHTML = `<a class="twitter-timeline rz-fallo" data-height="440" data-theme="${temaOscuro()?"dark":"light"}" data-chrome="noheader nofooter transparent" data-lang="es" data-dnt="true" href="https://twitter.com/${encodeURIComponent(u.replace(/^@/,""))}">Cargando los tuits de ${esc(u)}…<br>Solo se ven con tu sesión de X abierta en este navegador y sin bloqueador de anuncios.<b>Abrir en X ↗</b></a>`;
     cargaScript("xWidgets", "https://platform.twitter.com/widgets.js").then(()=>{ try{ window.twttr.widgets.load(el); }catch(e){} });
   }
+}
+const API = "https://redes.josango11.workers.dev";
+const CLAVE = "psg-redes-7f3c91b2e48a4d05";
+
+async function redIg(el, u, fallo){
+  el.innerHTML = `<div class="rz-nota">Cargando lo último de ${esc(u)}…</div>`;
+  try{
+    const r = await fetch(`${API}/api/feed?red=instagram&usuario=${encodeURIComponent(u)}`);
+    const d = await r.json();
+    const posts = d.posts || [];
+    if (!posts.length){
+      const err = (d.errores && d.errores[0] && d.errores[0].error) || "sin publicaciones";
+      el.innerHTML = fallo + `<div class="rz-nota">${esc(err)}</div>`;
+      return;
+    }
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">` +
+      posts.slice(0, 9).map(p => {
+        const f = new Date(p.fecha).toLocaleDateString("es-ES", {day:"numeric", month:"short"});
+        const img = p.imagenes && p.imagenes[0] ? `<img loading="lazy" src="${esc(API + p.imagenes[0])}" alt="" style="width:100%;aspect-ratio:1;object-fit:cover;display:block">` : `<span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:6px;font-size:.7rem">${esc((p.texto||"").slice(0,90))}</span>`;
+        return `<a href="${esc(p.url)}" target="_blank" rel="noopener" style="position:relative;display:block;text-decoration:none;color:inherit;background:#0001;border-radius:4px;overflow:hidden">${img}<time style="position:absolute;bottom:2px;left:3px;font-size:.6rem;background:#000a;color:#fff;padding:0 3px;border-radius:2px">${esc(f)}</time></a>`;
+      }).join("") + `</div>`;
+  }catch(e){
+    el.innerHTML = fallo;
+  }
+}
+
+function redSync(){
+  try{
+    const mapa = {ig:"instagram", fb:"facebook", x:"x", tt:"tiktok"};
+    const lista = (st.redesD || []).filter(p => mapa[p.r] && p.u).map(p => ({ red: mapa[p.r], usuario: p.u }));
+    fetch(`${API}/api/profiles/sync`, { method:"POST", headers:{"Content-Type":"application/json", "x-clave": CLAVE}, body: JSON.stringify(lista) }).catch(()=>{});
+  }catch(e){}
 }
 /* X no deja mostrar tuits en otras webs (su incrustado ya no carga). Los lee GitHub con la cuenta de lectura de la unidad
    y los guarda el Apps Script (herramientas/redesx.gs); aquí se piden y se pintan. Si son viejos, se pide una lectura nueva. */
@@ -1958,6 +1989,7 @@ function viewRedes(){
   if (red==="x" && L.length) h += `<div class="rx-estado" id="redXEstado">${redXEstadoHtml()}</div>`;
   h += `<div class="rz-deck">` + (LF.length ? LF.map(p=>`<section class="rz-col" data-id="${esc(p.id)}"><header>${redCab(p)}</header><div class="rz-emb" data-r="${p.r}" data-u="${esc(p.u)}"></div></section>`).join("")
     : `<div class="rz-vacio"><b>${L.length ? "Nada en este grupo" : `Todavía no hay ${red==="fb"?"páginas":"perfiles"} de ${R.n}`}</b>${L.length ? "Elige otro grupo o añade uno nuevo." : `Pulsa «Añadir ${que}» y pega el enlace: aparecerá aquí con su foto y lo último que haya publicado.`}</div>`) + `</div>`;
+  redSync();
   return h + `</div>`;
 }
 document.addEventListener("submit", e=>{ const f = e.target.dataset.form;
