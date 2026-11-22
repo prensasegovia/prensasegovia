@@ -139,9 +139,6 @@ aplicaLetra();
 // Abre la sección que diga el enlace (al cargar, o si se cambia a mano en la barra de direcciones)
 const vistaHash = (alCargar) => {
   let h = location.hash.slice(1); try { h = decodeURIComponent(h); } catch(e){}
-  // Enlace directo a un perfil de Redes (desde Atalaya): #redes/ig/usuario
-  if (h.startsWith("redes/")){ st.rsAbrir = h.slice(6); st.redRed = "todas"; st.redGrupo = "todos"; h = "redes";
-    if (st.sub && st.sub.t==="redes"){ st.redesPinta = true; render(); fijaHash(); return; } }
   const sub = h.startsWith("pueblo/") ? {t:"pueblo", name:h.slice(7)} : SUBS.includes(h) ? {t:h} : null;
   if (sub){
     if (st.sub && st.sub.t===sub.t && st.sub.name===sub.name) return;
@@ -159,7 +156,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v120";
+const VERSION_APP = "prensa-segovia-v121";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

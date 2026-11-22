@@ -1,10 +1,10 @@
 /* ================= Navegación ================= */
 let scrollPrevio = 0;
-// Cada sección tiene su enlace (#noticias, #agenda, #redes, #pueblo/Cuéllar…): al recargar se queda donde estaba
+// Cada sección tiene su enlace (#noticias, #agenda, #pueblo/Cuéllar…): al recargar se queda donde estaba
 const VISTAS = ["noticias","agenda","pueblos","periodicos","guardadas"];
-const SUBS = ["redes","parte","medios","imp","elec"];
+const SUBS = ["parte","medios","imp","elec"];
 const NOMBRE_SECCION = {noticias:"Noticias", agenda:"la Agenda", pueblos:"Pueblos", periodicos:"Periódicos", guardadas:"Guardadas",
-  redes:"Redes", parte:"el Parte del día", medios:"Medios y fuentes", imp:"Importantes", elec:"Elecciones", pueblo:"este pueblo"};
+  parte:"el Parte del día", medios:"Medios y fuentes", imp:"Importantes", elec:"Elecciones", pueblo:"este pueblo"};
 function hashActual(){
   const s = st.sub;
   if (!s) return "#" + st.view;
@@ -112,11 +112,9 @@ $("#app").addEventListener("click", e=>{
   else if (act==="imp") abrirSub({t:"imp"});
   else if (act==="elec"){ store.set("elecVisto", 1); abrirSub({t:"elec"}); }
   else if (act==="parte") abrirSub({t:"parte"});
-  else if (/^red[A-Z]/.test(act||"")) seguro("Redes", () => redesAccion(act, b));
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
   else if (act==="medios") abrirSub({t:"medios"});
-  else if (act==="redes") abrirSub({t:"redes"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");
   else if (act==="reload") load(true);

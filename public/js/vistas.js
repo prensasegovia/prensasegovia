@@ -43,7 +43,7 @@ function viewNoticias(news){
     h += `<div class="uptodate"><span>${I.check}Estás al día: nada nuevo</span></div>`;
   }
   h += porDias(vistas, nuevasTodas.length ? " · ya visto" : "");
-  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button> · <button type="button" data-act="redes">Redes</button></p>`;
+  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button></p>`;
 }
 function porDias(list, extra="", opts={}){
   const by = {}; for (const n of list) (by[n._dia] ||= []).push(n);
