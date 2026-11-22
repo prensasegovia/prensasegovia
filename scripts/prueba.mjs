@@ -7,7 +7,7 @@
 // con el motivo. En cada revisión del filtro se añaden los nuevos y todos tienen que seguir saliendo bien.
 import { readFileSync, writeFileSync, existsSync, unlinkSync } from "node:fs";
 const src = readFileSync(new URL("./actualizar.mjs", import.meta.url), "utf8").replace(/main\(\)\.catch[\s\S]*$/, "")
-  + "\nexport { clasifica, municipioDe, relleno, eventoDe, fueraDeProvincia, FUERA, soloAyto, soloOrganizacion };";
+  + "\nexport { clasifica, municipioDe, relleno, eventoDe, fueraDeProvincia, FUERA, soloAyto, soloOrganizacion, conCuerpo, SOLO_SI_MENCIONA, MENCIONA_SEGOVIA };";
 const tmp = new URL("./_tmp.mjs", import.meta.url);
 writeFileSync(tmp, src);
 const M = await import("./_tmp.mjs");
@@ -20,7 +20,11 @@ const evalua = c => {
   let m = c.m || M.fueraDeProvincia(c.t, M.municipioDe(c.t + " " + (c.r || "")));
   if (m === "General" && !c.nolocal && !M.FUERA.test(c.t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase())) m = "Segovia";
   // Como en la web: las webs de ayuntamientos y las notas de partidos y sindicatos se juzgan por el titular
-  const k = M.clasifica(c.t, c.r || "", m, M.soloAyto(medios) || M.soloOrganizacion(medios));
+  const nt = (c.t + " " + (c.r || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  // Medios de los que solo vale lo que nombra Segovia o un pueblo (como en la web)
+  if (M.SOLO_SI_MENCIONA.has(c.f) && !M.MENCIONA_SEGOVIA.test(nt)) return { ok: false, m, cats: "", rel: "baja", t: c.t, motivo: "no nombra Segovia" };
+  // Con «a» (lo que se leyó del artículo) se aplica también lo que aporta el cuerpo, como en la web
+  const k = M.conCuerpo(M.clasifica(c.t, c.r || "", m, M.soloAyto(medios) || M.soloOrganizacion(medios)), c.a, m, c.t);
   const n = { titulo: c.t, resumen: c.r || "", categorias: k.categorias, municipio: m, relevancia: k.relevancia, porTexto: k.porTexto, medios };
   Object.assign(n, M.eventoDe(c.t, c.r || "", new Date(), k.categorias));
   const rell = n.categorias.length > 0 && m !== "General" && M.relleno(n);
@@ -44,10 +48,12 @@ if (existsSync(fichero)) {
   const fallos = [];
   for (const c of aprendidos) {
     const o = evalua(c);
-    const bien = (c.espera === "si") === o.ok && (!c.pueblo || !o.ok || o.m === c.pueblo);
+    // «rel»: relevancia esperada («alta», «media») o «no alta»
+    const relBien = !c.rel || !o.ok || (c.rel === "no alta" ? o.rel !== "alta" : o.rel === c.rel);
+    const bien = (c.espera === "si") === o.ok && (!c.pueblo || !o.ok || o.m === c.pueblo) && relBien;
     if (!bien) fallos.push({ c, o });
   }
   console.log(`\nCasos aprendidos: ${aprendidos.length - fallos.length} de ${aprendidos.length} bien`);
-  for (const { c, o } of fallos) console.log(`  FALLA (esperaba ${c.espera}${c.pueblo ? " en " + c.pueblo : ""}; sale ${o.ok ? "si en " + o.m : "no, " + o.motivo}) ${c.t.slice(0, 80)}  [${c.motivo}]`);
+  for (const { c, o } of fallos) console.log(`  FALLA (esperaba ${c.espera}${c.pueblo ? " en " + c.pueblo : ""}${c.rel ? " " + c.rel : ""}; sale ${o.ok ? "si en " + o.m + " " + o.rel : "no, " + o.motivo}) ${c.t.slice(0, 80)}  [${c.motivo}]`);
   if (fallos.length) process.exitCode = 1;
 }
