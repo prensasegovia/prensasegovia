@@ -94,9 +94,11 @@ function rsPinta(){
   rsHistRepinta();
   const L = rsVisibles(), errs = st.rs.errs.filter(e => !ver || e.p.id === ver);
   const est = document.getElementById("rsEstado");
-  if (est){ const nPerf = new Set(L.map(o => o.p.id)).size, nFic = LF.filter(p => (!ver || p.id === ver) && (M[p.id] || {}).vacio).length;
+  if (est){ const nPerf = new Set(L.map(o => o.p.id)).size;
+    const nFic = Object.values(ver ? { [ver]: M[ver] } : M).filter(m => m && m.vacio).length;
     const cuenta = q ? `<b>${plural(L.length, "publicación contiene", "publicaciones contienen")} «${esc(q)}»</b>`
-      : L.length ? `${plural(L.length, "publicación", "publicaciones")} de ${plural(nPerf, "perfil", "perfiles")}${nFic ? ` · ${plural(nFic, "perfil", "perfiles")} sin publicaciones` : ""}`
+      : L.length ? `${plural(L.length, "publicación", "publicaciones")} de ${plural(nPerf, "perfil", "perfiles")}${nFic && !ver ? ` · ${plural(nFic, "perfil", "perfiles")} sin publicaciones` : ""}`
+      : ver ? "Sin publicaciones"
       : nFic ? `${plural(nFic, "perfil", "perfiles")} sin publicaciones` : "Sin publicaciones";
     est.innerHTML = `<span>${cuenta} · consultado a las ${esc(RT.hora(st.rs.hora))}</span>`
       + (LF.some(p => p.r === "x") && !RS_DEMO ? `<span class="rs-x" id="redXEstado">${redXEstadoHtml()}</span>` : ""); }
