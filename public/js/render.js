@@ -82,7 +82,9 @@ function render(keepScroll){
   seguro("el panel derecho", () => renderAside(news));
   seguro("el título", () => actualizaTitulo(news));
   const tq = $("#townQ");
-  if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); });
+  if (tq) tq.addEventListener("input", e=>{ st.townQ=e.target.value; const pos=e.target.selectionStart; render(true); const n=$("#townQ"); n.focus(); n.setSelectionRange(pos,pos); seguro("el mapa de pueblos", mapaBusca); });
+  // Pueblos: el mapa se monta (o se recoloca) después de pintar la sección
+  if (!st.sub && st.view==="pueblos") seguro("el mapa de pueblos", () => mapaMonta(news));
 }
 
 /* Una noticia cuenta como vista al estar un segundo en pantalla o al abrirla */

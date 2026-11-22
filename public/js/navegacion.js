@@ -114,6 +114,7 @@ $("#app").addEventListener("click", e=>{
   else if (act==="parte") abrirSub({t:"parte"});
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
+  else if (act==="mapaCierra") seguro("el mapa de pueblos", () => mapaElige(""));
   else if (act==="medios") abrirSub({t:"medios"});
   else if (act==="agenda") setView("agenda");
   else if (act==="pueblos") setView("pueblos");

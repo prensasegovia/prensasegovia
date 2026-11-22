@@ -103,6 +103,7 @@ function viewPueblos(news){
   let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
   if (st.townQ) list = list.filter(([k])=>norm(k).includes(norm(st.townQ)));
   let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">Últimos ${st.rango} días</span></div>
+    <div class="mapa-pueblos" id="mapaPueblos" role="region" aria-label="Mapa de pueblos de la provincia"></div><div class="mapa-panel" id="mapaPanel" aria-live="polite"></div>
     <div class="search">${I.search}<input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">${avisoFiltros()}`;
   if (!list.length && st.townQ){
     const otros = [...new Set(news.filter(n=>esPueblo(n.municipio) && norm(n.municipio).includes(norm(st.townQ))).map(n=>n.municipio))];

@@ -1,0 +1,23 @@
+/* Pueblos: mapa interactivo de la provincia (js/mapa-pueblos.js) */
+.mapa-pueblos{height:clamp(260px,84vw,62vh);margin:6px 16px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);position:relative;z-index:0}
+.mapa-pueblos .leaflet-container,.mapa-pueblos.leaflet-container{background:var(--surface);font:inherit}
+.mp-carga{display:grid;place-items:center;height:100%;color:var(--muted);font-size:14px;padding:16px;text-align:center}
+.mp-cifra{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;margin:-11px 0 0 -11px;border-radius:11px;background:var(--pine);color:#fff;font-size:12px;font-weight:700;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.35);border:1.5px solid var(--surface);cursor:pointer;white-space:nowrap}
+.mp-cifra.alta{background:var(--alta)}
+:root[data-theme="dark"] .mp-cifra:not(.alta){background:#2C6656}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mp-cifra:not(.alta){background:#2C6656} }
+.mp-tip{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.mp-tip::before{display:none}
+.leaflet-control-zoom a{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.leaflet-control-attribution{background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--muted)!important;font-size:10px}
+.mapa-panel{margin:10px 16px 4px}
+.mp-ayuda{font-size:13px;color:var(--muted);padding:4px 2px 2px;line-height:1.45}
+.mp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-bottom:8px}
+.mp-cab>div{flex:1;min-width:0}
+.mp-cab h3{margin:0;font-size:18px;line-height:1.2}
+.mp-cab span{font-size:13px;color:var(--muted)}
+.mp-cab .btn{white-space:nowrap}
+.mp-x{font:inherit;font-size:22px;line-height:1;background:none;border:0;color:var(--muted);cursor:pointer;padding:2px 6px}
+.mapa-panel .feed{padding:0}
+.mp-mas{display:block;margin:8px auto 4px}
+@media (min-width:700px){ .mapa-pueblos{height:min(64vh,560px)} }

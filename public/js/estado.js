@@ -12,7 +12,7 @@ const st = {
   tema: store.get("tema","auto"), letra: store.get("letra","auto"),
   periodicos: [], periodico: "todos", viaGoogle: [], parteDesde: "24h", ambito: store.get("ambito","interes"), parteLinks: store.get("parteLinks", false),
   rango:"3",                  // no se recuerda: cada vez que se abre, 3 días
-  q:"", townQ:"",
+  q:"", townQ:"", mapaSel:"",
   dias:[], fuentes:[], actualizado:"", loaded:false, error:false,
   seen: new Set(store.get("seen3", null) ? store.get("seen", []) : []),
   favs: store.get("favs", {}),  // id -> {n: noticia, t: guardada en}
