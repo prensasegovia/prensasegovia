@@ -139,6 +139,9 @@ aplicaLetra();
 // Abre la sección que diga el enlace (al cargar, o si se cambia a mano en la barra de direcciones)
 const vistaHash = (alCargar) => {
   let h = location.hash.slice(1); try { h = decodeURIComponent(h); } catch(e){}
+  // Enlace directo a un perfil de Redes (desde Atalaya): #redes/ig/usuario
+  if (h.startsWith("redes/")){ st.rsAbrir = h.slice(6); st.redRed = "todas"; st.redGrupo = "todos"; h = "redes";
+    if (st.sub && st.sub.t==="redes"){ st.redesPinta = true; render(); fijaHash(); return; } }
   const sub = h.startsWith("pueblo/") ? {t:"pueblo", name:h.slice(7)} : SUBS.includes(h) ? {t:h} : null;
   if (sub){
     if (st.sub && st.sub.t===sub.t && st.sub.name===sub.name) return;

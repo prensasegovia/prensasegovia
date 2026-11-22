@@ -26,7 +26,11 @@ async function rsTrae(p){
 }
 
 /* ---------- Vista: historias, herramientas y feed ---------- */
-const rsVista = (LF, clave) => { if (st.rsVer && !LF.some(p => p.id === st.rsVer)) st.rsVer = null;
+const rsVista = (LF, clave) => {
+  // Enlace directo a un perfil (#redes/ig/usuario, p. ej. desde Atalaya): se abre su historia en cuanto está en la lista
+  if (st.rsAbrir){ const [r, ...u] = st.rsAbrir.split("/"), k = r + "|" + u.join("/").replace(/^@/, "").toLowerCase(), p = LF.find(p => RT.clave(p) === k);
+    if (p){ st.rsVer = p.id; st.rsAbrir = null; } else if (st.redesNube != null) st.rsAbrir = null; }
+  if (st.rsVer && !LF.some(p => p.id === st.rsVer)) st.rsVer = null;
   return `<div class="rz-deck rs-wrap" data-vista="${esc(clave)}"><div class="rs-stories" id="rsHist">${rsHistorias(LF)}</div>`
     + `<div class="rs-herr"><label class="rs-q">${RT.SVG.buscar}<input id="rsQ" type="search" autocomplete="off" placeholder="Buscar en las publicaciones: texto, perfil, #etiqueta, @mención, lugar…" value="${esc(st.rsQ || "")}" aria-label="Buscar en las publicaciones"></label>`
     + `<button class="rs-bt" data-act="redRsCopiaTodo" type="button" title="Copia la ficha de todas las publicaciones que se ven ahora, para pegarla en un informe">${RT.SVG.ficha}<span>Copiar fichas</span></button>`
