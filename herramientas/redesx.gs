@@ -15,7 +15,7 @@
 // Misma contraseña que la zona privada de la web: se comprueba su huella, así que aquí no se guarda la contraseña
 const REDESX_HUELLA = '2daa7d78da68335e567c39515cf19cf2066123882deb3628a9d4e39fbfa8fbe5';
 const REDESX_REPO = 'prensasegovia/prensasegovia';
-const REDESX_ESPERA_MIN = 3;    // no se lanza otra lectura si hay una pedida hace menos de esto
+const REDESX_ESPERA_MIN = 20;    // no se lanza otra lectura si hay una pedida hace menos de esto
 const REDESX_MAX_PERFILES = 60;
 
 function redesXHuella_(t) {
