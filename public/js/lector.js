@@ -2,6 +2,38 @@
 const LECTOR_ESPERA = 25000;
 const e2 = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const uOk = u => /^https?:\/\//i.test(u) ? e2(u) : "";
+// Lo que va después de la noticia: se corta ahí
+const COLA = /^(comenta\b|comentarios|te puede interesar|lo m[áa]s le[íi]do|noticias? relacionadas?|m[áa]s noticias|suscr[íi]bete|share article|temas relacionados|temas\s*$|etiquetas|vocento|678 socios)/i;
+// Avisos y menús de la web: se descartan
+const BASURA = /^(configura tu navegaci[óo]n|rechazar y pagar|aceptar y seguir|aceptar y pagar|pol[íi]tica de cookies|aviso legal|inicia sesi[óo]n|comparte|share|imprimir|publicidad|enviar por|guarda en|lee tambi[ée]n|newsletter)/i;
+// Texto de la línea sin enlaces, imágenes, almohadillas ni viñetas
+const plano = l => l.replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/^#{1,6}\s+/, "").replace(/^(\*|-|\d+\.)\s+/, "").trim();
+const norma = s => s.toLowerCase().replace(/[^a-z0-9áéíóúüñ]+/g, " ").trim();
+// Se empieza en el primer párrafo de verdad (tras el titular, si la página lo trae) y se corta al llegar a la cola
+function recortaNoticia(lineas, titulo) {
+  const t = lineas.map(l => l.trim());
+  const nt = norma(titulo || "").slice(0, 40);
+  let desde = nt ? t.findIndex(l => /^#\s/.test(l) && norma(plano(l)).startsWith(nt)) : -1;
+  if (desde < 0) desde = 0;
+  const largo = n => (l, k) => k >= desde && plano(l).length >= n && !BASURA.test(plano(l));
+  let i = t.findIndex(largo(180));
+  if (i < 0) i = t.findIndex(largo(120));
+  if (i < 0) i = desde;
+  const out = [];
+  for (let k = i; k < t.length; k++) {
+    const l = t[k];
+    if (!l) { out.push(l); continue; }
+    const p = plano(l);
+    if (/^noticia relacionada/i.test(p)) { // se salta el titular y la foto que la acompañan
+      while (k + 1 < t.length) { const s = t[k + 1]; if (s && (plano(s).length >= 180 || /^#{1,6}\s/.test(s))) break; k++; }
+      continue;
+    }
+    if (COLA.test(p)) break;
+    if (BASURA.test(p)) continue;
+    out.push(l);
+  }
+  return out;
+}
 function enLinea(t) {
   return e2(t)
     .replace(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g, (m, alt, u) => uOk(u) ? `<img class="limg" src="${uOk(u)}" alt="${alt}" loading="lazy" referrerpolicy="no-referrer">` : "")
@@ -17,7 +49,7 @@ function pintaMarkdown(md) {
   const salida = []; let lista = null; let parrafo = [];
   const cierraP = () => { if (parrafo.length) { salida.push(`<p>${enLinea(parrafo.join(" "))}</p>`); parrafo = []; } };
   const cierraL = () => { if (lista) { salida.push(`<ul>${lista.join("")}</ul>`); lista = null; } };
-  for (const linea of cuerpo.split(/\r?\n/)) {
+  for (const linea of recortaNoticia(cuerpo.split(/\r?\n/), titulo)) {
     const t = linea.trim();
     if (!t) { cierraP(); cierraL(); continue; }
     if (/^#{1,6}\s+/.test(t)) { cierraP(); cierraL(); salida.push(`<h2>${enLinea(t.replace(/^#{1,6}\s+/, ""))}</h2>`); continue; }
@@ -27,6 +59,11 @@ function pintaMarkdown(md) {
   }
   cierraP(); cierraL();
   return { titulo, fecha, html: salida.join("") };
+}
+function fechaLegible(f) {
+  const d = new Date(f);
+  if (!f || isNaN(d)) return f || "";
+  return `${fmtLong(f.slice(0, 10))} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")} h`;
 }
 async function abreLector(jina, original) {
   const capa = $("#lector"); if (!capa) return;
@@ -39,8 +76,9 @@ async function abreLector(jina, original) {
     const r = await fetch(jina, { signal: ctl.signal }); clearTimeout(reloj);
     if (!r.ok) throw new Error("HTTP " + r.status);
     const { titulo, fecha, html } = pintaMarkdown(await r.text());
+    const f = fechaLegible(fecha);
     capa.innerHTML = `<div class="lbar"><span class="lmedio">${e2(medio)}</span><button data-lc="cerrar" type="button" aria-label="Cerrar">✕</button></div>
-      <article class="lcuerpo"><h1>${enLinea(titulo) || "Noticia"}</h1>${fecha ? `<div class="lfirma">${e2(fecha)}</div>` : ""}${html}
+      <article class="lcuerpo"><h1>${enLinea(titulo) || "Noticia"}</h1>${f ? `<div class="lfirma">${e2(f)}</div>` : ""}${html}
       <div class="lpie"><a class="btn" href="${e2(original)}" target="_blank" rel="noopener">Abrir en el periódico</a><button class="btn ghost" data-lc="cerrar" type="button">Cerrar</button></div></article>`;
     capa.scrollTop = 0;
   } catch (e) {
