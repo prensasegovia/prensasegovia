@@ -50,8 +50,9 @@ function doPost(e) {
 
 /* ===== Redes: lista compartida de perfiles =====
  * Se guarda aquí (propiedades del script, privadas de tu cuenta de Google), no en el repositorio público.
- * Solo responde a quien manda la contraseña. Para cambiarla, cambia CLAVE_REDES y vuelve a implementar. */
-const CLAVE_REDES = '1234';
+ * Solo responde a quien manda la contraseña. La contraseña está en Configuración del proyecto → Propiedades del script,
+ * con el nombre CLAVE_REDES (no en el código). Para cambiarla, cambia esa propiedad: no hace falta volver a implementar. */
+const CLAVE_REDES = PropertiesService.getScriptProperties().getProperty('CLAVE_REDES') || '';
 function redesLeer_() {
   const p = PropertiesService.getScriptProperties(), n = Number(p.getProperty('REDES_N') || 0);
   let s = ''; for (let i = 0; i < n; i++) s += p.getProperty('REDES_' + i) || '';
@@ -67,7 +68,7 @@ function redesGuardar_(lista) {
   p.setProperty('REDES_N', String(n)); p.setProperty('REDES_HORA', new Date().toISOString());
 }
 function redes_(d) {
-  if (String(d.clave || '') !== CLAVE_REDES) return json_({ error: 'clave' });
+  if (!CLAVE_REDES || String(d.clave || '') !== CLAVE_REDES) return json_({ error: 'clave' }); // sin propiedad, nadie entra
   if (d.accion === 'redesGuardar' && Array.isArray(d.perfiles)) {
     const txt = function (v, n) { return String(v == null ? '' : v).slice(0, n); };
     const lista = d.perfiles.filter(function (x) { return x && ['ig', 'fb', 'x', 'tt'].indexOf(x.r) >= 0 && x.u; }).slice(0, 300).map(function (x) {
