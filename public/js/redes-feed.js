@@ -31,7 +31,7 @@ const rsVista = (LF, clave) => {
   if (st.rsAbrir){ const [r, ...u] = st.rsAbrir.split("/"), k = r + "|" + u.join("/").replace(/^@/, "").toLowerCase(), p = LF.find(p => RT.clave(p) === k);
     if (p){ st.rsVer = p.id; st.rsAbrir = null; } else if (st.redesNube != null) st.rsAbrir = null; }
   if (st.rsVer && !LF.some(p => p.id === st.rsVer)) st.rsVer = null;
-  return `<div class="rz-deck rs-wrap" data-vista="${esc(clave)}"><div class="rs-stories" id="rsHist">${rsHistorias(LF)}</div>`
+  return `<div class="rz-deck rs-wrap" data-vista="${esc(clave)}">${/^ig(\||$)/.test(clave) ? `<p class="rs-nota-ig">Solo salen las cuentas que tengas en la lista. Las privadas únicamente aparecen si la cuenta de lectura las sigue; si no, Instagram no las expone por ninguna vía.</p>` : ""}<div class="rs-stories" id="rsHist">${rsHistorias(LF)}</div>`
     + `<div class="rs-herr"><label class="rs-q">${RT.SVG.buscar}<input id="rsQ" type="search" autocomplete="off" placeholder="Buscar en las publicaciones: texto, perfil, #etiqueta, @mención, lugar…" value="${esc(st.rsQ || "")}" aria-label="Buscar en las publicaciones"></label>`
     + `<button class="rs-bt" data-act="redRsCopiaTodo" type="button" title="Copia la ficha de todas las publicaciones que se ven ahora, para pegarla en un informe">${RT.SVG.ficha}<span>Copiar fichas</span></button>`
     + `<button class="rs-bt" data-act="redRsRecarga" type="button" title="Volver a pedir las publicaciones ahora">↻<span>Actualizar</span></button></div>`

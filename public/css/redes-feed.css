@@ -31,3 +31,4 @@
 .rz-col.rs-pf .rz-ic{width:28px;height:28px}
 .rs-fichas { display: grid; gap: 12px; margin: 12px 0 4px; }
 .rs-perfil .nota { margin: 4px 0 8px; font-size: .85rem; opacity: .75; }
+.rs-nota-ig { margin: 0 0 8px; font-size: .8rem; opacity: .75; }
