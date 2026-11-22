@@ -20,11 +20,11 @@
 .mp-tip{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:6px 10px}
 .mp-tip::before{display:none}
 /* Controles */
-.mapa-pueblos .leaflet-bar{border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.mapa-pueblos .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line);width:34px;height:34px;line-height:34px}
-.mp-todo{font:inherit;font-size:12px;font-weight:700;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:7px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.mp-ley{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;color:var(--muted);background:color-mix(in srgb,var(--surface) 90%,transparent);border:1px solid var(--line);border-radius:10px;padding:5px 8px;max-width:calc(100vw - 80px)}
-.mp-ley i{display:inline-block;width:14px;height:10px;border-radius:3px}
+.mapa-pueblos .leaflet-bar{border:1px solid color-mix(in srgb,var(--pine-2) 45%,var(--line));border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mapa-pueblos .leaflet-bar a{background:var(--surface);color:var(--pine-2);border-color:color-mix(in srgb,var(--pine-2) 30%,var(--line));width:34px;height:34px;line-height:34px;font-family:var(--rajdhani,inherit);font-weight:700}
+.mp-todo{font-family:var(--rajdhani,inherit);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--surface);color:var(--pine-2);border:1px solid color-mix(in srgb,var(--pine-2) 45%,var(--line));border-radius:4px;padding:6px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mp-ley{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-family:var(--rajdhani,inherit);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:color-mix(in srgb,var(--surface) 90%,transparent);border:1px solid color-mix(in srgb,var(--pine-2) 35%,var(--line));border-radius:4px;padding:5px 8px;max-width:calc(100vw - 80px)}
+.mp-ley i{display:inline-block;width:14px;height:10px;border-radius:2px}
 .mp-ley i.r{margin-left:8px}
 .mapa-pueblos .leaflet-control-attribution{background:transparent!important;color:var(--muted)!important;font-size:10px}
 /* Panel: pueblo elegido o pueblos con más noticias */

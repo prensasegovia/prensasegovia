@@ -1,0 +1,28 @@
+/* Detalles comunes con Atalaya (la web del GIC), sin cambiar el estilo de lectura de Prensa:
+   · Títulos de sección y cifras en Rajdhani, la letra de Atalaya. Los textos de las noticias siguen en Archivo.
+   · Colores de estado con los tonos de Atalaya: rojo «incidencia» (#ff2e63) para lo importante y ámbar «en curso» (#ffc400)
+     para convocatorias y relevancia media. En tema claro, un poco más oscuros para que se lean bien sobre blanco. */
+:root{
+  --rajdhani:"Rajdhani","Archivo",system-ui,sans-serif;
+  --alta:#E0234F; --alta-ink:#C21C45; --alta-soft:#FDE7ED;
+  --media:#8C6500; --media-soft:#FFF4D1;
+}
+:root[data-theme="dark"]{ --alta:#FF2E63; --alta-ink:#FF7C9A; --alta-soft:#3D1622; --media:#FFC400; --media-soft:#3A2E07; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --alta:#FF2E63; --alta-ink:#FF7C9A; --alta-soft:#3D1622; --media:#FFC400; --media-soft:#3A2E07; } }
+
+/* Títulos de sección y de cabecera */
+.sect h2,.subhero h1,.sheet h2,#guia h2,.mp-cab h3{font-family:var(--rajdhani);font-variation-settings:normal;font-weight:700;letter-spacing:.01em}
+.sect h2{font-size:24px}
+.subhero h1{font-size:clamp(30px,8.6vw,42px)}
+.sheet h2,#guia h2{font-size:25px}
+.mp-cab h3{font-size:21px}
+.hero .day{font-family:var(--rajdhani);font-variation-settings:normal;font-weight:700;font-size:clamp(28px,8vw,44px);letter-spacing:.005em}
+.dayhead h3,.newhead h3,.abox h3,.mgroup h3{font-family:var(--rajdhani);font-variation-settings:normal;font-weight:700;font-size:19px;letter-spacing:.02em}
+.abox h3{font-size:17px}
+/* Cifras */
+.stat .n,.ag-date .d,.town .cnt,.ad b,.prow b,.tab .b,.mp-eti b{font-family:var(--rajdhani);font-variation-settings:normal;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .n{font-size:27px}
+.ag-date .d{font-size:27px}
+.town .cnt{font-size:22px}
+.ad b{font-size:19px}
+.mp-eti b{font-size:13px}

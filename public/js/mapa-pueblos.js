@@ -31,8 +31,8 @@ function preparaMapa(){
 
 // Paleta: escala de verdes por número de noticias y de rojos si hay alguna importante (claro y oscuro)
 const MP_PALETA = {
-  claro:  { vacio: "#E6EBE7", borde: "#C3CCC6", prov: "#4C5A55", tinta: "#16201D", verde: ["#B9D8CA", "#7DB59E", "#3F8169", "#1E4A3F"], rojo: ["#F2B5AC", "#E07467", "#C2362B", "#8E2219"] },
-  oscuro: { vacio: "#1A2320", borde: "#2E3A35", prov: "#9AA6A1", tinta: "#E7ECE9", verde: ["#24453B", "#2F6656", "#4F9A82", "#86CAB5"], rojo: ["#5A2A25", "#8C3A31", "#C9544A", "#FF7A6B"] },
+  claro:  { vacio: "#E6EBE7", borde: "#C3CCC6", prov: "#4C5A55", tinta: "#16201D", verde: ["#B9D8CA", "#7DB59E", "#3F8169", "#1E4A3F"], rojo: ["#F7BCCB", "#EE7393", "#E0234F", "#A5163A"] },
+  oscuro: { vacio: "#1A2320", borde: "#2E3A35", prov: "#9AA6A1", tinta: "#E7ECE9", verde: ["#24453B", "#2F6656", "#4F9A82", "#86CAB5"], rojo: ["#4A1A28", "#85263F", "#D42A56", "#FF2E63"] },
 };
 const mpOscuro = () => { const t = document.documentElement.dataset.theme; return t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches); };
 const mpPal = () => MP_PALETA[mpOscuro() ? "oscuro" : "claro"];
