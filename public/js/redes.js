@@ -29,8 +29,8 @@ const redUrl = (r,u) => r==="bs" ? "https://bsky.app/profile/"+u.replace(/^@/,""
 // Acepta «@usuario», «usuario» o el enlace pegado tal cual
 // Rutas de la red que no son una página: si se pega el enlace de «search» o de «groups», no vale como perfil
 const REDES_RUTAS = /^(search|groups|watch|events|hashtag|marketplace|reels|stories|login|home|explore|notifications|messages|photo|video|share|p|permalink\.php|profile\.php)$/i;
-const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1];
-  if (r==="md"){ const t = u.replace(/^(https?:\/\/)?/i, "").replace(/^@/, "").replace(/\/+$/, "");
+const redUser = (r,u) => { u = String(u).trim().replace(/[\s.]+$/, ""); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1]; // sin puntos ni espacios al final (el Mac pone un punto con dos espacios)
+  if (r==="md"){ const t = u.replace(/^(https?:\/\/)?/i, "").replace(/^@/, "").replace(/\/+$/, "").replace(/[\s.]+@\s*/, "@");
     const m = /^([\w.\-]+)@([\w.\-]+\.[a-z]{2,})$/i.exec(t) || /^([\w.\-]+\.[a-z]{2,})\/@([\w.\-]+)$/i.exec(t);
     if (!m) return ""; return /\//.test(t) ? "@" + m[2].toLowerCase() + "@" + m[1].toLowerCase() : "@" + m[1].toLowerCase() + "@" + m[2].toLowerCase(); }
   const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com|tiktok\.com|bsky\.app\/profile)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
