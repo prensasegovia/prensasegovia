@@ -32,7 +32,7 @@ function recortaNoticia(lineas, titulo) {
     if (BASURA.test(p)) continue;
     out.push(l);
   }
-  return out;
+  return out.slice(0, 150);
 }
 function enLinea(t) {
   return e2(t)
