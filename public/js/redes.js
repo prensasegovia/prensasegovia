@@ -85,7 +85,12 @@ function redSync(){
   try{
     const mapa = {ig:"instagram", fb:"facebook", x:"x", tt:"tiktok", bs:"bluesky", md:"mastodon"};
     const lista = (st.redesD || []).filter(p => mapa[p.r] && p.u).map(p => ({ red: mapa[p.r], usuario: p.u }));
-    fetch(`${API}/api/profiles/sync`, { method:"POST", headers:{"Content-Type":"application/json", "x-clave": CLAVE}, body: JSON.stringify(lista) }).catch(()=>{});
+    fetch(`${API}/api/profiles/sync`, { method:"POST", headers:{"Content-Type":"application/json", "x-clave": CLAVE}, body: JSON.stringify(lista) })
+      .then(r => { // con la lista ya en el servidor, se vuelven a pedir las publicaciones (si no, un perfil recién añadido sale vacío)
+        if (!r.ok || typeof RS_CACHE === "undefined") return;
+        Object.keys(RS_CACHE).forEach(k => delete RS_CACHE[k]);
+        if (document.getElementById("rsFeed")) rsCarga(true);
+      }).catch(()=>{});
   }catch(e){}
 }
 /* X no deja mostrar tuits en otras webs (su incrustado ya no carga). Los lee GitHub con la cuenta de lectura de la unidad
