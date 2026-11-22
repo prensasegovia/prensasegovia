@@ -17,7 +17,7 @@
               enlace:{ url, titulo, dominio, imagen }, ubicacion, musica, colaboradores:[],
               metricas:{ likes, respuestas, compartidos, vistas, guardados } }] }
 
-   Un perfil (lista compartida): { id, r:"ig|fb|x|tt", u:"@usuario" (o nombre de página en Facebook), n:"Nombre", g:"Grupo",
+   Un perfil (lista compartida): { id, r:"ig|fb|x|tt|bs|md", u:"@usuario" (en Mastodon "@usuario@servidor") (o nombre de página en Facebook), n:"Nombre", g:"Grupo",
    m:"40xxx" (código INE del pueblo, opcional), av:true|false (aviso) }. La clave estable de un perfil es «r|usuario». */
 (function (raiz) {
   const RED = {
@@ -28,7 +28,12 @@
     x: { n: "X", c: "#111111", api: "x", url: u => `https://x.com/${u}`, tag: w => `https://x.com/hashtag/${w}`, men: u => `https://x.com/${u}`,
       nom: { likes: "Me gusta", respuestas: "Respuestas", compartidos: "Reposts", vistas: "Visualizaciones", guardados: "Guardados", pub: "tuit" } },
     tt: { n: "TikTok", c: "#FE2C55", api: "tiktok", url: u => `https://www.tiktok.com/@${u}`, tag: w => `https://www.tiktok.com/tag/${w}`, men: u => `https://www.tiktok.com/@${u}`,
-      nom: { likes: "Me gusta", respuestas: "Comentarios", compartidos: "Compartidos", vistas: "Reproducciones", guardados: "Guardados", pub: "vídeo" } }
+      nom: { likes: "Me gusta", respuestas: "Comentarios", compartidos: "Compartidos", vistas: "Reproducciones", guardados: "Guardados", pub: "vídeo" } },
+    bs: { n: "Bluesky", c: "#1185FE", api: "bluesky", url: u => `https://bsky.app/profile/${u}`, tag: w => `https://bsky.app/hashtag/${w}`, men: u => `https://bsky.app/profile/${u}`,
+      nom: { likes: "Me gusta", respuestas: "Respuestas", compartidos: "Reposts", vistas: "Reproducciones", guardados: "Guardados", pub: "publicación" } },
+    // Mastodon: el usuario lleva su instancia (usuario@servidor); urlPerfil lo codifica, por eso se decodifica antes de partirlo
+    md: { n: "Mastodon", c: "#6364FF", api: "mastodon", url: u => { const [a, b] = decodeURIComponent(u).split("@"); return `https://${b}/@${a}`; }, tag: w => `https://mastodon.social/tags/${w}`, men: u => { const [a, b] = decodeURIComponent(u).split("@"); return `https://${b || "mastodon.social"}/@${a}`; },
+      nom: { likes: "Favoritos", respuestas: "Respuestas", compartidos: "Impulsos", vistas: "Reproducciones", guardados: "Guardados", pub: "publicación" } }
   };
   const TIPO = { reel: "Reel", video: "Vídeo", carrusel: "Carrusel", retuit: "Repost", respuesta: "Respuesta", cita: "Cita", compartido: "Compartido", historia: "Historia", directo: "Directo" };
   const TZ = "Europe/Madrid";

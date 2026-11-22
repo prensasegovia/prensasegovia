@@ -8,7 +8,9 @@ const REDES = {
   ig:{n:"Instagram", c:"#D6336C", av:true},
   fb:{n:"Facebook", c:"#1877F2", av:true},
   x:{n:"X", c:"var(--ink)", av:true},
-  tt:{n:"TikTok", c:"#FE2C55", av:true}
+  tt:{n:"TikTok", c:"#FE2C55", av:true},
+  bs:{n:"Bluesky", c:"#1185FE", av:true, nota:"Lo último de cada perfil, de lo más nuevo a lo más antiguo. Solo funciona con cuentas públicas."},
+  md:{n:"Mastodon", c:"#6364FF", av:true, nota:"Lo último de cada cuenta. Escribe el usuario con su instancia: usuario@servidor."}
 };
 const REDES_NOTA = "Todas las publicaciones juntas, de la más nueva a la más antigua, con la fecha y hora exactas. Toca una historia para ver solo ese perfil (y su aviso, editar o quitar). Cada publicación tiene botones para copiar su enlace o su ficha completa.";
 const REDES_GRUPOS = ["Partidos y candidatos","Sindicatos","Organizaciones agrarias","Plataformas y asociaciones","Ayuntamientos","Otros"];
@@ -20,13 +22,18 @@ const RI = {
   mas:`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`,
   lock:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`
 };
-const redKey = (r, t="") => `<img class="rk ${r} ${t}" src="redes/${r}.png" alt="${REDES[r].n}" width="20" height="20">`;
-const redUrl = (r,u) => r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : r==="tt" ? "https://www.tiktok.com/@"+u.replace(/^@/,"") : "https://x.com/"+u.replace(/^@/,"");
+// Las redes sin icono propio (Bluesky, Mastodon) llevan una insignia con su inicial y su color
+const REDES_SIN_ICONO = ["bs", "md"];
+const redKey = (r, t="") => REDES_SIN_ICONO.includes(r) ? `<b class="rk rk-txt ${r} ${t}" role="img" aria-label="${REDES[r].n}">${REDES[r].n[0]}</b>` : `<img class="rk ${r} ${t}" src="redes/${r}.png" alt="${REDES[r].n}" width="20" height="20">`;
+const redUrl = (r,u) => r==="bs" ? "https://bsky.app/profile/"+u.replace(/^@/,"") : r==="md" ? (()=>{const [a,b]=u.replace(/^@/,"").split("@"); return "https://"+b+"/@"+a;})() : r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : r==="tt" ? "https://www.tiktok.com/@"+u.replace(/^@/,"") : "https://x.com/"+u.replace(/^@/,"");
 // Acepta «@usuario», «usuario» o el enlace pegado tal cual
 // Rutas de la red que no son una página: si se pega el enlace de «search» o de «groups», no vale como perfil
 const REDES_RUTAS = /^(search|groups|watch|events|hashtag|marketplace|reels|stories|login|home|explore|notifications|messages|photo|video|share|p|permalink\.php|profile\.php)$/i;
 const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1];
-  const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com|tiktok\.com)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
+  if (r==="md"){ const t = u.replace(/^(https?:\/\/)?/i, "").replace(/^@/, "").replace(/\/+$/, "");
+    const m = /^([\w.\-]+)@([\w.\-]+\.[a-z]{2,})$/i.exec(t) || /^([\w.\-]+\.[a-z]{2,})\/@([\w.\-]+)$/i.exec(t);
+    if (!m) return ""; return /\//.test(t) ? "@" + m[2].toLowerCase() + "@" + m[1].toLowerCase() : "@" + m[1].toLowerCase() + "@" + m[2].toLowerCase(); }
+  const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com|tiktok\.com|bsky\.app\/profile)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
   if (REDES_RUTAS.test(x)) return "";
   return /^[\w.\-]{1,80}$/.test(x) ? (r==="fb" ? x : "@"+x) : ""; };
 const iniciales = n => n.replace(/[·|].*$/,"").replace(/^@/,"").split(/[\s._-]+/).filter(w=>/^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w) && !/^(de|del|la|el|los|las|y)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join("") || "?";
@@ -76,7 +83,7 @@ function redNum(n){
 function redSync(){
   if (RS_DEMO) return;
   try{
-    const mapa = {ig:"instagram", fb:"facebook", x:"x", tt:"tiktok"};
+    const mapa = {ig:"instagram", fb:"facebook", x:"x", tt:"tiktok", bs:"bluesky", md:"mastodon"};
     const lista = (st.redesD || []).filter(p => mapa[p.r] && p.u).map(p => ({ red: mapa[p.r], usuario: p.u }));
     fetch(`${API}/api/profiles/sync`, { method:"POST", headers:{"Content-Type":"application/json", "x-clave": CLAVE}, body: JSON.stringify(lista) }).catch(()=>{});
   }catch(e){}

@@ -71,7 +71,7 @@ function redes_(d) {
   if (!CLAVE_REDES || String(d.clave || '') !== CLAVE_REDES) return json_({ error: 'clave' }); // sin propiedad, nadie entra
   if (d.accion === 'redesGuardar' && Array.isArray(d.perfiles)) {
     const txt = function (v, n) { return String(v == null ? '' : v).slice(0, n); };
-    const lista = d.perfiles.filter(function (x) { return x && ['ig', 'fb', 'x', 'tt'].indexOf(x.r) >= 0 && x.u; }).slice(0, 300).map(function (x) {
+    const lista = d.perfiles.filter(function (x) { return x && ['ig', 'fb', 'x', 'tt', 'bs', 'md'].indexOf(x.r) >= 0 && x.u; }).slice(0, 300).map(function (x) {
       const o = { id: txt(x.id, 30), r: x.r, g: txt(x.g, 40), n: txt(x.n, 60), u: txt(x.u, 90), av: !!x.av };
       if (typeof x.f === 'string' && x.f.indexOf('data:image/') === 0 && x.f.length < 12000) o.f = x.f;
       return o;
