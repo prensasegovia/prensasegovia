@@ -12,17 +12,16 @@
  * UNA línea al principio de doPost y OTRA al principio de doGet (ver INSTRUCCIONES-REDES-X.md) y volver a implementar.
  */
 
-// Misma contraseña que la zona privada de la web: se comprueba su huella, así que aquí no se guarda la contraseña
-const REDESX_HUELLA = '2daa7d78da68335e567c39515cf19cf2066123882deb3628a9d4e39fbfa8fbe5';
+// Misma contraseña que la zona privada de la web: se compara con la propiedad del script CLAVE_REDES (la de avisos.gs),
+// así que aquí no hay ni contraseña ni huella. Al cambiar la contraseña basta con cambiar esa propiedad.
 const REDESX_REPO = 'prensasegovia/prensasegovia';
 const REDESX_ESPERA_MIN = 20;    // no se lanza otra lectura si hay una pedida hace menos de esto
 const REDESX_MAX_PERFILES = 60;
 
-function redesXHuella_(t) {
-  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, t, Utilities.Charset.UTF_8)
-    .map(function (b) { return ('0' + (b & 0xff).toString(16)).slice(-2); }).join('');
+function redesXClaveOk_(c) {
+  const k = PropertiesService.getScriptProperties().getProperty('CLAVE_REDES') || '';
+  return !!k && String(c || '') === k;   // sin propiedad, nadie entra
 }
-function redesXClaveOk_(c) { return redesXHuella_('prensa-segovia-redes|' + String(c || '')) === REDESX_HUELLA; }
 function redesXJson_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 
 // Guardar textos largos en trozos (cada propiedad admite ~9 KB)
