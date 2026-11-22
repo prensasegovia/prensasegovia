@@ -32,7 +32,7 @@ function recortaNoticia(lineas, titulo) {
     if (BASURA.test(p)) continue;
     out.push(l);
   }
-  return out.slice(0, 150);
+  return out.slice(0, 300);
 }
 function enLinea(t) {
   return e2(t)
@@ -65,7 +65,7 @@ function fechaLegible(f) {
   if (!f || isNaN(d)) return f || "";
   return `${fmtLong(f.slice(0, 10))} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")} h`;
 }
-async function abreLector(jina, original) {
+async function abreLector(jina, original, img) {
   const capa = $("#lector"); if (!capa) return;
   let medio = "Texto completo";
   try { medio = new URL(original).hostname.replace(/^www\./, ""); } catch (e) {}
@@ -78,7 +78,7 @@ async function abreLector(jina, original) {
     const { titulo, fecha, html } = pintaMarkdown(await r.text());
     const f = fechaLegible(fecha);
     capa.innerHTML = `<div class="lbar"><span class="lmedio">${e2(medio)}</span><button data-lc="cerrar" type="button" aria-label="Cerrar">✕</button></div>
-      <article class="lcuerpo"><h1>${enLinea(titulo) || "Noticia"}</h1>${f ? `<div class="lfirma">${e2(f)}</div>` : ""}${html}
+      <article class="lcuerpo"><h1>${enLinea(titulo) || "Noticia"}</h1>${f ? `<div class="lfirma">${e2(f)}</div>` : ""}${img ? `<img class="lhero" src="${e2(img)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}${html}
       <div class="lpie"><a class="btn" href="${e2(original)}" target="_blank" rel="noopener">Abrir en el periódico</a><button class="btn ghost" data-lc="cerrar" type="button">Cerrar</button></div></article>`;
     capa.scrollTop = 0;
   } catch (e) {
