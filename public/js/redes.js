@@ -23,8 +23,11 @@ const RI = {
 const redKey = (r, t="") => `<img class="rk ${r} ${t}" src="redes/${r}.png" alt="${REDES[r].n}" width="20" height="20">`;
 const redUrl = (r,u) => r==="ig" ? "https://www.instagram.com/"+u.replace(/^@/,"")+"/" : r==="fb" ? "https://www.facebook.com/"+u+"/" : r==="tt" ? "https://www.tiktok.com/@"+u.replace(/^@/,"") : "https://x.com/"+u.replace(/^@/,"");
 // Acepta «@usuario», «usuario» o el enlace pegado tal cual
+// Rutas de la red que no son una página: si se pega el enlace de «search» o de «groups», no vale como perfil
+const REDES_RUTAS = /^(search|groups|watch|events|hashtag|marketplace|reels|stories|login|home|explore|notifications|messages|photo|video|share|p|permalink\.php|profile\.php)$/i;
 const redUser = (r,u) => { u = String(u).trim(); const id = r==="fb" && /profile\.php\?id=(\d+)/.exec(u); if (id) return id[1];
   const x = u.replace(/^(https?:\/\/)?(www\.|m\.|mobile\.)?(instagram\.com|facebook\.com|fb\.com|x\.com|twitter\.com|tiktok\.com)\//i,"").replace(/[/?#].*$/,"").replace(/^@+/,"").replace(/\s+/g,"");
+  if (REDES_RUTAS.test(x)) return "";
   return /^[\w.\-]{1,80}$/.test(x) ? (r==="fb" ? x : "@"+x) : ""; };
 const iniciales = n => n.replace(/[·|].*$/,"").replace(/^@/,"").split(/[\s._-]+/).filter(w=>/^[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w) && !/^(de|del|la|el|los|las|y)$/i.test(w)).slice(0,2).map(w=>w[0].toUpperCase()).join("") || "?";
 const redActual = () => REDES[st.redRed] || st.redRed==="todas" ? st.redRed : "todas";
