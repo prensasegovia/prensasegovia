@@ -196,7 +196,7 @@ function viewRedes(){
   if (!st.redesBajado) redesBaja();
   const tile = (r, ico, n, s, c) => `<button class="rz-tile" role="tab" data-act="redRed" data-v="${r}" aria-selected="${r===red}" style="--tc:${c}">${ico}<span class="t"><b>${n}</b><span class="s">${s}</span></span></button>`;
   h += `<div class="rz-tabs" role="tablist" aria-label="Redes">`
-    + tile("todas", `<span class="rk lg rz-todas">${RS_SVG.todos}</span>`, "Todas", plural(P.length, "perfil", "perfiles"), "var(--pine)")
+    + tile("todas", `<span class="rk lg rz-todas">${RedesTarjeta.SVG.todos}</span>`, "Todas", plural(P.length, "perfil", "perfiles"), "var(--pine)")
     + Object.keys(REDES).map(r=>tile(r, redKey(r,"lg"), REDES[r].n, plural(de(r).length, r==="fb"?"página":"perfil", r==="fb"?"páginas":"perfiles"), REDES[r].c)).join("")
     + `<button class="rz-link rz-out" data-act="redCerrar">${RS_DEMO ? "" : "Cerrar zona privada"}</button></div>`;
   h += `<div class="rz-bar"><div class="rz-chips">${redChips(L, grp)}</div>${todas ? "" : `<button class="rz-add" data-act="redNuevo">${RI.mas} Añadir ${que}</button>`}</div>`;
