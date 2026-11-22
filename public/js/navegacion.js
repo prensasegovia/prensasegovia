@@ -70,6 +70,7 @@ $("#app").addEventListener("change", e=>{ if (e.target.id==="parteLinks"){ st.pa
 $("#app").addEventListener("click", e=>{
   const am = e.target.closest("[data-ambito]"); if (am){ st.ambito = am.dataset.ambito; store.set("ambito", st.ambito); render(); window.scrollTo({top:0}); return; }
   const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }
+  const mp = e.target.closest("[data-mapa-pueblo]"); if (mp){ seguro("el mapa de pueblos", () => mapaElige(mp.dataset.mapaPueblo, true)); return; }
   const a = e.target.closest("a");
   if (a){ const c = a.closest("[data-k]"); if (c) marcarAbierta(c.dataset.k); return; }
   const card = e.target.closest(".card");

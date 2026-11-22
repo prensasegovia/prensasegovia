@@ -1,23 +1,59 @@
 /* Pueblos: mapa interactivo de la provincia (js/mapa-pueblos.js) */
-.mapa-pueblos{height:clamp(260px,84vw,62vh);margin:6px 16px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);position:relative;z-index:0}
-.mapa-pueblos .leaflet-container,.mapa-pueblos.leaflet-container{background:var(--surface);font:inherit}
+.mp-wrap{margin:6px 16px 4px}
+.mapa-pueblos{height:clamp(280px,92vw,64vh);border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--stone);position:relative;z-index:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.mapa-pueblos.leaflet-container,.mapa-pueblos .leaflet-container{background:var(--stone);font:inherit;outline:none}
+.mapa-pueblos:focus,.mapa-pueblos:focus-visible,.leaflet-container:focus{outline:none}
+.leaflet-interactive:focus{outline:none}
 .mp-carga{display:grid;place-items:center;height:100%;color:var(--muted);font-size:14px;padding:16px;text-align:center}
-.mp-cifra{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;margin:-11px 0 0 -11px;border-radius:11px;background:var(--pine);color:#fff;font-size:12px;font-weight:700;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.35);border:1.5px solid var(--surface);cursor:pointer;white-space:nowrap}
-.mp-cifra.alta{background:var(--alta)}
-:root[data-theme="dark"] .mp-cifra:not(.alta){background:#2C6656}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mp-cifra:not(.alta){background:#2C6656} }
-.mp-tip{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+/* Etiqueta de cada pueblo: cifra siempre, nombre al acercar o si está elegido */
+.mp-eti{background:none;border:0;width:0!important;height:0!important}
+/* (Leaflet mueve el marcador con «transform»: el centrado va en el bloque de dentro) */
+.mp-eti>div{display:inline-flex;align-items:center;gap:5px;transform:translate(-11px,-50%);white-space:nowrap;cursor:pointer}
+.mp-eti b{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--pine);color:#fff;font-size:12px;font-weight:800;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.3);border:2px solid var(--surface)}
+.mp-eti.alta b{background:var(--alta)}
+.mp-eti.cero b{background:var(--baja)}
+.mp-eti span{display:none;font-size:12px;font-weight:700;color:var(--ink);background:color-mix(in srgb,var(--surface) 88%,transparent);padding:2px 7px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.mp-cerca .mp-eti span,.mp-eti.sel span{display:inline-block}
+.mp-eti.sel b{transform:scale(1.15)}
+:root[data-theme="dark"] .mp-eti:not(.alta):not(.cero) b{background:#2C6656}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mp-eti:not(.alta):not(.cero) b{background:#2C6656} }
+.mp-tip{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.18);padding:6px 10px}
 .mp-tip::before{display:none}
-.leaflet-control-zoom a{background:var(--surface);color:var(--ink);border-color:var(--line)}
-.leaflet-control-attribution{background:color-mix(in srgb,var(--surface) 80%,transparent)!important;color:var(--muted)!important;font-size:10px}
-.mapa-panel{margin:10px 16px 4px}
-.mp-ayuda{font-size:13px;color:var(--muted);padding:4px 2px 2px;line-height:1.45}
-.mp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-bottom:8px}
+/* Controles */
+.mapa-pueblos .leaflet-bar{border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mapa-pueblos .leaflet-bar a{background:var(--surface);color:var(--ink);border-color:var(--line);width:34px;height:34px;line-height:34px}
+.mp-todo{font:inherit;font-size:12px;font-weight:700;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:7px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mp-ley{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;color:var(--muted);background:color-mix(in srgb,var(--surface) 90%,transparent);border:1px solid var(--line);border-radius:10px;padding:5px 8px;max-width:calc(100vw - 80px)}
+.mp-ley i{display:inline-block;width:14px;height:10px;border-radius:3px}
+.mp-ley i.r{margin-left:8px}
+.mapa-pueblos .leaflet-control-attribution{background:transparent!important;color:var(--muted)!important;font-size:10px}
+/* Panel: pueblo elegido o pueblos con más noticias */
+.mapa-panel{margin-top:10px}
+.mp-ayuda{font-size:14px;color:var(--muted);padding:4px 2px 8px;line-height:1.45}
+.mp-ayuda b{color:var(--ink)}
+.mp-top{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:10px 6px 6px}
+.mp-top h3{margin:2px 10px 6px;font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.mp-fila{display:flex;align-items:center;gap:10px;width:100%;font:inherit;font-size:15px;text-align:left;background:none;border:0;color:var(--ink);padding:9px 10px;border-radius:10px;cursor:pointer}
+.mp-fila:hover{background:var(--pine-soft)}
+.mp-fila .nom{flex:1;font-weight:600}
+.mp-fila .al{font-size:12px;font-weight:700;color:var(--alta-ink);background:var(--alta-soft);padding:2px 8px;border-radius:999px}
+.mp-fila .cnt{font-weight:800;color:var(--muted);min-width:20px;text-align:right}
+.mp-punto{width:10px;height:10px;border-radius:50%;background:var(--pine-2)}
+.mp-punto.alta{background:var(--alta)}
+.mp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-bottom:8px}
 .mp-cab>div{flex:1;min-width:0}
-.mp-cab h3{margin:0;font-size:18px;line-height:1.2}
+.mp-cab h3{margin:0;font-size:19px;line-height:1.2}
 .mp-cab span{font-size:13px;color:var(--muted)}
 .mp-cab .btn{white-space:nowrap}
 .mp-x{font:inherit;font-size:22px;line-height:1;background:none;border:0;color:var(--muted);cursor:pointer;padding:2px 6px}
 .mapa-panel .feed{padding:0}
 .mp-mas{display:block;margin:8px auto 4px}
-@media (min-width:700px){ .mapa-pueblos{height:min(64vh,560px)} }
+/* Ordenador: mapa a la izquierda y noticias del pueblo a la derecha */
+@media (min-width:1000px){
+  .mp-wrap{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);gap:16px;align-items:start}
+  .mapa-pueblos{height:min(72vh,640px);position:sticky;top:calc(var(--bar) + 12px)}
+  .mapa-panel{margin-top:0;max-height:min(72vh,640px);overflow-y:auto;scrollbar-width:thin;padding-right:2px}
+  .mapa-panel .feed{display:flex;flex-direction:column;gap:10px}
+  .mapa-panel .card{margin:0}
+}
+@media (min-width:700px) and (max-width:999px){ .mapa-pueblos{height:min(60vh,520px)} }

@@ -1,6 +1,6 @@
 /* ================= Pueblos: mapa interactivo de la provincia =================
    Cada municipio se colorea según cuántas noticias tiene en el periodo elegido (con los mismos filtros que la lista)
-   y se marca en rojo si alguna es importante. Al tocar un pueblo, debajo del mapa salen sus noticias.
+   y en rojo si alguna es importante. Al tocar un pueblo, al lado (ordenador) o debajo (móvil) salen sus noticias.
    · Límites: public/mapa/municipios.json (se prepara con scripts/mapa-municipios.mjs).
    · Leaflet se carga solo al abrir Pueblos. Si no carga (sin conexión, bloqueado…), queda la lista de siempre.
    · El mapa se crea una vez y se conserva entre repintados: al volver a pintar la sección se recoloca, sin parpadeo. */
@@ -9,9 +9,10 @@ const LEAFLET = {
   css: ["https://unpkg.com/leaflet@1.9.4/dist/leaflet.css", "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="],
 };
 let mapaCarga = null;          // promesa: Leaflet + límites
-let mapa = null, mapaEl = null, capaMunis = null, capaCifras = null;
+let mapa = null, mapaEl = null, capaMunis = null, capaCifras = null, capaProv = null;
 let mapaConteo = {};           // { municipio: { n, a } } del último repintado
 let mapaNoticias = [];         // noticias que cuentan en el mapa (mismos filtros que la lista)
+let mapaMovido = false;        // la persona ha movido o ampliado el mapa: no se reencuadra solo
 
 function cargaLeaflet(){
   if (window.L) return Promise.resolve();
@@ -28,26 +29,22 @@ function preparaMapa(){
   return mapaCarga;
 }
 
-// Colores del tema (claro u oscuro) leídos de las variables de la web
-function mapaColores(){
-  const v = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
-  const oscuro = matchMedia("(prefers-color-scheme: dark)").matches ? document.documentElement.dataset.theme !== "light" : document.documentElement.dataset.theme === "dark";
-  return { oscuro, linea: v("--line") || "#ccc", tinta: v("--ink") || "#222", fondo: v("--surface") || "#fff",
-    verde: oscuro ? "#86CAB5" : "#1E4A3F", alta: oscuro ? "#FF7A6B" : "#C2362B", vacio: oscuro ? "#1d2622" : "#f3f5f2" };
-}
-const mapaNivel = n => n >= 6 ? .78 : n >= 3 ? .56 : n >= 1 ? .34 : 0;
+// Paleta: escala de verdes por número de noticias y de rojos si hay alguna importante (claro y oscuro)
+const MP_PALETA = {
+  claro:  { vacio: "#E6EBE7", borde: "#C3CCC6", prov: "#4C5A55", tinta: "#16201D", verde: ["#B9D8CA", "#7DB59E", "#3F8169", "#1E4A3F"], rojo: ["#F2B5AC", "#E07467", "#C2362B", "#8E2219"] },
+  oscuro: { vacio: "#1A2320", borde: "#2E3A35", prov: "#9AA6A1", tinta: "#E7ECE9", verde: ["#24453B", "#2F6656", "#4F9A82", "#86CAB5"], rojo: ["#5A2A25", "#8C3A31", "#C9544A", "#FF7A6B"] },
+};
+const mpOscuro = () => { const t = document.documentElement.dataset.theme; return t === "dark" || (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches); };
+const mpPal = () => MP_PALETA[mpOscuro() ? "oscuro" : "claro"];
+const mpPaso = n => n >= 8 ? 3 : n >= 4 ? 2 : n >= 2 ? 1 : 0;
 function estiloMuni(f){
-  const c = mapaColores(), k = mapaConteo[f.properties.n], sel = st.mapaSel === f.properties.n;
-  if (f.properties.comun) return { color: c.linea, weight: .6, fillColor: c.vacio, fillOpacity: .5, dashArray: "2 3" };
-  const n = k ? k.n : 0;
-  return {
-    color: sel ? c.tinta : k && k.a ? c.alta : c.linea,
-    weight: sel ? 3 : k && k.a ? 2 : .8,
-    fillColor: k && k.a ? c.alta : n ? c.verde : c.vacio,
-    fillOpacity: n ? (k.a ? Math.max(.42, mapaNivel(n)) : mapaNivel(n)) : .55,
-  };
+  const p = mpPal(), k = mapaConteo[f.properties.n], sel = st.mapaSel === f.properties.n;
+  if (f.properties.comun) return { color: p.borde, weight: .6, fillColor: p.vacio, fillOpacity: .6, dashArray: "3 3" };
+  if (!k) return { color: sel ? p.tinta : p.borde, weight: sel ? 2.5 : .7, fillColor: p.vacio, fillOpacity: 1 };
+  const escala = k.a ? p.rojo : p.verde;
+  return { color: sel ? p.tinta : mpOscuro() ? "#0E1412" : "#FFFFFF", weight: sel ? 3 : 1.2, fillColor: escala[mpPaso(k.n)], fillOpacity: 1 };
 }
-// Punto para la cifra: el centro del municipio (de su rectángulo)
+// Punto para la etiqueta: el centro del municipio (de su rectángulo)
 const puntoDe = capa => capa.getBounds().getCenter();
 
 function mapaRecuento(news){
@@ -56,10 +53,14 @@ function mapaRecuento(news){
   for (const n of mapaNoticias){ const k = mapaConteo[n.municipio] ||= { n: 0, a: 0 }; k.n++; if (n.relevancia === "alta") k.a++; }
 }
 
-// Lo que sale debajo del mapa: las noticias del pueblo elegido
+// Al lado o debajo del mapa: las noticias del pueblo elegido; sin elegir, los pueblos con más noticias
 function mapaPanel(){
   const p = st.mapaSel;
-  if (!p) return `<div class="mp-ayuda">Toca un pueblo en el mapa para ver sus noticias. Cuanto más intenso el color, más noticias; en rojo, los que tienen alguna importante.</div>`;
+  if (!p){
+    const top = Object.entries(mapaConteo).sort((a, b) => (b[1].a - a[1].a) || (b[1].n - a[1].n) || a[0].localeCompare(b[0], "es")).slice(0, 8);
+    return `<div class="mp-ayuda"><b>Toca un pueblo</b> para ver sus noticias.</div>` + (top.length ? `<div class="mp-top"><h3>Con más noticias · ${st.rango} días</h3>${top.map(([k, v]) =>
+      `<button type="button" class="mp-fila" data-mapa-pueblo="${esc(k)}"><span class="mp-punto ${v.a ? "alta" : ""}"></span><span class="nom">${esc(k)}</span>${v.a ? `<span class="al">${plural(v.a, "importante", "importantes")}</span>` : ""}<span class="cnt">${v.n}</span></button>`).join("")}</div>` : `<div class="mp-ayuda">No hay noticias de pueblos en estos ${st.rango} días.</div>`);
+  }
   const lista = mapaNoticias.filter(n => n.municipio === p).sort(porHora);
   const k = mapaConteo[p] || { n: 0, a: 0 };
   let h = `<div class="mp-cab"><div><h3>${esc(p)}</h3><span>${k.n ? plural(k.n, "noticia", "noticias") + (k.a ? ` · ${plural(k.a, "importante", "importantes")}` : "") + ` en ${st.rango} días` : `Sin noticias en ${st.rango} días`}</span></div>
@@ -68,27 +69,31 @@ function mapaPanel(){
     : `<div class="empty"><b>Sin noticias recientes</b>Prueba con un periodo más largo o mira todo lo publicado de ${esc(p)}.<br><button class="btn ghost" type="button" data-pueblo="${esc(p)}">Abrir ${esc(p)}</button></div>`;
   return h;
 }
+function encuadra(){ if (mapa && capaMunis){ mapa.invalidateSize(); mapa.fitBounds(capaMunis.getBounds(), { padding: [10, 10], animate: false }); } }
 function mapaElige(nombre, centrar){
   st.mapaSel = nombre || "";
   if (capaMunis) capaMunis.setStyle(estiloMuni);
+  pintaCifras();
   const pan = $("#mapaPanel"); if (pan) pan.innerHTML = seguro("el pueblo elegido", mapaPanel, cajaFallo);
   if (nombre && capaMunis){
-    capaMunis.eachLayer(l => { if (l.feature.properties.n === nombre){ l.bringToFront(); if (centrar) mapa.fitBounds(l.getBounds(), { maxZoom: 11, padding: [30, 30] }); } });
+    capaMunis.eachLayer(l => { if (l.feature.properties.n === nombre){ l.bringToFront(); if (centrar){ mapaMovido = true; mapa.fitBounds(l.getBounds(), { maxZoom: 10.5, padding: [40, 40] }); } } });
     // En el móvil, que se vea el principio de la lista sin perder el mapa
     if (pan && !esPC()) setTimeout(() => { const r = pan.getBoundingClientRect(); if (r.top > innerHeight * .75) scrollBy({ top: r.top - innerHeight * .55, behavior: "smooth" }); }, 60);
   }
 }
 
+// Etiquetas: cifra siempre; nombre del pueblo al acercar (o del elegido)
 function pintaCifras(){
-  if (!capaCifras) return;
+  if (!capaCifras || !capaMunis) return;
   capaCifras.clearLayers();
   capaMunis.eachLayer(l => {
-    const p = l.feature.properties, k = mapaConteo[p.n];
-    if (!k || p.comun) return;
-    const ic = L.divIcon({ className: "mp-cifra" + (k.a ? " alta" : ""), html: String(k.n), iconSize: null });
-    L.marker(puntoDe(l), { icon: ic, keyboard: false, title: p.n }).on("click", () => mapaElige(p.n)).addTo(capaCifras);
+    const p = l.feature.properties, k = mapaConteo[p.n], sel = st.mapaSel === p.n;
+    if (p.comun || (!k && !sel)) return;
+    const ic = L.divIcon({ className: "mp-eti" + (k && k.a ? " alta" : "") + (sel ? " sel" : "") + (!k ? " cero" : ""), html: `<div><b>${k ? k.n : 0}</b><span>${esc(p.n)}</span></div>`, iconSize: null });
+    L.marker(puntoDe(l), { icon: ic, keyboard: false, title: p.n, zIndexOffset: sel ? 1000 : k ? k.n * 10 : 0 }).on("click", () => mapaElige(p.n)).addTo(capaCifras);
   });
 }
+const mpZoomClase = () => { if (mapaEl && mapa) mapaEl.classList.toggle("mp-cerca", mapa.getZoom() >= 9.5); };
 
 // Se llama después de pintar la sección Pueblos
 function mapaMonta(news){
@@ -99,34 +104,51 @@ function mapaMonta(news){
   if (mapa && mapaEl){
     hueco.replaceWith(mapaEl);
     mapa.invalidateSize();
+    if (!mapaMovido) encuadra();
     capaMunis.setStyle(estiloMuni); pintaCifras();
     return;
   }
   hueco.innerHTML = `<div class="mp-carga">Cargando el mapa…</div>`;
   preparaMapa().then(geo => {
     const sitio = $("#mapaPueblos"); if (!sitio) return;   // se cambió de sección mientras cargaba
-    if (mapa && mapaEl){ sitio.replaceWith(mapaEl); mapa.invalidateSize(); return; }
+    if (mapa && mapaEl){ sitio.replaceWith(mapaEl); encuadra(); return; }
     sitio.innerHTML = "";
     mapaEl = sitio;
-    mapa = L.map(sitio, { zoomSnap: .25, attributionControl: true, scrollWheelZoom: false, zoomControl: true, minZoom: 7, maxZoom: 13 });
-    mapa.attributionControl.setPrefix("").addAttribution("Límites: IGN");
-    const c = mapaColores();
-    L.geoJSON({ type: "Feature", geometry: geo.provincia }, { interactive: false, style: { color: c.tinta, weight: 2, fill: false, opacity: .55 } }).addTo(mapa);
+    mapa = L.map(sitio, { zoomSnap: .25, zoomDelta: .5, attributionControl: true, scrollWheelZoom: false, zoomControl: true, minZoom: 7, maxZoom: 13, keyboard: false });
+    mapa.attributionControl.setPrefix("").addAttribution("Límites municipales: IGN");
     capaMunis = L.geoJSON(geo, {
       style: estiloMuni,
       onEachFeature: (f, l) => {
-        if (f.properties.comun) { l.bindTooltip("Común de Sepúlveda y Riaza (no es un municipio)", { sticky: true }); return; }
+        if (f.properties.comun) { l.bindTooltip("Común de Sepúlveda y Riaza (no es un municipio)", { sticky: true, className: "mp-tip" }); return; }
         l.bindTooltip(() => { const k = mapaConteo[f.properties.n]; return `<b>${esc(f.properties.n)}</b><br>${k ? plural(k.n, "noticia", "noticias") + (k.a ? ` · ${plural(k.a, "importante", "importantes")}` : "") : "Sin noticias"}`; }, { sticky: true, direction: "top", className: "mp-tip" });
         l.on("click", () => mapaElige(f.properties.n));
+        // Resalte al pasar el ratón
+        l.on("mouseover", () => { if (st.mapaSel !== f.properties.n) l.setStyle({ weight: 2.5, color: mpPal().tinta }); });
+        l.on("mouseout", () => l.setStyle(estiloMuni(f)));
       },
     }).addTo(mapa);
+    capaProv = L.geoJSON({ type: "Feature", geometry: geo.provincia }, { interactive: false, style: () => ({ color: mpPal().prov, weight: 2.2, fill: false, opacity: .9 }) }).addTo(mapa);
     capaCifras = L.layerGroup().addTo(mapa);
-    mapa.fitBounds(capaMunis.getBounds(), { padding: [6, 6] });
-    // Si cambia el tamaño (girar el móvil, ventana) y no hay un pueblo elegido, la provincia vuelve a encajar entera
-    mapa.on("resize", () => { if (!st.mapaSel) mapa.fitBounds(capaMunis.getBounds(), { padding: [6, 6] }); });
+    // Leyenda
+    const ley = L.control({ position: "bottomleft" });
+    ley.onAdd = () => { const d = L.DomUtil.create("div", "mp-ley"); const p = mpPal();
+      d.innerHTML = `<span>Menos</span>${p.verde.map(c => `<i style="background:${c}"></i>`).join("")}<span>Más</span><i class="r" style="background:${p.rojo[2]}"></i><span>Con importantes</span>`; return d; };
+    ley.addTo(mapa);
+    requestAnimationFrame(encuadra);
+    // Si cambia el tamaño (girar el móvil, ventana) y nadie ha movido el mapa, la provincia vuelve a encajar entera
+    mapa.on("resize", () => { if (!mapaMovido) encuadra(); });
+    mapa.on("dragstart", () => { mapaMovido = true; });
+    mapa.getContainer().addEventListener("wheel", () => { if (mapa.scrollWheelZoom.enabled()) mapaMovido = true; }, { passive: true });
+    mapa.on("zoomend", mpZoomClase);
+    mapa.zoomControl.getContainer().addEventListener("click", () => { mapaMovido = true; });
     // La rueda del ratón solo amplía tras hacer clic en el mapa (si no, al bajar por la página se quedaría atrapada)
     mapa.on("click", () => mapa.scrollWheelZoom.enable()); mapa.on("mouseout", () => mapa.scrollWheelZoom.disable());
-    pintaCifras();
+    // Botón para volver a ver la provincia entera
+    const ver = L.control({ position: "topleft" });
+    ver.onAdd = () => { const b = L.DomUtil.create("button", "mp-todo"); b.type = "button"; b.title = "Ver toda la provincia"; b.textContent = "Provincia";
+      L.DomEvent.on(b, "click", e => { L.DomEvent.stop(e); mapaMovido = false; encuadra(); }); return b; };
+    ver.addTo(mapa);
+    pintaCifras(); mpZoomClase();
     if (st.mapaSel) mapaElige(st.mapaSel);
   }).catch(e => {
     console.warn("[Prensa Segovia] Mapa de pueblos:", e);
@@ -137,5 +159,7 @@ function mapaMonta(news){
 function mapaBusca(){
   if (!capaMunis || !st.townQ || st.townQ.length < 3) return;
   const q = norm(st.townQ), hay = []; capaMunis.eachLayer(l => { if (!l.feature.properties.comun && norm(l.feature.properties.n).includes(q)) hay.push(l); });
-  if (hay.length === 1) mapa.fitBounds(hay[0].getBounds(), { maxZoom: 11, padding: [30, 30] });
+  if (hay.length === 1){ mapaMovido = true; mapa.fitBounds(hay[0].getBounds(), { maxZoom: 10.5, padding: [40, 40] }); }
 }
+// Cambio de tema claro/oscuro: se recolorea
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { if (capaMunis){ capaMunis.setStyle(estiloMuni); capaProv?.setStyle({ color: mpPal().prov }); } });
