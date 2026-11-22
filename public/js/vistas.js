@@ -102,16 +102,18 @@ function viewPueblos(news){
   for (const n of pool){ const k=n.municipio; (m[k] ||= {n:0,a:0}); m[k].n++; if(n.relevancia==="alta") m[k].a++; }
   let list = Object.entries(m).sort((a,b)=> (b[1].a-a[1].a) || (b[1].n-a[1].n) || a[0].localeCompare(b[0],"es"));
   if (st.townQ) list = list.filter(([k])=>norm(k).includes(norm(st.townQ)));
+  // Mapa y, al lado (ordenador) o debajo (móvil), la lista de pueblos; al elegir un pueblo, la lista deja paso a sus noticias
   let h = `<div class="sect"><h2>Pueblos</h2><span class="aux">Últimos ${st.rango} días</span></div>
-    <div class="mp-wrap"><div class="mapa-pueblos" id="mapaPueblos" role="region" aria-label="Mapa de pueblos de la provincia"></div><div class="mapa-panel" id="mapaPanel" aria-live="polite"></div></div>
+    <div class="mp-wrap"><div class="mapa-pueblos" id="mapaPueblos" role="region" aria-label="Mapa de pueblos de la provincia"></div><div class="mapa-panel">
+    <div id="mapaPanel" aria-live="polite"></div><div id="mpLista" ${st.mapaSel?"hidden":""}>
     <div class="search">${I.search}<input id="townQ" type="search" placeholder="Buscar pueblo" value="${esc(st.townQ)}" autocomplete="off"></div><div class="towns">${avisoFiltros()}`;
   if (!list.length && st.townQ){
     const otros = [...new Set(news.filter(n=>esPueblo(n.municipio) && norm(n.municipio).includes(norm(st.townQ))).map(n=>n.municipio))];
     h += otros.length ? otros.map(k=>`<button class="town none" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span><span class="cnt">hace más de ${esc(st.rango)} días</span><span class="chev">›</span></button>`).join("")
       : `<div class="empty"><b>Sin noticias</b>No hay noticias de interés recientes de ese pueblo.<br><button class="btn ghost" data-act="buscapueblo" type="button">Buscar en todo lo publicado</button></div>`;
   } else if (!list.length) h += `<div class="empty"><b>Sin noticias de pueblos</b>En los últimos ${st.rango} días no hay noticias de interés de ningún pueblo.</div>`;
-  h += list.map(([k,v])=>`<button class="town" data-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span>${v.a?`<span class="al">${plural(v.a,"importante","importantes")}</span>`:""}<span class="cnt">${v.n}</span><span class="chev">›</span></button>`).join("");
-  return h + `</div>`;
+  h += list.map(([k,v])=>`<button class="town" data-mapa-pueblo="${esc(k)}" type="button"><span class="name">${esc(k)}</span>${v.a?`<span class="al">${plural(v.a,"importante","importantes")}</span>`:""}<span class="cnt">${v.n}</span><span class="chev">›</span></button>`).join("");
+  return h + `</div></div></div></div>`;
 }
 
 function viewGuardadas(){

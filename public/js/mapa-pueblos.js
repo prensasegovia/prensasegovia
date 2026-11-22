@@ -53,14 +53,10 @@ function mapaRecuento(news){
   for (const n of mapaNoticias){ const k = mapaConteo[n.municipio] ||= { n: 0, a: 0 }; k.n++; if (n.relevancia === "alta") k.a++; }
 }
 
-// Al lado o debajo del mapa: las noticias del pueblo elegido; sin elegir, los pueblos con más noticias
+// Al lado o debajo del mapa: las noticias del pueblo elegido (sin elegir, se ve la lista de pueblos de la sección)
 function mapaPanel(){
   const p = st.mapaSel;
-  if (!p){
-    const top = Object.entries(mapaConteo).sort((a, b) => (b[1].a - a[1].a) || (b[1].n - a[1].n) || a[0].localeCompare(b[0], "es")).slice(0, 8);
-    return `<div class="mp-ayuda"><b>Toca un pueblo</b> para ver sus noticias.</div>` + (top.length ? `<div class="mp-top"><h3>Con más noticias · ${st.rango} días</h3>${top.map(([k, v]) =>
-      `<button type="button" class="mp-fila" data-mapa-pueblo="${esc(k)}"><span class="mp-punto ${v.a ? "alta" : ""}"></span><span class="nom">${esc(k)}</span>${v.a ? `<span class="al">${plural(v.a, "importante", "importantes")}</span>` : ""}<span class="cnt">${v.n}</span></button>`).join("")}</div>` : `<div class="mp-ayuda">No hay noticias de pueblos en estos ${st.rango} días.</div>`);
-  }
+  if (!p) return `<div class="mp-ayuda"><b>Toca un pueblo</b> en el mapa o en la lista para ver sus noticias.</div>`;
   const lista = mapaNoticias.filter(n => n.municipio === p).sort(porHora);
   const k = mapaConteo[p] || { n: 0, a: 0 };
   let h = `<div class="mp-cab"><div><h3>${esc(p)}</h3><span>${k.n ? plural(k.n, "noticia", "noticias") + (k.a ? ` · ${plural(k.a, "importante", "importantes")}` : "") + ` en ${st.rango} días` : `Sin noticias en ${st.rango} días`}</span></div>
@@ -75,6 +71,9 @@ function mapaElige(nombre, centrar){
   if (capaMunis) capaMunis.setStyle(estiloMuni);
   pintaCifras();
   const pan = $("#mapaPanel"); if (pan) pan.innerHTML = seguro("el pueblo elegido", mapaPanel, cajaFallo);
+  const li = $("#mpLista"); if (li) li.hidden = !!st.mapaSel;
+  // Al cerrar el pueblo, el mapa vuelve a la provincia entera
+  if (!nombre && mapa){ mapaMovido = false; mapa.fitBounds(capaMunis.getBounds(), { padding: [10, 10] }); }
   if (nombre && capaMunis){
     capaMunis.eachLayer(l => { if (l.feature.properties.n === nombre){ l.bringToFront(); if (centrar){ mapaMovido = true; mapa.fitBounds(l.getBounds(), { maxZoom: 10.5, padding: [40, 40] }); } } });
     // En el móvil, que se vea el principio de la lista sin perder el mapa

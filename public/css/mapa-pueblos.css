@@ -29,17 +29,10 @@
 .mapa-pueblos .leaflet-control-attribution{background:transparent!important;color:var(--muted)!important;font-size:10px}
 /* Panel: pueblo elegido o pueblos con más noticias */
 .mapa-panel{margin-top:10px}
+.mapa-panel .towns,.mapa-panel .feed{padding:0}
+#mpLista[hidden]{display:none}
 .mp-ayuda{font-size:14px;color:var(--muted);padding:4px 2px 8px;line-height:1.45}
 .mp-ayuda b{color:var(--ink)}
-.mp-top{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:10px 6px 6px}
-.mp-top h3{margin:2px 10px 6px;font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.mp-fila{display:flex;align-items:center;gap:10px;width:100%;font:inherit;font-size:15px;text-align:left;background:none;border:0;color:var(--ink);padding:9px 10px;border-radius:10px;cursor:pointer}
-.mp-fila:hover{background:var(--pine-soft)}
-.mp-fila .nom{flex:1;font-weight:600}
-.mp-fila .al{font-size:12px;font-weight:700;color:var(--alta-ink);background:var(--alta-soft);padding:2px 8px;border-radius:999px}
-.mp-fila .cnt{font-weight:800;color:var(--muted);min-width:20px;text-align:right}
-.mp-punto{width:10px;height:10px;border-radius:50%;background:var(--pine-2)}
-.mp-punto.alta{background:var(--alta)}
 .mp-cab{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-bottom:8px}
 .mp-cab>div{flex:1;min-width:0}
 .mp-cab h3{margin:0;font-size:19px;line-height:1.2}
@@ -52,7 +45,9 @@
 @media (min-width:1000px){
   .mp-wrap{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);gap:16px;align-items:start}
   .mapa-pueblos{height:min(72vh,640px);position:sticky;top:calc(var(--bar) + 12px)}
-  .mapa-panel{margin-top:0;max-height:min(72vh,640px);overflow-y:auto;scrollbar-width:thin;padding-right:2px}
+  .mapa-panel{margin-top:0;min-width:0}
+  .mapa-panel .search{margin-top:0}
+  .mapa-panel .towns{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
   .mapa-panel .feed{display:flex;flex-direction:column;gap:10px}
   .mapa-panel .card{margin:0}
 }
