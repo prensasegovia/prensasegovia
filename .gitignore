@@ -1,4 +1,3 @@
 node_modules/
-usuarios/.env
-usuarios/*.db
-usuarios/*.db-*
+# Copias temporales del banco de pruebas
+scripts/_*.mjs

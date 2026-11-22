@@ -3,7 +3,8 @@
 Web que reúne cada día las noticias de los pueblos de la provincia de Segovia.
 
 - **Web:** se publica con GitHub Pages desde la carpeta `public/`.
-- **Actualización:** GitHub Actions ejecuta `scripts/actualizar.mjs` cada hora. El script lee los RSS de los medios provinciales y comarcales y varias búsquedas de Google Noticias, clasifica cada noticia por pueblo, tema y relevancia, agrupa las repetidas y guarda los últimos 30 días en `public/datos.json`.
+- **Actualización:** GitHub Actions ejecuta `scripts/actualizar.mjs`. Lo lanza el despertador de Apps Script (`herramientas/despertador.gs`) cada 10 minutos de lunes a viernes de 8 a 15 h y cada hora el resto; el reloj de GitHub hace de respaldo cada 20 minutos. El script lee los RSS de los medios provinciales y comarcales y varias búsquedas de Google Noticias, clasifica cada noticia por pueblo, tema y relevancia, agrupa las repetidas y guarda los últimos 21 días en `public/datos.json` (lo que pasó el filtro queda por meses en `public/archivo/` y todo lo leído en `public/hemeroteca/`).
+- **Banco de pruebas del filtro:** `node scripts/prueba.mjs --casos` comprueba los ejemplos reales de `scripts/casos.json` (si entran o no, en qué pueblo y si van en rojo). Al cambiar el filtro se añaden los casos nuevos y todos tienen que seguir saliendo bien. Necesita `npm install` la primera vez.
 - **Coste:** cero. Repositorio público + GitHub Pages + GitHub Actions gratuitos.
 
 ## Cómo está organizada la web (`public/`)
