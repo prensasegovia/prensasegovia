@@ -66,8 +66,9 @@ async function rsCarga(forzar){
     ps.forEach(o => vistas.add(o.k));
     meta[p.id] = { ...((d && d.perfiles && d.perfiles[0]) || {}), n: ps.length, min: ps.length ? Math.min(...ps.map(o => new Date(o.fecha).getTime())) : 0 };
     meta[p.id].vacio = !ps.length;
+    const conFicha = !!(meta[p.id].enlace || meta[p.id].nota);
     if (!d) errs.push({ p, e: "el servidor no responde" });
-    else if (d.errores && d.errores[0] && d.errores[0].error) errs.push({ p, e: d.errores[0].error });
+    else if (d.errores && d.errores[0] && d.errores[0].error && !(meta[p.id].vacio && conFicha)) errs.push({ p, e: d.errores[0].error });
     else if (!ps.length && p.r === "x" && redXLeyendo()) errs.push({ p, e: "leyendo en X…" });
     posts.push(...ps); });
   posts.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -93,8 +94,11 @@ function rsPinta(){
   rsHistRepinta();
   const L = rsVisibles(), errs = st.rs.errs.filter(e => !ver || e.p.id === ver);
   const est = document.getElementById("rsEstado");
-  if (est){ const nPerf = new Set(L.map(o => o.p.id)).size;
-    est.innerHTML = `<span>${q ? `<b>${plural(L.length, "publicación contiene", "publicaciones contienen")} «${esc(q)}»</b>` : `${plural(L.length, "publicación", "publicaciones")} de ${plural(nPerf, "perfil", "perfiles")}`} · consultado a las ${esc(RT.hora(st.rs.hora))}</span>`
+  if (est){ const nPerf = new Set(L.map(o => o.p.id)).size, nFic = LF.filter(p => (!ver || p.id === ver) && (M[p.id] || {}).vacio).length;
+    const cuenta = q ? `<b>${plural(L.length, "publicación contiene", "publicaciones contienen")} «${esc(q)}»</b>`
+      : L.length ? `${plural(L.length, "publicación", "publicaciones")} de ${plural(nPerf, "perfil", "perfiles")}${nFic ? ` · ${plural(nFic, "perfil", "perfiles")} sin publicaciones` : ""}`
+      : nFic ? `${plural(nFic, "perfil", "perfiles")} sin publicaciones` : "Sin publicaciones";
+    est.innerHTML = `<span>${cuenta} · consultado a las ${esc(RT.hora(st.rs.hora))}</span>`
       + (LF.some(p => p.r === "x") && !RS_DEMO ? `<span class="rs-x" id="redXEstado">${redXEstadoHtml()}</span>` : ""); }
   let h = "";
   if (ver){ const p = LF.find(q => q.id === ver); if (p) h += rsPf(p, M[ver] || {}); }
