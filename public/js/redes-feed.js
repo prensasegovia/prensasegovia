@@ -65,7 +65,10 @@ async function rsCarga(forzar){
     const ps = raw.map(x => seguro("una publicación de " + p.n, () => RT.rsNorm(x, p, rsImg), null)).filter(o => o && o.fecha && !vistas.has(o.k));
     ps.forEach(o => vistas.add(o.k));
     meta[p.id] = { ...((d && d.perfiles && d.perfiles[0]) || {}), n: ps.length, min: ps.length ? Math.min(...ps.map(o => new Date(o.fecha).getTime())) : 0 };
-    if (!ps.length) errs.push({ p, e: d ? ((d.errores && d.errores[0] && d.errores[0].error) || (p.r === "x" && redXLeyendo() ? "leyendo en X…" : "sin publicaciones")) : "el servidor no responde" });
+    meta[p.id].vacio = !ps.length;
+    if (!d) errs.push({ p, e: "el servidor no responde" });
+    else if (d.errores && d.errores[0] && d.errores[0].error) errs.push({ p, e: d.errores[0].error });
+    else if (!ps.length && p.r === "x" && redXLeyendo()) errs.push({ p, e: "leyendo en X…" });
     posts.push(...ps); });
   posts.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
   st.rs = { clave, posts, errs, meta, n: (st.rs && st.rs.clave === clave && st.rs.n) || RS_PAG, hora: Date.now(), visto: st.rsVistoV[clave] };
@@ -78,6 +81,12 @@ const rsVisibles = () => { if (!st.rs) return []; const ver = st.rsVer, q = st.r
   return st.rs.posts.filter(o => (!ver || o.p.id === ver) && RT.casa(o, q)); };
 const rsTarjeta = (o, re) => RT.tarjeta(o, { re, nuevo: rsEsNuevo(o), icono: redKey,
   avatar: x => x.avatar ? `<img src="${esc(x.avatar)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : rsAvt(x.p) });
+// Ficha del perfil: foto, cabecera, cifras, bio, motivo por el que no hay publicaciones y enlace
+const rsPf = (p, m) => `<div class="rs-perfil" data-r="${p.r}"><span class="ring">${rsAvt(p)}</span><div class="rs-pf-i"><section class="rz-col rs-pf" data-id="${esc(p.id)}"><header>${redCab(p)}</header></section>`
+  + `<span class="cifras">${[m.total != null && `<b>${RT.exacto(m.total)}</b> publicaciones`, m.seguidores != null && `<b>${RT.exacto(m.seguidores)}</b> seguidores`, m.siguiendo != null && `<b>${RT.exacto(m.siguiendo)}</b> seguidos`].filter(Boolean).join(" · ") || "Sin datos del perfil"}</span>`
+  + (m.bio ? `<p class="bio">${RT.texto(m.bio, p.r, null)}</p>` : "")
+  + (m.nota ? `<p class="nota">${esc(m.nota)}</p>` : "")
+  + `<a class="ver" href="${esc(m.enlace || redUrl(p.r, p.u))}" target="_blank" rel="noopener noreferrer">Ver perfil en ${REDES[p.r].n} ↗</a></div></div>`;
 function rsPinta(){
   const el = document.getElementById("rsFeed"); if (!el || !st.rs) return;
   const LF = rsLF(), ver = st.rsVer, q = (st.rsQ || "").trim(), re = RT.qRe(q), M = st.rs.meta;
@@ -88,13 +97,11 @@ function rsPinta(){
     est.innerHTML = `<span>${q ? `<b>${plural(L.length, "publicación contiene", "publicaciones contienen")} «${esc(q)}»</b>` : `${plural(L.length, "publicación", "publicaciones")} de ${plural(nPerf, "perfil", "perfiles")}`} · consultado a las ${esc(RT.hora(st.rs.hora))}</span>`
       + (LF.some(p => p.r === "x") && !RS_DEMO ? `<span class="rs-x" id="redXEstado">${redXEstadoHtml()}</span>` : ""); }
   let h = "";
-  if (ver){ const p = LF.find(q => q.id === ver), m = M[ver] || {};
-    if (p) h += `<div class="rs-perfil" data-r="${p.r}"><span class="ring">${rsAvt(p)}</span><div class="rs-pf-i"><section class="rz-col rs-pf" data-id="${esc(p.id)}"><header>${redCab(p)}</header></section>`
-      + `<span class="cifras">${[m.total != null && `<b>${RT.exacto(m.total)}</b> publicaciones`, m.seguidores != null && `<b>${RT.exacto(m.seguidores)}</b> seguidores`, m.siguiendo != null && `<b>${RT.exacto(m.siguiendo)}</b> seguidos`].filter(Boolean).join(" · ") || "Sin datos del perfil"}</span>`
-      + (m.bio ? `<p class="bio">${RT.texto(m.bio, p.r, null)}</p>` : "")
-      + `<a class="ver" href="${esc(redUrl(p.r, p.u))}" target="_blank" rel="noopener noreferrer">Ver perfil en ${REDES[p.r].n} ↗</a></div></div>`; }
+  if (ver){ const p = LF.find(q => q.id === ver); if (p) h += rsPf(p, M[ver] || {}); }
   if (errs.length) h += `<p class="rs-errs">No se ha podido leer: ${errs.map(e => `${redKey(e.p.r)} <b>${esc(e.p.n)}</b> (${esc(e.e)})`).join(", ")}</p>`;
-  if (!L.length) h += `<div class="rz-vacio"><b>${q ? "Nada encontrado" : "Sin publicaciones"}</b>${q ? "Ninguna publicación cargada contiene eso. Prueba con otra palabra." : ver ? "Este perfil no tiene publicaciones que se puedan leer ahora." : "Ningún perfil tiene publicaciones que se puedan leer ahora."}</div>`;
+  const vacios = !ver && !q ? LF.filter(p => (M[p.id] || {}).vacio) : [];
+  if (vacios.length) h += `<div class="rs-fichas">${vacios.map(p => rsPf(p, M[p.id] || {})).join("")}</div>`;
+  if (!L.length && !vacios.length && (q || !ver)) h += `<div class="rz-vacio"><b>${q ? "Nada encontrado" : "Sin publicaciones"}</b>${q ? "Ninguna publicación cargada contiene eso. Prueba con otra palabra." : "Ningún perfil tiene publicaciones que se puedan leer ahora."}</div>`;
   /* El servidor trae solo las últimas de cada perfil (12 en Instagram). Un perfil que publica mucho las cubre en un día y otro en
      una semana: más atrás de la más antigua del primero ya solo saldrían las del segundo. En «Todos» (sin buscar) se enseña solo
      el tramo en que están todos los perfiles, bien mezclados por fecha y hora, y lo anterior queda detrás de un botón que lo explica. */
