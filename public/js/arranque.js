@@ -183,7 +183,7 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
     if (!a) return;
     e.preventDefault();
     e.stopPropagation();
-    abreLector(a.href, a.dataset.origen || "");
+    abreLector(a.href, a.dataset.origen || "", a.dataset.img || "");
   }, true);
   const poner = raiz => {
     const cards = raiz.matches && raiz.matches('article.card[data-href]') ? [raiz] : (raiz.querySelectorAll ? [...raiz.querySelectorAll('article.card[data-href]')] : []);
@@ -192,7 +192,8 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
       c.dataset.chip = '1';
       if (!c.querySelector('.pay')) continue;
       const h4 = c.querySelector('h4'); if (!h4) continue;
-      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${c.dataset.href}" data-origen="${c.dataset.href}" target="_blank" rel="noopener">Leer completo</a>`);
+      const foto = (c.querySelector('img.thumb')?.src || "").replace(/&/g, "&amp;");
+      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${c.dataset.href}" data-origen="${c.dataset.href}"${foto ? ` data-img="${foto}"` : ""} target="_blank" rel="noopener">Leer completo</a>`);
     }
   };
   poner(document);
