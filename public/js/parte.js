@@ -50,10 +50,24 @@ function viewParte(news){
 }
 document.addEventListener("click", e=>{ const r = e.target.closest && e.target.closest(".parte.pd a[data-k]"); if (r) marcarAbierta(r.dataset.k); });
 const GRUPOS_MEDIOS = ["Periódicos y digitales de Segovia","Comarcales y locales","Radio","Agencias y medios regionales","Instituciones","Partidos y sindicatos","Plataformas vecinales","Sector agrario","Ayuntamientos","Google Noticias","Otros"];
+// Estado real de cada fuente: no basta con que responda; importa si publica y si aporta noticias de interés
+const diasDesde = f => f ? Math.round((new Date(today() + "T12:00") - new Date(f + "T12:00")) / 864e5) : null;
+const haceDias = f => { const d = diasDesde(f); return d === null ? "" : d <= 0 ? "hoy" : d === 1 ? "ayer" : `hace ${d} días`; };
+const PARADA_DIAS = 14;
+function estadoFuente(f){
+  if (!f.ok) return { c: "ko", t: "No responde ahora · sus noticias pueden llegar por Google Noticias" };
+  const u = diasDesde(f.ultima), a = diasDesde(f.aporta);
+  if (u !== null && u > PARADA_DIAS) return { c: "parada", t: `Parada: no publica nada desde ${haceDias(f.ultima)}` };
+  const pub = f.ultima ? `publicó ${haceDias(f.ultima)}` : "";
+  if (a === null) return { c: "cero", t: [pub, "ninguna noticia de interés en 3 semanas"].filter(Boolean).join(" · ") };
+  return { c: a > 7 ? "cero" : "", t: `Última noticia de interés ${haceDias(f.aporta)}${pub && diasDesde(f.ultima) < a ? " · " + pub : ""}` };
+}
 function viewMedios(){
   const F = st.fuentes;
   const ok = F.filter(f=>f.ok).length;
-  let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>${F.length} fuentes revisadas cada 10 min (L-V, 8-15 h) o cada hora${st.actualizado?` · última revisión ${esc(st.actualizado.slice(11,16))}`:""}. ${ok} responden ahora.</p></section>`;
+  const est = F.map(estadoFuente), aportan = est.filter(e=>e.c==="").length, paradas = est.filter(e=>e.c==="parada").length;
+  let h = `<section class="subhero"><h1>Medios y fuentes</h1><p>${F.length} fuentes revisadas cada 10 min (L-V, 8-15 h) o cada hora${st.actualizado?` · última revisión ${esc(st.actualizado.slice(11,16))}`:""}. ${ok} responden ahora · ${aportan} han aportado noticias esta semana${paradas?` · ${paradas} paradas`:""}.</p></section>
+    <p class="note mleyenda" style="padding:0 20px"><span class="dot"></span> aporta noticias <span class="dot cero"></span> responde pero apenas aporta <span class="dot parada"></span> parada (no publica hace más de ${PARADA_DIAS} días) <span class="dot ko"></span> no responde</p>`;
   if (!F.length) return h + `<div class="empty"><b>Cargando…</b></div>`;
   for (const g of GRUPOS_MEDIOS){
     const l = F.filter(f=>(f.grupo||"Otros")===g);
@@ -62,13 +76,15 @@ function viewMedios(){
     if (g==="Ayuntamientos"){
       const aOk = l.filter(f=>f.ok).length, aN = l.reduce((t,f)=>t+(f.noticias||0),0);
       h += `<p class="note" style="padding:0 4px">Webs municipales con noticias activas. ${aOk} de ${l.length} responden · ${aN} avisos leídos. Solo pasan los que son de interés (no bandos, plenos ordinarios ni trámites).</p><div class="aytos">` +
-        l.map(f=>`<a class="ayto" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${!f.ok?"ko":f.noticias?"":"cero"}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`).join("") + `</div>`;
+        l.map(f=>{ const e = estadoFuente(f); return `<a class="ayto" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener" title="${esc(e.t)}"><span class="dot ${e.c}"></span>${esc(f.fuente.replace("Ayuntamiento de ",""))}</a>`; }).join("") + `</div>`;
     } else if (g==="Google Noticias"){
       const f = l[0];
       h += `<div class="medio"><span class="dot ${f.ok?"":"ko"}"></span><div><b>Búsquedas en Google Noticias</b><span>${f.busquedas||""} búsquedas por temas y por los 208 municipios · ${f.noticias||0} resultados en la última revisión</span></div></div>`;
       if (st.viaGoogle.length) h += `<p class="note" style="padding:0 4px">Medios que llegan por esta vía: ${st.viaGoogle.map(([m,n])=>`${esc(m)} (${n})`).join(", ")}.</p>`;
     } else {
-      h += l.map(f=>`<a class="medio" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${f.ok?"":"ko"}"></span><div><b>${esc(f.fuente)}</b><span>${f.ok?`${plural(f.noticias,"noticia leída","noticias leídas")} en la última revisión`:"No responde ahora · sus noticias llegan por Google Noticias"}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
+      // Primero las que aportan; las paradas y caídas, al final
+      const orden = {"":0, cero:1, parada:2, ko:3};
+      h += l.map(f=>({f, e:estadoFuente(f)})).sort((x,y)=>orden[x.e.c]-orden[y.e.c]).map(({f,e})=>`<a class="medio" href="${esc(safeUrl(f.web)||"#")}" target="_blank" rel="noopener"><span class="dot ${e.c}"></span><div><b>${esc(f.fuente)}</b><span>${esc(e.t)}</span></div>${I.ext.replace('<svg','<svg width="14" height="14"')}</a>`).join("");
     }
     h += `</div>`;
   }

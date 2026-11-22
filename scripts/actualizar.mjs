@@ -154,6 +154,10 @@ const BUSQUEDAS = [
   'Segovia carteles electorales OR mitin incidentes OR boicot OR abucheos campaña',
   'Segovia desinformación OR bulo OR injerencia OR rusa OR espionaje OR ciberataque',
   'Segovia dron OR drones prisión OR "centro penitenciario" OR sobrevuelo',
+  // Fuentes sin canal propio que funcione: Cadena SER Segovia, el 112 y los avisos naranja y rojo de AEMET
+  'site:cadenaser.com Segovia',
+  'Segovia "112" OR "Emergencias 112" OR bomberos',
+  'Segovia AEMET "aviso naranja" OR "aviso rojo" OR "alerta naranja" OR "alerta roja"',
   // Pueblos grandes y cabeceras de comarca
   '(Cuéllar OR "Navas de Oro" OR Samboal OR Chañe OR Fuentepelayo) Segovia',
   '("El Espinar" OR "San Rafael" OR "Navas de San Antonio" OR "Otero de Herreros") Segovia',
@@ -166,7 +170,7 @@ const BUSQUEDAS = [
   '(Fuentidueña OR Sacramenia OR Aguilafuente OR Mozoncillo OR Zarzuela) Segovia',
 ];
 // Solo se aceptan resultados de Google Noticias de estos medios (o de cualquiera con "Segovia" o "Castilla" en el nombre)
-const MEDIOS_OK_RE = /segovia|castilla|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
+const MEDIOS_OK_RE = /segovia|castilla|aemet|cuellar|nordeste|adelantado|norte de castilla|ical|europa press|cope|cadena ser|onda cero|rtvcyl|la 8|cyltv|el espanol|el mundo|abc|la razon|20 ?minutos|rtve|eldiario|el pais|efe|infolibre|la sexta|antena 3|telecinco|cuatro|el confidencial|okdiario|libertad digital|vozpopuli|nius|la vanguardia|el periodico|publico|huffpost|niusdiario|noticiascyl|tribuna|guardia civil|interior|ministerio|junta|diputacion|ayuntamiento|subdelegacion|112/;
 // Medios locales de otras provincias (Onda Cero Jaén, Tribuna de León, Ayuntamiento de ... Fuerteventura): fuera.
 // Ávila, Valladolid, Madrid y Soria se dejan pasar porque a veces cuentan cosas de pueblos de Segovia limítrofes.
 const OTRA_PROVINCIA = /alava|albacete|alicante|almeria|asturias|badajoz|baleares|barcelona|burgos|caceres|cadiz|cantabria|castellon|ciudad real|cordoba|coruna|cuenca|girona|granada|guadalajara|gipuzkoa|guipuzcoa|huelva|huesca|jaen|\bleon\b|lleida|rioja|lugo|malaga|murcia|navarra|ourense|palencia|las palmas|pontevedra|salamanca|tenerife|sevilla|tarragona|teruel|toledo|valencia|vizcaya|bizkaia|bilbao|zamora|zaragoza|fuerteventura|lanzarote|canarias|galicia|andalucia|cataluna|aragon|extremadura|ceuta|melilla|mallorca|ibiza|menorca|gijon|oviedo|vigo|elche|cartagena|jerez|marbella|puerto del rosario/;
@@ -510,7 +514,7 @@ const VACIAS = new Set("el la los las un una unos unas de del al a en y o u que 
 // Palabras distintas que en un titular significan lo mismo (para reconocer la misma noticia contada por varios medios)
 const SINONIMOS = { carce: "carce", prisi: "carce", penit: "carce", lesio: "herid", herid: "herid", heric: "herid", recl: "carce", reclu: "carce", /* ni «inter» (internacional) ni «presi» (presidente) */
   incid: "alter", alter: "alter", agred: "agres", agres: "agres", detie: "deten", deten: "deten", arres: "deten", autob: "autob", bus: "autob", buses: "autob", urban: "urban",
-  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", alumb: "ilumi", ilumi: "ilumi", robab: "robo", robos: "robo", desva: "robo", sustr: "robo", grupo: "banda", banda: "banda", desma: "desar", desar: "desar", cae: "desar", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", quema: "incen", fuego: "incen", arde: "incen", ardio: "incen", intox: "intox", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", paros: "huelg", tren: "tren", trene: "tren", maqui: "tren" };
+  fallec: "muert", falle: "muert", muere: "muert", muert: "muert", murio: "muert", sinie: "accid", accid: "accid", colis: "accid", choqu: "accid", robar: "robo", roban: "robo", robo: "robo", robos: "robo", robad: "robo", hurto: "robo", alumb: "ilumi", ilumi: "ilumi", robab: "robo", robos: "robo", desva: "robo", sustr: "robo", grupo: "banda", banda: "banda", desma: "desar", desar: "desar", cae: "desar", coche: "vehic", vehic: "vehic", turis: "vehic", retie: "deten", reten: "deten", zbe: "zbe", emisi: "zbe", quema: "incen", fuego: "incen", arde: "incen", ardio: "incen", intox: "intox", comie: "inici", arran: "inici", preso: "carce", presos: "carce", candi: "candi", escan: "candi", "escañ": "candi", concu: "candi", lista: "candi", estac: "tren", guiom: "tren", paros: "huelg", tren: "tren", trene: "tren", maqui: "tren", navaj: "arma", cuchi: "arma", pisto: "arma", escop: "arma", movil: "movil", movile: "movil", telef: "movil" };
 // Cargos que los titulares nombran de dos formas ("el alcalde de Madrid" / "Martínez-Almeida"): misma palabra clave
 const MISMA_PERSONA = [[/alcalde de madrid|martinez-almeida|\balmeida\b/, "almeida"], [/presidente de la junta|\bmanueco\b/, "manueco"], [/presidenta de (la comunidad de )?madrid|\bayuso\b/, "ayuso"],
   [/presidente del gobierno|pedro sanchez/, "psanchez"], [/lider del pp|\bfeijoo\b/, "feijoo"], [/lider de vox|\babascal\b/, "abascal"], [/subdelegad[oa] del gobierno/, "subdelegado"], [/delegad[oa] del gobierno en castilla/, "delegado"]];
@@ -667,6 +671,9 @@ function mismaNoticia(a, b) {
   if (lejos > 6) return false;
   // Mismo incendio o intoxicación el mismo día, aunque un titular hable de desalojos y otro no
   if (Math.abs(new Date(a.dia) - new Date(b.dia)) === 0 && a.tk.has("intox") && b.tk.has("intox") && a.tk.has("incen") && b.tk.has("incen")) return true;
+  // El mismo suceso contado el mismo día como detención por un medio y como ingreso en prisión por otro
+  // («Detenido por robar el móvil a un menor con un cuchillo» / «A prisión por robar a punta de navaja a un menor su móvil»)
+  if (lejos === 0 && a.municipio === b.municipio && comunes >= 3 && [...a.tk].some(w => b.tk.has(w) && TEMA_TK.some(t => w.startsWith(t)))) return true;
   if (a.titulo && b.titulo && DESARROLLO.test(norm(a.titulo)) !== DESARROLLO.test(norm(b.titulo))) return false;
   const dias = Math.abs(new Date(a.dia) - new Date(b.dia)) / 864e5;
   if (CONCRETO(a.municipio) && a.municipio === b.municipio && dias <= 2) {
@@ -932,13 +939,16 @@ async function main() {
   // 1) Feeds de medios
   // Se leen 8 fuentes a la vez para que la actualización no se alargue
   const colaF = FEEDS.map((f, i) => [f, i]); const estadoF = [];
+  // Lo último que ha publicado cada fuente en su canal (aunque no pase el filtro): sirve para ver si está parada
+  const ultimaFeed = new Map();
+  const apuntaUltima = (nombre, its) => { for (const x of its) if (!x.sinFecha && x.fecha && !isNaN(x.fecha) && x.fecha <= Date.now() + 36e5) { const v = ultimaFeed.get(nombre); if (!v || x.fecha > v) ultimaFeed.set(nombre, x.fecha); } };
   await Promise.all(Array.from({ length: 8 }, async () => {
     while (colaF.length) {
       const [f, i] = colaF.shift();
       let ok = false, error = "", n = 0;
       for (const url of f.urls) {
         try {
-          const its = items(await descarga(url));
+          const its = items(await descarga(url)); apuntaUltima(f.nombre, its);
           // Feeds sin fecha (Tribuna): solo las más recientes, que se fechan con la hora en que aparecen
           for (const it of its.filter((x, k) => !x.sinFecha || k < 12)) {
             if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
@@ -962,7 +972,8 @@ async function main() {
     for (const url of f.urls) {
       try {
         let n = 0;
-        for (const it of items(await descarga(url)).filter((x, k) => !x.sinFecha || k < 12)) {
+        const its2 = items(await descarga(url)); apuntaUltima(f.nombre, its2);
+        for (const it of its2.filter((x, k) => !x.sinFecha || k < 12)) {
           if (f.soloSiMenciona && !MENCIONA_SEGOVIA.test(norm(it.titulo + " " + it.texto))) continue;
           if (OPINION.test(it.url)) continue;
           brutos.push({ ...it, medio: f.nombre, directo: true, pueblo: f.pueblo, local: f.local === true || (f.local instanceof RegExp && f.local.test(it.url)) }); n++;
@@ -1015,9 +1026,13 @@ async function main() {
       if ((b.cuerpo || "").length > (g.cuerpo || "").length) g.cuerpo = b.cuerpo;
       if (!g.img && b.img) g.img = b.img;
       if (b.local) g.local = true;
-      if (b.fecha < g.fecha) g.fecha = b.fecha;
-      if (!ORGANIZACIONES.has(b.medio) && (!g.fechaMedio || b.fecha < g.fechaMedio)) g.fechaMedio = b.fecha;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, ...(ORGANIZACIONES.has(b.medio) ? {} : { fechaMedio: b.fecha }), medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+      // La fecha de Google Noticias a veces es anterior a la real (la crónica de la huelga del 11N salía el día 10):
+      // si la noticia ya tiene fecha de un medio leído directamente, la de Google no la adelanta
+      const fiable = b.directo || !g.directo;
+      if (fiable && b.fecha < g.fecha) g.fecha = b.fecha;
+      if (fiable && !ORGANIZACIONES.has(b.medio) && (!g.fechaMedio || b.fecha < g.fechaMedio)) g.fechaMedio = b.fecha;
+      if (b.directo) g.directo = true;
+    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, directo: !!b.directo, ...(ORGANIZACIONES.has(b.medio) ? {} : { fechaMedio: b.fecha }), medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
   // La hora de la noticia es la del primer periódico que la da: la nota de un partido o sindicato
   // no se muestra sola, así que no debe adelantar la hora (parecería que llegó tarde)
@@ -1311,6 +1326,18 @@ async function main() {
     if (!u) { n.sinFoto = true; return; }
     await leeArticulo(u); const im = ultimaImg.get(u); if (im) n.img = im; else n.sinFoto = true;
   }));
+  // Medios y fuentes: cuándo aportó cada una su última noticia de interés («aporta») y cuándo publicó algo («ultima»).
+  // Si en esta pasada no se sabe (más de 21 días o sin respuesta), se conserva lo que se sabía de antes.
+  const aporta = {};
+  for (const d of dias) for (const n of d.noticias) for (const m of n.medios || []) {
+    const k = canonMedio(m.nombre), f = n.publicado ? fechaMadrid(new Date(n.publicado)) : d.fecha;
+    if (!aporta[k] || f > aporta[k]) aporta[k] = f;
+  }
+  const antesF = new Map((previo.fuentes || []).map(f => [f.fuente, f]));
+  for (const e of estado) {
+    const a = aporta[canonMedio(e.fuente)] || antesF.get(e.fuente)?.aporta; if (a) e.aporta = a;
+    const u = ultimaFeed.get(e.fuente); const uu = u ? fechaMadrid(u) : antesF.get(e.fuente)?.ultima; if (uu) e.ultima = uu;
+  }
   const salida = {
     actualizado: `${hoy} ${horaMadrid(ahora)}`,
     fuentes: estado,

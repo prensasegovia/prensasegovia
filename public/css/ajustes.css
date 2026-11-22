@@ -180,3 +180,9 @@
 .card.nueva{box-shadow:0 0 0 2px var(--new);border-color:transparent;background:color-mix(in srgb,var(--new) 4%,var(--surface,#fff))}
 .nvtag{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:var(--new);border-radius:5px;padding:2px 6px;line-height:1.4}
 .card .top{flex-wrap:wrap;row-gap:3px}
+/* Medios y fuentes: fuentes paradas en gris, las que no responden en rojo, con leyenda */
+.dot.parada{background:var(--baja)}
+.dot.ko{background:var(--alta)}
+.mleyenda{font-size:13px;color:var(--muted);line-height:1.9}
+.mleyenda .dot{display:inline-block;margin:0 4px 0 10px;vertical-align:middle}
+.mleyenda .dot:first-child{margin-left:0}
