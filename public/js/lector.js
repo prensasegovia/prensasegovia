@@ -1,7 +1,9 @@
 /* ================= Lector del texto completo ================= */
-// Orden: 1) descarga local del periódico; 2) solo si falla por red o CORS, Jina (servicio externo); 3) si no hay texto, aviso
+// Orden: 0) texto preparado por la tarea de GitHub; 1) descarga local del periódico;
+//        2) si la local falla o trae poco texto, Jina (servicio externo); 3) si tampoco, aviso
 const LECTOR_ESPERA = 25000;   // tiempo máximo para Jina
 const LOCAL_ESPERA = 10000;    // tiempo máximo para la descarga local
+const TEXTOS_BASE = new URL("../textos/", document.currentScript ? document.currentScript.src : location.href);
 const TEXTO_MINIMO = 300;      // por debajo, se considera que no hay noticia (muro o página rara)
 let turnoLector = 0;           // evita que una respuesta tardía pise otra noticia abierta después
 const e2 = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -91,7 +93,20 @@ async function obtenerTextoLocal(url, signal) {
     .filter(t => t.length > 30)
     .join('\n\n');
 }
-/* 2) Jina (servicio externo): solo se llama si la descarga local ha fallado por red o CORS */
+/* 0) Texto preparado por la tarea de GitHub (scripts/textos.mjs): mismo identificador que allí,
+   SHA-1 de la dirección de la noticia, 16 primeros caracteres */
+async function idTexto(url) {
+  const b = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(String(url).trim()));
+  return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("").slice(0, 16);
+}
+async function obtenerDeLaTarea(url, signal) {
+  const r = await fetch(new URL(`${await idTexto(url)}.json`, TEXTOS_BASE), { signal, cache: "no-store" });
+  if (!r.ok) return null; // la tarea aún no ha pasado por esta noticia
+  const j = await r.json();
+  return j && j.texto && j.texto.length >= TEXTO_MINIMO ? j : null;
+}
+const parrafosHtml = texto => texto.split(/\n\n+/).map(p => `<p>${e2(p)}</p>`).join("");
+/* 2) Jina (servicio externo): solo si la descarga local ha fallado o ha traído poco texto */
 async function obtenerConJina(jina, signal) {
   const r = await fetch(jina, { signal });
   if (!r.ok) throw new Error("HTTP " + r.status);
@@ -129,20 +144,24 @@ async function abreLector(jina, original, img) {
   capa.hidden = false; document.body.classList.add("leyendo");
   capa.innerHTML = `${barra}<div class="lcarga">Abriendo la noticia completa…</div>`;
 
-  // 1) Local primero
-  let texto = null;
-  try { texto = await conEspera(LOCAL_ESPERA, s => obtenerTextoLocal(original, s)); }
-  catch (e) { texto = null; } // error de red o CORS: entonces, y solo entonces, Jina
-  if (texto !== null) {
-    if (!texto || texto.length < TEXTO_MINIMO) {
-      avisa("Texto no disponible en local (posible muro en servidor). Abre la noticia en el medio original.");
-      return;
-    }
-    pinta(e2(tituloTarjeta(original)), "", texto.split(/\n\n+/).map(p => `<p>${e2(p)}</p>`).join(""), false);
+  // 0) Lo que ya ha preparado la tarea de GitHub
+  let prep = null;
+  try { prep = await conEspera(LOCAL_ESPERA, s => obtenerDeLaTarea(original, s)); } catch (e) { prep = null; }
+  if (prep) {
+    pinta(e2(prep.titulo || tituloTarjeta(original)), fechaLegible(prep.fecha || ""), parrafosHtml(prep.texto), false);
     return;
   }
 
-  // 2) Jina, solo porque la local ha fallado
+  // 1) Descarga local
+  let texto = "";
+  try { texto = (await conEspera(LOCAL_ESPERA, s => obtenerTextoLocal(original, s))) || ""; }
+  catch (e) { texto = ""; } // error de red o CORS
+  if (texto.length >= TEXTO_MINIMO) {
+    pinta(e2(tituloTarjeta(original)), "", parrafosHtml(texto), false);
+    return;
+  }
+
+  // 2) Jina: la local ha fallado o ha traído poco texto
   try {
     const { titulo, fecha, html } = await conEspera(LECTOR_ESPERA, s => obtenerConJina(jina, s));
     if (textoPlano(html).length < TEXTO_MINIMO) throw new Error("texto corto");

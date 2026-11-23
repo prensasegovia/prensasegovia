@@ -1,0 +1,44 @@
+name: Textos completos
+
+# Cada hora baja y limpia el texto completo de las noticias de pago (aquí no hay CORS)
+# y lo guarda en public/textos/. La siguiente pasada de «Actualizar noticias» lo publica,
+# y el lector lo abre al instante sin pasar por Jina.
+on:
+  schedule:
+    - cron: "33 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: textos
+  cancel-in-progress: false
+
+jobs:
+  textos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Descargar y limpiar los textos
+        run: node scripts/textos.mjs
+
+      - name: Guardar en el repositorio
+        run: |
+          git config user.name "prensa-bot"
+          git config user.email "prensa-bot@users.noreply.github.com"
+          git add -A public/textos/ datos/textos.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Textos completos $(date -u +'%Y-%m-%d %H:%M') UTC"
+          for i in 1 2 3; do git push && break; git pull --rebase -X theirs -q; sleep 3; done
