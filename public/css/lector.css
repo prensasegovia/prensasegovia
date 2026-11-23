@@ -18,6 +18,8 @@
 .lpie{margin-top:26px;display:flex;gap:10px;flex-wrap:wrap}
 .lcarga,.lmal{padding:60px 24px;text-align:center;opacity:.8}
 .lmal .btn{margin-top:14px}
+.lmal .aviso{max-width:28rem;margin:0 auto}
+.lexterno{font-size:12px;font-style:italic;opacity:.55;margin:0 0 16px}
 @media (min-width:900px){
   .lcuerpo{max-width:40rem;padding:30px 24px 90px}
   .lcuerpo h1{font-size:2.1rem}
