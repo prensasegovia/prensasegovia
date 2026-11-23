@@ -22,6 +22,8 @@ export const idDe = url => createHash("sha1").update(String(url).trim()).digest(
 // Líneas que no son noticia aunque estén dentro del cuerpo
 const RUIDO = /^(esta funcionalidad es exclusiva|reporta un error|comentar es una ventaja|¿ya eres suscriptor|ya eres suscriptor|inicia sesi[óo]n|suscr[íi]bete|l[íi]mite de sesiones|te puede interesar|lee tambi[ée]n|publicidad|noticia relacionada|si eres suscriptor|para seguir leyendo|contenido exclusivo)/i;
 const limpiaEspacios = t => String(t || "").replace(/\s+/g, " ").trim();
+// Titulares con entidades HTML sin traducir («m&aacute;s»)
+const descodifica = t => /&[#a-z0-9]+;/i.test(t) ? parseHTML(`<p>${t}</p>`).document.querySelector("p").textContent : t;
 
 // Marca de corte de la entradilla de Vocento («1,7 millones ... de euros»): fuera
 const sinCorte = t => t.replace(/ ?\.\.\.(?= [a-záéíóúüñ])/g, "");
@@ -153,7 +155,7 @@ async function main() {
         const r = limpia(await descarga(url));
         if (r.texto.length >= TEXTO_MINIMO) {
           await writeFile(new URL(`${id}.json`, DIR), JSON.stringify({
-            url, titulo: candidatas.get(url) || r.titulo, fecha: r.fecha, texto: r.texto, via: r.via, descargado: new Date().toISOString()
+            url, titulo: descodifica(candidatas.get(url) || r.titulo), fecha: r.fecha, texto: r.texto, via: r.via, descargado: new Date().toISOString()
           }));
           estado[id] = { url, ok: true, ultimo: new Date().toISOString() };
           informe.push(`OK   ${host} · ${r.texto.split("\n\n").length} párrafos, ${r.texto.length} caracteres (${r.via}) · ${url}`);
