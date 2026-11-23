@@ -318,5 +318,37 @@
   "t": "Una avería obliga a desalojar un tren en El Espinar",
   "r": "",
   "f": "El Día de Segovia"
+ },
+ {
+  "fecha": "2026-11-23",
+  "espera": "si",
+  "motivo": "Colectivo: convocatoria de manifestación",
+  "t": "Manifestación 20 N Antifascista en Segovia",
+  "r": "",
+  "f": "Foro Social de Segovia"
+ },
+ {
+  "fecha": "2026-11-23",
+  "espera": "si",
+  "motivo": "Colectivo: «se moviliza» es una convocatoria",
+  "t": "Segovia se moviliza por la absolución de l@s 4 de Valladolid: 8 años de cárcel por denunciar el genocidio",
+  "r": "",
+  "f": "Foro Social de Segovia"
+ },
+ {
+  "fecha": "2026-11-23",
+  "espera": "no",
+  "motivo": "Recuerdo de una persona; Abascal es su apellido, no el dirigente",
+  "t": "En Memoria Maricarmen Abascal",
+  "r": "",
+  "f": "Foro Social de Segovia"
+ },
+ {
+  "fecha": "2026-11-23",
+  "espera": "no",
+  "motivo": "Colectivo: presentación de un libro",
+  "t": "Presentación del libro “Los Williams” en Segovia",
+  "r": "",
+  "f": "Foro Social de Segovia"
  }
 ]

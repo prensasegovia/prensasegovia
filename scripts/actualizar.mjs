@@ -55,6 +55,8 @@ const FEEDS = [
   { nombre: "PP de Segovia", urls: ["https://ppsegovia.com/feed/"], tipo: "organizacion", local: true },
   { nombre: "PSOE de Segovia", urls: ["https://www.psoesegovia.es/feed/"], tipo: "organizacion", local: true },
   { nombre: "Salvemos la Saleta", urls: ["https://salvemoslasaleta.blogspot.com/feeds/posts/default?alt=rss"], pueblo: "Santa María la Real de Nieva" },
+  // Colectivo de la capital que anuncia manifestaciones, concentraciones y huelgas (sus actos culturales no pasan el filtro)
+  { nombre: "Foro Social de Segovia", urls: ["https://forosocialsg.blogspot.com/feeds/posts/default?alt=rss"], tipo: "organizacion" },
   { nombre: "PP de Castilla y León", urls: ["https://www.ppcyl.es/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "STECyL", urls: ["https://stecyl.net/feed/"], tipo: "organizacion", soloSiMenciona: true },
   { nombre: "UGT Castilla y León", urls: ["https://ugtcyl.es/web/feed"], tipo: "organizacion", soloSiMenciona: true },
@@ -106,6 +108,7 @@ const INFO_FUENTE = {
   "PP de Segovia": ["Partidos y sindicatos", "https://ppsegovia.com"],
   "PSOE de Segovia": ["Partidos y sindicatos", "https://www.psoesegovia.es"],
   "Salvemos la Saleta": ["Plataformas vecinales", "https://salvemoslasaleta.blogspot.com"],
+  "Foro Social de Segovia": ["Plataformas vecinales", "https://forosocialsg.blogspot.com"],
   "PP de Castilla y León": ["Partidos y sindicatos", "https://www.ppcyl.es"],
   "STECyL": ["Partidos y sindicatos", "https://stecyl.net"],
   "IU Segovia": ["Partidos y sindicatos", "https://iusegovia.es/sg/"],
@@ -570,6 +573,8 @@ function relleno(n) {
   if (BIOGAS.test(tt) && !BIOGAS_NO.test(tt)) return false;
   if (convocaCalle(tt)) return false;
   const solo = ks => c.length && c.every(k => ks.includes(k));
+  // Recuerdos y esquelas («En memoria de…»): no son noticia aunque el apellido coincida con el de un dirigente
+  if (/^(en memoria|in memoriam|recordando a|adios a)\b/.test(tt) && !/concentracion|manifestacion|homenaje (a|de) (las )?victimas/.test(tt)) return true;
   // Campañas de sensibilización de ayuntamientos e instituciones (25N, 8M, prevención…): no son convocatorias ni campaña electoral
   if (/campana (de )?(sensibilizacion|concienciacion|prevencion|informativa)|(nos sumamos|se suma|se suman) a la campana|campana\b.{0,40}\b(25n|8m)\b/.test(tt + " " + norm(n.resumen || "")) && !CONFLICTO.test(tt)) return true;
   // Micología, trufa, piña, resina, vendimia: agronomía sin conflicto (sí entran robos, furtivos, sanciones, intoxicaciones o protestas)
@@ -585,7 +590,7 @@ function relleno(n) {
   if (EN_CAMPANA() && c.includes("politica") && (ELECTORAL_ACTO.test(tt) || DIRIGENTES.test(tt)) && !(ESTADISTICA_ELECTORAL.test(tt) && !/\((pp|psoe|vox|sumar|podemos|iu|upl|se)\)/.test(tt) && !DIRIGENTES.test(tt)) && !/elecciones (municipales )?(de |del )?2027|municipales de 2027/.test(tt)) return false;
   if (CONCRETO(n.municipio) && c.includes("politica") && tt.includes(" en " + norm(n.municipio)) && /\b(psoe|pp|vox|iu|podemos|sumar|upl|socialistas|populares|candidat\w*|diputad[oa]s?|senador\w*|mitin)\b/.test(tt)) return false; // campaña: actos de partidos en un pueblo
   // Notas de prensa de partidos y sindicatos: solo movilizaciones, visitas, actos con fecha o de un pueblo
-  if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|movilizacion|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)
+  if (soloOrganizacion(n.medios || []) && !/huelga|concentracion|manifestacion|moviliz|protesta|paros|asamblea|mitin|visita|acto (de|en|con)|campana electoral|caravana|encierro|tractorada|recogida de firmas|cierre de campana/.test(tt)
     && !(CONCRETO(n.municipio) && tt.includes(" en " + norm(n.municipio)))) return true; // en campaña: actos de partidos en un pueblo sí
   // Trámites administrativos (compras, subvenciones, contratos, empleo público): no son noticias para la unidad
   if (/^(adquisicion|suministro|licitacion|contrato|contratacion|subvencion|ayudas?|bases|convocatoria de (plazas|empleo|bolsa|ayudas|subvenciones)|bolsa de empleo|oferta de empleo|obras de|proyecto de obras|aprobacion (inicial|definitiva)|exposicion publica|padron|tasas|impuesto|calendario fiscal)/.test(tt) && !c.some(k => ["policial", "social"].includes(k) && !soloAyto(n.medios || []))) return true;
