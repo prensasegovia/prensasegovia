@@ -25,15 +25,21 @@ const limpiaEspacios = t => String(t || "").replace(/\s+/g, " ").trim();
 
 // Marca de corte de la entradilla de Vocento («1,7 millones ... de euros»): fuera
 const sinCorte = t => t.replace(/ ?\.\.\.(?= [a-záéíóúüñ])/g, "");
-const vale = t => t.length > 30 && !RUIDO.test(t);
+// Avisos de cookies y privacidad que algunas webs meten como párrafos normales
+const COOKIES = /\bcookies\b|apartado [‘'"]?privacidad|consentimiento/i;
+const vale = t => t.length > 30 && !RUIDO.test(t) && !COOKIES.test(t);
 
 // Cuerpo de la noticia en el HTML: el elemento cuyos párrafos HIJOS DIRECTOS suman más texto
 // (así no se cuelan los resúmenes de noticias relacionadas, que van más anidados), más los
 // párrafos hijos directos de su padre (la entradilla de Vocento va un nivel por encima).
 function cuerpoHtml(doc) {
+  // Los <br> dentro de un párrafo separan frases o párrafos: se respetan
+  doc.querySelectorAll("p br").forEach(b => b.replaceWith(doc.createTextNode("\n")));
+  const trozos = p => p.textContent.split(/\n+/).map(t => sinCorte(limpiaEspacios(t))).filter(Boolean);
+  const entero = p => trozos(p).join(" ");
   const puntos = new Map();
   for (const p of doc.querySelectorAll("p")) {
-    const t = limpiaEspacios(p.textContent);
+    const t = entero(p);
     if (vale(t) && p.parentElement) puntos.set(p.parentElement, (puntos.get(p.parentElement) || 0) + t.length);
   }
   let mejor = null, max = 0;
@@ -42,9 +48,9 @@ function cuerpoHtml(doc) {
   const raiz = mejor.parentElement || mejor;
   const vistos = new Set();
   return [...raiz.querySelectorAll("p")]
-    .filter(p => p.parentElement === mejor || p.parentElement === raiz)
-    .map(p => sinCorte(limpiaEspacios(p.textContent)))
-    .filter(t => vale(t) && !vistos.has(t) && vistos.add(t));
+    .filter(p => (p.parentElement === mejor || p.parentElement === raiz) && vale(entero(p)))
+    .flatMap(trozos)   // un párrafo con <br> sale en varios, sin perder las frases cortas
+    .filter(t => !RUIDO.test(t) && !COOKIES.test(t) && !vistos.has(t) && vistos.add(t));
 }
 // Cuerpo de JSON-LD (algunos periódicos lo traen entero ahí aunque la página lo corte)
 function trocea(cuerpo) {
@@ -76,9 +82,12 @@ export function limpia(html) {
 
   // Quitar ruido. A diferencia del navegador, aquí NO se quita [class*="paywall"]: en El Norte y ABC
   // (Vocento) el cuerpo entero de la noticia va dentro de un <div class="paywall">.
-  ["script", "style", "nav", "header", "footer", "aside", "form", "noscript", "iframe"].forEach(s =>
+  // Los <form> pequeños (buscador, acceso, boletín) fuera; los grandes no: webs como Europa Press
+  // envuelven la página entera en un <form>.
+  ["script", "style", "nav", "header", "footer", "aside", "noscript", "iframe"].forEach(s =>
     doc.querySelectorAll(s).forEach(e => e.remove()));
-  doc.querySelectorAll('[class*="cookie"],[class*="subscribe"],[class*="newsletter"]')
+  doc.querySelectorAll("form").forEach(f => { if (limpiaEspacios(f.textContent).length < 1000) f.remove(); });
+  doc.querySelectorAll('[class*="cookie"],[id*="cookie"],[class*="consent"],[id*="consent"],[class*="didomi"],[id*="didomi"],[class*="gdpr"],[id*="gdpr"],[class*="subscribe"],[class*="newsletter"]')
     .forEach(e => e.remove());
 
   const mejor = cuerpoHtml(doc);
@@ -144,7 +153,7 @@ async function main() {
         const r = limpia(await descarga(url));
         if (r.texto.length >= TEXTO_MINIMO) {
           await writeFile(new URL(`${id}.json`, DIR), JSON.stringify({
-            url, titulo: r.titulo || candidatas.get(url), fecha: r.fecha, texto: r.texto, via: r.via, descargado: new Date().toISOString()
+            url, titulo: candidatas.get(url) || r.titulo, fecha: r.fecha, texto: r.texto, via: r.via, descargado: new Date().toISOString()
           }));
           estado[id] = { url, ok: true, ultimo: new Date().toISOString() };
           informe.push(`OK   ${host} · ${r.texto.split("\n\n").length} párrafos, ${r.texto.length} caracteres (${r.via}) · ${url}`);
