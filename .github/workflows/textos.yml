@@ -1,12 +1,17 @@
 name: Textos completos
 
-# Cada hora baja y limpia el texto completo de las noticias de pago (aquí no hay CORS)
+# Cada hora baja y limpia el texto completo de las noticias, de pago y abiertas (aquí no hay CORS)
 # y lo guarda en public/textos/. La siguiente pasada de «Actualizar noticias» lo publica,
 # y el lector lo abre al instante sin pasar por Jina.
 on:
   schedule:
     - cron: "33 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      prueba:
+        description: "Solo prueba: enseña una muestra por periódico y no guarda nada"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,8 +38,11 @@ jobs:
 
       - name: Descargar y limpiar los textos
         run: node scripts/textos.mjs
+        env:
+          MUESTRA: ${{ inputs.prueba && '1' || '' }}
 
       - name: Guardar en el repositorio
+        if: ${{ !inputs.prueba }}
         run: |
           git config user.name "prensa-bot"
           git config user.email "prensa-bot@users.noreply.github.com"

@@ -1,4 +1,4 @@
-// Texto completo de las noticias de pago, preparado por la tarea de GitHub.
+// Texto completo de las noticias (de pago y abiertas), preparado por la tarea de GitHub.
 // Aquí no hay CORS: se baja el HTML del periódico, se limpia y se guarda en public/textos/<id>.json.
 // El lector de la web lo abre al instante; Jina queda solo de respaldo para lo que aún no esté.
 import { readFile, writeFile, mkdir, readdir, unlink, appendFile } from "node:fs/promises";
@@ -12,7 +12,7 @@ const DIAS_GUARDAR = 21;    // lo mismo que guarda datos.json
 const INTENTOS_MAX = 3;     // si un periódico no deja, se deja de insistir
 const TEXTO_MINIMO = 300;   // por debajo no se considera noticia (muro o página rara)
 const ESPERA = 20000;
-const A_LA_VEZ = 4;
+const A_LA_VEZ = 6;
 const MUESTRA = process.env.MUESTRA === "1"; // en pruebas: enseña el principio de cada texto en el registro
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
@@ -117,22 +117,24 @@ async function main() {
   const per = await leeJSON(new URL("../public/periodicos.json", import.meta.url), {});
   const reciente = f => { const t = new Date(f).getTime(); return !isNaN(t) && ahora - t < HORAS_VENTANA * 36e5; };
 
-  // Noticias de pago recientes (Noticias y Periódicos)
+  // Todas las noticias recientes, de pago y abiertas (Noticias y Periódicos).
+  // Los enlaces de Google Noticias no llevan a la noticia: se dejan fuera.
   const candidatas = new Map();
+  const sirve = u => /^https?:\/\//i.test(u || "") && !/^https?:\/\/news\.google\./i.test(u);
   for (const dia of Object.values(datos.dias || {})) for (const n of dia.noticias || []) {
     if (!reciente(n.publicado || dia.fecha)) continue;
-    for (const m of n.medios || []) if (m.pago && /^https?:\/\//i.test(m.url || "")) candidatas.set(m.url.trim(), n.titulo || "");
+    for (const m of n.medios || []) if (sirve(m.url)) candidatas.set(m.url.trim(), n.titulo || "");
   }
-  for (const n of per.noticias || []) if (n.pago && /^https?:\/\//i.test(n.url || "") && reciente(n.publicado)) candidatas.set(n.url.trim(), n.titulo || "");
+  for (const n of per.noticias || []) if (sirve(n.url) && reciente(n.publicado)) candidatas.set(n.url.trim(), n.titulo || "");
 
   const hechos = new Set((await readdir(DIR)).filter(f => f.endsWith(".json")).map(f => f.slice(0, -5)));
   const cola = [...candidatas.keys()].filter(u => {
     const id = idDe(u);
     return !hechos.has(id) && !((estado[id]?.intentos || 0) >= INTENTOS_MAX);
   });
-  console.log(`Noticias de pago recientes: ${candidatas.size} · ya preparadas: ${candidatas.size - cola.length} · por descargar: ${cola.length}`);
+  console.log(`Noticias recientes: ${candidatas.size} · ya preparadas o descartadas: ${candidatas.size - cola.length} · por descargar: ${cola.length}`);
 
-  const informe = [];
+  const informe = [], muestras = new Set();
   let i = 0;
   const trabajador = async () => {
     while (i < cola.length) {
@@ -146,7 +148,7 @@ async function main() {
           }));
           estado[id] = { url, ok: true, ultimo: new Date().toISOString() };
           informe.push(`OK   ${host} · ${r.texto.split("\n\n").length} párrafos, ${r.texto.length} caracteres (${r.via}) · ${url}`);
-          if (MUESTRA) console.log(`\n--- ${url}\n${r.titulo}\n${r.texto.slice(0, 1200)}\n[...] ${r.texto.slice(-300)}\n`);
+          if (MUESTRA && !muestras.has(host) && muestras.add(host)) console.log(`\n--- ${url}\n${r.titulo}\n${r.texto.slice(0, 1200)}\n[...] ${r.texto.slice(-300)}\n`);
           continue;
         }
         motivo = `texto corto (${r.texto.length})`;
@@ -168,6 +170,9 @@ async function main() {
   for (const [id, e] of Object.entries(estado)) if (new Date(e.ultimo).getTime() < limite) delete estado[id];
   await writeFile(ESTADO, JSON.stringify(estado, null, 1));
 
+  const porMedio = {};
+  for (const l of informe) { const k = l.slice(5).split(" · ")[0]; porMedio[k] = porMedio[k] || { ok: 0, mal: 0 }; porMedio[k][l.startsWith("OK") ? "ok" : "mal"]++; }
+  console.log("Por periódico: " + Object.entries(porMedio).map(([k, v]) => `${k} ${v.ok}✓${v.mal ? " " + v.mal + "✗" : ""}`).join(" · "));
   const ok = informe.filter(l => l.startsWith("OK")).length;
   const resumen = `Textos nuevos: ${ok} · fallidos: ${informe.length - ok} · borrados por antiguos: ${borrados}`;
   console.log(informe.join("\n") + "\n" + resumen);

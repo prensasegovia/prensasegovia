@@ -1,8 +1,8 @@
 /* ================= Lector del texto completo ================= */
-// Orden: 0) texto preparado por la tarea de GitHub; 1) descarga local del periódico;
-//        2) si la local falla o trae poco texto, Jina (servicio externo); 3) si tampoco, aviso
+// Orden: 1) texto preparado por la tarea de GitHub (scripts/textos.mjs);
+//        2) si la tarea aún no ha pasado por esa noticia, Jina (servicio externo); 3) si tampoco, aviso
 const LECTOR_ESPERA = 25000;   // tiempo máximo para Jina
-const LOCAL_ESPERA = 10000;    // tiempo máximo para la descarga local
+const TAREA_ESPERA = 10000;    // tiempo máximo para leer el texto preparado por la tarea
 const TEXTOS_BASE = new URL("../textos/", document.currentScript ? document.currentScript.src : location.href);
 const TEXTO_MINIMO = 300;      // por debajo, se considera que no hay noticia (muro o página rara)
 let turnoLector = 0;           // evita que una respuesta tardía pise otra noticia abierta después
@@ -71,29 +71,7 @@ function fechaLegible(f) {
   if (!f || isNaN(d)) return f || "";
   return `${fmtLong(f.slice(0, 10))} · ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")} h`;
 }
-/* 1) Descarga local: baja el HTML del periódico y lo limpia aquí mismo.
-   Si el navegador la bloquea (red o CORS), fetch lanza un error y se pasa a Jina. */
-async function obtenerTextoLocal(url, signal) {
-  const res = await fetch(url, { headers: { 'Accept': 'text/html' }, signal });
-  const html = await res.text();
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-
-  // quitar ruido
-  ['script','style','nav','header','footer','aside','form'].forEach(s =>
-    doc.querySelectorAll(s).forEach(e => e.remove()));
-  doc.querySelectorAll('[class*="cookie"],[class*="subscribe"],[class*="paywall"],[class*="newsletter"]')
-    .forEach(e => e.remove());
-
-  // buscar el contenedor del cuerpo
-  const cuerpo = doc.querySelector('article, [itemprop="articleBody"], .article-body, .cuerpo-noticia');
-  if (!cuerpo) return '';
-
-  return Array.from(cuerpo.querySelectorAll('p'))
-    .map(p => p.textContent.trim())
-    .filter(t => t.length > 30)
-    .join('\n\n');
-}
-/* 0) Texto preparado por la tarea de GitHub (scripts/textos.mjs): mismo identificador que allí,
+/* 1) Texto preparado por la tarea de GitHub (scripts/textos.mjs): mismo identificador que allí,
    SHA-1 de la dirección de la noticia, 16 primeros caracteres */
 async function idTexto(url) {
   const b = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(String(url).trim()));
@@ -106,7 +84,7 @@ async function obtenerDeLaTarea(url, signal) {
   return j && j.texto && j.texto.length >= TEXTO_MINIMO ? j : null;
 }
 const parrafosHtml = texto => texto.split(/\n\n+/).map(p => `<p>${e2(p)}</p>`).join("");
-/* 2) Jina (servicio externo): solo si la descarga local ha fallado o ha traído poco texto */
+/* 2) Jina (servicio externo): solo si la tarea aún no ha pasado por esa noticia */
 async function obtenerConJina(jina, signal) {
   const r = await fetch(jina, { signal });
   if (!r.ok) throw new Error("HTTP " + r.status);
@@ -117,7 +95,7 @@ async function conEspera(ms, tarea) {
   try { return await tarea(ctl.signal); } finally { clearTimeout(reloj); }
 }
 const textoPlano = html => (new DOMParser().parseFromString(html, "text/html").body.textContent || "").trim();
-// Titular de la tarjeta de la que se ha abierto el lector (la descarga local solo devuelve el texto)
+// Titular de la tarjeta de la que se ha abierto el lector (por si el texto no trae titular)
 const tituloTarjeta = url => {
   const c = [...document.querySelectorAll("article.card[data-href]")].find(c => c.dataset.href === url);
   return (c && c.querySelector("h4") && c.querySelector("h4").textContent.trim()) || "";
@@ -144,31 +122,22 @@ async function abreLector(jina, original, img) {
   capa.hidden = false; document.body.classList.add("leyendo");
   capa.innerHTML = `${barra}<div class="lcarga">Abriendo la noticia completa…</div>`;
 
-  // 0) Lo que ya ha preparado la tarea de GitHub
+  // 1) Lo que ya ha preparado la tarea de GitHub
   let prep = null;
-  try { prep = await conEspera(LOCAL_ESPERA, s => obtenerDeLaTarea(original, s)); } catch (e) { prep = null; }
+  try { prep = await conEspera(TAREA_ESPERA, s => obtenerDeLaTarea(original, s)); } catch (e) { prep = null; }
   if (prep) {
     pinta(e2(prep.titulo || tituloTarjeta(original)), fechaLegible(prep.fecha || ""), parrafosHtml(prep.texto), false);
     return;
   }
 
-  // 1) Descarga local
-  let texto = "";
-  try { texto = (await conEspera(LOCAL_ESPERA, s => obtenerTextoLocal(original, s))) || ""; }
-  catch (e) { texto = ""; } // error de red o CORS
-  if (texto.length >= TEXTO_MINIMO) {
-    pinta(e2(tituloTarjeta(original)), "", parrafosHtml(texto), false);
-    return;
-  }
-
-  // 2) Jina: la local ha fallado o ha traído poco texto
+  // 2) Jina, solo porque la tarea aún no ha pasado por esta noticia
   try {
     const { titulo, fecha, html } = await conEspera(LECTOR_ESPERA, s => obtenerConJina(jina, s));
     if (textoPlano(html).length < TEXTO_MINIMO) throw new Error("texto corto");
     pinta(enLinea(titulo) || e2(tituloTarjeta(original)), fechaLegible(fecha), html, true);
   } catch (e) {
-    // 3) Han fallado las dos
-    avisa("No se ha podido obtener el texto, ni en local ni con el servicio externo. Abre la noticia en el medio original.");
+    // 3) Ni la tarea ni Jina
+    avisa("Texto aún no disponible: la descarga automática no ha pasado por esta noticia y el servicio externo no responde. Abre la noticia en el medio original.");
   }
 }
 function cierraLector() { const c = $("#lector"); if (!c) return; c.hidden = true; c.innerHTML = ""; document.body.classList.remove("leyendo"); }
