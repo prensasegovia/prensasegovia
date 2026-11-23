@@ -175,7 +175,8 @@ setInterval(compruebaVersion, 30*60*1000);
 fijaCortePer();
 document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState==="hidden"){ ocultoDesde = Date.now(); return; } if (ocultoDesde && Date.now()-ocultoDesde > 10*6e4){ fijaCortePer(); if (st.view==="periodicos" && !st.sub) render(true); } if (document.visibilityState==="visible"){ poll(); compruebaVersion(); if (st.letra==="auto") aplicaLetra(); } });
 
-/* Enlace «Leer completo» en las noticias de medios de pago: el texto se abre con un lector, sin muro */
+/* Enlace «Leer completo» en todas las noticias (de pago y abiertas): el texto se abre con el lector, sin muro.
+   El lector usa el texto preparado por la tarea de GitHub; si aún no está, Jina; si tampoco, aviso. */
 (function(){
   document.head.insertAdjacentHTML('beforeend','<style>.leer-completo{display:inline-block;margin-top:8px;padding:4px 10px;border:1px solid currentColor;border-radius:999px;font-size:.78rem;text-decoration:none;opacity:.75;color:inherit}.leer-completo:hover{opacity:1}</style>');
   document.addEventListener('click', e => {
@@ -190,10 +191,10 @@ document.addEventListener("visibilitychange", ()=>{ if (document.visibilityState
     for (const c of cards){
       if (c.dataset.chip) continue;
       c.dataset.chip = '1';
-      if (!c.querySelector('.pay')) continue;
       const h4 = c.querySelector('h4'); if (!h4) continue;
-      const foto = (c.querySelector('img.thumb')?.src || "").replace(/&/g, "&amp;");
-      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${c.dataset.href}" data-origen="${c.dataset.href}"${foto ? ` data-img="${foto}"` : ""} target="_blank" rel="noopener">Leer completo</a>`);
+      const at = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      const foto = at(c.querySelector('img.thumb')?.src || "");
+      h4.insertAdjacentHTML('afterend', `<a class="leer-completo" href="https://r.jina.ai/${at(c.dataset.href)}" data-origen="${at(c.dataset.href)}"${foto ? ` data-img="${foto}"` : ""} target="_blank" rel="noopener">Leer completo</a>`);
     }
   };
   poner(document);
