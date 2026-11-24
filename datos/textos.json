@@ -247,8 +247,8 @@
  "60e3ab7ff3060106": {
   "url": "https://www.europapress.es/castilla-y-leon/noticia-tres-heridos-colisionar-dos-turismos-espinar-segovia-20261121102943.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-23T13:41:30.915Z",
+  "intentos": 2,
+  "ultimo": "2026-11-24T01:08:23.663Z",
   "motivo": "HTTP 403"
  },
  "a652a9062219f391": {
@@ -274,8 +274,8 @@
  "efbb4af556125f79": {
   "url": "https://segoviaudaz.es/accidente-de-trafico-en-el-espinar-con-tres-heridos-en-la-carretera-n-6/",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-23T13:41:31.918Z",
+  "intentos": 2,
+  "ultimo": "2026-11-24T01:08:25.153Z",
   "motivo": "texto corto (123)"
  },
  "f8f4c09724457de0": {
@@ -301,8 +301,8 @@
  "71a727e4e247552c": {
   "url": "https://segoviaudaz.es/una-averia-deja-parado-un-tren-entre-cercedilla-y-segovia-y-obliga-a-evacuar-a-los-pasajeros-en-el-espinar/",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-23T13:41:32.802Z",
+  "intentos": 2,
+  "ultimo": "2026-11-24T01:08:26.403Z",
   "motivo": "texto corto (123)"
  },
  "6e72e138eeff6004": {
@@ -323,8 +323,8 @@
  "4f22ee31a84a721f": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/colegio-medicos-insta-ciudadanos-sumarse-campana-vacunacion-gripe-covid_202611236b042ba0ed8101000790a353.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-23T13:41:33.172Z",
+  "intentos": 2,
+  "ultimo": "2026-11-24T01:08:26.751Z",
   "motivo": "texto corto (89)"
  },
  "05089b5767fc19a3": {
@@ -430,8 +430,8 @@
  "9b2e535707fde4a9": {
   "url": "http://segovia247.es/art/13813/flores-para-antonio-en-segovia-manana-lunes-pase-exclusivo-a-las-1100-en-el-campus-maria-zambrano",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-23T13:41:36.095Z",
+  "intentos": 2,
+  "ultimo": "2026-11-24T01:08:27.317Z",
   "motivo": "texto corto (83)"
  },
  "4302f68d2c1c101f": {
@@ -948,5 +948,207 @@
   "url": "https://ppsegovia.com/jose-luis-martinez-almeida-aboga-por-el-cambio-necesario-en-espana-en-una-visita-a-segovia-donde-ha-acompanado-a-los-candidatos-al-congreso-y-al-senado/",
   "ok": true,
   "ultimo": "2026-11-23T13:41:50.456Z"
+ },
+ "07e990421d997c38": {
+  "url": "https://www.elnortedecastilla.es/segovia/psoe-reclama-recursos-atencion-dependencia-medio-rural-20261123201101-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:21.870Z"
+ },
+ "765900afcd8c0a01": {
+  "url": "https://www.tribunasegovia.com/noticias/467778/los-ciberdelitos-suben-un-16-7-por-ciento-en-segovia-y-un-congreso-ensenara-a-las-empresas-a-defenderse",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:22.383Z"
+ },
+ "fc5e3676597a99c5": {
+  "url": "https://segoviadirecto.com/art/56622/la-diputacion-busca-en-el-dia-internacional-de-la-eliminacion-de-la-violencia-contra-las-mujeres-tejer-una-red-colaborativa-que-permita-alcanzar-la-igualdad-y-deshacer-la-violencia-de-genero-en-la-provincia",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:22.435Z"
+ },
+ "ac3b4e0f355e251f": {
+  "url": "https://segoviadirecto.com/art/56610/las-ventajas-de-utilizar-un-robot-para-indices-sinteticos",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:22.453Z"
+ },
+ "bc8deca2748421e3": {
+  "url": "https://www.elnortedecastilla.es/segovia/segovia-instalara-camaras-blanca-silos-ante-continuos-20261123175745-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:22.664Z"
+ },
+ "d6e17c7badc58994": {
+  "url": "https://www.eldiasegovia.es/noticia/zfbebcca7-cb0c-444d-82c65a363736a58d/202611/cuellar-acoge-la-charla-macroplantas-solucion-o-problema",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.119Z"
+ },
+ "6eeb948f3c0af111": {
+  "url": "https://eladelantado.com/segovia/2026/11/23/carriedo-es-hora-de-un-gobierno-de-estabilidad-para-que-la-economia-crezca/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.289Z"
+ },
+ "61dc0a3a1a96fa85": {
+  "url": "https://segoviaudaz.es/ie-university-lleva-a-segovia-el-testimonio-de-una-superviviente-de-violencia-de-genero-con-la-obra-del-grito-a-la-palabra/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.540Z"
+ },
+ "aac6783215f4a285": {
+  "url": "https://www.eldiario.es/castilla-y-leon/cultura/opacidad-rumores-cesion-poner-oficinas-palacio-quintanar-segovia-espacio-cultural-limbo_1_13685774.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.613Z"
+ },
+ "78131803d7ea4008": {
+  "url": "https://www.elnortedecastilla.es/segovia/desalojar-restaurante-tres-veces-amenazas-bomba-20261123220857-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.645Z"
+ },
+ "6ba20ef1401dcb1f": {
+  "url": "https://www.elnortedecastilla.es/segovia/ayuntamiento-recupera-fuente-mercado-huertos-zona-meliton-20261123221508-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.706Z"
+ },
+ "d02e5a912ee19f07": {
+  "url": "https://www.diariodecastillayleon.es/segovia/261123/110357/la-lista-roja-del-patrimonio-se-amplia-en-castilla-y-leon-dos-iglesias-medievales-de-segovia-en-riesgo.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:23.773Z"
+ },
+ "a94c3e882c622f15": {
+  "url": "https://forosocialsg.blogspot.com/2026/11/manifestacion-20-n-antifascista-en.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-24T01:08:24.039Z",
+  "motivo": "texto corto (0)"
+ },
+ "3d43f916b18bdf7f": {
+  "url": "https://www.europapress.es/castilla-y-leon/noticia-fes-organiza-iii-congreso-hackers-diciembre-formar-contra-fraude-digital-20261123144128.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.106Z"
+ },
+ "b0b2d8f1d6facab7": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/23/la-junta-convoca-758-plazas-de-maestro-en-siete-especialidades/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.259Z"
+ },
+ "305e8f0bd39e62f7": {
+  "url": "https://ppsegovia.com/fernandez-carriedo-es-hora-de-un-gobierno-que-de-estabilidad-confianza-y-seguridad-y-cree-las-condiciones-para-que-la-economia-crezca/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.663Z"
+ },
+ "4339fe0caf87d0dc": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/23/operacion-jaula-en-palencia-tras-un-ataque-a-la-comisaria-con-cocteles-molotov/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.886Z"
+ },
+ "4ded3886469d8064": {
+  "url": "https://www.eldiasegovia.es/noticia/z89f8e24a-c7f1-43d5-a84da133fcc20283/202611/nuria-rubio-celebra-las-ganas-de-un-gobierno-de-progreso",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.959Z"
+ },
+ "d17e7df9c56905cc": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/23/los-veterinarios-habilitados-gestionaran-el-lobo-el-oso-y-el-lince/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:24.995Z"
+ },
+ "50a841a1434f0baa": {
+  "url": "https://segoviadirecto.com/art/56624/alvaro-casaux-retrata-la-geometria-de-la-alta-montana-en-la-geometria-del-silencio",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.061Z"
+ },
+ "1c24c8fe5c1f30ad": {
+  "url": "https://segoviadirecto.com/art/56623/izquierda-unida-insiste-en-que-el-pp-no-cumple-los-objetivos-de-limpieza-de-imbornales",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.262Z"
+ },
+ "44aeca9273800b57": {
+  "url": "https://segoviadirecto.com/art/56619/la-losa-celebrara-un-vermu-solidario-para-recaudar-fondos-para-familias-palestinas",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.310Z"
+ },
+ "f1bfa0130599b445": {
+  "url": "https://segoviadirecto.com/art/56616/la-guardia-civil-detiene-a-dos-hombres-como-presuntos-autores-de-24-delitos-de-robo-con-fuerza-cometidos-en-segovia-y-en-tres-provincias-limitrofes",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.650Z"
+ },
+ "51df5e38c21b299d": {
+  "url": "https://segoviadirecto.com/art/56621/la-diputacion-de-segovia-impulsa-la-segunda-feria-navidena-de-turegano-que-llega-este-fin-de-semana-llena-de-propuestas-para-la-epoca-mas-magica-del-ano",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.709Z"
+ },
+ "7cc480c26caee119": {
+  "url": "https://segoviadirecto.com/art/56620/el-30o-premio-santa-cecilia-premio-hazen-ya-tiene-ganadores",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.729Z"
+ },
+ "33edb5c110889efd": {
+  "url": "https://segoviadirecto.com/art/56617/dos-detenidos-por-realizar-ocho-disparos-contra-un-edificio-en-segovia",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.730Z"
+ },
+ "ac224339316f3fc7": {
+  "url": "https://segoviadirecto.com/art/56615/las-atletas-del-centro-de-tecnificacion-del-cas-aluminios-luis-miguel-sandra-san-miguel-y-pilar-moreno-logran-un-meritorio-decimo-puesto-nacional-con-el-image-fdr",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.883Z"
+ },
+ "953c0fdb6dfb34b2": {
+  "url": "https://segoviadirecto.com/art/56618/el-otono-enologico-de-la-fundacion-caja-rural-escaparate-de-la-excelencia-gastronomica-de-nuestra-provincia",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.911Z"
+ },
+ "a8966b283218f81f": {
+  "url": "https://segoviadirecto.com/art/56613/cruz-roja-visibiliza-las-graves-consecuencias-de-la-violencia-digital-una-expresion-cada-vez-mas-extendida-de-la-violencia-machista",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.982Z"
+ },
+ "41596007f58fe5b5": {
+  "url": "https://segoviadirecto.com/art/56612/segoviaempleocom-reune-ofertas-de-trabajo-en-administracion-ganaderia-atencion-sociosanitaria-y-otros-sectores",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:25.991Z"
+ },
+ "bf3b31a03a40be86": {
+  "url": "https://www.elnortedecastilla.es/segovia/acueducto-somete-nueva-limpieza-retirar-vegetacion-piedras-20261123172504-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.060Z"
+ },
+ "036db76ed2a98345": {
+  "url": "https://segoviadirecto.com/art/56609/aspiradora-sin-cable-para-personas-con-alergia-al-polvo-comparacion-de-los-mejores-sistemas-de-filtracion",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.215Z"
+ },
+ "1f2126e79db64a1e": {
+  "url": "https://www.tribunasegovia.com/noticias/467784/detenidos-dos-hombres-por-24-robos-en-viviendas-de-avila-segovia-soria-y-valladolid",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.286Z"
+ },
+ "09337c0e4fee5392": {
+  "url": "https://www.tribunasegovia.com/noticias/467777/el-ayuntamiento-de-segovia-pide-cambiar-la-mirada-ante-los-mensajes-en-redes-que-normalizan-la-desigualdad",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.419Z"
+ },
+ "23258e640694607f": {
+  "url": "https://eladelantado.com/segovia/2026/11/23/aprobada-la-financiacion-para-desarrollar-la-escuela-de-artes-de-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.435Z"
+ },
+ "46787d7081823deb": {
+  "url": "https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/jose-luis-aceves-cree-psoe-todavia-dar-sorpresa-iniciamos-remontada-culminar-dia-29-20261123_3480382.html",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.740Z"
+ },
+ "c2fc930946d46e98": {
+  "url": "https://www.tribunasegovia.com/noticias/467781/las-mujeres-mayores-del-medio-rural-foco-de-la-campana-de-la-diputacion-de-segovia-para-el-25n",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.773Z"
+ },
+ "44cd4fe2911e1986": {
+  "url": "https://eladelantado.com/segovia/2026/11/23/abascal-cualquier-voto-que-no-vaya-a-la-mafia-de-sanchez-y-a-sus-complices-es-un-voto-util/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:26.945Z"
+ },
+ "a11e4173033e6a9f": {
+  "url": "https://www.elnordestedesegovia.es/reportajes/1812-nordeste-de-segovia-en-el-puente-de-diciembre-que-hacer",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:27.705Z"
+ },
+ "98abd5ecbc0be2e2": {
+  "url": "https://segoviaudaz.es/este-25n-segovia-invita-a-cambiar-la-mirada-contra-la-violencia-machista/",
+  "ok": true,
+  "ultimo": "2026-11-24T01:08:28.517Z"
  }
 }
