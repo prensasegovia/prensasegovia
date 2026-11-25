@@ -2,7 +2,7 @@
 function appbar(){
   const bar = $("#appbar");
   if (st.sub){
-    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="elec" ? "Elecciones 29N" : st.sub.t==="parte" ? "Parte del día" : st.sub.t==="asuntos" ? "Asuntos" : "Medios";
+    const titulo = st.sub.t==="pueblo" ? "Pueblo" : st.sub.t==="imp" ? "Importantes" : st.sub.t==="elec" ? "Elecciones 29N" : st.sub.t==="parte" ? "Parte del día" : "Medios";
     bar.innerHTML = `<button class="ibtn back" id="btnBack" type="button" aria-label="Volver">${I.back}Volver</button><div class="brand"><div class="t" style="font-size:16px;opacity:.85">${esc(titulo)}</div></div><div class="syncpill" id="syncPill" title="Las noticias se revisan cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto"></div>`;
     syncLabel();
     $("#btnBack").onclick = () => cerrarSub();
@@ -59,7 +59,7 @@ function render(keepScroll){
     app.innerHTML = `<section class="hero"><div class="day">${esc(fmtLong(today()))}</div><div class="sum">${st.error?"No se han podido cargar las noticias.":"Todavía no hay noticias cargadas."}</div></section><div class="empty"><b>${st.error?"Revisa la conexión":"La primera carga llega pronto"}</b>${st.error?"Vuelve a intentarlo en unos segundos.":"La app se actualiza sola cada hora."}<br><button class="btn" data-act="reload" type="button">Volver a cargar</button></div>`;
     return;
   }
-  if (st.sub) app.innerHTML = seguro("el aviso de actualización", avisoViejo, "") + seguro(NOMBRE_SECCION[st.sub.t] || "esta sección", () => st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : st.sub.t==="asuntos" ? viewAsuntos(news) : viewMedios(), cajaFallo);
+  if (st.sub) app.innerHTML = seguro("el aviso de actualización", avisoViejo, "") + seguro(NOMBRE_SECCION[st.sub.t] || "esta sección", () => st.sub.t==="pueblo" ? viewPueblo(news, st.sub.name) : st.sub.t==="imp" ? viewImportantes(news) : st.sub.t==="elec" ? viewElecciones(news) : st.sub.t==="parte" ? viewParte(news) : viewMedios(), cajaFallo);
   else app.innerHTML = seguro("el aviso de actualización", avisoViejo, "") + seguro(NOMBRE_SECCION[st.view] || "esta sección", () => st.view==="agenda" ? viewAgenda(news) : st.view==="pueblos" ? viewPueblos(news) : st.view==="guardadas" ? viewGuardadas() : st.view==="periodicos" ? viewPeriodicos() : viewNoticias(news), cajaFallo);
   fijaHash();
   const t = today();

@@ -25,7 +25,6 @@ function contraste(n){
   const cif = (n.cifras||[]).map(c=>`<div class="cifras" title="Los medios no dan la misma cifra"><b>Cifras distintas:</b> ${c.valores.map(x=>`${fmtN(x.v)} ${CIFRA_NOMBRE[c.k]||c.k} <span>(${esc(x.medio)})</span>`).join(" · ")}</div>`).join("");
   return { conf, cif };
 }
-const asSigue = n => { try { return typeof asDe === "function" && asuntos().length ? asDe(n) : null; } catch(e){ return null; } };
 // Importante: además del color, un icono y la palabra (para quien no distingue bien los colores y para lectores de pantalla)
 const ICO_IMP = "M12 3l9 16H3zM12 10v4M12 17h.01";
 function card(n, opts={}){
@@ -52,7 +51,6 @@ function card(n, opts={}){
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     ${contraste(n).cif}
     <div class="bottom"><div class="srcs">${contraste(n).conf}${src}</div><div class="acts">
-      <button class="seguir" type="button" data-seguir aria-pressed="${!!asSigue(n)}" title="${asSigue(n)?"Ya sigues este asunto: ver todas sus noticias":"Seguir este asunto: juntar todas sus noticias y avisarte de las nuevas"}">${asSigue(n)?"✓ Siguiendo":"+ Seguir"}</button>
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>
       <button class="abtn" type="button" data-share aria-label="Compartir">${I.share}</button>
     </div></div>

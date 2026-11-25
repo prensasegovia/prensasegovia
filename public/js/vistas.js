@@ -19,7 +19,7 @@ function viewNoticias(news){
       <button class="stat" data-act="pueblos" type="button"><div class="n">${pueblos.size}</div><div class="l"><span>Pueblos</span>${I.chev}</div></button>${hayElecciones()?`
       <button class="stat elec ${store.get("elecVisto",0)?"":"nuevo"}" data-act="elec" type="button">${store.get("elecVisto",0)?"":`<span class="nuevotag">Nuevo</span>`}<div class="n">${elecNoticias(news).length}</div><div class="l" title="Elecciones del 29N: capital y provincia"><span>Elecciones</span>${I.chev}</div></button>`:""}
     </div>
-    <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>` + seguro("los asuntos", () => avisoAsuntos(news), "");
+    <button class="partebtn" data-act="parte" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg>Parte del día<span>Resumen para copiar o enviar</span></button></section>`;
   const urg = nuevasTodas.filter(n=>n.relevancia==="alta").slice(0,8);
   // Lo que ya sale arriba en rojo no se repite en la lista
   const nuevas = nuevasTodas.filter(n=>!urg.includes(n));
@@ -43,7 +43,7 @@ function viewNoticias(news){
     h += `<div class="uptodate"><span>${I.check}Estás al día: nada nuevo</span></div>`;
   }
   h += porDias(vistas, nuevasTodas.length ? " · ya visto" : "");
-  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button> · <button type="button" data-act="asuntos">Asuntos que sigues</button></p>`;
+  return h + `</div><p class="foot">Se actualiza sola: cada 10 minutos de lunes a viernes de 8 a 15 h, y cada hora el resto. <button type="button" data-act="medios">Medios y fuentes</button></p>`;
 }
 function porDias(list, extra="", opts={}){
   const by = {}; for (const n of list) (by[n._dia] ||= []).push(n);

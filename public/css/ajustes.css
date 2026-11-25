@@ -200,3 +200,5 @@
 .conf.uno{color:var(--media);background:var(--media-soft)}
 .cifras{font-size:13px;line-height:1.4;margin:6px 0 2px;padding:6px 10px;border-left:3px solid var(--media);background:var(--media-soft);border-radius:0 8px 8px 0;color:var(--ink)}
 .cifras span{color:var(--muted)}
+/* «✓ N medios»: contrastada por varios medios (despliega la lista) */
+.card .more{border-style:solid;background:var(--pine-soft);border-color:transparent}
