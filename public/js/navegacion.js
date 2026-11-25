@@ -2,9 +2,9 @@
 let scrollPrevio = 0;
 // Cada sección tiene su enlace (#noticias, #agenda, #pueblo/Cuéllar…): al recargar se queda donde estaba
 const VISTAS = ["noticias","agenda","pueblos","periodicos","guardadas"];
-const SUBS = ["parte","medios","imp","elec"];
+const SUBS = ["parte","medios","imp","elec","asuntos"];
 const NOMBRE_SECCION = {noticias:"Noticias", agenda:"la Agenda", pueblos:"Pueblos", periodicos:"Periódicos", guardadas:"Guardadas",
-  parte:"el Parte del día", medios:"Medios y fuentes", imp:"Importantes", elec:"Elecciones", pueblo:"este pueblo"};
+  parte:"el Parte del día", asuntos:"Asuntos", medios:"Medios y fuentes", imp:"Importantes", elec:"Elecciones", pueblo:"este pueblo"};
 function hashActual(){
   const s = st.sub;
   if (!s) return "#" + st.view;
@@ -23,6 +23,7 @@ function abrirSub(sub, sinHistorial){
   scrollPrevio = window.scrollY;
   if (!$("#searchbar").hidden && !esPC()) toggleSearch(false, true);
   st.detalle = null;
+  if (sub && sub.t==="asuntos") seguro("Asuntos", asMarcaVisto);
   if (st.sub){ st.pila = [...(st.pila||[]), st.sub]; }
   // Primero el paso en el historial y después se pinta: así el enlace nuevo queda en este paso y «atrás» vuelve al anterior
   if (!sinHistorial) history.pushState({sub:true}, "");
@@ -83,6 +84,7 @@ $("#app").addEventListener("click", e=>{
     const k = card.dataset.k;
     if (b.hasAttribute("data-share")) return compartir(card);
     if (b.hasAttribute("data-fav")){ toggleFav(k); render(true); return; }
+    if (b.hasAttribute("data-seguir")){ seguro("Asuntos", () => seguirAsunto(k)); return; }
     if (b.hasAttribute("data-more")){ st.abiertos.has(k) ? st.abiertos.delete(k) : st.abiertos.add(k); render(true); return; }
   }
   if (b && b.dataset.pueblo){ abrirSub({t:"pueblo", name:b.dataset.pueblo}); return; }
@@ -119,6 +121,8 @@ $("#app").addEventListener("click", e=>{
   else if (act==="parte") abrirSub({t:"parte"});
   else if (act==="parteCopiar"){ const x = $("#parteRaw").value; navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado"),()=>aviso("No se pudo copiar")); }
   else if (act==="parteEnviar"){ const x = $("#parteRaw").value; if (esPC()) window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(x), "_blank", "noopener"); else if (navigator.share) navigator.share({ text: x }).catch(()=>{}); else navigator.clipboard.writeText(x).then(()=>aviso("Parte copiado")); }
+  else if (act==="asuntos") abrirSub({t:"asuntos"});
+  else if (/^as[A-Z]/.test(act||"")) seguro("Asuntos", () => asAccion(act, b));
   else if (act==="mapaCierra") seguro("el mapa de pueblos", () => mapaElige(""));
   else if (act==="medios") abrirSub({t:"medios"});
   else if (act==="agenda") setView("agenda");

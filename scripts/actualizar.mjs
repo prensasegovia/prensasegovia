@@ -729,6 +729,33 @@ function juntaMedios(destino, origen) {
     .filter(x => { const k1 = "n:" + x.nombre, k2 = "u:" + x.url; if (vistos.has(k1) || vistos.has(k2)) return false; vistos.add(k1); vistos.add(k2); return true; });
   destino.splice(0, destino.length, ...unicos);
 }
+// Cifras que da cada medio (asistentes, heridos, detenidos, fallecidos): si no coinciden, la web lo enseña
+const CIFRA_TIPO = [["personas", /personas|asistentes|manifestantes|participantes|vecin[oa]s|trabajador[ae]s|concentrad[oa]s|agricultores|ganaderos|tractores/],
+  ["heridos", /herid[oa]s/], ["detenidos", /detenid[oa]s|arrestad[oa]s/], ["fallecidos", /fallecid[oa]s|muert[oa]s|victimas mortales/]];
+const NUM_PAL = { dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, doce: 12, quince: 15, veinte: 20, treinta: 30, cuarenta: 40, cincuenta: 50, cien: 100, doscientas: 200, doscientos: 200, trescientas: 300, trescientos: 300, quinientas: 500, quinientos: 500 };
+function cifrasDe(medio, texto) {
+  const t = norm(texto).replace(/(\d)\.(\d{3})\b/g, "$1$2");
+  const out = [];
+  const re = /\b(\d{1,6}|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|doce|quince|veinte|treinta|cuarenta|cincuenta|cien|doscient[oa]s|trescient[oa]s|quinient[oa]s)( mil)? ([a-z]+(?: [a-z]+)?)/g;
+  let m;
+  while ((m = re.exec(t))) {
+    let v = /^\d/.test(m[1]) ? +m[1] : NUM_PAL[m[1]]; if (!v) continue;
+    if (m[2]) v *= 1000;
+    const tipo = CIFRA_TIPO.find(([, r]) => r.test(m[3].split(" ")[0]) || r.test(m[3]));
+    if (tipo && v < 200000) out.push({ medio: canonMedio(medio), k: tipo[0], v });
+  }
+  return out;
+}
+// Solo se guardan las cifras en las que dos medios distintos no coinciden (una diferencia de al menos un 25 %)
+function cifrasDistintas(lista) {
+  const out = [];
+  for (const [k] of CIFRA_TIPO) {
+    const porMedio = new Map(); for (const c of lista || []) if (c.k === k && !porMedio.has(c.medio)) porMedio.set(c.medio, c.v);
+    const vals = [...porMedio.values()];
+    if (porMedio.size >= 2 && Math.max(...vals) >= 1.25 * Math.min(...vals)) out.push({ k, valores: [...porMedio].map(([medio, v]) => ({ medio, v })).sort((a, b) => b.v - a.v).slice(0, 4) });
+  }
+  return out;
+}
 // Páginas automáticas o de relleno que no son noticias
 // Artículos de opinión, cartas y blogs: no son noticias
 const OPINION = /\/(opinion|opiniones|tribuna|blogs?|cartas?-al-director|cartas-de-los-lectores|columnistas?|firmas)\//;
@@ -1036,6 +1063,7 @@ async function main() {
     const g = grupos.find(g => mismaNoticia(g, yo));
     if (g) {
       juntaMedios(g.medios, [{ nombre: b.medio, url: b.url }]);
+      g.cifras.push(...cifrasDe(b.medio, b.titulo + " " + String(b.texto || "").slice(0, 400)));
       if (!g.texto && b.texto) g.texto = b.texto;
       if ((b.cuerpo || "").length > (g.cuerpo || "").length) g.cuerpo = b.cuerpo;
       if (!g.img && b.img) g.img = b.img;
@@ -1046,7 +1074,7 @@ async function main() {
       if (fiable && b.fecha < g.fecha) g.fecha = b.fecha;
       if (fiable && !ORGANIZACIONES.has(b.medio) && (!g.fechaMedio || b.fecha < g.fechaMedio)) g.fechaMedio = b.fecha;
       if (b.directo) g.directo = true;
-    } else grupos.push({ ...yo, pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, directo: !!b.directo, ...(ORGANIZACIONES.has(b.medio) ? {} : { fechaMedio: b.fecha }), medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
+    } else grupos.push({ ...yo, cifras: cifrasDe(b.medio, b.titulo + " " + String(b.texto || "").slice(0, 400)), pueblo: b.pueblo, titulo: b.titulo, texto: b.texto, cuerpo: b.cuerpo, img: b.img, local: b.local, fecha: b.fecha, directo: !!b.directo, ...(ORGANIZACIONES.has(b.medio) ? {} : { fechaMedio: b.fecha }), medios: [{ nombre: canonMedio(b.medio), url: b.url }] });
   }
   // La hora de la noticia es la del primer periódico que la da: la nota de un partido o sindicato
   // no se muestra sola, así que no debe adelantar la hora (parecería que llegó tarde)
@@ -1103,6 +1131,7 @@ async function main() {
       ...(a ? { analisis: a } : {}),
       ...(g.img ? { img: g.img } : {}),
       ...(g.local ? { local: true } : {}),
+      ...(cifrasDistintas(g.cifras).length ? { cifras: cifrasDistintas(g.cifras) } : {}),
       // Los de pago, al final: así el primer enlace es una versión que se puede leer entera
       medios: g.medios.map(m => cache[m.url]?.pago || esPago(m.url) ? { ...m, pago: true } : m).sort((x, y) => (x.pago ? 1 : 0) - (y.pago ? 1 : 0)),
       publicado: g.fecha.toISOString(),

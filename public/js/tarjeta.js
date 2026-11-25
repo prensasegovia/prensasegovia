@@ -15,6 +15,18 @@ const tarjetas = new Map(); // noticias dibujadas, para el panel ampliado
 // Sin foto (o si la foto no carga): un recuadro con el icono del tema, en vez de un hueco gris
 const ICO_NOTICIA = "M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5";
 const sinFoto = n => `<div class="thumb sinfoto" aria-hidden="true">${ICON((n._cats && n._cats[0] && CAT[n._cats[0]] ? CAT[n._cats[0]].d : ICO_NOTICIA))}</div>`;
+// Cuántos medios la cuentan y, si dan cifras distintas (asistentes, heridos…), cuáles
+const CIFRA_NOMBRE = { personas: "personas", heridos: "heridos", detenidos: "detenidos", fallecidos: "fallecidos" };
+const fmtN = v => Number(v).toLocaleString("es-ES");
+function contraste(n){
+  const k = new Set(mediosDe(n).map(m=>m.nombre)).size;
+  const conf = k<=1 ? `<span class="conf uno" title="Solo la cuenta un medio: sin contrastar">Solo 1 medio</span>`
+    : `<span class="conf" title="La cuentan ${k} medios distintos">✓ ${k}${k>=5?"+":""} medios</span>`;
+  const cif = (n.cifras||[]).map(c=>`<div class="cifras" title="Los medios no dan la misma cifra"><b>Cifras distintas:</b> ${c.valores.map(x=>`${fmtN(x.v)} ${CIFRA_NOMBRE[c.k]||c.k} <span>(${esc(x.medio)})</span>`).join(" · ")}</div>`).join("");
+  return { conf, cif };
+}
+const ICO_OJO = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
+const asSigue = n => { try { return typeof asDe === "function" && asuntos().length ? asDe(n) : null; } catch(e){ return null; } };
 // Importante: además del color, un icono y la palabra (para quien no distingue bien los colores y para lectores de pantalla)
 const ICO_IMP = "M12 3l9 16H3zM12 10v4M12 17h.01";
 function card(n, opts={}){
@@ -39,7 +51,9 @@ function card(n, opts={}){
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${opts.pub?`<div class="pubd">Publicada ${esc(cuando(n._dia, n.hora))}</div>`:""}
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
-    <div class="bottom"><div class="srcs">${src}</div><div class="acts">
+    ${contraste(n).cif}
+    <div class="bottom"><div class="srcs">${contraste(n).conf}${src}</div><div class="acts">
+      <button class="abtn seg" type="button" data-seguir aria-pressed="${!!asSigue(n)}" aria-label="${asSigue(n)?"Ver el asunto que sigues":"Seguir este asunto"}" title="${asSigue(n)?"Ya sigues este asunto":"Seguir este asunto: junta todas sus noticias"}">${ICON(ICO_OJO)}</button>
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>
       <button class="abtn" type="button" data-share aria-label="Compartir">${I.share}</button>
     </div></div>
