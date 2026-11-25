@@ -44,8 +44,15 @@ async function load(){
   catch(e){ st.loaded = true; st.error = !st.dias.length; render(); if (st.dias.length) aviso("Sin conexión: mostrando lo último guardado"); }
   finally{ const b=$("#btnReload"); if (b) setTimeout(()=>b.classList.remove("spin"), 400); }
 }
+// Cada 10 minutos se mira solo version.json (unos bytes); las noticias se descargan únicamente si han cambiado.
+// Si version.json no existe o falla, se mira datos.json como antes.
+async function hayNuevas(){
+  try { const r = await fetch("version.json?t="+Date.now(), {cache:"no-store"}); if (!r.ok) return true; const v = await r.json(); return !v.actualizado || v.actualizado !== st.actualizado; }
+  catch(e){ return true; }
+}
 async function poll(){
   try{
+    if (!(await hayNuevas())) { syncLabel(); return; }
     const j = await fetchJSON();
     if (j.actualizado && j.actualizado !== st.actualizado) cargaPeriodicos();
     if (j.actualizado && j.actualizado !== st.actualizado){
@@ -156,7 +163,7 @@ load();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 setInterval(poll, REFRESH_MS);
 // Versión de la app: si en el servidor hay una más nueva, se recarga sola (en el iPhone la app instalada no lo hace por sí misma)
-const VERSION_APP = "prensa-segovia-v127";
+const VERSION_APP = "prensa-segovia-v128";
 async function compruebaVersion(){
   try {
     const t = await (await fetch("sw.js?t="+Date.now(), {cache:"no-store"})).text();

@@ -12,6 +12,11 @@ function extractoDe(n){
   return norm(n.resumen||"").includes(nf) || norm(n.titulo).includes(nf) ? "" : f;
 }
 const tarjetas = new Map(); // noticias dibujadas, para el panel ampliado
+// Sin foto (o si la foto no carga): un recuadro con el icono del tema, en vez de un hueco gris
+const ICO_NOTICIA = "M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5";
+const sinFoto = n => `<div class="thumb sinfoto" aria-hidden="true">${ICON((n._cats && n._cats[0] && CAT[n._cats[0]] ? CAT[n._cats[0]].d : ICO_NOTICIA))}</div>`;
+// Importante: además del color, un icono y la palabra (para quien no distingue bien los colores y para lectores de pantalla)
+const ICO_IMP = "M12 3l9 16H3zM12 10v4M12 17h.01";
 function card(n, opts={}){
   tarjetas.set(n._key, n);
   if (opts.per) return cardPer(n);
@@ -28,9 +33,9 @@ function card(n, opts={}){
   const fav = !!st.favs[n._key];
   // «Nueva» se mantiene toda la visita (aunque ya haya pasado por pantalla); a la siguiente visita ya no
   const nueva = isNew(n) || (st.sesionNuevas && st.sesionNuevas.has(n._key));
-  return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${nueva?"nueva":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
-    <div class="top">${nueva?`<span class="nvtag">Nueva</span>`:""}${n.resuelta?`<span class="nvtag" style="background:var(--pine-2)">${esc(n.resuelta)}</span>`:""}${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
-    <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<h4>${hl(n.titulo)}</h4>
+  return `<article class="card ${lvl} ${isNew(n)?"unseen":""} ${nueva?"nueva":""} ${st.detalle===n._key?"sel":""}" data-k="${esc(n._key)}" tabindex="0" ${medios[0]?`data-href="${esc(medios[0].url)}"`:""}>
+    <div class="top">${lvl==="alta"?`<span class="imptag">${ICON(ICO_IMP)}Importante</span>`:""}${nueva?`<span class="nvtag">Nueva</span>`:""}${n.resuelta?`<span class="nvtag" style="background:var(--pine-2)">${esc(n.resuelta)}</span>`:""}${lugar}${ev}${cat}<span class="time">${opts.pub ? (n.hora_evento ? `<b class="hacto">${I.clock}${esc(n.hora_evento)} h</b>` : `<span class="hsin">Hora sin confirmar</span>`) : esc(cuando(n._dia, n.hora))}</span></div>
+    <div class="cbody">${fotoValida(n.img)?`<img class="thumb" src="${esc(n.img)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-sin="${esc(sinFoto(n))}" onerror="this.outerHTML=this.dataset.sin">`:sinFoto(n)}<h4>${hl(n.titulo)}</h4>
     ${n.resumen?`<p>${hl(n.resumen)}</p>`:""}</div>
     ${opts.pub?`<div class="pubd">Publicada ${esc(cuando(n._dia, n.hora))}</div>`:""}
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}

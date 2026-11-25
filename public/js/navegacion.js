@@ -67,6 +67,10 @@ let avisoT;
 function aviso(txt){ const el=$("#aviso"); el.textContent=txt; el.classList.add("show"); clearTimeout(avisoT); avisoT=setTimeout(()=>el.classList.remove("show"),1600); }
 
 $("#app").addEventListener("change", e=>{ if (e.target.id==="parteLinks"){ st.parteLinks=e.target.checked; store.set("parteLinks",st.parteLinks); render(true); } });
+// Teclado: con una tarjeta enfocada (Tab), Intro o espacio la abren como un clic
+$("#app").addEventListener("keydown", e=>{
+  if ((e.key==="Enter" || e.key===" ") && e.target.matches && e.target.matches("article.card[tabindex]")){ e.preventDefault(); e.target.click(); }
+});
 $("#app").addEventListener("click", e=>{
   const am = e.target.closest("[data-ambito]"); if (am){ st.ambito = am.dataset.ambito; store.set("ambito", st.ambito); render(); window.scrollTo({top:0}); return; }
   const sp = e.target.closest("#segParte button"); if (sp){ st.parteDesde = sp.dataset.v; render(true); return; }

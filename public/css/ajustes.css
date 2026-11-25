@@ -186,3 +186,12 @@
 .mleyenda{font-size:13px;color:var(--muted);line-height:1.9}
 .mleyenda .dot{display:inline-block;margin:0 4px 0 10px;vertical-align:middle}
 .mleyenda .dot:first-child{margin-left:0}
+/* Tarjetas sin foto: icono del tema en lugar del hueco gris */
+.thumb.sinfoto{display:grid;place-items:center;background:var(--pine-soft);color:var(--pine-2)}
+.thumb.sinfoto svg{width:34%;height:auto;max-width:44px;opacity:.85}
+/* Importante: icono y palabra además del color */
+.imptag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#fff;background:var(--alta);border-radius:999px;padding:2px 8px 2px 6px}
+.imptag svg{width:13px;height:13px}
+/* Teclado: se ve qué tarjeta está enfocada */
+.card:focus{outline:none}
+.card:focus-visible{outline:3px solid var(--new);outline-offset:2px}
