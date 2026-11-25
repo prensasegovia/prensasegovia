@@ -460,6 +460,7 @@ function clasifica(titulo, texto, municipio, soloTitulo = false) {
   // Previsiones y avisos generales (peligro de incendios, operación salida...) no son urgentes
   if (relevancia === "alta" && /peligro|riesgo|preve|prevision|prevencion|campana de|\boperacion (salida|especial)|recomendaciones/.test(tt) && !/detenid|herid|fallec|muere/.test(tt)) relevancia = "media";
   if (municipio === "Segovia" && relevancia === "alta" && !politizado && !altaEnCapital(tt, categorias)) relevancia = "media";
+  relevancia = rebajaDiaSenalado(tt, relevancia);
   return { categorias, relevancia, porTexto: porTexto && !politizado, noAlta: NO_ALTA.test(tt) && !politizado, politizado };
 }
 
@@ -561,6 +562,11 @@ const DIA_REIVINDICATIVO = /\b(25n|8m)\b|25 de noviembre|8 de marzo|1 de mayo|vi
 const A_LA_CALLE = /concentra|manifesta|\bmarcha\b|movilizac|convoca|protesta|lectura (de|del) manifiesto|minutos? de silencio|cadena humana|✊/;
 const CALLE_NO = /taller|charla|curso|concurso|microrrelato|exposicion|programa de actividades|\bcine\b|teatro/;
 const convocaCalle = tt => DIA_REIVINDICATIVO.test(tt) && A_LA_CALLE.test(tt) && !CALLE_NO.test(tt);
+// Días señalados (25N, 8M…): sus marchas y concentraciones son previsibles y van en la agenda, no en rojo,
+// salvo que haya incidentes. Sus campañas y programas de actos institucionales no son noticia para la unidad.
+const INCIDENTE_CALLE = /incidentes?|cargas|altercad|detenid|agresi|agred|enfrent|ultras|contramanifest|disturb|boicot|insult|pintadas/;
+const DELITO_TT = /detenid|agresi|agred|asesin|mata|muere|fallec|herid|condena|juicio|juzgad|denuncia|absuel|alejamiento|investigad|maltrat/;
+const rebajaDiaSenalado = (tt, rel) => rel === "alta" && DIA_REIVINDICATIVO.test(tt) && !INCIDENTE_CALLE.test(tt) && !DELITO_TT.test(tt) ? "media" : rel;
 // «Carretera de Villacastín»: si el pueblo solo sale como nombre de carretera, no es el sitio de la noticia
 // (corrige también lo que se leyó del cuerpo con la regla vieja y quedó guardado)
 const soloComoCarretera = (texto, muni) => {
@@ -573,6 +579,8 @@ function relleno(n) {
   if (BIOGAS.test(tt) && !BIOGAS_NO.test(tt)) return false;
   if (convocaCalle(tt)) return false;
   const solo = ks => c.length && c.every(k => ks.includes(k));
+  // Programas, campañas y mensajes por el 25N, el 8M o la igualdad (talleres, actos, «se suma», «teje»…): no son noticia
+  if ((DIA_REIVINDICATIVO.test(tt) || /\bigualdad\b/.test(tt)) && !A_LA_CALLE.test(tt) && !DELITO_TT.test(tt) && !INCIDENTE_CALLE.test(tt)) return true;
   // Recuerdos y esquelas («En memoria de…»): no son noticia aunque el apellido coincida con el de un dirigente
   if (/^(en memoria|in memoriam|recordando a|adios a)\b/.test(tt) && !/concentracion|manifestacion|homenaje (a|de) (las )?victimas/.test(tt)) return true;
   // Campañas de sensibilización de ayuntamientos e instituciones (25N, 8M, prevención…): no son convocatorias ni campaña electoral
@@ -830,6 +838,7 @@ function conCuerpo(c, a, municipio, titulo = "") {
   // (si el tema salió solo de la entradilla, como «amenazada» en un reportaje, el titular no era de interés)
   if (!soloTexto && !c.porTexto && !c.noAlta && a.extracto && ALTA.test(norm(a.extracto)) && !NO_ALTA.test(norm(a.extracto))) relevancia = "alta";
   if (municipio === "Segovia" && relevancia === "alta" && !c.politizado && !altaEnCapital(norm(titulo), categorias)) relevancia = "media";
+  relevancia = rebajaDiaSenalado(norm(titulo), relevancia);
   return { categorias, relevancia, porTexto: false, noAlta: c.noAlta, politizado: c.politizado };
 }
 function eventoConCuerpo(titulo, resumen, publicada, categorias, a) {

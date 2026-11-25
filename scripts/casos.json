@@ -350,5 +350,44 @@
   "t": "Presentación del libro “Los Williams” en Segovia",
   "r": "",
   "f": "Foro Social de Segovia"
+ },
+ {
+  "fecha": "2026-11-25",
+  "espera": "si",
+  "rel": "media",
+  "motivo": "Marcha de un día señalado (25N) en la capital: entra y va a la agenda, pero no en rojo",
+  "t": "Manifestación el 25N en defensa de los derechos de las mujeres",
+  "r": "La movilización partirá a las 19.00 horas de la puerta de los sindicatos y concluirá en la plaza de San Martín",
+  "f": "El Día de Segovia",
+  "a": {
+   "cats": [
+    "social"
+   ],
+   "extracto": "La movilización comenzará a las 19.00 horas en la puerta de los sindicatos y finalizará en la plaza de San Martín."
+  }
+ },
+ {
+  "fecha": "2026-11-25",
+  "espera": "no",
+  "motivo": "Campaña institucional del 25N (actividades): no es noticia",
+  "t": "La provincia «teje» por la igualdad y contra la violencia de género",
+  "r": "En el Día Internacional de la Eliminación de la Violencia contra las Mujeres, la Diputación de Segovia busca crear «un gran tejido» de actividades.",
+  "f": "SegoviaUdaz"
+ },
+ {
+  "fecha": "2026-11-25",
+  "espera": "no",
+  "motivo": "Programa de actos del 25N de un ayuntamiento",
+  "t": "El Espinar se suma al 25N",
+  "r": "La programación se extiende del 24 al 27 de noviembre e incluye actos institucionales, propuestas educativas y actividades para familias, jóvenes y mayores",
+  "f": "El Día de Segovia"
+ },
+ {
+  "fecha": "2026-11-25",
+  "espera": "si",
+  "motivo": "Delito de violencia de género: sigue entrando",
+  "t": "Detenido un hombre en Cuéllar por agredir a su pareja",
+  "r": "",
+  "f": "El Día de Segovia"
  }
 ]
