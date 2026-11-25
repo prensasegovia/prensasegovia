@@ -20,12 +20,11 @@ const CIFRA_NOMBRE = { personas: "personas", heridos: "heridos", detenidos: "det
 const fmtN = v => Number(v).toLocaleString("es-ES");
 function contraste(n){
   const k = new Set(mediosDe(n).map(m=>m.nombre)).size;
-  const conf = k<=1 ? `<span class="conf uno" title="Solo la cuenta un medio: sin contrastar">Solo 1 medio</span>`
-    : `<span class="conf" title="La cuentan ${k} medios distintos">✓ ${k}${k>=5?"+":""} medios</span>`;
+  // Con varios medios, el propio botón «✓ N medios» lo dice (y despliega la lista); con uno solo, se avisa
+  const conf = k<=1 ? `<span class="conf uno" title="Solo la cuenta un medio: sin contrastar">Solo 1 medio</span>` : "";
   const cif = (n.cifras||[]).map(c=>`<div class="cifras" title="Los medios no dan la misma cifra"><b>Cifras distintas:</b> ${c.valores.map(x=>`${fmtN(x.v)} ${CIFRA_NOMBRE[c.k]||c.k} <span>(${esc(x.medio)})</span>`).join(" · ")}</div>`).join("");
   return { conf, cif };
 }
-const ICO_OJO = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
 const asSigue = n => { try { return typeof asDe === "function" && asuntos().length ? asDe(n) : null; } catch(e){ return null; } };
 // Importante: además del color, un icono y la palabra (para quien no distingue bien los colores y para lectores de pantalla)
 const ICO_IMP = "M12 3l9 16H3zM12 10v4M12 17h.01";
@@ -40,7 +39,7 @@ function card(n, opts={}){
   const maxV = 1;
   const visibles = abierto ? medios : medios.slice(0,maxV);
   const src = visibles.map(m=>`<a class="src" href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.nombre)}${m.pago?' <span class="pay" title="El periódico solo muestra el principio a quien no es suscriptor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Suscriptores</span>':""}${I.ext}</a>`).join("")
-    + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`+${medios.length-maxV} ${medios.length-maxV===1?"medio":"medios"}`}</button>` : "");
+    + (medios.length>maxV ? `<button class="more" type="button" data-more>${abierto?"Menos":`✓ ${medios.length} medios`}</button>` : "");
   const lugar = n.municipio && n.municipio!=="General" ? `<button class="pill ${lvl!=="baja"?"lvl-"+lvl:""}" type="button" data-pueblo="${esc(n.municipio)}">${esc(n.municipio)}</button>` : "";
   const fav = !!st.favs[n._key];
   // «Nueva» se mantiene toda la visita (aunque ya haya pasado por pantalla); a la siguiente visita ya no
@@ -53,7 +52,7 @@ function card(n, opts={}){
     ${extractoDe(n)?`<div class="pista"><b>En la noticia:</b> ${hl(extractoDe(n))}</div>`:""}
     ${contraste(n).cif}
     <div class="bottom"><div class="srcs">${contraste(n).conf}${src}</div><div class="acts">
-      <button class="abtn seg" type="button" data-seguir aria-pressed="${!!asSigue(n)}" aria-label="${asSigue(n)?"Ver el asunto que sigues":"Seguir este asunto"}" title="${asSigue(n)?"Ya sigues este asunto":"Seguir este asunto: junta todas sus noticias"}">${ICON(ICO_OJO)}</button>
+      <button class="seguir" type="button" data-seguir aria-pressed="${!!asSigue(n)}" title="${asSigue(n)?"Ya sigues este asunto: ver todas sus noticias":"Seguir este asunto: juntar todas sus noticias y avisarte de las nuevas"}">${asSigue(n)?"✓ Siguiendo":"+ Seguir"}</button>
       <button class="abtn fav" type="button" data-fav aria-pressed="${fav}" aria-label="${fav?"Quitar de guardadas":"Guardar"}">${I.fav}</button>
       <button class="abtn" type="button" data-share aria-label="Compartir">${I.share}</button>
     </div></div>
