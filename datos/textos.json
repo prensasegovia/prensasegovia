@@ -1587,8 +1587,8 @@
  "73701008a916109a": {
   "url": "https://www.eldiasegovia.es/noticia/z3cdfe3bb-e195-4543-b2b9d93357fc46b1/202611/dia-internacional-de-la-eliminacion-de-la-violencia-contra-la",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T04:30:02.776Z",
+  "intentos": 3,
+  "ultimo": "2026-11-25T14:50:35.534Z",
   "motivo": "texto corto (0)"
  },
  "7a505337103ffaa2": {
@@ -1679,8 +1679,8 @@
  "b5b4d6365d536a71": {
   "url": "https://www.elnortedecastilla.es/segovia/ayuntamiento-preve-vender-matadero-municipal-financiar-nuevo-20261124180144-nt.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T04:30:01.220Z",
+  "intentos": 3,
+  "ultimo": "2026-11-25T14:50:40.148Z",
   "motivo": "HTTP 404"
  },
  "fe09339558298bcf": {
@@ -1812,5 +1812,338 @@
   "url": "http://segovia247.es/art/13833/29n-sanchez-en-cordoba-a-las-1900-feijoo-en-entrevistas-colau-en-madrid-asi-cierra-el-lunes-la-campana",
   "ok": true,
   "ultimo": "2026-11-24T21:27:30.641Z"
+ },
+ "8141adeb4306d721": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/el-equipo-de-gobierno-de-la-diputacion-lleva-al-pleno-del-jueves-los-presupuestos/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:33.084Z"
+ },
+ "68d0c36e554a573a": {
+  "url": "http://segovia247.es/art/13859/primera-nevada-de-la-temporada-en-la-sierra-de-guadarrama",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:33.749Z"
+ },
+ "2db444c4558ebd9c": {
+  "url": "https://www.eldiasegovia.es/noticia/z208c4ae7-1397-40b4-851f5faa3ebb5947/202611/vox-propone-tres-planes-provinciales-en-la-diputacion",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.023Z"
+ },
+ "301e51773f08de12": {
+  "url": "https://www.eldiasegovia.es/noticia/z4d88a026-812f-48c1-8349a07a89613115/202611/segovia-registra-la-primera-nevada-del-otono",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.024Z"
+ },
+ "3b1855cb1dbf9d3e": {
+  "url": "https://www.eldiasegovia.es/noticia/zfb718ecb-ab7e-4710-843022143bda63b2/202611/el-psoe-de-palazuelos-denuncia-errores-en-el-presupuesto",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.065Z"
+ },
+ "5b84f531650d8760": {
+  "url": "http://segovia247.es/art/13858/vialidad-invernal-diputacion-segovia-2026-quitanieves-sal-y-bomberos-para-1200-km",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.089Z"
+ },
+ "e39f6a6fd251207b": {
+  "url": "https://www.psoesegovia.es/el-psoe-defiende-el-reconocimiento-de-los-empleados-publicos-con-nuevas-subidas-salariales-y-una-ampliacion-historica-de-los-permisos-laborales/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.359Z"
+ },
+ "993616c2912470af": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/la-diputacion-de-segovia-tiene-listos-sus-medios-para-la-campana-de-vialidad-invernal/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.525Z"
+ },
+ "8a1d473161f1966c": {
+  "url": "https://segoviaudaz.es/todo-listo-en-la-provincia-para-hacer-frente-a-las-nevadas/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.652Z"
+ },
+ "0078f94bc345b11f": {
+  "url": "https://www.eldiasegovia.es/noticia/z47ec980d-187e-44ee-8c6d100916941dfc/202611/vox-propone-que-el-colegio-de-arquitectos-agilice-licencias",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:34.790Z"
+ },
+ "d9ce38a71d07798b": {
+  "url": "https://www.eldiasegovia.es/noticia/z2a9a78c3-a513-44b6-bf849b155b130c92/202611/absueltos-dos-hombres-de-una-agresion-sexual-a-una-menor",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.094Z"
+ },
+ "f7c46d1f27a89ebb": {
+  "url": "https://www.eldiasegovia.es/noticia/z4e35abf6-184f-47e0-b5649039401c9e88/202611/queremos-una-izquierda-que-diga-que-es-republicana",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.278Z"
+ },
+ "99cc23905a7c9ac7": {
+  "url": "https://www.dipsegovia.es/noticias/-/asset_publisher/1xkM/content/la-diputaci%C3%B3n-de-segovia-tiene-listos-todos-sus-medios-para-actuar-durante-una-nueva-campa%C3%B1a-de-vialidad-invernal-en-la-provincia",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.309Z"
+ },
+ "605506c8191899fc": {
+  "url": "https://www.elnortedecastilla.es/segovia/inversores-extranjeros-protagonizan-diez-adquisiciones-vivienda-20261125140238-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.465Z"
+ },
+ "8d764b6b0fa680f5": {
+  "url": "https://www.elnortedecastilla.es/segovia/solares-urbanos-toman-relevo-ante-frenazo-compra-20261125140108-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.497Z"
+ },
+ "52c258e3ed8811b2": {
+  "url": "https://www.elnortedecastilla.es/segovia/sale-venta-historico-edificio-siglo-xvi-ubicado-20261125140150-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.577Z"
+ },
+ "cb223c9ac662388a": {
+  "url": "https://www.tribunasegovia.com/noticias/468019/cuatro-detenidos-por-robar-material-de-riego-y-gasoleo-en-explotaciones-agricolas-de-valladolid-y-segovia",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.621Z"
+ },
+ "438bb8afcf4279ec": {
+  "url": "https://oterodeherreros.es/25-noviembre-dia-internacional-de-la-eliminacion-de-la-violencia-contra-las-mujeres/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.918Z"
+ },
+ "8570b9d3601444d3": {
+  "url": "http://segovia247.es/art/13864/mas-de-9700-agentes-velaran-por-la-seguridad-de-las-elecciones-del-domingo-en-castilla-y-leon-31-diputados-y-36-senadores-en-juego",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.972Z"
+ },
+ "2c4c6eafb7e25b83": {
+  "url": "https://lavozdeelespinar.es/nosotras-no-olvidamos-25n/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:35.972Z"
+ },
+ "18d531cf5b0de94f": {
+  "url": "http://segovia247.es/art/13863/la-guardia-civil-desarticula-un-grupo-que-robaba-material-de-riego-a-plena-luz-del-dia-y-esclarece-el-robo-de-1440-litros-de-gasoleo-en-explotaciones-de-segovia-y-valladolid",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.131Z"
+ },
+ "4c03ca80404b5d51": {
+  "url": "http://segovia247.es/art/13862/bruselas-avisa-de-un-posible-expediente-a-espana-por-exceso-de-gasto",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.144Z"
+ },
+ "8a2178645b10da64": {
+  "url": "http://segovia247.es/art/13861/puigdemont-anuncia-que-volvera-a-espana-el-12-de-diciembre",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.209Z"
+ },
+ "ea6c66ebefb33c1c": {
+  "url": "http://segovia247.es/art/13857/25n-en-segovia",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.270Z"
+ },
+ "a5863c4dce2f70e9": {
+  "url": "http://segovia247.es/art/13860/estudiantes-de-educacion-de-segovia-aprenden-a-actuar-en-emergencias-en-el-colegio",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.485Z"
+ },
+ "76c603628e361be3": {
+  "url": "http://segovia247.es/art/13856/mercado-navideno-plaza-mayor-segovia-2025-fechas-horarios-21-casetas-y-arbol-magico",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.542Z"
+ },
+ "61948356bfa91056": {
+  "url": "https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/alfonso-fernandez-manueco-pide-votantes-no-bajar-guardia-recta-final-momentos-confiarse-perder-20261125_3481697.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.582Z"
+ },
+ "16713d1b16187287": {
+  "url": "https://eladelantado.com/nacional/2026/11/25/los-mejores-juguetes-de-2026-segun-la-asociacion-nacional-de-fabricantes/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.719Z"
+ },
+ "44dde30619937374": {
+  "url": "https://www.eldiasegovia.es/noticia/z6271f810-50a4-48f2-8cb42f1a1245a2ed/202611/el-mercado-de-navidad-de-segovia-incorpora-un-arbol-magico",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.815Z"
+ },
+ "e7e1172643466e5c": {
+  "url": "https://www.elnordestedesegovia.es/noticias/1816-25n-en-segovia-418-casos-activos-de-violencia-de-genero",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:36.926Z"
+ },
+ "c8f87a7f31905667": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/llamamiento-vecinal-en-sepulveda-para-vestir-de-navidad-los-puntos-mas-representativos-de-la-villa/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.281Z"
+ },
+ "bc0564a014dfae34": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/regala-segovia-ocho-experiencias-para-disfrutar-y-recordar/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.373Z"
+ },
+ "b8f021e5e03089f3": {
+  "url": "https://www.eldiasegovia.es/noticia/zfe9cd329-f0f7-45ba-bc47451aeb12287a/202611/consulta-cuantos-habitantes-tiene-tu-pueblo",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.384Z"
+ },
+ "5e17c344e9ef4b7c": {
+  "url": "https://www.elnordestedesegovia.es/noticias/1815-vialidad-invernal-en-sepulveda-riaza-y-boceguillas-2026",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.500Z"
+ },
+ "6163009647553e10": {
+  "url": "https://www.elnortedecastilla.es/segovia/nieve-llega-provincia-segovia-20261125105159-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.533Z"
+ },
+ "35bc91cde07ba2f8": {
+  "url": "https://segoviaudaz.es/la-catedral-de-segovia-dara-la-bienvenida-a-la-navidad-con-un-arbol-de-12-metros/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.692Z"
+ },
+ "6e69ad4a8719f5ca": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/el-espinar-activa-el-nivel-1-del-plan-municipal-de-inclemencias-invernales-por-la-nieve-y-las-bajas-temperaturas/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.750Z"
+ },
+ "697b2676978f699d": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/cosmetica-de-aqui-para-la-gente-guapa/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.872Z"
+ },
+ "a0d6546d5bd98d8d": {
+  "url": "https://www.eldiasegovia.es/noticia/z353ba1c4-75cb-43a8-b11b5ee6dcfc2c9c/202611/palazuelos-convoca-el-acto-de-reconocimiento-a-sus-vecinos",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:37.988Z"
+ },
+ "312ecf664845b2a7": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/regalate-aromas-ambientes-que-despiertan-los-sentidos/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.211Z"
+ },
+ "702499f9f13964c2": {
+  "url": "https://www.eldiasegovia.es/noticia/ze48b0ce5-6379-4e77-84d488070206bc56/202611/el-ovino-roza-maximos-mientras-cae-el-precio-del-porcino",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.373Z"
+ },
+ "79c453396fb33331": {
+  "url": "https://iusegovia.es/sg/2026/11/iu-el-espinar-recoge-propuestas-vecinales-para-el-gobierno-del-estado/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.474Z"
+ },
+ "d11edff630e88b1d": {
+  "url": "https://segoviaudaz.es/que-cambios-proponen-los-partidos-para-los-presupuestos-de-la-diputacion-estas-son-sus-enmiendas/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.531Z"
+ },
+ "1401410a2891340e": {
+  "url": "https://www.eldiasegovia.es/noticia/zf138a359-5970-4708-9734cf043c5e02ed/202611/la-mancomunidad-fuente-del-mojon-levanta-las-restricciones",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.564Z"
+ },
+ "b882e8c3bd5ceca2": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/seis-gadgets-verificados-para-acertar-con-la-tecnologia/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.816Z"
+ },
+ "612d60748728813a": {
+  "url": "https://www.elnortedecastilla.es/segovia/segovia-ultima-instalacion-luces-navidad-20261125085048-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.848Z"
+ },
+ "0f702cca8025c9a0": {
+  "url": "https://www.elnortedecastilla.es/segovia/adif-coloca-futuro-estacion-ortigosa-pestano-alero-20261125084913-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.886Z"
+ },
+ "db04814ac71d9b94": {
+  "url": "https://www.elnortedecastilla.es/segovia/brecha-salarial-repunta-segovia-cobrar-mujeres-hombres-20261125084831-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.913Z"
+ },
+ "68dff0d4f0e784cf": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/tendencias-de-regalos-en-2026-menos-cantidad-mas-intencion/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:38.936Z"
+ },
+ "be7153c0a799a0cd": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/la-ampa-antonio-machado-organiza-en-cantimpalos-una-charla-informativa-sobre-el-tdah/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.335Z"
+ },
+ "bad6f6c9ea9b6ef8": {
+  "url": "https://eladelantado.com/provincia/2026/11/25/el-25n-reune-a-instituciones-y-municipios-en-torno-a-una-jornada-de-reivindicacion/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.343Z"
+ },
+ "f3489c8a59b0fa18": {
+  "url": "https://segoviaudaz.es/publicatessen-se-suma-al-25n-con-una-jornada-sobre-limites-y-relaciones-sanas/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.475Z"
+ },
+ "6fefb3c1fde056f3": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/25/la-junta-afianza-los-servicios-para-proteger-a-las-victimas-de-la-violencia-machista-y-de-las-agresiones-sexuales/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.824Z"
+ },
+ "8cb2b7147cc8c0e1": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/la-muerte-no-le-resta-valor-a-la-existencia-se-lo-concede/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.857Z"
+ },
+ "0d01e36abdda70cb": {
+  "url": "https://segoviaudaz.es/la-navidad-se-asoma-a-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:39.911Z"
+ },
+ "22a9ab5ef44e60f9": {
+  "url": "https://segoviaudaz.es/90-plazas-para-esquiar-en-andorra-con-la-semana-blanca-de-la-fundacion-caja-rural-de-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.034Z"
+ },
+ "2f00db0e527d5cf8": {
+  "url": "https://www.eldiasegovia.es/noticia/zc2e41c96-67fb-49c6-905ddf9ec75ffde1/202611/casi-la-mitad-de-los-municipios-de-segovia-sube-su-poblacion",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.208Z"
+ },
+ "cb2ff6b1221b3f6b": {
+  "url": "https://www.ondacero.es/podcast/emisoras/valladolid/brujula-castilla-leon/brujula-castilla-leon-24112026_202611246b059766f058440007c2c654.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-25T14:50:40.449Z",
+  "motivo": "texto corto (89)"
+ },
+ "22f849e6477bb4cb": {
+  "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-2411202_202611246b058ec10bd9b0e427b2862b.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-25T14:50:40.489Z",
+  "motivo": "texto corto (89)"
+ },
+ "61e6eaac072faf94": {
+  "url": "https://www.eldiasegovia.es/noticia/z4809165c-7651-47a5-894e247a7639d6b5/202611/la-dulzaina-en-madrona-sigue-tocando",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.519Z"
+ },
+ "35fac860326eccf9": {
+  "url": "https://www.eldiasegovia.es/noticia/z372e73de-8fd2-4493-9b06613ed9fb6b26/202611/mazarias-es-optimista-sobre-la-aprobacion-del-presupuesto",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.587Z"
+ },
+ "3b43b829a91763c7": {
+  "url": "https://segoviaudaz.es/aviso-amarillo-por-nevadas-en-el-sistema-central-de-segovia-2/",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.692Z"
+ },
+ "d9ea3c7bfe6bafb9": {
+  "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-24112026_202611246b05a5a3ed8101000790a82e.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-25T14:50:40.725Z",
+  "motivo": "texto corto (89)"
+ },
+ "f98ba5c23726aedd": {
+  "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/agua-transportes-industria-concentran-propuestas-vox-recuperar-diputado-segovia_202611246b0576f8f64e3b00074e00be.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-25T14:50:40.776Z",
+  "motivo": "texto corto (89)"
+ },
+ "87d0108c3368c460": {
+  "url": "https://www.elnortedecastilla.es/segovia/javier-carretero-segovia-viviendas-papel-politicos-promesas-20261118200338-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T14:50:40.883Z"
  }
 }
