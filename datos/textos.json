@@ -2101,15 +2101,15 @@
  "cb2ff6b1221b3f6b": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/brujula-castilla-leon/brujula-castilla-leon-24112026_202611246b059766f058440007c2c654.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-25T14:50:40.449Z",
+  "intentos": 2,
+  "ultimo": "2026-11-25T23:44:09.048Z",
   "motivo": "texto corto (89)"
  },
  "22f849e6477bb4cb": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-2411202_202611246b058ec10bd9b0e427b2862b.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-25T14:50:40.489Z",
+  "intentos": 2,
+  "ultimo": "2026-11-25T23:44:09.177Z",
   "motivo": "texto corto (89)"
  },
  "61e6eaac072faf94": {
@@ -2130,20 +2130,220 @@
  "d9ea3c7bfe6bafb9": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-24112026_202611246b05a5a3ed8101000790a82e.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-25T14:50:40.725Z",
+  "intentos": 2,
+  "ultimo": "2026-11-25T23:44:08.917Z",
   "motivo": "texto corto (89)"
  },
  "f98ba5c23726aedd": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/agua-transportes-industria-concentran-propuestas-vox-recuperar-diputado-segovia_202611246b0576f8f64e3b00074e00be.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-25T14:50:40.776Z",
+  "intentos": 2,
+  "ultimo": "2026-11-25T23:44:09.466Z",
   "motivo": "texto corto (89)"
  },
  "87d0108c3368c460": {
   "url": "https://www.elnortedecastilla.es/segovia/javier-carretero-segovia-viviendas-papel-politicos-promesas-20261118200338-nt.html",
   "ok": true,
   "ultimo": "2026-11-25T14:50:40.883Z"
+ },
+ "dc221ce1d67bedd3": {
+  "url": "https://www.tribunasegovia.com/noticias/468130/paula-escorial-reelegida-presidenta-de-la-asociacion-de-turismo-rural-y-activo-de-segovia",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:04.426Z"
+ },
+ "c783709fec94c2d8": {
+  "url": "https://www.elnortedecastilla.es/segovia/lluvias-permiten-levantar-restricciones-agua-seis-pueblos-20261125182409-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:04.485Z"
+ },
+ "f628efc1b22bbf71": {
+  "url": "https://www.abc.es/espana/castilla-leon/guardia-civil-desarticula-grupo-criminal-dedicado-robo-20261125112946-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:04.523Z"
+ },
+ "b80c0d92af73e5c5": {
+  "url": "https://hoycyl.com/cuatro-detenidos-y-un-investigado-tras-cometer-32-delitos-de-robo-en-transformadores-de-riego-en-avila-salamanca-segovia-valladolid-y-zamora/87543/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.048Z"
+ },
+ "d90b9c1b76ab4c2c": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/pino-defiende-una-pac-con-presupuesto-propio-y-fuerte/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.078Z"
+ },
+ "16aeb34dbf3dbc36": {
+  "url": "https://www.elnortedecastilla.es/segovia/segovia-alza-voz-violencia-machista-recuerda-mujeres-20261125214903-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.267Z"
+ },
+ "cddbde79110b3a7b": {
+  "url": "https://www.eldiasegovia.es/noticia/za1ee8333-72d6-43f9-b5d6cf46540a0eed/202611/paula-escorial-reelegida-presidenta-de-turismo-rural",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.314Z"
+ },
+ "9ecf16c68db2969c": {
+  "url": "https://www.eldiasegovia.es/noticia/z7501e16c-3ead-4fc2-8330ed2b60c191da/202611/corte-puntual-del-trafico-en-la-calle-san-anton-manana-jueves",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.326Z"
+ },
+ "78b9dffd35c4b4d7": {
+  "url": "https://segoviadirecto.com/art/56627/marea-blanca-de-segovia-convoca-una-nueva-concentracion-en-defensa-de-la-sanidad-publica",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.419Z"
+ },
+ "36d2106ca393470e": {
+  "url": "https://www.eldiasegovia.es/noticia/z72a3e7f4-725c-4b0e-855ae3d4785b61b1/202611/pino-vox-defiende-una-pac-con-un-presupuesto-fuerte",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.739Z"
+ },
+ "adf07c297e8b8114": {
+  "url": "https://www.eldiario.es/castilla-y-leon/sociedad/castilla-leon-clama-violencia-machista-advierte-riesgo-retroceder-derechos_1_13694012.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.794Z"
+ },
+ "f78979a2857481bd": {
+  "url": "https://www.abc.es/espana/castilla-leon/ayuntamiento-segovia-presenta-presupuesto-2027-843-millones-20261124191953-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.821Z"
+ },
+ "d1805b68be165be1": {
+  "url": "https://www.elnortedecastilla.es/segovia/cuellar-eleva-presupuestos-millones-reserva-662000-euros-20261125163125-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.975Z"
+ },
+ "e5864ec2314a723e": {
+  "url": "https://segoviadirecto.com/art/56626/el-sindicato-de-veterinarios-de-castilla-y-leon-sivecal-muestra-su-total-rechazo-al-protocolo-para-las-actuaciones-de-los-veterinarios-habilitados-en-los-programas-de-sanidad-animal-de-cyl",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:05.990Z"
+ },
+ "e01380a09e2b8fcf": {
+  "url": "https://www.eldiario.es/castilla-y-leon/politica/entidades-lgtbi-piden-voto-frenar-recortes-derechos-castilla-leon-unica-autonomia-ley-propia_1_13690640.html",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.131Z"
+ },
+ "1d890727e255f745": {
+  "url": "https://segoviadirecto.com/art/56630/la-operacion-navidad-llama-a-la-participacion-vecinal-para-llenar-de-luz-y-color-las-calles-de-sepulveda",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.141Z"
+ },
+ "c73b1423e4042531": {
+  "url": "https://segoviadirecto.com/art/56625/las-entidades-lgtbiqa-de-castilla-y-leon-piden-el-voto-frente-a-quienes-quieren-eliminar-derechos",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.198Z"
+ },
+ "4cb0225654d00715": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/25/aumenta-un-42-la-inversion-en-id-en-2025-hasta-alcanzar-los-1-0648-millones-de-euros/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.481Z"
+ },
+ "a42857c66360a69a": {
+  "url": "https://segoviadirecto.com/art/56638/arantxa-coca-aborda-la-importancia-de-los-limites-y-la-asertividad-en-las-relaciones-personales",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.638Z"
+ },
+ "6ec0a718a85469f6": {
+  "url": "https://www.eldiasegovia.es/noticia/z6e231472-7973-4b19-87a62b6c8bc45ad2/202611/segovia-feminista-evoca-a-las-victimas-de-violencia-machista",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.836Z"
+ },
+ "1d6a3c5182622955": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/25/mas-de-200-expertos-analizan-en-avila-la-siniestralidad-vial/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.907Z"
+ },
+ "b1d6f2ae3643f74b": {
+  "url": "https://segoviadirecto.com/art/56634/la-diputacion-de-segovia-tiene-listos-todos-sus-medios-para-actuar-durante-una-nueva-campana-de-vialidad-invernal-en-la-provincia",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.917Z"
+ },
+ "574c50f452981a15": {
+  "url": "https://segoviadirecto.com/art/56637/el-mercado-navideno-regresa-a-la-plaza-mayor-de-segovia-con-21-casetas-y-un-gran-arbol-con-columpios",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:06.933Z"
+ },
+ "d852232c80daca6a": {
+  "url": "https://segoviadirecto.com/art/56632/izquierda-unida-vuelve-a-llevar-al-pleno-la-situacion-del-palacio-de-quintanar",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.149Z"
+ },
+ "c3302828aeb59c13": {
+  "url": "https://segoviadirecto.com/art/56633/el-palacio-episcopal-de-segovia-acoge-un-belen-con-mas-de-cien-figuras-que-recrea-el-camino-de-jerusalen-a-belen",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.283Z"
+ },
+ "e86dcee9b2b415e3": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/25/agricultura-cifra-el-coste-de-produccion-del-maiz-en-2-685-euros-por-hectarea/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.391Z"
+ },
+ "042c8aff31dba1da": {
+  "url": "https://segoviadirecto.com/art/56629/luminaria-la-magia-de-la-navidad-enciende-una-nueva-historia-sobre-el-futuro-de-nuestros-pueblos",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.454Z"
+ },
+ "fd27899f0294c8fe": {
+  "url": "https://segoviadirecto.com/art/56628/la-fundacion-caja-rural-de-segovia-presenta-la-semana-blanca",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.668Z"
+ },
+ "aedf4656b65927a7": {
+  "url": "https://segoviadirecto.com/art/56631/la-guardia-civil-interviene-tabaco-de-contrabando-y-marihuana-en-un-autobus-con-destino-a-paris",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.676Z"
+ },
+ "34159eacfc9d8881": {
+  "url": "https://www.elnordestedesegovia.es/noticias/1814-navidad-en-sepulveda-decoracion-vecinal-y-teatro-luminaria",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.736Z"
+ },
+ "cb620e8058b7d394": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/25/mas-de-9-700-agentes-se-desplegaran-en-la-region-el-29n/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.837Z"
+ },
+ "daff9ee3e038d003": {
+  "url": "https://www.elnordestedesegovia.es/noticias/1817-ayllon-y-riaza-dos-murales-contra-la-violencia-de-genero",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:07.965Z"
+ },
+ "92ce581a9978fcf2": {
+  "url": "https://www.eldiasegovia.es/noticia/zab5a92ac-2b85-43ad-88eef71fe7e8b24f/202611/el-programa-stem-talent-girl-reune-este-curso-a-99-alumnas",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.098Z"
+ },
+ "60996bd15dc7fa59": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/la-diputacion-apuesta-por-fomentar-y-llenar-de-kilometros-de-igualdad-de-provincia/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.136Z"
+ },
+ "e1ff7f8c89d30590": {
+  "url": "https://www.tribunasegovia.com/noticias/468136/segovia-estrena-el-arbol-magico-en-el-mercado-navideno-de-la-plaza-mayor",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.178Z"
+ },
+ "22d9ee0b753a9db6": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/mira-otra-vez-la-igualdad-tambien-se-aprende-la-campana-del-ayuntamiento-por-el-25-n/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.430Z"
+ },
+ "84c7254286516103": {
+  "url": "https://eladelantado.com/segovia/2026/11/25/el-mercado-navideno-ira-acompanado-de-un-arbol-magico-tiovivo-fotomaton-360-y-tren-turistico/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.588Z"
+ },
+ "427229cc2172fa9d": {
+  "url": "https://www.tribunasegovia.com/noticias/468127/segovia-llama-a-mirar-otra-vez-para-prevenir-la-violencia-contra-las-mujeres",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.725Z"
+ },
+ "a849d0c6596344ef": {
+  "url": "https://escuellar.es/cuellar-invita-a-no-mirar-hacia-otro-lado-ante-la-violencia-machista/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:08.825Z"
+ },
+ "81104e18f94f5996": {
+  "url": "https://escuellar.es/el-equipo-de-gobierno-de-cuellar-llevara-al-pleno-un-presupuesto-de-11-millones-de-euros-para-2027/",
+  "ok": true,
+  "ultimo": "2026-11-25T23:44:10.961Z"
  }
 }
