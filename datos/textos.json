@@ -2101,15 +2101,15 @@
  "cb2ff6b1221b3f6b": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/brujula-castilla-leon/brujula-castilla-leon-24112026_202611246b059766f058440007c2c654.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T23:44:09.048Z",
+  "intentos": 3,
+  "ultimo": "2026-11-26T08:45:40.686Z",
   "motivo": "texto corto (89)"
  },
  "22f849e6477bb4cb": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-2411202_202611246b058ec10bd9b0e427b2862b.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T23:44:09.177Z",
+  "intentos": 3,
+  "ultimo": "2026-11-26T08:45:41.079Z",
   "motivo": "texto corto (89)"
  },
  "61e6eaac072faf94": {
@@ -2130,15 +2130,15 @@
  "d9ea3c7bfe6bafb9": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-24112026_202611246b05a5a3ed8101000790a82e.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T23:44:08.917Z",
+  "intentos": 3,
+  "ultimo": "2026-11-26T08:45:40.891Z",
   "motivo": "texto corto (89)"
  },
  "f98ba5c23726aedd": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/agua-transportes-industria-concentran-propuestas-vox-recuperar-diputado-segovia_202611246b0576f8f64e3b00074e00be.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-25T23:44:09.466Z",
+  "intentos": 3,
+  "ultimo": "2026-11-26T08:45:40.778Z",
   "motivo": "texto corto (89)"
  },
  "87d0108c3368c460": {
@@ -2345,5 +2345,86 @@
   "url": "https://escuellar.es/el-equipo-de-gobierno-de-cuellar-llevara-al-pleno-un-presupuesto-de-11-millones-de-euros-para-2027/",
   "ok": true,
   "ultimo": "2026-11-25T23:44:10.961Z"
+ },
+ "9c0908f3c52c77c4": {
+  "url": "https://eladelantado.com/provincia/2026/11/26/huercasa-country-festival-regresara-a-riaza-del-9-al-11-de-julio-de-2027-para-celebrar-su-xii-edicion/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:38.504Z"
+ },
+ "1180b1981553440e": {
+  "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/pablo-perez-sostiene-que-gobierno-psoe-situado-provincia-cola-inversiones-nacionales_202611256b06cd3ce9f5b4000745c5c6.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-26T08:45:38.711Z",
+  "motivo": "texto corto (89)"
+ },
+ "cc6e02abae11fc2e": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/los-comercios-segovianos-cuestionan-el-impacto-del-black-friday-en-el-negocio-de-proximidad/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:39.072Z"
+ },
+ "040295ccfcde9ab1": {
+  "url": "https://eladelantado.com/provincia/2026/11/26/exito-de-participacion-en-la-cata-de-vinos-y-quesos-celebrada-en-cantimpalos/",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-26T08:45:39.246Z",
+  "motivo": "texto corto (103)"
+ },
+ "074ecf0e7d51d6c1": {
+  "url": "https://www.eldiasegovia.es/noticia/z2a878424-5abf-440a-b487ab76a4e5a814/202611/el-25-n-mira-en-segovia-a-los-pueblos-y-a-las-redes-sociales",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:39.626Z"
+ },
+ "29be6526810da9af": {
+  "url": "https://eladelantado.com/suplementos/2026/11/26/el-arte-de-regalar-2026/",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-26T08:45:39.644Z",
+  "motivo": "texto corto (103)"
+ },
+ "77a964ca7d71aab5": {
+  "url": "https://www.eldiasegovia.es/noticia/za8c2c287-c42c-47a7-b1a4b92d1ea13af4/202611/son-unas-elecciones-al-nivel-de-las-primeras-en-democracia",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:39.652Z"
+ },
+ "d48c9e2aae928ba2": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/calladitas-no-hacemos-historia/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:39.661Z"
+ },
+ "87380f2c933f0c14": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/pido-el-voto-para-que-segovia-este-presente-desde-que-se-empiecen-a-negociar-las-nuevas-cuentas/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:40.017Z"
+ },
+ "fe96b7237bf909ff": {
+  "url": "https://segoviaudaz.es/el-25n-en-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:40.145Z"
+ },
+ "3196aaf442116fcc": {
+  "url": "https://www.eldiasegovia.es/noticia/zcb365257-2e7e-430d-a6e39e9632676ed9/202611/lastras-condena-las-pintadas-politicas-contra-vecinos",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:40.458Z"
+ },
+ "8a36c8d6432daf65": {
+  "url": "https://segoviaudaz.es/corte-de-trafico-en-la-calle-san-anton/",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:40.484Z"
+ },
+ "ddad8cee331faa90": {
+  "url": "https://www.eldiasegovia.es/noticia/zcba798ee-c76b-490b-b8f2e7b905cdd3b4/202611/viogen-sigue-414-casos-de-violencia-de-genero-en-segovia",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:40.584Z"
+ },
+ "567dea1889a4a441": {
+  "url": "https://www.eldiasegovia.es/noticia/z4be50261-e706-4a47-a655aa1d2825f569/202611/cuellar-reduce-su-deuda-y-eleva-su-presupuesto-a-11m",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:41.301Z"
+ },
+ "bab1038325d18bab": {
+  "url": "https://www.eldiasegovia.es/noticia/zaf6ca3a5-8cbb-497a-9e6124d4dd681748/202611/maderuelo-declara-el-agua-del-grifo-no-apta",
+  "ok": true,
+  "ultimo": "2026-11-26T08:45:41.543Z"
  }
 }
