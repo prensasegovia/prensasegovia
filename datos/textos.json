@@ -2440,8 +2440,8 @@
  "32f304729ed32096": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/psoe-defiende-gobierno-nacional-ultimos-anos-300-leyes-pais-mas-derechos_202611266b080face9f5b4000745c914.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:50.784Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:05.242Z",
   "motivo": "texto corto (89)"
  },
  "09bf322c215c324d": {
@@ -2512,8 +2512,8 @@
  "1d2c455f3adff126": {
   "url": "https://www.ppcyl.es/manueco-alienta-en-segovia-a-la-marea-azul-que-lleve-a-feijoo-a-la-moncloa-dispersar-el-voto-beneficia-a-sanchez/",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:51.540Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:06.581Z",
   "motivo": "texto corto (0)"
  },
  "ca2006e2361b7fc3": {
@@ -2604,16 +2604,16 @@
  "1ea478e1afcad46e": {
   "url": "http://segovia247.es/art/13874/zelenski-advierte-sobre-una-nueva-ofensiva-rusa-tras-informes-de-inteligencia",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:52.565Z",
-  "motivo": "texto corto (270)"
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:10.407Z",
+  "motivo": "texto corto (271)"
  },
  "d39f236f59643a1a": {
   "url": "http://segovia247.es/art/13873/la-administracion-trump-impone-nuevos-aranceles-a-la-ue-china-japon-y-otra-decena-de-paises",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:52.757Z",
-  "motivo": "texto corto (270)"
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:10.398Z",
+  "motivo": "texto corto (271)"
  },
  "3eb62b1597c134b2": {
   "url": "https://www.elnortedecastilla.es/segovia/estado-moviliza-quitanieves-600-personas-frente-invierno-20261126173602-nt.html",
@@ -2638,16 +2638,16 @@
  "e6f1dec943531f8f": {
   "url": "http://segovia247.es/art/13872/record-historico-1971-migrantes-llegan-en-un-dia-a-el-hierro",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:52.833Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:10.874Z",
   "motivo": "texto corto (266)"
  },
  "98d55215b9c103c1": {
   "url": "http://segovia247.es/art/13871/solo-un-4-por-ciento-de-los-medicos-secunda-la-huelga-en-castilla-y-leon",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:53.037Z",
-  "motivo": "texto corto (270)"
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:10.676Z",
+  "motivo": "texto corto (271)"
  },
  "a7f8736f840e099c": {
   "url": "http://segovia247.es/art/13869/penultima-jornada-esta-noche-debate-a-cuatro-a-las-2200-y-sanchez-llama-a-una-movilizacion-historica",
@@ -2847,8 +2847,8 @@
  "47bfea682c7c2ca5": {
   "url": "https://segoviaudaz.es/el-precio-del-alquiler-de-habitaciones-se-duplica-en-segovia-desde-2018/",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T02:21:54.165Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T11:14:11.219Z",
   "motivo": "HTTP 404"
  },
  "d1673399aa13d969": {
@@ -2934,8 +2934,174 @@
  "a1fe6e75c8cbad62": {
   "url": "https://www.tribunasegovia.com/noticias/468312/manueco-pide-el-voto-en-pueblos-y-barrios-con-feijoo-gana-segovia-gana-castilla-y-leon-y-gana-espana",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-27T02:22:01.104Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T11:14:16.361Z",
   "motivo": "fetch failed"
+ },
+ "c6a481f245864c66": {
+  "url": "https://www.elnortedecastilla.es/segovia/detenido-joven-valladolid-tras-arrojar-400-gramos-20261127093543-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:04.651Z"
+ },
+ "bfecca40003233c2": {
+  "url": "https://lavozdeelespinar.es/detenido-en-el-espinar-tras-arrojar-casi-400-gramos-de-hachis-por-la-ventanilla-de-su-coche/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:04.993Z"
+ },
+ "1d2549e7ecef8142": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/detenido-en-el-espinar-un-hombre-con-casi-400-gramos-de-hachis-tras-arrojar-un-paquete-por-la-ventanilla-de-su-coche/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:05.122Z"
+ },
+ "4cd86a3a95c16a2c": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/jose-antonio-manrique-toma-posesion-como-concejal-del-ayuntamiento-de-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:05.221Z"
+ },
+ "b707290cd3b7ea41": {
+  "url": "https://www.eldiasegovia.es/noticia/zd2036226-ccd8-4e7f-921431ab20db033b/202611/el-psoe-propone-construir-una-residencia-universitaria",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:05.925Z"
+ },
+ "4427060cf89df189": {
+  "url": "https://www.psoesegovia.es/el-psoe-de-segovia-cierra-la-campana-con-un-balance-de-escucha-propuestas-y-defensa-de-los-intereses-de-la-provincia/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:05.940Z"
+ },
+ "5df1d400d37e0769": {
+  "url": "https://www.eldiasegovia.es/noticia/z27c1d368-4d71-4717-a787b3c9bc7f666f/202611/detenido-un-hombre-por-transportar-400-gramos-de-hachis",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:06.067Z"
+ },
+ "13bdb969ba84c35e": {
+  "url": "https://www.eldiasegovia.es/noticia/zfc20178b-ea56-4ac7-bff85653ef0169ec/202611/nuestra-primera-medida-sera-desviar-el-trafico-de-san-rafael",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:06.454Z"
+ },
+ "ffeab1f392c4f841": {
+  "url": "https://www.eldiasegovia.es/noticia/zd057dbf3-ad54-4ef3-9d89780e2be184af/202611/esta-por-ver-cuanto-empleo-van-a-crear-las-plantas-de-biogas",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:06.499Z"
+ },
+ "ef7d2d465336100d": {
+  "url": "https://segoviaudaz.es/29n-121-464-segovianos-estan-llamados-a-votar/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:06.612Z"
+ },
+ "a7b1935d8764b4aa": {
+  "url": "https://www.eldiasegovia.es/noticia/ze62aed0c-28a6-45b8-956579d6aa3b7f6b/202611/el-otono-enologico-se-despide-con-vinos-de-tomas-postigo",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:07.248Z"
+ },
+ "a3860202562ab290": {
+  "url": "https://www.eldiasegovia.es/noticia/z0ab52e70-72b4-484b-a30dc92b713a224f/202611/cuellar-recibe-a-marina-munoz-y-la-hace-pregonera",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:07.390Z"
+ },
+ "dfbd14aacede8629": {
+  "url": "https://www.eldiasegovia.es/noticia/z79223f30-c6ac-46de-8538a4ed84dd3f48/202611/el-restaurante-de-la-casa-de-la-moneda-se-cerrara-en-enero",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:07.456Z"
+ },
+ "4d5335223deb2194": {
+  "url": "https://www.elnortedecastilla.es/segovia/nuevo-concejal-ciudadanos-permite-pp-sacar-adelante-20261127103424-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:07.572Z"
+ },
+ "311b6a4ec9db5986": {
+  "url": "https://segoviaudaz.es/y-si-la-navidad-pudiera-devolver-la-luz-a-los-pueblos-sepulveda-tiene-la-respuesta/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:07.593Z"
+ },
+ "fd8b14e6c0d1f60d": {
+  "url": "https://segoviaudaz.es/el-nuevo-concejal-de-ciudadanos-en-el-ayuntamiento-de-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:08.519Z"
+ },
+ "06028b50ef31366d": {
+  "url": "https://escuellar.es/cuellar-recibe-a-su-campeona-del-mundo-marina-munoz-nombrandola-pregonera-de-las-fiestas-2027/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:08.615Z"
+ },
+ "2806bf5092426fb2": {
+  "url": "https://www.eldiasegovia.es/noticia/z46e5ba51-7bbe-4e27-93cae5ad9faba5ac/202611/via-libre-al-nuevo-recinto-ferial-gracias-al-nuevo-edil-de-cs",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:08.635Z"
+ },
+ "22a1f14ba821bd09": {
+  "url": "https://www.eldiasegovia.es/noticia/z29435ed0-0274-4d0e-8133b21642129f5d/202611/corte-de-trafico-en-un-carril-de-padre-claret-que-se-bacheara",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:08.636Z"
+ },
+ "4ea0e1221f03b215": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/la-magia-de-la-navidad-surge-en-turegano/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.011Z"
+ },
+ "f3f6a6d60b286b26": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/turegano-invita-a-un-paseo-por-su-historia/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.053Z"
+ },
+ "00a4033ab662f059": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/aprobada-la-modificacion-del-pgou-que-facilita-el-desarrollo-del-recinto-ferial/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.214Z"
+ },
+ "d3606abf9521b3b9": {
+  "url": "https://www.elnordestedesegovia.es/noticias/1819-recortes-de-la-pac-union-de-uniones-protesta-en-bruselas",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-27T11:14:09.300Z",
+  "motivo": "HTTP 500"
+ },
+ "43aa6aad7026b986": {
+  "url": "https://www.elnortedecastilla.es/segovia/actividad-comercial-ventas-concentra-cinco-ofertas-empleo-20261127082123-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.460Z"
+ },
+ "5b556c1168d53f6a": {
+  "url": "https://www.elnortedecastilla.es/segovia/black-friday-llega-menor-gasto-mayor-escepticismo-20261127082054-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.574Z"
+ },
+ "b2ed0721c75b1013": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/la-xi-muestra-de-dulzaina-homenajea-a-los-madrones/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.750Z"
+ },
+ "89d3918670e284d3": {
+  "url": "https://segoviaudaz.es/cuatro-gatos-buscan-una-familia-en-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:09.864Z"
+ },
+ "5839cce1a051fb02": {
+  "url": "https://www.eldiasegovia.es/noticia/zd284ba24-c08f-4746-b860a6a6412dacd0/202611/segovia-encara-el-29n-con-el-foco-puesto-en-la-vivienda",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:10.327Z"
+ },
+ "8c0d8f2b49037006": {
+  "url": "https://www.eldiasegovia.es/noticia/z2e70c8e0-5a32-4722-9e22a01b9772aa34/202611/2-011-electores-mas-en-segovia-que-en-2023",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:10.429Z"
+ },
+ "3be7b4c196ca4877": {
+  "url": "https://www.ondacero.es/podcast/emisoras/valladolid/brujula-castilla-leon/brujula-castilla-leon-26112026_202611266b0847820bd9b0e4bcb9862b.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-27T11:14:10.559Z",
+  "motivo": "texto corto (89)"
+ },
+ "aec6974e7a651ff9": {
+  "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-26112026_202611266b0833a7f058440007c2cd6c.html",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-27T11:14:10.573Z",
+  "motivo": "texto corto (89)"
+ },
+ "fff43d4ad4086455": {
+  "url": "https://segoviaudaz.es/la-provincia-despide-noviembre-con-estos-planes-de-fin-de-semana/",
+  "ok": true,
+  "ultimo": "2026-11-27T11:14:10.867Z"
  }
 }
