@@ -2934,8 +2934,8 @@
  "a1fe6e75c8cbad62": {
   "url": "https://www.tribunasegovia.com/noticias/468312/manueco-pide-el-voto-en-pueblos-y-barrios-con-feijoo-gana-segovia-gana-castilla-y-leon-y-gana-espana",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-27T11:14:16.361Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T20:11:01.411Z",
   "motivo": "fetch failed"
  },
  "c6a481f245864c66": {
@@ -3050,10 +3050,8 @@
  },
  "d3606abf9521b3b9": {
   "url": "https://www.elnordestedesegovia.es/noticias/1819-recortes-de-la-pac-union-de-uniones-protesta-en-bruselas",
-  "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-27T11:14:09.300Z",
-  "motivo": "HTTP 500"
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.799Z"
  },
  "43aa6aad7026b986": {
   "url": "https://www.elnortedecastilla.es/segovia/actividad-comercial-ventas-concentra-cinco-ofertas-empleo-20261127082123-nt.html",
@@ -3088,20 +3086,215 @@
  "3be7b4c196ca4877": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/brujula-castilla-leon/brujula-castilla-leon-26112026_202611266b0847820bd9b0e4bcb9862b.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-27T11:14:10.559Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T20:10:54.895Z",
   "motivo": "texto corto (89)"
  },
  "aec6974e7a651ff9": {
   "url": "https://www.ondacero.es/podcast/emisoras/valladolid/castilla-leon-onda/castilla-leon-onda-26112026_202611266b0833a7f058440007c2cd6c.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-27T11:14:10.573Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T20:10:55.009Z",
   "motivo": "texto corto (89)"
  },
  "fff43d4ad4086455": {
   "url": "https://segoviaudaz.es/la-provincia-despide-noviembre-con-estos-planes-de-fin-de-semana/",
   "ok": true,
   "ultimo": "2026-11-27T11:14:10.867Z"
+ },
+ "ece74a7098109038": {
+  "url": "https://www.elnortedecastilla.es/segovia/policia-nacional-segovia-incorpora-dron-buscar-personas-20261127181255-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:50.224Z"
+ },
+ "32f980e0d04c0df4": {
+  "url": "https://segoviadirecto.com/art/56652/union-de-uniones-se-manifiesta-en-bruselas-contra-el-desmantelamiento-de-la-pac-la-unica-politica-comun-europea",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:50.748Z"
+ },
+ "0ba393d51d3111ae": {
+  "url": "https://segoviadirecto.com/art/56653/la-fundacion-caja-rural-de-segovia-dona-un-dron-a-la-policia-nacional-para-busquedas-y-emergencias",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:50.768Z"
+ },
+ "e64ec0054bbaf4b0": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/el-pp-de-segovia-traslada-a-los-usuarios-del-ave-su-compromiso-de-mejorar-las-frecuencias/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:50.998Z"
+ },
+ "55500498aeb5a36f": {
+  "url": "https://www.eldiasegovia.es/noticia/z4370e4cc-6367-42cd-b81d294b9ddcd5c4/202611/la-fundacion-caja-rural-dona-un-dron-a-la-policia-nacional",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.237Z"
+ },
+ "792f2a7df57a2754": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/el-pleno-del-ayuntamiento-de-la-granja-rechaza-el-convenio-con-acuaes-para-el-abastecimiento-de-agua/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.455Z"
+ },
+ "64b7c4e06b2ea650": {
+  "url": "https://www.elnortedecastilla.es/segovia/navidad-abre-casetas-plaza-mayor-20261127195903-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.492Z"
+ },
+ "608067325e78a09a": {
+  "url": "https://www.eldiasegovia.es/noticia/za7ad368f-1e28-4afd-ae04bfe6c167bb64/202611/la-oposicion-echa-abajo-el-acuerdo-del-real-sitio-con-acuaes",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.785Z"
+ },
+ "435e5578f5378558": {
+  "url": "https://www.europapress.es/castilla-y-leon/noticia-detenido-joven-tirar-casi-400-gramos-hachis-coche-ver-control-espinar-segovia-20261127123408.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.838Z"
+ },
+ "dd14c1dde53eccfe": {
+  "url": "https://www.elnortedecastilla.es/segovia/pp-vox-aprueban-espinar-presupuestos-millones-euros-20261127191354-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.910Z"
+ },
+ "911d149304f4ebf0": {
+  "url": "https://www.elnortedecastilla.es/segovia/psoe-plantea-construir-vivienda-protegida-ultima-parcela-20261127191645-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.931Z"
+ },
+ "0cf4ba6e73ad6587": {
+  "url": "https://www.elnortedecastilla.es/segovia/segovia-aprueba-impulsar-residencia-universitaria-publica-agilizar-20261127191114-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:51.957Z"
+ },
+ "476617cd23fce162": {
+  "url": "https://www.eldiasegovia.es/noticia/z320d7ff7-21cb-4d35-a130b1504fd097c6/202611/el-espinar-aprueba-unos-presupuestos-de-casi-17-millones",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.163Z"
+ },
+ "37c9b07284be72fb": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/la-navidad-se-instala-en-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.361Z"
+ },
+ "fa6b662c3d87958b": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/el-ies-vega-del-piron-obtiene-el-sello-de-calidad-europeo/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.678Z"
+ },
+ "a2338745bf967b44": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/soledad-atienza-nombrada-vicerrectora-de-coordinacion-de-ie-university-en-segovia/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.812Z"
+ },
+ "686306f95a6c2cf3": {
+  "url": "https://eladelantado.com/provincia/2026/11/27/el-espinar-aprueba-un-presupuesto-de-17-millones-con-deuda-cero/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:52.824Z"
+ },
+ "840a43f8c0bc3f7c": {
+  "url": "https://segoviadirecto.com/art/56663/la-abstencion-del-nuevo-concejal-de-ciudadanos-permite-a-mazarias-sacar-adelante-el-presupuesto-de-2027",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.072Z"
+ },
+ "8f42e3be886bf984": {
+  "url": "https://segoviadirecto.com/art/56662/san-quirce-publica-los-numeros-125-y-126-de-estudios-segovianos",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.212Z"
+ },
+ "439edeebadbc6f82": {
+  "url": "https://escuellar.es/frente-amplio-muestra-su-preocupacion-en-cuellar-por-la-vivienda-y-la-proliferacion-de-plantas-de-biogas/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.326Z"
+ },
+ "058da20b622af2a1": {
+  "url": "https://segoviadirecto.com/art/56658/eatcology-abordara-el-desperdicio-alimentario-en-su-segunda-jornada-en-torrecaballeros",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.336Z"
+ },
+ "90561b300ac0683b": {
+  "url": "https://segoviadirecto.com/art/56659/la-diputacion-de-segovia-recibe-a-marina-munoz",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.434Z"
+ },
+ "c88a64009edcd872": {
+  "url": "https://segoviadirecto.com/art/56660/detenido-en-el-espinar-tras-arrojar-por-la-ventanilla-un-paquete-con-casi-400-gramos-de-hachis",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.500Z"
+ },
+ "918aaeedcbd768b3": {
+  "url": "https://segoviadirecto.com/art/56657/la-diputacion-de-segovia-presenta-la-22a-campana-de-animacion-a-la-lectura-del-servicio-de-bibliobuses-con-la-generacion-del-27-como-protagonista",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.633Z"
+ },
+ "7e78f7b3a72de4a1": {
+  "url": "https://segoviadirecto.com/art/56656/los-psicologos-alertan-de-los-riesgos-del-acceso-prematuro-a-las-redes-sociales-y-recomiendan-a-las-familias-dar-marcha-atras-y-retirar-el-permiso-a-menores-de-16-anos",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.721Z"
+ },
+ "65e4ba3172cdbbb4": {
+  "url": "https://www.elnortedecastilla.es/segovia/manrique-permite-pp-aprobar-ultimo-presupuesto-mandato-20261127135809-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.760Z"
+ },
+ "c273ef1bb83400f6": {
+  "url": "https://segoviadirecto.com/art/56655/cuellar-recibe-a-marina-munoz-y-su-titulo-mundial-de-triatlon-cros",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.769Z"
+ },
+ "f7e9740a232ca840": {
+  "url": "https://www.cope.es/emisoras/castilla-y-leon/segovia-provincia/segovia/noticias/pleno-ayuntamiento-segovia-aprueba-presupuestos-2027-abstencion-clave-ciudadanos-20261127_3483884.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.805Z"
+ },
+ "ae1d28e40f1a0f78": {
+  "url": "https://segoviadirecto.com/art/56654/tomas-postigo-el-segoviano-que-ayudo-a-cambiar-la-ribera-del-duero",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:53.895Z"
+ },
+ "6f2b910835a5037f": {
+  "url": "https://www.elnortedecastilla.es/elecciones/generales/segovia-pierde-106-votos-extranjero-tras-decision-20261127105457-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.014Z"
+ },
+ "b7f945db7b18d4a9": {
+  "url": "https://www.psoesegovia.es/mazarias-aprovecha-el-estreno-del-concejal-de-cs-para-sacar-adelante-un-presupuesto-sin-negociacion-ni-dialogo/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.280Z"
+ },
+ "6cdd1b5543fe2b20": {
+  "url": "https://www.eldiasegovia.es/noticia/zdf4c056a-fb76-48ab-bf2161c25e1a98c4/202611/ciudadanos-facilita-la-aprobacion-del-presupuesto-municipal",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.478Z"
+ },
+ "382eeea65abf8386": {
+  "url": "https://eladelantado.com/segovia/2026/11/27/el-equipo-de-gobierno-saca-adelante-los-presupuestos-con-la-abstencion-del-nuevo-concejal-de-ciudadanos/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.486Z"
+ },
+ "845ddbdc96e08c65": {
+  "url": "https://www.elnortedecastilla.es/segovia/real-sitio-rechaza-reforzar-abastecimiento-ante-temor-20261127121957-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.592Z"
+ },
+ "4069d9667cb8bd42": {
+  "url": "https://www.elnortedecastilla.es/segovia/proyecto-agua-real-sitio-preveia-recurrir-atalaya-20261127122016-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.650Z"
+ },
+ "e3a7b612ad90cb1a": {
+  "url": "https://segoviaudaz.es/la-navidad-toma-las-calles-de-sepulveda-con-una-iniciativa-que-implica-a-todo-el-pueblo/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.936Z"
+ },
+ "d36e18d405d41a39": {
+  "url": "https://segoviaudaz.es/mas-de-cien-personas-clausuran-el-otono-enologico-con-tomas-postigo/",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:54.936Z"
+ },
+ "e8a940e2da6853d5": {
+  "url": "https://www.eldiasegovia.es/noticia/zefb86385-f31d-46e2-a8167664b201dd4a/202611/una-de-las-novedades-en-navidad-de-segovia-el-arbol-magico",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:55.148Z"
+ },
+ "3a8da52340e0d6b9": {
+  "url": "https://www.elnordestedesegovia.es/reportajes/articulos-culturales/1820-bibliobus-en-el-nordeste-de-segovia-pueblos-dias-y-horas",
+  "ok": true,
+  "ultimo": "2026-11-27T20:10:56.643Z"
  }
 }
