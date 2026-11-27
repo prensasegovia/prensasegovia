@@ -2354,8 +2354,8 @@
  "1180b1981553440e": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/pablo-perez-sostiene-que-gobierno-psoe-situado-provincia-cola-inversiones-nacionales_202611256b06cd3ce9f5b4000745c5c6.html",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-26T19:13:38.049Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T02:21:50.967Z",
   "motivo": "texto corto (89)"
  },
  "cc6e02abae11fc2e": {
@@ -2366,8 +2366,8 @@
  "040295ccfcde9ab1": {
   "url": "https://eladelantado.com/provincia/2026/11/26/exito-de-participacion-en-la-cata-de-vinos-y-quesos-celebrada-en-cantimpalos/",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-26T19:13:45.478Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T02:21:53.481Z",
   "motivo": "texto corto (103)"
  },
  "074ecf0e7d51d6c1": {
@@ -2378,8 +2378,8 @@
  "29be6526810da9af": {
   "url": "https://eladelantado.com/suplementos/2026/11/26/el-arte-de-regalar-2026/",
   "ok": false,
-  "intentos": 2,
-  "ultimo": "2026-11-26T19:13:45.936Z",
+  "intentos": 3,
+  "ultimo": "2026-11-27T02:21:53.488Z",
   "motivo": "texto corto (103)"
  },
  "77a964ca7d71aab5": {
@@ -2440,8 +2440,8 @@
  "32f304729ed32096": {
   "url": "https://www.ondacero.es/podcast/emisoras/segovia/mas-de-uno-segovia/psoe-defiende-gobierno-nacional-ultimos-anos-300-leyes-pais-mas-derechos_202611266b080face9f5b4000745c914.html",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:35.119Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:50.784Z",
   "motivo": "texto corto (89)"
  },
  "09bf322c215c324d": {
@@ -2512,8 +2512,8 @@
  "1d2c455f3adff126": {
   "url": "https://www.ppcyl.es/manueco-alienta-en-segovia-a-la-marea-azul-que-lleve-a-feijoo-a-la-moncloa-dispersar-el-voto-beneficia-a-sanchez/",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:37.910Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:51.540Z",
   "motivo": "texto corto (0)"
  },
  "ca2006e2361b7fc3": {
@@ -2604,16 +2604,16 @@
  "1ea478e1afcad46e": {
   "url": "http://segovia247.es/art/13874/zelenski-advierte-sobre-una-nueva-ofensiva-rusa-tras-informes-de-inteligencia",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:39.286Z",
-  "motivo": "texto corto (271)"
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:52.565Z",
+  "motivo": "texto corto (270)"
  },
  "d39f236f59643a1a": {
   "url": "http://segovia247.es/art/13873/la-administracion-trump-impone-nuevos-aranceles-a-la-ue-china-japon-y-otra-decena-de-paises",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:39.382Z",
-  "motivo": "texto corto (271)"
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:52.757Z",
+  "motivo": "texto corto (270)"
  },
  "3eb62b1597c134b2": {
   "url": "https://www.elnortedecastilla.es/segovia/estado-moviliza-quitanieves-600-personas-frente-invierno-20261126173602-nt.html",
@@ -2638,16 +2638,16 @@
  "e6f1dec943531f8f": {
   "url": "http://segovia247.es/art/13872/record-historico-1971-migrantes-llegan-en-un-dia-a-el-hierro",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:39.744Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:52.833Z",
   "motivo": "texto corto (266)"
  },
  "98d55215b9c103c1": {
   "url": "http://segovia247.es/art/13871/solo-un-4-por-ciento-de-los-medicos-secunda-la-huelga-en-castilla-y-leon",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:39.748Z",
-  "motivo": "texto corto (271)"
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:53.037Z",
+  "motivo": "texto corto (270)"
  },
  "a7f8736f840e099c": {
   "url": "http://segovia247.es/art/13869/penultima-jornada-esta-noche-debate-a-cuatro-a-las-2200-y-sanchez-llama-a-una-movilizacion-historica",
@@ -2847,8 +2847,8 @@
  "47bfea682c7c2ca5": {
   "url": "https://segoviaudaz.es/el-precio-del-alquiler-de-habitaciones-se-duplica-en-segovia-desde-2018/",
   "ok": false,
-  "intentos": 1,
-  "ultimo": "2026-11-26T19:13:45.885Z",
+  "intentos": 2,
+  "ultimo": "2026-11-27T02:21:54.165Z",
   "motivo": "HTTP 404"
  },
  "d1673399aa13d969": {
@@ -2870,5 +2870,72 @@
   "url": "http://segovia247.es/art/13883/25n-segovia-campana-mira-otra-vez-la-igualdad-tambien-se-aprende-acto-en-la-carcel",
   "ok": true,
   "ultimo": "2026-11-26T19:13:46.469Z"
+ },
+ "d59e06dd4693546c": {
+  "url": "https://www.elnortedecastilla.es/elecciones/generales/frente-amplio-reivindica-acceso-vivienda-freno-macroplantas-20261126213118-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:50.861Z"
+ },
+ "f8134bd187dc8948": {
+  "url": "https://www.elnortedecastilla.es/elecciones/generales/manueco-apela-voto-rural-segovia-conseguir-mayoria-20261126212120-nt.html",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:50.995Z"
+ },
+ "fe25641d37eadd8b": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/manueco-apela-al-redoble-de-esfuerzos-en-el-mundo-rural-para-conseguir-el-cambio/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:51.496Z"
+ },
+ "bad82cb74972f223": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/pablo-horcajo-llorente-nombrado-decano-de-la-seccion-de-segovia-del-colegio-de-economistas-de-madrid/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:51.608Z"
+ },
+ "27c830d3c673859f": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/tomas-postigo-el-segoviano-que-ayudo-a-cambiar-la-ribera-del-duero/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:51.634Z"
+ },
+ "01fb0e814cf56b40": {
+  "url": "https://www.lagranja-valsain.com/el-embalse-del-mar-seguira-siendo-la-fuente-principal-de-agua-de-la-granja-de-san-ildefonso/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:51.741Z"
+ },
+ "8bbed91d44c1a4d2": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/26/castilla-y-leon-pide-financiacion-para-cumplir-con-las-nuevas-ratios-de-infantil-decretadas-por-el-gobierno/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:51.935Z"
+ },
+ "f926f8fe4092e5b1": {
+  "url": "https://eladelantado.com/castilla-leon/2026/11/26/iniciados-los-debates-sobre-las-enmiendas-parciales-a-los-pgc/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:52.032Z"
+ },
+ "8b8bf033ad1e0a26": {
+  "url": "https://eladelantado.com/segovia/2026/11/26/el-tiempo-de-sanchez-se-ha-acabado-y-espana-necesita-abrir-una-etapa-nueva/",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:52.225Z"
+ },
+ "86fdc2a6ba1f2021": {
+  "url": "https://www.eldiasegovia.es/noticia/z1c57e0d4-5cf6-4b62-9f36af23d4e5b04f/202611/las-placas-solares-del-hospital-invisibles-en-los-miradores",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:53.073Z"
+ },
+ "54efdfbae0050788": {
+  "url": "https://www.eldiasegovia.es/noticia/z486e57c4-c877-44e8-abed997f30895e85/202611/un-cartel-para-anunciar-la-navidad-en-segovia",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:53.081Z"
+ },
+ "9350e89fe87ab977": {
+  "url": "https://www.eldiasegovia.es/noticia/z87384153-7268-4584-8762d7d0a2184f8a/202611/nuevo-decano-en-segovia-del-colegio-de-economistas-de-madrid",
+  "ok": true,
+  "ultimo": "2026-11-27T02:21:53.119Z"
+ },
+ "a1fe6e75c8cbad62": {
+  "url": "https://www.tribunasegovia.com/noticias/468312/manueco-pide-el-voto-en-pueblos-y-barrios-con-feijoo-gana-segovia-gana-castilla-y-leon-y-gana-espana",
+  "ok": false,
+  "intentos": 1,
+  "ultimo": "2026-11-27T02:22:01.104Z",
+  "motivo": "fetch failed"
  }
 }
